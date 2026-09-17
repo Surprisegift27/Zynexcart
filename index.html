@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs (Required for Real Auth) -->
+    <!-- Firebase SDKs (Compat version for vanilla JS) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
@@ -30,7 +30,6 @@
             
             <!-- User Profile Section (Dynamic) -->
             <div id="userSection" class="flex items-center gap-4">
-                <!-- Logged Out State -->
                 <button onclick="openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition">
                     <i class="fa-regular fa-user text-xl"></i>
                     <span class="font-semibold hidden sm:block">Login</span>
@@ -75,9 +74,13 @@
                         <span>Login with Email</span>
                         <div class="loader" id="loaderEmail"></div>
                     </button>
+                    <!-- Quick Sign Up Hint -->
+                    <p class="text-center text-xs text-gray-500 mt-2">
+                        Don't have an account? <a href="#" onclick="alert('Sign Up feature can be added easily! Let me know if you want it.')" class="text-secondary font-bold hover:underline">Create one</a>
+                    </p>
                 </div>
 
-                <!-- Phone Form (UI Only for Demo) -->
+                <!-- Phone Form -->
                 <div id="formPhone" class="hidden space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Mobile Number</label>
@@ -86,7 +89,7 @@
                             <input type="tel" id="phoneInput" placeholder="98765 43210" class="w-full px-4 py-3 rounded-r-lg border border-gray-300 focus:border-secondary outline-none">
                         </div>
                     </div>
-                    <button onclick="alert('OTP Setup requires Firebase Project Configuration. Please use Email for this demo.')" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition">
+                    <button onclick="alert('OTP Setup requires Firebase Project Configuration. Please use Email for now.')" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition">
                         Send OTP
                     </button>
                 </div>
@@ -118,25 +121,21 @@
 
     <script>
         // ==========================================
-        // 1. FIREBASE CONFIGURATION (IMPORTANT)
+        // 1. FIREBASE CONFIGURATION (UPDATED)
         // ==========================================
-        // Apne Firebase Console se yeh values copy-paste karein
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY_HERE",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID"
+            apiKey: "AIzaSyDI15D4x7_Lo6w9Eh9M5HPQBXFLq2zFklM",
+            authDomain: "zynexcart-web.firebaseapp.com",
+            projectId: "zynexcart-web",
+            storageBucket: "zynexcart-web.firebasestorage.app",
+            messagingSenderId: "328652532886",
+            appId: "1:328652532886:web:b6552b9f2cdb2f290066b7",
+            measurementId: "G-P9WTMDQEPW"
         };
 
         // Initialize Firebase
-        try {
-            firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
-        } catch (e) {
-            console.log("Firebase not configured yet. UI Mode Active.");
-        }
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
         // ==========================================
         // 2. UI LOGIC
@@ -182,18 +181,10 @@
             hideError();
 
             try {
-                // Real Firebase Login
-                await firebase.auth().signInWithEmailAndPassword(email, pass);
+                await auth.signInWithEmailAndPassword(email, pass);
                 closeModal();
             } catch (error) {
-                // Agar Firebase config nahi hai to Demo Mode chalega
-                if(error.code === 'app/no-app') {
-                    setTimeout(() => {
-                        simulateLogin({ email: email, displayName: email.split('@')[0], photoURL: null });
-                    }, 1500);
-                } else {
-                    showError(error.message);
-                }
+                showError(error.message);
             } finally {
                 loader.style.display = 'none';
             }
@@ -203,22 +194,11 @@
         async function handleGoogleLogin() {
             try {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                await firebase.auth().signInWithPopup(provider);
+                await auth.signInWithPopup(provider);
                 closeModal();
             } catch (error) {
-                if(error.code === 'app/no-app') {
-                    simulateLogin({ email: "user@gmail.com", displayName: "Demo User", photoURL: "https://ui-avatars.com/api/?name=Demo+User&background=FF6B00&color=fff" });
-                } else {
-                    showError(error.message);
-                }
+                showError(error.message);
             }
-        }
-
-        // Simulate Login (For testing without Firebase Keys)
-        function simulateLogin(userObj) {
-            localStorage.setItem('zynex_user', JSON.stringify(userObj));
-            updateHeader(userObj);
-            alert("Login Successful (Demo Mode)");
         }
 
         // Update Header UI
@@ -249,28 +229,23 @@
         }
 
         function logout() {
-            firebase.auth().signOut().then(() => {
-                localStorage.removeItem('zynex_user');
+            auth.signOut().then(() => {
                 updateHeader(null);
-            }).catch(() => {
-                localStorage.removeItem('zynex_user');
+            }).catch((error) => {
+                console.error("Logout error:", error);
                 updateHeader(null);
             });
         }
 
         // Check Session on Load
         window.onload = () => {
-            // Check LocalStorage first (Demo fallback)
-            const localUser = localStorage.getItem('zynex_user');
-            if(localUser) updateHeader(JSON.parse(localUser));
-
-            // Check Firebase Auth State
-            if(typeof firebase !== 'undefined') {
-                firebase.auth().onAuthStateChanged((user) => {
-                    if (user) updateHeader(user);
-                    else if(!localUser) updateHeader(null);
-                });
-            }
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    updateHeader(user);
+                } else {
+                    updateHeader(null);
+                }
+            });
         };
     </script>
 </body>
