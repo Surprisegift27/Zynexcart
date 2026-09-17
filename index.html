@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Modern Firebase SDKs via CDN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { 
@@ -90,39 +91,36 @@
         let cart = JSON.parse(localStorage.getItem('zynex_cart')) || [];
 
         function renderProducts() {
-            try {
-                const grid = document.getElementById('productGrid');
-                if (!grid) {
-                    console.error("productGrid element not found!");
-                    return;
-                }
-                
-                grid.innerHTML = products.map(p => `
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group flex flex-col">
-                        <div class="h-48 overflow-hidden bg-gray-100 relative">
-                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${p.name}">
-                            <span class="absolute top-2 right-2 bg-secondary text-white text-xs font-bold px-2 py-1 rounded">Hot</span>
-                        </div>
-                        <div class="p-4 flex flex-col flex-grow">
-                            <h3 class="font-bold text-gray-800 mb-1 truncate">${p.name}</h3>
-                            <p class="text-secondary font-bold text-xl mb-4">₹${p.price}</p>
-                            
-                            <div class="mt-auto space-y-2">
-                                <button onclick="window.addToCart(${p.id})" class="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                                </button>
-                                <button onclick="window.buyNow(${p.id})" class="w-full bg-secondary text-white font-semibold py-2.5 rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2 shadow-md shadow-orange-100">
-                                    <i class="fa-solid fa-bolt"></i> Buy Now
-                                </button>
-                            </div>
+            const grid = document.getElementById('productGrid');
+            if (!grid) {
+                console.error("Product grid not found!");
+                return;
+            }
+            
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group flex flex-col h-full">
+                    <div class="h-48 overflow-hidden bg-gray-100 relative">
+                        <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${p.name}">
+                        <span class="absolute top-2 right-2 bg-secondary text-white text-xs font-bold px-2 py-1 rounded">Hot</span>
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="font-bold text-gray-800 mb-1 truncate">${p.name}</h3>
+                        <p class="text-secondary font-bold text-xl mb-4">₹${p.price}</p>
+                        
+                        <!-- BUTTONS SECTION - YEH AB DIKHEGA -->
+                        <div class="mt-auto space-y-2">
+                            <button onclick="window.addToCart(${p.id})" class="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button onclick="window.buyNow(${p.id})" class="w-full bg-secondary text-white font-semibold py-2.5 rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2 shadow-md shadow-orange-100 cursor-pointer">
+                                <i class="fa-solid fa-bolt"></i> Buy Now
+                            </button>
                         </div>
                     </div>
-                `).join('');
-                
-                console.log("✅ Products rendered successfully!");
-            } catch (error) {
-                console.error("Error rendering products:", error);
-            }
+                </div>
+            `).join('');
+            
+            console.log("✅ Products rendered with buttons!");
         }
 
         window.addToCart = (productId) => {
@@ -136,6 +134,7 @@
             saveCart();
             updateCartUI();
             
+            // Visual feedback
             const btn = event.target.closest('button');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-check"></i> Added!`;
@@ -316,17 +315,18 @@
             signOut(auth).then(() => window.updateHeader(null));
         };
 
-        // ============ INITIALIZATION (FIXED TIMING ISSUE) ============
-        // Directly call renderProducts instead of waiting for window.onload
-        renderProducts();
-        updateCartUI();
+        // ============ INITIALIZATION (FIXED TIMING) ============
+        // DOMContentLoaded ensure karta hai ki HTML puri tarah load ho chuka hai
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateCartUI();
+            console.log("✅ ZynexCart initialized!");
+        });
         
         onAuthStateChanged(auth, (user) => {
             if (user) window.updateHeader(user);
             else window.updateHeader(null);
         });
-        
-        console.log("✅ ZynexCart initialized successfully!");
     </script>
 
     <style>
