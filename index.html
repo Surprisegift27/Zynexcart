@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZynexCart - Checkout Login</title>
+    <title>ZynexCart - Professional Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Modern Firebase SDKs via CDN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { 
-            getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, 
-            onAuthStateChanged, signOut, signInWithPhoneNumber, RecaptchaVerifier 
-        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        // Added signInWithPhoneNumber and RecaptchaVerifier
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, signInWithPhoneNumber, RecaptchaVerifier } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
 
+        // Aapka Real Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDI15D4x7_Lo6w9Eh9M5HPQBXFLq2zFklM",
             authDomain: "zynexcart-web.firebaseapp.com",
@@ -24,97 +25,91 @@
             measurementId: "G-P9WTMDQEPW"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const auth = getAuth(app);
 
-        // ============ RECAPTCHA SETUP (Required for Phone) ============
+        // ============ RECAPTCHA SETUP (Required for Phone OTP) ============
         window.setupRecaptcha = () => {
             if (!window.recaptchaVerifier) {
                 window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
                     'size': 'invisible',
-                    'callback': () => { console.log("reCAPTCHA solved"); }
+                    'callback': (response) => { console.log("reCAPTCHA solved"); }
                 });
             }
         };
 
-        // ============ UI FUNCTIONS ============
-        window.openModal = () => document.getElementById('authModal').classList.remove('hidden');
+        // UI Functions
+        window.openModal = () => { document.getElementById('authModal').classList.remove('hidden'); };
         window.closeModal = () => { 
             document.getElementById('authModal').classList.add('hidden'); 
             window.hideError(); 
         };
         
         window.switchTab = (tab) => {
-            const emailForm = document.getElementById('formEmail');
-            const phoneForm = document.getElementById('formPhone');
-            const otpForm = document.getElementById('formOTP');
-            const tabEmail = document.getElementById('tabEmail');
-            const tabPhone = document.getElementById('tabPhone');
-            
             if(tab === 'email') {
-                emailForm.classList.remove('hidden');
-                phoneForm.classList.add('hidden');
-                otpForm.classList.add('hidden');
-                tabEmail.className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
-                tabPhone.className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
+                document.getElementById('formEmail').classList.remove('hidden');
+                document.getElementById('formPhone').classList.add('hidden');
+                document.getElementById('formOTP').classList.add('hidden'); // Hide OTP form
+                document.getElementById('tabEmail').className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
+                document.getElementById('tabPhone').className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
             } else {
-                emailForm.classList.add('hidden');
-                phoneForm.classList.remove('hidden');
-                otpForm.classList.add('hidden');
-                tabPhone.className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
-                tabEmail.className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
+                document.getElementById('formEmail').classList.add('hidden');
+                document.getElementById('formPhone').classList.remove('hidden');
+                document.getElementById('formOTP').classList.add('hidden'); // Hide OTP form
+                document.getElementById('tabPhone').className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
+                document.getElementById('tabEmail').className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
             }
             window.hideError();
         };
 
-        window.showOTPForm = () => {
-            document.getElementById('formPhone').classList.add('hidden');
-            document.getElementById('formOTP').classList.remove('hidden');
-        };
-
         function showError(msg) {
             const el = document.getElementById('errorMsg');
-            el.innerText = msg; 
+            el.innerText = msg;
             el.classList.remove('hidden');
         }
-        window.hideError = () => document.getElementById('errorMsg').classList.add('hidden');
+        window.hideError = () => { document.getElementById('errorMsg').classList.add('hidden'); };
 
-        // ============ EMAIL LOGIN ============
+        // Real Email Login
         window.handleEmailLogin = async () => {
             const email = document.getElementById('emailInput').value;
             const pass = document.getElementById('passInput').value;
+            const loader = document.getElementById('loaderEmail');
+
             if(!email || !pass) return showError("Please fill all fields");
-            
-            document.getElementById('loaderEmail').style.display = 'block';
+
+            loader.style.display = 'block';
+            window.hideError();
+
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
                 window.closeModal();
-                window.handleCheckout(); // Auto checkout after login
             } catch (error) {
                 showError(error.message);
             } finally {
-                document.getElementById('loaderEmail').style.display = 'none';
+                loader.style.display = 'none';
             }
         };
 
-        // ============ GOOGLE LOGIN ============
+        // Real Google Login
         window.handleGoogleLogin = async () => {
             try {
                 const provider = new GoogleAuthProvider();
                 await signInWithPopup(auth, provider);
                 window.closeModal();
-                window.handleCheckout(); // Auto checkout after login
             } catch (error) {
                 showError(error.message);
             }
         };
 
-        // ============ PHONE: SEND OTP ============
+        // ============ PHONE OTP LOGIC ============
         window.sendOTP = async () => {
             const phone = document.getElementById('phoneInput').value.trim();
             if(!phone || phone.length < 10) return showError("Please enter a valid 10-digit number");
             
-            document.getElementById('loaderPhone').style.display = 'block';
+            const loader = document.getElementById('loaderPhone');
+            loader.style.display = 'block';
             window.hideError();
             
             try {
@@ -122,78 +117,81 @@
                 const appVerifier = window.recaptchaVerifier;
                 const fullPhone = "+91" + phone;
                 
+                // Send OTP
                 window.confirmationResult = await signInWithPhoneNumber(auth, fullPhone, appVerifier);
-                document.getElementById('loaderPhone').style.display = 'none';
-                window.showOTPForm();
+                loader.style.display = 'none';
+                
+                // Hide Phone form and Show OTP form
+                document.getElementById('formPhone').classList.add('hidden');
+                document.getElementById('formOTP').classList.remove('hidden');
             } catch (error) {
-                document.getElementById('loaderPhone').style.display = 'none';
+                loader.style.display = 'none';
                 showError("Error: " + error.message);
                 console.error(error);
             }
         };
 
-        // ============ PHONE: VERIFY OTP ============
         window.verifyOTP = async () => {
             const otp = document.getElementById('otpInput').value.trim();
             if(!otp || otp.length !== 6) return showError("Enter valid 6-digit OTP");
             
-            document.getElementById('loaderOTP').style.display = 'block';
+            const loader = document.getElementById('loaderOTP');
+            loader.style.display = 'block';
             window.hideError();
             
             try {
                 await window.confirmationResult.confirm(otp);
                 window.closeModal();
-                window.handleCheckout(); // Auto checkout after login
             } catch (error) {
-                document.getElementById('loaderOTP').style.display = 'none';
+                loader.style.display = 'none';
                 showError("Invalid OTP. Please try again.");
             }
         };
 
-        // ============ CHECKOUT LOGIC ============
-        window.handleCheckout = () => {
-            const currentUser = auth.currentUser;
-            if (!currentUser) {
-                openModal(); // Agar login nahi hai, toh modal kholo
-            } else {
-                // Agar login hai, toh order place karo
-                const total = document.getElementById('cartTotal') ? document.getElementById('cartTotal').innerText : '0';
-                alert(`✅ Order Placed Successfully!\nTotal: ₹${total}\nWelcome, ${currentUser.displayName || currentUser.phoneNumber || currentUser.email}!`);
-                // Yahan aap cart clear kar sakte hain aur database mein order save kar sakte hain
-            }
-        };
-
-        // ============ HEADER UPDATE ============
+        // Header Update Logic (Updated to support Phone Number display)
         window.updateHeader = (user) => {
             const section = document.getElementById('userSection');
             if(user) {
+                // Fixed crash when user logs in via phone (no email)
                 const name = user.displayName || user.phoneNumber || user.email.split('@')[0];
                 const img = user.photoURL || `https://ui-avatars.com/api/?name=${name}&background=0F2C59&color=fff`;
+                
                 section.innerHTML = `
-                    <div class="flex items-center gap-3 cursor-pointer">
+                    <div class="flex items-center gap-3 cursor-pointer group">
                         <img src="${img}" class="w-9 h-9 rounded-full border-2 border-white shadow-sm">
                         <div class="hidden md:block text-right">
                             <p class="text-sm font-bold text-primary leading-none">${name}</p>
-                            <button onclick="window.logout()" class="text-[10px] text-red-500 font-semibold hover:text-red-700">Logout</button>
+                            <p class="text-[10px] text-gray-500">My Account</p>
                         </div>
-                    </div>`;
+                    </div>
+                    <button onclick="window.logout()" class="text-xs text-red-500 font-semibold hover:text-red-700">Logout</button>
+                `;
             } else {
                 section.innerHTML = `
                     <button onclick="window.openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition">
                         <i class="fa-regular fa-user text-xl"></i>
                         <span class="font-semibold hidden sm:block">Login</span>
-                    </button>`;
+                    </button>
+                `;
             }
         };
 
         window.logout = () => {
-            signOut(auth).then(() => window.updateHeader(null));
+            signOut(auth).then(() => {
+                window.updateHeader(null);
+            }).catch((error) => {
+                console.error("Logout error:", error);
+                window.updateHeader(null);
+            });
         };
 
-        // Check login state on load
+        // Page Load check
         onAuthStateChanged(auth, (user) => {
-            if (user) window.updateHeader(user);
-            else window.updateHeader(null);
+            if (user) {
+                window.updateHeader(user);
+            } else {
+                window.updateHeader(null);
+            }
         });
     </script>
 
@@ -208,6 +206,8 @@
     <header class="bg-white shadow-sm sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
             <div class="text-2xl font-bold text-primary">Zynex<span class="text-secondary italic">Cart</span></div>
+            
+            <!-- User Profile Section (Dynamic) -->
             <div id="userSection" class="flex items-center gap-4">
                 <button onclick="openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition">
                     <i class="fa-regular fa-user text-xl"></i>
@@ -217,60 +217,46 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT (Demo Checkout Button) -->
-    <main class="max-w-7xl mx-auto p-8 text-center">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Your Cart</h1>
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 max-w-md mx-auto">
-            <p class="text-gray-600 mb-4">Total Amount: <span class="text-2xl font-bold text-secondary">₹<span id="cartTotal">2499</span></span></p>
-            <button onclick="handleCheckout()" class="w-full bg-secondary text-white font-bold py-4 rounded-lg hover:bg-orange-600 transition text-lg shadow-lg shadow-orange-200">
-                Proceed to Checkout <i class="fa-solid fa-arrow-right ml-2"></i>
-            </button>
-        </div>
-    </main>
-
-    <!-- LOGIN MODAL (Updated with Phone Tab) -->
+    <!-- LOGIN MODAL -->
     <div id="authModal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
+        
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
-            
-            <!-- Modal Header -->
             <div class="bg-primary p-6 text-center relative">
                 <button onclick="closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-                <h2 class="text-2xl font-bold text-white mb-1">Login Required</h2>
-                <p class="text-blue-200 text-sm">Please login to complete your purchase</p>
+                <h2 class="text-2xl font-bold text-white mb-1">Welcome Back</h2>
+                <p class="text-blue-200 text-sm">Login to access your orders & addresses</p>
             </div>
 
-            <!-- Tabs: Email & Phone -->
             <div class="flex border-b">
-                <button id="tabEmail" onclick="switchTab('email')" class="flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50">Email</button>
+                <button id="tabEmail" onclick="switchTab('email')" class="flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50">Email / Password</button>
                 <button id="tabPhone" onclick="switchTab('phone')" class="flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary">Phone Number</button>
             </div>
 
             <div class="p-6 space-y-4">
-                
-                <!-- 1. Email Form -->
+                <!-- Email Form -->
                 <div id="formEmail" class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Email Address</label>
-                        <input type="email" id="emailInput" placeholder="name@example.com" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none transition">
+                        <input type="email" id="emailInput" placeholder="name@example.com" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Password</label>
-                        <input type="password" id="passInput" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none transition">
+                        <input type="password" id="passInput" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition">
                     </div>
                     <button onclick="handleEmailLogin()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
-                        <span>Login & Checkout</span>
+                        <span>Login with Email</span>
                         <div class="loader" id="loaderEmail"></div>
                     </button>
                 </div>
 
-                <!-- 2. Phone Form -->
+                <!-- Phone Form -->
                 <div id="formPhone" class="hidden space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Mobile Number</label>
                         <div class="flex">
-                            <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-600 text-sm font-bold">+91</span>
-                            <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="10" class="w-full px-4 py-3 rounded-r-lg border border-gray-300 focus:border-secondary outline-none transition">
+                            <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-600 text-sm">+91</span>
+                            <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="10" class="w-full px-4 py-3 rounded-r-lg border border-gray-300 focus:border-secondary outline-none">
                         </div>
                     </div>
                     <button onclick="sendOTP()" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition flex justify-center items-center gap-2">
@@ -279,31 +265,28 @@
                     </button>
                 </div>
 
-                <!-- 3. OTP Verification Form -->
+                <!-- OTP Verification Form -->
                 <div id="formOTP" class="hidden space-y-4">
                     <p class="text-sm text-gray-600 text-center">Enter the 6-digit code sent to your phone</p>
-                    <input type="text" id="otpInput" maxlength="6" placeholder="1 2 3 4 5 6" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none text-center text-2xl font-bold tracking-widest transition">
+                    <input type="text" id="otpInput" maxlength="6" placeholder="123456" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none text-center text-2xl font-bold tracking-widest transition">
                     <button onclick="verifyOTP()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
-                        <span>Verify & Checkout</span>
+                        <span>Verify & Login</span>
                         <div class="loader" id="loaderOTP"></div>
                     </button>
-                    <button onclick="switchTab('phone')" class="w-full text-sm text-gray-500 hover:text-primary font-semibold">Change Phone Number</button>
+                    <button onclick="switchTab('phone')" class="w-full text-sm text-gray-500 hover:text-primary font-semibold mt-2">Change Phone Number</button>
                 </div>
 
-                <!-- Divider -->
                 <div class="relative flex py-2 items-center">
                     <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold">OR</span>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs">OR CONTINUE WITH</span>
                     <div class="flex-grow border-t border-gray-200"></div>
                 </div>
 
-                <!-- Google Login -->
                 <button onclick="handleGoogleLogin()" class="w-full border border-gray-300 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-50 transition flex justify-center items-center gap-3">
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
                     Sign in with Google
                 </button>
 
-                <!-- Error Message -->
                 <div id="errorMsg" class="hidden bg-red-50 text-red-600 text-sm p-3 rounded-lg text-center border border-red-100"></div>
             </div>
             
@@ -311,6 +294,12 @@
             <div id="recaptcha-container" class="absolute bottom-0 right-0"></div>
         </div>
     </div>
+
+    <!-- CONTENT PLACEHOLDER -->
+    <main class="max-w-7xl mx-auto p-8 text-center">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Start Shopping</h1>
+        <p class="text-gray-500">Login to see your personalized recommendations.</p>
+    </main>
 
 </body>
 </html>
