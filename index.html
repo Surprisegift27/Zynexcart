@@ -3,430 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZynexCart - Shop Smart, Live Better</title>
+    <title>ZynexCart - Working Demo</title>
+    <!-- Tailwind CSS for Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0F2C59', // Zynex Blue
+                        secondary: '#FF6B00', // Zynex Orange
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* --- CORE STYLES (No External Dependencies) --- */
-        :root {
-            --primary-blue: #0F2C59;
-            --primary-orange: #FF6B00;
-            --bg-light: #f8f9fa;
-            --text-dark: #333;
-            --white: #ffffff;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        body { background-color: var(--bg-light); color: var(--text-dark); }
-        
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-
-        /* --- HEADER --- */
-        header {
-            background: var(--white);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .top-bar {
-            background: var(--primary-blue);
-            color: var(--white);
-            text-align: center;
-            padding: 8px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-area { display: flex; flex-direction: column; }
-        .logo-text { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
-        .logo-zynex { color: var(--primary-blue); }
-        .logo-cart { color: var(--primary-orange); font-style: italic; }
-        .tagline { font-size: 14px; color: var(--primary-blue); font-family: cursive; margin-top: -5px; }
-
-        .search-box {
-            flex: 1;
-            max-width: 500px;
-            margin: 0 20px;
-            position: relative;
-            display: none; /* Hidden on very small mobile */
-        }
-        @media(min-width: 768px) { .search-box { display: block; } }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 50px;
-            border: 1px solid #ddd;
-            background: #f1f3f5;
-            outline: none;
-        }
-        .search-btn {
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            background: var(--primary-orange);
-            color: white;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .nav-actions { display: flex; gap: 20px; align-items: center; }
-        .action-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; color: var(--primary-blue); }
-        .cart-wrapper { position: relative; }
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--primary-orange);
-            color: white;
-            font-size: 12px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        .hero-banner {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, #1a428a 100%);
-            border-radius: 20px;
-            padding: 40px;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            overflow: hidden;
-            position: relative;
-        }
-        .hero-content { z-index: 2; max-width: 60%; }
-        .hero h1 { font-size: 3rem; line-height: 1.2; margin-bottom: 15px; }
-        .hero span { color: var(--primary-orange); }
-        .cta-btn {
-            background: var(--primary-orange);
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .cta-btn:hover { background: #e65c00; transform: translateY(-2px); }
-
-        /* --- FEATURES BAR --- */
-        .features {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .feature-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
-        }
-        .icon-box {
-            width: 50px;
-            height: 50px;
-            background: #fff0e6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-orange);
-        }
-
-        /* --- CATEGORIES --- */
-        .section-title {
-            max-width: 1200px;
-            margin: 40px auto 20px;
-            padding: 0 20px;
-            font-size: 24px;
-            color: var(--primary-blue);
-            font-weight: 700;
-        }
-        .categories-scroll {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 10px 20px 30px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            scrollbar-width: none; /* Firefox */
-        }
-        .categories-scroll::-webkit-scrollbar { display: none; } /* Chrome/Safari */
-        
-        .cat-item {
-            min-width: 100px;
-            text-align: center;
-            cursor: pointer;
-        }
-        .cat-icon {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            border: 2px solid transparent;
-        }
-        .cat-item:hover .cat-icon { border-color: var(--primary-orange); transform: scale(1.05); }
-
-        /* --- PRODUCTS GRID --- */
-        .products-grid {
-            max-width: 1200px;
-            margin: 0 auto 50px;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid #eee;
-            transition: 0.3s;
-            position: relative;
-        }
-        .product-card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: #ffdcc2; }
-        
-        .prod-img-box {
-            height: 140px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: #ccc;
-        }
-        
-        .prod-title { font-weight: 600; margin-bottom: 5px; font-size: 16px; }
-        .prod-weight { font-size: 12px; color: #888; margin-bottom: 15px; }
-        
-        .price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-weight: 700; font-size: 18px; }
-        
-        .add-btn {
-            border: 1px solid var(--primary-blue);
-            color: var(--primary-blue);
-            background: white;
-            padding: 6px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .add-btn:hover { background: var(--primary-blue); color: white; }
-        .add-btn.added { background: var(--primary-orange); border-color: var(--primary-orange); color: white; }
-
-        /* --- FOOTER --- */
-        footer { background: white; padding: 40px 20px; border-top: 1px solid #eee; text-align: center; color: #666; }
-
-        /* SVG Icons Helper */
-        .svg-icon { width: 24px; height: 24px; fill: currentColor; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f8fafc; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .modal { transition: opacity 0.25s ease; }
+        body.modal-active { overflow-x: hidden; overflow-y: visible !important; }
     </style>
 </head>
-<body>
+<body class="text-gray-800 relative">
 
-    <!-- Header -->
-    <header>
-        <div class="top-bar">Fast Delivery across India | Use code <b style="color:#FF6B00">ZYNEX10</b> for 10% off</div>
-        <div class="nav-container">
-            <div class="logo-area">
-                <div class="logo-text">
-                    <span class="logo-zynex">Zynex</span><span class="logo-cart">Cart</span>
+    <!-- HEADER -->
+    <header class="sticky top-0 z-40 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="resetFilters()">
+                    <span class="text-3xl font-extrabold text-primary tracking-tighter">Zynex<span class="text-secondary italic">Cart</span></span>
                 </div>
-                <div class="tagline">Shop Smart, Live Better</div>
+
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-lg mx-8 relative">
+                    <input type="text" id="searchInput" placeholder='Search for "Milk", "Bread"...' 
+                           class="w-full pl-10 pr-4 py-2.5 bg-gray-100 border-none rounded-full focus:ring-2 focus:ring-secondary focus:bg-white transition-all outline-none">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400"></i>
+                </div>
+
+                <!-- Right Actions -->
+                <div class="flex items-center gap-6">
+                    <!-- Profile Button -->
+                    <button onclick="toggleModal('loginModal')" class="flex flex-col items-center text-primary hover:text-secondary transition">
+                        <i class="fa-regular fa-user text-xl"></i>
+                        <span class="text-xs font-semibold">Login</span>
+                    </button>
+
+                    <!-- Cart Button -->
+                    <button onclick="toggleModal('cartModal')" class="relative flex flex-col items-center text-primary hover:text-secondary transition">
+                        <div class="relative">
+                            <i class="fa-solid fa-cart-shopping text-xl"></i>
+                            <span id="cartBadge" class="absolute -top-2 -right-2 bg-secondary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full hidden">0</span>
+                        </div>
+                        <span class="text-xs font-semibold">My Cart</span>
+                    </button>
+                </div>
             </div>
-
-            <div class="search-box">
-                <input type="text" class="search-input" placeholder='Search "milk", "bread", "chips"...'>
-                <button class="search-btn"></button>
-            </div>
-
-            <div class="nav-actions">
-                <div class="action-item">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    <span style="font-size:12px; font-weight:600;">Login</span>
-                </div>
-                <div class="action-item cart-wrapper" onclick="alert('Opening Cart...')">
-                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                    <span class="cart-count" id="cartCount">0</span>
-                    <span style="font-size:12px; font-weight:600;">Cart</span>
-                </div>
+            
+            <!-- Mobile Search (Visible only on small screens) -->
+            <div class="md:hidden pb-4">
+                <input type="text" id="mobileSearchInput" placeholder='Search products...' 
+                       class="w-full pl-4 pr-4 py-2 bg-gray-100 rounded-lg outline-none border border-transparent focus:border-secondary">
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-banner">
-            <div class="hero-content">
-                <h1>Groceries delivered in <br><span>10 Minutes</span></h1>
-                <p style="margin-bottom: 20px; opacity: 0.9;">Get fresh vegetables, dairy, and snacks at your doorstep.</p>
-                <button class="cta-btn">Shop Now</button>
-            </div>
-            <!-- Simple CSS Shape for illustration instead of image -->
-            <div style="font-size: 150px; opacity: 0.2; transform: rotate(-15deg);">🛒</div>
-        </div>
-    </section>
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <!-- Features (From Logo) -->
-    <section class="features">
-        <div class="feature-card">
-            <div class="icon-box"></div>
-            <div>
-                <h4 style="color:var(--primary-blue)">Trendy Products</h4>
-                <small>New arrivals every day</small>
+        <!-- Categories Section -->
+        <section class="mb-10">
+            <h2 class="text-xl font-bold text-primary mb-4">Shop by Category</h2>
+            <div class="flex gap-4 overflow-x-auto hide-scrollbar pb-2" id="categoryContainer">
+                <!-- Categories injected via JS -->
             </div>
-        </div>
-        <div class="feature-card">
-            <div class="icon-box">🛡️</div>
-            <div>
-                <h4 style="color:var(--primary-blue)">Best Quality</h4>
-                <small>100% Genuine items</small>
-            </div>
-        </div>
-        <div class="feature-card">
-            <div class="icon-box">🚚</div>
-            <div>
-                <h4 style="color:var(--primary-blue)">Fast Delivery</h4>
-                <small>Under 15 mins</small>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Categories -->
-    <h2 class="section-title">Shop by Category</h2>
-    <div class="categories-scroll">
-        <div class="cat-item"><div class="cat-icon">🍎</div><span>Fruits</span></div>
-        <div class="cat-item"><div class="cat-icon">🥕</div><span>Veg</span></div>
-        <div class="cat-item"><div class="cat-icon">🥛</div><span>Dairy</span></div>
-        <div class="cat-item"><div class="cat-icon">🍪</div><span>Snacks</span></div>
-        <div class="cat-item"><div class="cat-icon">🥤</div><span>Drinks</span></div>
-        <div class="cat-item"><div class="cat-icon">🧼</div><span>Cleaning</span></div>
-        <div class="cat-item"><div class="cat-icon">👶</div><span>Baby Care</span></div>
+        <!-- Products Grid -->
+        <section>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-primary" id="gridTitle">All Products</h2>
+                <span id="resultCount" class="text-sm text-gray-500"></span>
+            </div>
+            
+            <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                <!-- Products injected via JS -->
+            </div>
+            
+            <!-- Empty State (Hidden by default) -->
+            <div id="emptyState" class="hidden text-center py-20">
+                <i class="fa-solid fa-basket-shopping text-6xl text-gray-200 mb-4"></i>
+                <p class="text-gray-500 text-lg">No products found matching your search.</p>
+                <button onclick="resetFilters()" class="mt-4 text-secondary font-bold hover:underline">Clear Filters</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" onclick="toggleModal('loginModal')"></div>
+        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-xl shadow-2xl z-50 overflow-y-auto p-6 relative">
+            <button onclick="toggleModal('loginModal')" class="absolute top-4 right-4 text-gray-500 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
+            <h3 class="text-2xl font-bold text-primary mb-2 text-center">Welcome Back!</h3>
+            <p class="text-gray-500 text-center mb-6 text-sm">Login to access your orders and saved addresses.</p>
+            
+            <form onsubmit="event.preventDefault(); alert('Logged in successfully!'); toggleModal('loginModal');" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                    <input type="tel" placeholder="+91 98765 43210" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary outline-none">
+                </div>
+                <button type="submit" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition">Continue</button>
+            </form>
+        </div>
     </div>
 
-    <!-- Products -->
-    <h2 class="section-title">Best Sellers</h2>
-    <div class="products-grid">
-        <!-- Product 1 -->
-        <div class="product-card">
-            <div class="prod-img-box">🥛</div>
-            <div class="prod-title">Amul Taaza Milk</div>
-            <div class="prod-weight">500 ml</div>
-            <div class="price-row">
-                <div class="price">₹27</div>
-                <button class="add-btn" onclick="addToCart(this)">ADD</button>
+    <!-- CART MODAL -->
+    <div id="cartModal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" onclick="toggleModal('cartModal')"></div>
+        <div class="modal-container bg-white w-full md:max-w-lg mx-auto rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[80vh]">
+            
+            <!-- Cart Header -->
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h3 class="text-lg font-bold text-primary">My Cart (<span id="cartTotalItems">0</span>)</h3>
+                <button onclick="toggleModal('cartModal')" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-        </div>
-        <!-- Product 2 -->
-        <div class="product-card">
-            <div class="prod-img-box">🍞</div>
-            <div class="prod-title">Harvest Gold Bread</div>
-            <div class="prod-weight">400 g</div>
-            <div class="price-row">
-                <div class="price">₹45</div>
-                <button class="add-btn" onclick="addToCart(this)">ADD</button>
+
+            <!-- Cart Items Area -->
+            <div id="cartItemsContainer" class="p-4 overflow-y-auto flex-1 space-y-4">
+                <!-- Cart items injected here -->
+                <div class="text-center py-10 text-gray-400">Your cart is empty</div>
             </div>
-        </div>
-        <!-- Product 3 -->
-        <div class="product-card">
-            <div class="prod-img-box">🥚</div>
-            <div class="prod-title">Farm Fresh Eggs</div>
-            <div class="prod-weight">6 pcs</div>
-            <div class="price-row">
-                <div class="price">₹65</div>
-                <button class="add-btn" onclick="addToCart(this)">ADD</button>
-            </div>
-        </div>
-        <!-- Product 4 -->
-        <div class="product-card">
-            <div class="prod-img-box"></div>
-            <div class="prod-title">Fresh Potatoes</div>
-            <div class="prod-weight">1 kg</div>
-            <div class="price-row">
-                <div class="price">₹30</div>
-                <button class="add-btn" onclick="addToCart(this)">ADD</button>
-            </div>
-        </div>
-         <!-- Product 5 -->
-         <div class="product-card">
-            <div class="prod-img-box">🧴</div>
-            <div class="prod-title">Dove Shampoo</div>
-            <div class="prod-weight">180 ml</div>
-            <div class="price-row">
-                <div class="price">₹150</div>
-                <button class="add-btn" onclick="addToCart(this)">ADD</button>
+
+            <!-- Cart Footer -->
+            <div class="p-4 border-t bg-gray-50">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="font-bold text-gray-600">Grand Total</span>
+                    <span class="font-bold text-xl text-primary" id="cartGrandTotal">₹0</span>
+                </div>
+                <button onclick="alert('Proceeding to checkout...')" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition">Checkout</button>
             </div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 ZynexCart Commerce Pvt Ltd. All rights reserved.</p>
-    </footer>
-
-    <!-- JavaScript for Functionality -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        let count = 0;
-        const cartBadge = document.getElementById('cartCount');
+        // --- DATA ---
+        const categories = [
+            { id: 'all', name: 'All', icon: 'fa-layer-group' },
+            { id: 'fruits', name: 'Fruits', icon: 'fa-apple-whole' },
+            { id: 'dairy', name: 'Dairy', icon: 'fa-cow' },
+            { id: 'bakery', name: 'Bakery', icon: 'fa-bread-slice' },
+            { id: 'snacks', name: 'Snacks', icon: 'fa-cookie-bite' },
+            { id: 'beverages', name: 'Drinks', icon: 'fa-bottle-water' }
+        ];
 
-        function addToCart(btn) {
-            // Animation logic
-            if(btn.innerText === "ADDED") return; // Prevent double click
+        const products = [
+            { id: 1, name: 'Amul Taaza Milk', category: 'dairy', price: 27, weight: '500ml', emoji: '🥛' },
+            { id: 2, name: 'Harvest Gold Bread', category: 'bakery', price: 45, weight: '400g', emoji: '🍞' },
+            { id: 3, name: 'Red Apple', category: 'fruits', price: 120, weight: '1kg', emoji: '🍎' },
+            { id: 4, name: 'Lays Classic', category: 'snacks', price: 20, weight: '50g', emoji: '🥔' },
+            { id: 5, name: 'Coca Cola', category: 'beverages', price: 40, weight: '750ml', emoji: '' },
+            { id: 6, name: 'Farm Eggs', category: 'dairy', price: 65, weight: '6pcs', emoji: '🥚' },
+            { id: 7, name: 'Banana', category: 'fruits', price: 40, weight: '1 Dozen', emoji: '🍌' },
+            { id: 8, name: 'Croissant', category: 'bakery', price: 35, weight: '1pc', emoji: '🥐' },
+            { id: 9, name: 'Orange Juice', category: 'beverages', price: 90, weight: '1L', emoji: '🍊' },
+            { id: 10, name: 'Potato Chips', category: 'snacks', price: 20, weight: '50g', emoji: '🍟' },
+        ];
+
+        let cart = {}; // Object to store cart items: { productId: quantity }
+        let activeCategory = 'all';
+        let searchQuery = '';
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderProducts();
+            setupEventListeners();
+        });
+
+        // --- RENDER FUNCTIONS ---
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = categories.map(cat => `
+                <div onclick="setCategory('${cat.id}')" 
+                     class="flex flex-col items-center min-w-[80px] cursor-pointer group">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl mb-2 transition-all duration-300 
+                                ${activeCategory === cat.id ? 'bg-secondary text-white shadow-lg scale-110' : 'bg-white text-primary border border-gray-200 group-hover:border-secondary'}">
+                        <i class="fa-solid ${cat.icon}"></i>
+                    </div>
+                    <span class="text-sm font-semibold ${activeCategory === cat.id ? 'text-secondary' : 'text-gray-600'}">${cat.name}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptyState');
+            const resultCount = document.getElementById('resultCount');
             
-            btn.innerText = "ADDED";
-            btn.classList.add("added");
+            // Filter Logic
+            const filtered = products.filter(p => {
+                const matchCat = activeCategory === 'all' || p.category === activeCategory;
+                const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCat && matchSearch;
+            });
+
+            resultCount.innerText = `${filtered.length} items`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
             
-            // Update Counter
-            count++;
-            cartBadge.innerText = count;
+            grid.innerHTML = filtered.map(p => {
+                const qty = cart[p.id] || 0;
+                return `
+                <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
+                    <div class="h-32 flex items-center justify-center text-6xl mb-4 bg-gray-50 rounded-lg">
+                        ${p.emoji}
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg leading-tight mb-1">${p.name}</h3>
+                    <p class="text-xs text-gray-500 mb-4">${p.weight}</p>
+                    
+                    <div class="mt-auto flex justify-between items-center">
+                        <span class="font-bold text-lg text-gray-900">₹${p.price}</span>
+                        
+                        ${qty === 0 ? `
+                            <button onclick="updateCart(${p.id}, 1)" 
+                                    class="bg-white border border-primary text-primary font-bold px-6 py-1.5 rounded-lg hover:bg-primary hover:text-white transition uppercase text-sm">
+                                Add
+                            </button>
+                        ` : `
+                            <div class="flex items-center bg-primary rounded-lg overflow-hidden">
+                                <button onclick="updateCart(${p.id}, -1)" class="text-white px-3 py-1.5 hover:bg-blue-800">-</button>
+                                <span class="text-white font-bold text-sm px-2">${qty}</span>
+                                <button onclick="updateCart(${p.id}, 1)" class="text-white px-3 py-1.5 hover:bg-blue-800">+</button>
+                            </div>
+                        `}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cartItemsContainer');
+            const totalItemsEl = document.getElementById('cartTotalItems');
+            const grandTotalEl = document.getElementById('cartGrandTotal');
             
-            // Reset button after 2 seconds
-            setTimeout(() => {
-                btn.innerText = "ADD";
-                btn.classList.remove("added");
-            }, 2000);
+            const cartIds = Object.keys(cart);
+            let totalQty = 0;
+            let totalPrice = 0;
+
+            if (cartIds.length === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-gray-400 flex flex-col items-center"><i class="fa-solid fa-cart-arrow-down text-4xl mb-3"></i>Your cart is empty</div>';
+                totalItemsEl.innerText = '0';
+                grandTotalEl.innerText = '₹0';
+                document.getElementById('cartBadge').classList.add('hidden');
+                return;
+            }
+
+            let html = '';
+            cartIds.forEach(id => {
+                const product = products.find(p => p.id == id);
+                const qty = cart[id];
+                const itemTotal = product.price * qty;
+                
+                totalQty += qty;
+                totalPrice += itemTotal;
+
+                html += `
+                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <div class="text-2xl">${product.emoji}</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-800">${product.name}</h4>
+                            <p class="text-xs text-gray-500">₹${product.price} x ${qty}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold text-primary">₹${itemTotal}</span>
+                        <div class="flex items-center bg-white border rounded-md">
+                            <button onclick="updateCart(${product.id}, -1)" class="px-2 py-1 text-gray-600 hover:text-red-500">-</button>
+                            <span class="text-xs font-bold px-1">${qty}</span>
+                            <button onclick="updateCart(${product.id}, 1)" class="px-2 py-1 text-gray-600 hover:text-green-500">+</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            totalItemsEl.innerText = totalQty;
+            grandTotalEl.innerText = `₹${totalPrice}`;
+            
+            // Update Badge
+            const badge = document.getElementById('cartBadge');
+            badge.innerText = totalQty;
+            badge.classList.remove('hidden');
+        }
+
+        // --- ACTIONS ---
+        function setCategory(id) {
+            activeCategory = id;
+            document.getElementById('gridTitle').innerText = id === 'all' ? 'All Products' : categories.find(c => c.id === id).name;
+            renderCategories(); // Re-render to update active styling
+            renderProducts();
+        }
+
+        function resetFilters() {
+            activeCategory = 'all';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            document.getElementById('gridTitle').innerText = 'All Products';
+            renderCategories();
+            renderProducts();
+        }
+
+        function updateCart(productId, change) {
+            if (!cart[productId]) cart[productId] = 0;
+            cart[productId] += change;
+            
+            if (cart[productId] <= 0) {
+                delete cart[productId];
+            }
+            
+            // Refresh UI
+            renderProducts(); // To toggle Add button vs +/-
+            renderCartItems(); // To update modal
+            
+            // Optional: Small animation feedback could go here
+        }
+
+        function setupEventListeners() {
+            // Desktop Search
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderProducts();
+            });
+            
+            // Mobile Search
+            document.getElementById('mobileSearchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderProducts();
+            });
+        }
+
+        // --- MODAL UTILS ---
+        function toggleModal(modalID){
+            const modal = document.getElementById(modalID);
+            modal.classList.toggle('opacity-0');
+            modal.classList.toggle('pointer-events-none');
+            document.body.classList.toggle('modal-active');
+            
+            // If opening cart, refresh it
+            if(modalID === 'cartModal' && !modal.classList.contains('opacity-0')) {
+                renderCartItems();
+            }
         }
     </script>
 </body>
