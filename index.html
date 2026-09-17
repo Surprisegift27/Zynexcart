@@ -1,1 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>ZynexCart — Shop Smart, Live Better</title>
+  <meta name="description" content="ZynexCart — Shop smart, live better. Discover quality products at great prices with a seamless shopping experience.">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f8fb;
+      color: #111827;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      background: #0b132b;
+      color: white;
+      text-align: center;
+      padding: 9px 15px;
+      font-size: 13px;
+    }
+
+    /* HEADER */
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .logo {
+      min-width: 180px;
+    }
+
+    .logo-name {
+      font-size: 27px;
+      font-weight: 800;
+      color: #0b132b;
+    }
+
+    .logo-name span {
+      color: #ff6b00;
+    }
+
+    .tagline {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 3px;
+    }
+
+    .search-box {
+      flex: 1;
+      display: flex;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 9px;
+      overflow: hidden;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 13px 15px;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+    }
+
+    .search-box button {
+      width: 52px;
+      background: #ff6b00;
+      color: white;
+      font-size: 19px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .action {
+      text-align: center;
+      font-size: 13px;
+      color: #334155;
+      position: relative;
+    }
+
+    .action-icon {
+      font-size: 22px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -8px;
+      background: #ff6b00;
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* NAVIGATION */
+    nav {
+      background: #0b132b;
+      color: white;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      padding: 12px 20px;
+      font-size: 14px;
+    }
+
+    .nav-inner a:hover {
+      color: #ff9b50;
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 1200px;
+      margin: 25px auto;
+      padding: 0 20px;
+    }
+
+    .hero-card {
+      min-height: 380px;
+      border-radius: 18px;
+      background: linear-gradient(120deg, #0b132b, #172554);
+      display: flex;
+      align-items: center;
+      padding: 50px;
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 570px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-small {
+      color: #ff9b50;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 span {
+      color: #ff7a1a;
+    }
+
+    .hero p {
+      color: #dbe4f0;
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .hero-btn {
+      background: #ff6b00;
+      color: white;
+      padding: 14px 25px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .hero-btn:hover {
+      background: #e85e00;
+    }
+
+    .hero-shape {
+      position: absolute;
+      right: -80px;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      background: rgba(255, 107, 0, 0.15);
+    }
+
+    /* SECTION */
+    .section {
+      max-width: 1200px;
+      margin: 45px auto;
+      padding: 0 20px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+      font-size: 24px;
+    }
+
+    .view-all {
+      color: #ff6b00;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* CATEGORIES */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+    }
+
+    .category {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px 10px;
+      text-align: center;
+      transition: 0.2s;
+    }
+
+    .category:hover {
+      transform: translateY(-4px);
+      border-color: #ff6b00;
+    }
+
+    .category-icon {
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+
+    .category h3 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* PRODUCTS */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .product {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: 0.2s;
+      position: relative;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+
+    .product-image {
+      height: 210px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 70px;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-category {
+      color: #64748b;
+      font-size: 11px;
+      margin-bottom: 7px;
+    }
+
+    .product-name {
+      font-size: 15px;
+      font-weight: 600;
+      min-height: 38px;
+      line-height: 1.4;
+    }
+
+    .rating {
+      color: #f59e0b;
+      font-size: 13px;
+      margin: 8px 0;
+    }
+
+    .price {
+      font-size: 19px;
+      font-weight: 800;
+      color: #0b132b;
+    }
+
+    .old-price {
+      font-size: 12px;
+      color: #94a3b8;
+      text-decoration: line-through;
+      margin-left: 5px;
+    }
+
+    .add-cart {
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: #0b132b;
+      color: white;
+      border-radius: 7px;
+      font-weight: 600;
+    }
+
+    .add-cart:hover {
+      background: #ff6b00;
+    }
+
+    /* FEATURES */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .feature {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .feature-icon {
+      font-size: 28px;
+    }
+
+    .feature h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .feature p {
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    /* NEWSLETTER */
+    .newsletter {
+      background: #0b132b;
+      color: white;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .newsletter h2 {
+      margin-bottom: 10px;
+    }
+
+    .newsletter p {
+      color: #cbd5e1;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .newsletter-form {
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      gap: 8px;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 13px;
+      border-radius: 7px;
+      border: none;
+      outline: none;
+    }
+
+    .newsletter-form button {
+      background: #ff6b00;
+      color: white;
+      padding: 0 20px;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #07101f;
+      color: white;
+      padding: 45px 20px 20px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-logo {
+      font-size: 25px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .footer-logo span {
+      color: #ff6b00;
+    }
+
+    .footer-about {
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.7;
+      max-width: 330px;
+    }
+
+    footer h3 {
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    footer ul {
+      list-style: none;
+    }
+
+    footer li {
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .copyright {
+      max-width: 1200px;
+      margin: 35px auto 0;
+      padding-top: 20px;
+      border-top: 1px solid #1e293b;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .header-main {
+        flex-wrap: wrap;
+      }
+
+      .logo {
+        min-width: auto;
+      }
+
+      .search-box {
+        order: 3;
+        flex-basis: 100%;
+      }
+
+      .categories {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .top-bar {
+        font-size: 11px;
+      }
+
+      .header-main {
+        padding: 12px 15px;
+        gap: 12px;
+      }
+
+      .logo-name {
+        font-size: 23px;
+      }
+
+      .header-actions {
+        margin-left: auto;
+        gap: 12px;
+      }
+
+      .action {
+        font-size: 10px;
+      }
+
+      .action-icon {
+        font-size: 19px;
+      }
+
+      .nav-inner {
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 20px;
+      }
+
+      .hero {
+        padding: 0 12px;
+        margin: 15px auto;
+      }
+
+      .hero-card {
+        min-height: 330px;
+        padding: 30px 22px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .section {
+        padding: 0 12px;
+        margin: 32px auto;
+      }
+
+      .section-heading h2 {
+        font-size: 20px;
+      }
+
+      .categories {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .category {
+        padding: 14px 5px;
+      }
+
+      .category-icon {
+        font-size: 28px;
+      }
+
+      .category h3 {
+        font-size: 11px;
+      }
+
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .product-image {
+        height: 150px;
+        font-size: 52px;
+      }
+
+      .product-info {
+        padding: 11px;
+      }
+
+      .product-name {
+        font-size: 13px;
+      }
+
+      .price {
+        font-size: 16px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .newsletter {
+        margin: 35px 12px;
+        padding: 30px 18px;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .newsletter-form button {
+        padding: 12px;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+      }
+
+      .footer-inner > div:first-child {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-bar">
+    🚚 Free Shipping on Selected Orders &nbsp; | &nbsp; 🛍️ Shop Smart, Live Better
+  </div>
+
+  <header>
+    <div class="header-main">
+
+      <a href="#" class="logo">
+        <div class="logo-name">Zynex<span>Cart</span></div>
+        <div class="tagline">Shop Smart, Live Better</div>
+      </a>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search for products...">
+        <button onclick="searchProducts()">🔍</button>
+      </div>
+
+      <div class="header-actions">
+        <a href="#" class="action">
+          <span class="action-icon">👤</span>
+          Account
+        </a>
+
+        <a href="#" class="action">
+          <span class="action-icon">❤️</span>
+          Wishlist
+        </a>
+
+        <a href="#" class="action">
+          <span class="action-icon">🛒</span>
+          Cart
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+      </div>
+
+    </div>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="#">Home</a>
+        <a href="#categories">Categories</a>
+        <a href="#products">All Products</a>
+        <a href="#deals">Deals</a>
+        <a href="#">New Arrivals</a>
+        <a href="#">Best Sellers</a>
+        <a href="#">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-card">
+
+        <div class="hero-content">
+          <div class="hero-small">Welcome to ZynexCart</div>
+
+          <h1>
+            Shop Smart.<br>
+            <span>Live Better.</span>
+          </h1>
+
+          <p>
+            Discover quality products, exciting deals and everyday essentials
+            — all in one place.
+          </p>
+
+          <a href="#products" class="hero-btn">
+            Shop Now →
+          </a>
+        </div>
+
+        <div class="hero-shape"></div>
+
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="section" id="categories">
+
+      <div class="section-heading">
+        <h2>Shop by Category</h2>
+        <a href="#" class="view-all">View All →</a>
+      </div>
+
+      <div class="categories">
+
+        <div class="category">
+          <div class="category-icon">👕</div>
+          <h3>Fashion</h3>
+        </div>
+
+        <div class="category">
+          <div class="category-icon">📱</div>
+          <h3>Electronics</h3>
+        </div>
+
+        <div class="category">
+          <div class="category-icon">🏠</div>
+          <h3>Home & Kitchen</h3>
+        </div>
+
+        <div class="category">
+          <div class="category-icon">💄</div>
+          <h3>Beauty</h3>
+        </div>
+
+        <div class="category">
+          <div class="category-icon">🏋️</div>
+          <h3>Fitness</h3>
+        </div>
+
+        <div class="category">
+          <div class="category-icon">🎒</div>
+          <h3>Accessories</h3>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="section" id="products">
+
+      <div class="section-heading">
+        <h2>Trending Products</h2>
+        <a href="#" class="view-all">View All →</a>
+      </div>
+
+      <div class="products" id="productGrid">
+
+        <div class="product" data-name="Wireless Headphones">
+          <div class="product-image">🎧</div>
+          <div class="product-info">
+            <div class="product-category">Electronics</div>
+            <div class="product-name">Wireless Bluetooth Headphones</div>
+            <div class="rating">★★★★★ <small>(128)</small></div>
+            <div class="price">₹1,499 <span class="old-price">₹2,499</span></div>
+            <button class="add-cart" onclick="addToCart()">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="product" data-name="Smart Watch">
+          <div class="product-image">⌚</div>
+          <div class="product-info">
+            <div class="product-category">Electronics</div>
+            <div class="product-name">Smart Fitness Watch</div>
+            <div class="rating">★★★★☆ <small>(96)</small></div>
+            <div class="price">₹1,999 <span class="old-price">₹3,499</span></div>
+            <button class="add-cart" onclick="addToCart()">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="product" data-name="Travel Backpack">
+          <div class="product-image">🎒</div>
+          <div class="product-info">
+            <div class="product-category">Accessories</div>
+            <div class="product-name">Premium Travel Backpack</div>
+            <div class="rating">★★★★★ <small>(74)</small></div>
+            <div class="price">₹899 <span class="old-price">₹1,499</span></div>
+            <button class="add-cart" onclick="addToCart()">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="product" data-name="Running Shoes">
+          <div class="product-image">👟</div>
+          <div class="product-info">
+            <div class="product-category">Fashion</div>
+            <div class="product-name">Lightweight Running Shoes</div>
+            <div class="rating">★★★★☆ <small>(112)</small></div>
+            <div class="price">₹1,299 <span class="old-price">₹2,199</span></div>
+            <button class="add-cart" onclick="addToCart()">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section">
+
+      <div class="features">
+
+        <div class="feature">
+          <div class="feature-icon">🚚</div>
+          <div>
+            <h3>Fast Delivery</h3>
+            <p>Quick & reliable delivery</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🔒</div>
+          <div>
+            <h3>Secure Shopping</h3>
+            <p>Your information is protected</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">💯</div>
+          <div>
+            <h3>Quality Products</h3>
+            <p>Products selected for you</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">💬</div>
+          <div>
+            <h3>Customer Support</h3>
+            <p>We're here to help</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter" id="deals">
+
+      <h2>Get the Latest Deals</h2>
+
+      <p>
+        Subscribe to receive new product updates and special offers.
+      </p>
+
+      <div class="newsletter-form">
+        <input type="email" placeholder="Enter your email address">
+        <button onclick="subscribeUser()">Subscribe</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div class="footer-inner">
+
+      <div>
+        <div class="footer-logo">Zynex<span>Cart</span></div>
+
+        <p class="footer-about">
+          ZynexCart is your online shopping destination for quality products,
+          great deals and a simple shopping experience.
+        </p>
+      </div>
+
+      <div>
+        <h3>Shop</h3>
+        <ul>
+          <li>All Products</li>
+          <li>New Arrivals</li>
+          <li>Best Sellers</li>
+          <li>Deals</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Customer Care</h3>
+        <ul>
+          <li>Contact Us</li>
+          <li>Shipping</li>
+          <li>Returns</li>
+          <li>FAQs</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li>About ZynexCart</li>
+          <li>Privacy Policy</li>
+          <li>Terms & Conditions</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      © 2026 ZynexCart. All rights reserved.
+    </div>
+
+  </footer>
+
+  <script>
+
+    let cartCount = 0;
+
+    function addToCart() {
+      cartCount++;
+      document.getElementById("cartCount").innerText = cartCount;
+      alert("Product added to cart!");
+    }
+
+    function searchProducts() {
+
+      const search =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+      const products =
+        document.querySelectorAll(".product");
+
+      products.forEach(product => {
+
+        const name =
+          product.dataset.name.toLowerCase();
+
+        if (name.includes(search) || search === "") {
+          product.style.display = "";
+        } else {
+          product.style.display = "none";
+        }
+
+      });
+
+    }
+
+    document
+      .getElementById("searchInput")
+      .addEventListener("keyup", function(event) {
+
+        if (event.key === "Enter") {
+          searchProducts();
+        }
+
+      });
+
+    function subscribeUser() {
+
+      const ema
