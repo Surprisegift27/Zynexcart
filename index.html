@@ -3,11 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZynexCart - Shop & Checkout</title>
+    <title>ZynexCart - Shop Smart, Live Better</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Modern Firebase SDKs via CDN -->
+    <!-- Custom Brand Colors based on your Logo -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0F2C59',   // Navy Blue from Logo
+                        secondary: '#FF6B00', // Orange from Logo
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Firebase SDKs (Modular) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { 
@@ -28,17 +44,17 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // ============ RECAPTCHA SETUP ============
+        // --- RECAPTCHA SETUP FOR PHONE AUTH ---
         window.setupRecaptcha = () => {
             if (!window.recaptchaVerifier) {
                 window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
                     'size': 'invisible',
-                    'callback': () => { console.log("reCAPTCHA solved"); }
+                    'callback': () => console.log("reCAPTCHA solved")
                 });
             }
         };
 
-        // ============ UI FUNCTIONS ============
+        // --- UI FUNCTIONS ---
         window.openModal = () => document.getElementById('authModal').classList.remove('hidden');
         window.closeModal = () => { 
             document.getElementById('authModal').classList.add('hidden'); 
@@ -80,7 +96,7 @@
         }
         window.hideError = () => document.getElementById('errorMsg').classList.add('hidden');
 
-        // ============ E-COMMERCE LOGIC ============
+        // --- E-COMMERCE LOGIC ---
         const products = [
             { id: 1, name: "Wireless Noise-Cancel Headphones", price: 2499, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" },
             { id: 2, name: "Smart Watch Series 7", price: 3999, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" },
@@ -92,35 +108,29 @@
 
         function renderProducts() {
             const grid = document.getElementById('productGrid');
-            if (!grid) {
-                console.error("Product grid not found!");
-                return;
-            }
+            if (!grid) return;
             
             grid.innerHTML = products.map(p => `
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group flex flex-col h-full">
-                    <div class="h-48 overflow-hidden bg-gray-100 relative">
-                        <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${p.name}">
-                        <span class="absolute top-2 right-2 bg-secondary text-white text-xs font-bold px-2 py-1 rounded">Hot</span>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col h-full">
+                    <div class="h-56 overflow-hidden bg-gray-100 relative">
+                        <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="${p.name}">
+                        <span class="absolute top-3 right-3 bg-secondary text-white text-xs font-bold px-2 py-1 rounded-md shadow-sm">Hot Deal</span>
                     </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                        <h3 class="font-bold text-gray-800 mb-1 truncate">${p.name}</h3>
-                        <p class="text-secondary font-bold text-xl mb-4">₹${p.price}</p>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h3 class="font-bold text-gray-800 mb-2 line-clamp-2 h-12">${p.name}</h3>
+                        <p class="text-secondary font-extrabold text-2xl mb-5">₹${p.price}</p>
                         
-                        <!-- BUTTONS SECTION - YEH AB DIKHEGA -->
-                        <div class="mt-auto space-y-2">
-                            <button onclick="window.addToCart(${p.id})" class="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2 cursor-pointer">
+                        <div class="mt-auto space-y-3">
+                            <button onclick="window.addToCart(${p.id})" class="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2 cursor-pointer shadow-sm">
                                 <i class="fa-solid fa-cart-plus"></i> Add to Cart
                             </button>
-                            <button onclick="window.buyNow(${p.id})" class="w-full bg-secondary text-white font-semibold py-2.5 rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2 shadow-md shadow-orange-100 cursor-pointer">
+                            <button onclick="window.buyNow(${p.id})" class="w-full bg-secondary text-white font-semibold py-3 rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2 shadow-md shadow-orange-200 cursor-pointer">
                                 <i class="fa-solid fa-bolt"></i> Buy Now
                             </button>
                         </div>
                     </div>
                 </div>
             `).join('');
-            
-            console.log("✅ Products rendered with buttons!");
         }
 
         window.addToCart = (productId) => {
@@ -134,22 +144,20 @@
             saveCart();
             updateCartUI();
             
-            // Visual feedback
+            // Button Feedback
             const btn = event.target.closest('button');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-check"></i> Added!`;
-            btn.classList.add('bg-green-600');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> Added`;
+            btn.classList.replace('bg-primary', 'bg-green-600');
             setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.classList.remove('bg-green-600');
+                btn.innerHTML = originalHTML;
+                btn.classList.replace('bg-green-600', 'bg-primary');
             }, 1000);
         };
 
         window.buyNow = (productId) => {
             window.addToCart(productId);
-            setTimeout(() => {
-                window.showPage('cart');
-            }, 300);
+            setTimeout(() => window.showPage('cart'), 400);
         };
 
         window.removeFromCart = (productId) => {
@@ -158,14 +166,12 @@
             renderCartPage();
         };
 
-        function saveCart() {
-            localStorage.setItem('zynex_cart', JSON.stringify(cart));
-        }
+        function saveCart() { localStorage.setItem('zynex_cart', JSON.stringify(cart)); }
 
         function updateCartUI() {
             const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const cartCountEl = document.getElementById('cartCount');
-            if (cartCountEl) cartCountEl.innerText = count;
+            const el = document.getElementById('cartCount');
+            if(el) el.innerText = count;
         }
 
         function renderCartPage() {
@@ -173,7 +179,7 @@
             const summary = document.getElementById('cartSummary');
             
             if (cart.length === 0) {
-                container.innerHTML = `<div class="p-12 text-center text-gray-500"><i class="fa-solid fa-cart-arrow-down text-4xl mb-3 text-gray-300"></i><p>Your cart is empty.</p><button onclick="window.showPage('home')" class="mt-4 text-secondary font-bold hover:underline">Start Shopping</button></div>`;
+                container.innerHTML = `<div class="p-16 text-center text-gray-500"><i class="fa-solid fa-basket-shopping text-5xl mb-4 text-gray-300"></i><p class="text-lg">Your cart is empty.</p><button onclick="window.showPage('home')" class="mt-6 text-secondary font-bold hover:underline text-lg">Start Shopping</button></div>`;
                 summary.classList.add('hidden');
                 return;
             }
@@ -182,14 +188,14 @@
             container.innerHTML = cart.map(item => {
                 total += item.price * item.quantity;
                 return `
-                <div class="flex items-center gap-4 p-4 border-b border-gray-100 last:border-0">
-                    <img src="${item.image}" class="w-20 h-20 object-cover rounded-lg bg-gray-100">
+                <div class="flex items-center gap-5 p-5 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition">
+                    <img src="${item.image}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 shadow-sm">
                     <div class="flex-1">
-                        <h3 class="font-bold text-gray-800">${item.name}</h3>
-                        <p class="text-secondary font-semibold">₹${item.price} x ${item.quantity}</p>
+                        <h3 class="font-bold text-gray-800 text-lg">${item.name}</h3>
+                        <p class="text-secondary font-bold mt-1">₹${item.price} x ${item.quantity}</p>
                     </div>
-                    <button onclick="window.removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 p-2">
-                        <i class="fa-solid fa-trash"></i>
+                    <button onclick="window.removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 p-3 rounded-full hover:bg-red-50 transition">
+                        <i class="fa-solid fa-trash-can text-xl"></i>
                     </button>
                 </div>`;
             }).join('');
@@ -205,18 +211,18 @@
             document.getElementById('page-cart').classList.add('hidden');
             document.getElementById(`page-${pageName}`).classList.remove('hidden');
             if (pageName === 'cart') renderCartPage();
+            window.scrollTo(0,0);
         };
 
-        // ============ CHECKOUT & AUTHENTICATION ============
+        // --- CHECKOUT & AUTH LOGIC ---
         window.handleCheckout = () => {
             if (cart.length === 0) return alert("Cart is empty!");
-            
             const currentUser = auth.currentUser;
             if (!currentUser) {
                 window.openModal();
             } else {
                 const total = document.getElementById('cartTotal').innerText;
-                alert(`✅ Order Placed Successfully!\nTotal: ₹${total}\nPayment Method: Credit/Debit Card (Simulated)\nThank you, ${currentUser.displayName || currentUser.phoneNumber || currentUser.email.split('@')[0]}!`);
+                alert(`✅ Order Placed Successfully!\n\nTotal: ₹${total}\nPayment: Credit/Debit Card (Simulated)\nUser: ${currentUser.displayName || currentUser.phoneNumber || currentUser.email.split('@')[0]}`);
                 cart = [];
                 saveCart();
                 updateCartUI();
@@ -235,11 +241,8 @@
                 await signInWithEmailAndPassword(auth, email, pass);
                 window.closeModal();
                 window.handleCheckout();
-            } catch (error) {
-                showError(error.message);
-            } finally {
-                document.getElementById('loaderEmail').style.display = 'none';
-            }
+            } catch (error) { showError(error.message); }
+            finally { document.getElementById('loaderEmail').style.display = 'none'; }
         };
 
         window.handleGoogleLogin = async () => {
@@ -248,22 +251,19 @@
                 await signInWithPopup(auth, provider);
                 window.closeModal();
                 window.handleCheckout();
-            } catch (error) {
-                showError(error.message);
-            }
+            } catch (error) { showError(error.message); }
         };
 
         window.sendOTP = async () => {
             const phone = document.getElementById('phoneInput').value.trim();
-            if(!phone || phone.length < 10) return showError("Please enter a valid 10-digit number");
+            if(!phone || phone.length < 10) return showError("Enter valid 10-digit number");
             
             document.getElementById('loaderPhone').style.display = 'block';
             window.hideError();
             try {
                 window.setupRecaptcha();
-                const appVerifier = window.recaptchaVerifier;
                 const fullPhone = "+91" + phone;
-                window.confirmationResult = await signInWithPhoneNumber(auth, fullPhone, appVerifier);
+                window.confirmationResult = await signInWithPhoneNumber(auth, fullPhone, window.recaptchaVerifier);
                 document.getElementById('loaderPhone').style.display = 'none';
                 window.showOTPForm();
             } catch (error) {
@@ -274,7 +274,7 @@
 
         window.verifyOTP = async () => {
             const otp = document.getElementById('otpInput').value.trim();
-            if(!otp || otp.length !== 6) return showError("Enter valid 6-digit OTP");
+            if(!otp || otp.length !== 6) return showError("Enter 6-digit OTP");
             
             document.getElementById('loaderOTP').style.display = 'block';
             window.hideError();
@@ -284,176 +284,163 @@
                 window.handleCheckout();
             } catch (error) {
                 document.getElementById('loaderOTP').style.display = 'none';
-                showError("Invalid OTP. Please try again.");
+                showError("Invalid OTP");
             }
         };
 
-        // ============ HEADER UPDATE ============
+        // --- HEADER UPDATE ---
         window.updateHeader = (user) => {
             const section = document.getElementById('userSection');
             if(user) {
                 const name = user.displayName || user.phoneNumber || (user.email ? user.email.split('@')[0] : 'User');
                 const img = user.photoURL || `https://ui-avatars.com/api/?name=${name}&background=0F2C59&color=fff`;
                 section.innerHTML = `
-                    <div class="flex items-center gap-3 cursor-pointer">
-                        <img src="${img}" class="w-9 h-9 rounded-full border-2 border-white shadow-sm">
+                    <div class="flex items-center gap-3 cursor-pointer group">
+                        <img src="${img}" class="w-10 h-10 rounded-full border-2 border-primary shadow-sm group-hover:scale-105 transition">
                         <div class="hidden md:block text-right">
-                            <p class="text-sm font-bold text-primary leading-none">${name}</p>
+                            <p class="text-sm font-bold text-primary leading-tight">${name}</p>
                             <button onclick="window.logout()" class="text-[10px] text-red-500 font-semibold hover:text-red-700">Logout</button>
                         </div>
                     </div>`;
             } else {
                 section.innerHTML = `
-                    <button onclick="window.openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition">
+                    <button onclick="window.openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition font-semibold">
                         <i class="fa-regular fa-user text-xl"></i>
-                        <span class="font-semibold hidden sm:block">Login</span>
+                        <span class="hidden sm:block">Login</span>
                     </button>`;
             }
         };
 
-        window.logout = () => {
-            signOut(auth).then(() => window.updateHeader(null));
-        };
+        window.logout = () => signOut(auth).then(() => window.updateHeader(null));
 
-        // ============ INITIALIZATION (FIXED TIMING) ============
-        // DOMContentLoaded ensure karta hai ki HTML puri tarah load ho chuka hai
+        // --- INITIALIZATION (FIXED TIMING ISSUE) ---
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts();
             updateCartUI();
-            console.log("✅ ZynexCart initialized!");
+            console.log("✅ ZynexCart Loaded Successfully");
         });
         
-        onAuthStateChanged(auth, (user) => {
-            if (user) window.updateHeader(user);
-            else window.updateHeader(null);
-        });
+        onAuthStateChanged(auth, (user) => window.updateHeader(user));
     </script>
 
     <style>
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #FF6B00; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50 font-sans text-gray-800">
 
     <!-- HEADER -->
-    <header class="bg-white shadow-sm sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-            <div class="text-2xl font-bold text-primary cursor-pointer" onclick="window.showPage('home')">
+    <header class="bg-white shadow-md sticky top-0 z-40 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+            <div class="text-3xl font-extrabold text-primary cursor-pointer tracking-tight" onclick="window.showPage('home')">
                 Zynex<span class="text-secondary italic">Cart</span>
             </div>
-            <div class="flex items-center gap-6">
-                <button onclick="window.showPage('cart')" class="relative text-gray-600 hover:text-primary transition">
+            <div class="flex items-center gap-8">
+                <button onclick="window.showPage('cart')" class="relative text-gray-600 hover:text-primary transition p-2">
                     <i class="fa-solid fa-cart-shopping text-2xl"></i>
-                    <span id="cartCount" class="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                    <span id="cartCount" class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">0</span>
                 </button>
-                <div id="userSection">
-                    <button onclick="window.openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition">
-                        <i class="fa-regular fa-user text-xl"></i>
-                        <span class="font-semibold hidden sm:block">Login</span>
-                    </button>
-                </div>
+                <div id="userSection"></div>
             </div>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto p-4 sm:p-8 min-h-screen">
-        <!-- PAGE 1: PRODUCT LISTING -->
+    <main class="max-w-7xl mx-auto p-4 sm:p-8 min-h-screen pb-20">
+        <!-- HOME PAGE -->
         <div id="page-home" class="fade-in">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Trending Products</h1>
-            <p class="text-gray-500 mb-8">Browse our latest collection. No login required to add to cart!</p>
-            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+            <div class="mb-10 text-center sm:text-left">
+                <h1 class="text-4xl font-extrabold text-primary mb-3">Trending Products</h1>
+                <p class="text-gray-500 text-lg">Shop smart with our latest collection. No login required to browse!</p>
+            </div>
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
         </div>
 
-        <!-- PAGE 2: CART PAGE -->
-        <div id="page-cart" class="hidden fade-in max-w-3xl mx-auto">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">Your Shopping Cart</h1>
-            <div id="cartItems" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6"></div>
+        <!-- CART PAGE -->
+        <div id="page-cart" class="hidden fade-in max-w-4xl mx-auto">
+            <h1 class="text-3xl font-extrabold text-primary mb-8">Your Shopping Cart</h1>
+            <div id="cartItems" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8"></div>
             
-            <div id="cartSummary" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div class="flex justify-between items-center mb-2 text-gray-600">
-                    <span>Subtotal</span>
-                    <span>₹<span id="cartTotal">0</span></span>
-                </div>
-                <div class="flex justify-between items-center mb-6 text-gray-600">
-                    <span>Shipping</span>
-                    <span class="text-green-600 font-semibold">FREE</span>
-                </div>
-                <div class="flex justify-between items-center mb-6 text-xl font-bold text-gray-800 border-t pt-4">
-                    <span>Total Amount</span>
-                    <span class="text-secondary">₹<span id="cartTotalFinal">0</span></span>
+            <div id="cartSummary" class="hidden bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                <div class="space-y-3 mb-8">
+                    <div class="flex justify-between text-gray-600 text-lg"><span>Subtotal</span><span>₹<span id="cartTotal">0</span></span></div>
+                    <div class="flex justify-between text-gray-600 text-lg"><span>Shipping</span><span class="text-green-600 font-bold">FREE</span></div>
+                    <div class="border-t pt-4 flex justify-between text-2xl font-extrabold text-primary"><span>Total Amount</span><span class="text-secondary">₹<span id="cartTotalFinal">0</span></span></div>
                 </div>
                 
-                <button onclick="window.handleCheckout()" class="w-full bg-secondary text-white font-bold py-4 rounded-lg hover:bg-orange-600 transition text-lg shadow-lg shadow-orange-200 flex items-center justify-center gap-3">
-                    <i class="fa-regular fa-credit-card text-xl"></i> 
+                <button onclick="window.handleCheckout()" class="w-full bg-secondary text-white font-bold py-5 rounded-xl hover:bg-orange-600 transition text-xl shadow-xl shadow-orange-200 flex items-center justify-center gap-3 transform hover:-translate-y-1 duration-200">
+                    <i class="fa-regular fa-credit-card text-2xl"></i> 
                     Proceed to Pay (Card/UPI)
                 </button>
-                <p class="text-center text-xs text-gray-400 mt-3"><i class="fa-solid fa-lock"></i> Secure SSL Encrypted Checkout</p>
+                <p class="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-2"><i class="fa-solid fa-lock"></i> Secure SSL Encrypted Checkout</p>
             </div>
         </div>
     </main>
 
     <!-- LOGIN MODAL -->
     <div id="authModal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="window.closeModal()"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden fade-in">
-            <div class="bg-primary p-6 text-center relative">
-                <button onclick="window.closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-                <h2 class="text-2xl font-bold text-white mb-1">Login Required</h2>
-                <p class="text-blue-200 text-sm">Please login to complete your secure payment</p>
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="window.closeModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden fade-in border border-gray-100">
+            <div class="bg-primary p-8 text-center relative">
+                <button onclick="window.closeModal()" class="absolute top-4 right-4 text-white/60 hover:text-white transition"><i class="fa-solid fa-xmark text-2xl"></i></button>
+                <h2 class="text-2xl font-bold text-white mb-2">Login Required</h2>
+                <p class="text-blue-200 text-sm">Complete your secure payment</p>
             </div>
 
             <div class="flex border-b">
-                <button id="tabEmail" onclick="window.switchTab('email')" class="flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50">Email</button>
-                <button id="tabPhone" onclick="window.switchTab('phone')" class="flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary">Phone Number</button>
+                <button id="tabEmail" onclick="window.switchTab('email')" class="flex-1 py-4 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50">Email</button>
+                <button id="tabPhone" onclick="window.switchTab('phone')" class="flex-1 py-4 text-sm font-bold text-gray-500 hover:text-primary">Phone Number</button>
             </div>
 
-            <div class="p-6 space-y-4">
+            <div class="p-8 space-y-5">
+                <!-- Email Form -->
                 <div id="formEmail" class="space-y-4">
-                    <input type="email" id="emailInput" placeholder="Email Address" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none">
-                    <input type="password" id="passInput" placeholder="Password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none">
-                    <button onclick="window.handleEmailLogin()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
+                    <input type="email" id="emailInput" placeholder="Email Address" class="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:border-secondary focus:ring-2 focus:ring-orange-100 outline-none transition bg-gray-50">
+                    <input type="password" id="passInput" placeholder="Password" class="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:border-secondary focus:ring-2 focus:ring-orange-100 outline-none transition bg-gray-50">
+                    <button onclick="window.handleEmailLogin()" class="w-full bg-secondary text-white font-bold py-3.5 rounded-xl hover:bg-orange-600 transition flex justify-center items-center gap-2 shadow-lg shadow-orange-100">
                         <span>Login & Pay</span>
                         <div class="loader" id="loaderEmail"></div>
                     </button>
                 </div>
 
+                <!-- Phone Form -->
                 <div id="formPhone" class="hidden space-y-4">
                     <div class="flex">
-                        <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-600 text-sm font-bold">+91</span>
-                        <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="10" class="w-full px-4 py-3 rounded-r-lg border border-gray-300 focus:border-secondary outline-none">
+                        <span class="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-gray-200 bg-gray-100 text-gray-600 text-sm font-bold">+91</span>
+                        <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="10" class="w-full px-5 py-3.5 rounded-r-xl border border-gray-200 focus:border-secondary outline-none transition bg-gray-50">
                     </div>
-                    <button onclick="window.sendOTP()" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition flex justify-center items-center gap-2">
+                    <button onclick="window.sendOTP()" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-blue-900 transition flex justify-center items-center gap-2 shadow-lg shadow-blue-100">
                         <span>Send OTP</span>
                         <div class="loader" id="loaderPhone"></div>
                     </button>
                 </div>
 
+                <!-- OTP Form -->
                 <div id="formOTP" class="hidden space-y-4">
-                    <p class="text-sm text-gray-600 text-center">Enter the 6-digit code sent to your phone</p>
-                    <input type="text" id="otpInput" maxlength="6" placeholder="123456" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none text-center text-2xl font-bold tracking-widest">
-                    <button onclick="window.verifyOTP()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
+                    <p class="text-sm text-gray-600 text-center font-medium">Enter 6-digit code sent to your phone</p>
+                    <input type="text" id="otpInput" maxlength="6" placeholder="1 2 3 4 5 6" class="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:border-secondary outline-none text-center text-2xl font-bold tracking-[0.5em] transition bg-gray-50">
+                    <button onclick="window.verifyOTP()" class="w-full bg-secondary text-white font-bold py-3.5 rounded-xl hover:bg-orange-600 transition flex justify-center items-center gap-2 shadow-lg shadow-orange-100">
                         <span>Verify & Pay</span>
                         <div class="loader" id="loaderOTP"></div>
                     </button>
-                    <button onclick="window.switchTab('phone')" class="w-full text-sm text-gray-500 hover:text-primary font-semibold">Change Phone Number</button>
+                    <button onclick="window.switchTab('phone')" class="w-full text-sm text-gray-500 hover:text-primary font-semibold py-2">Change Phone Number</button>
                 </div>
 
                 <div class="relative flex py-2 items-center">
                     <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold">OR</span>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold uppercase">Or Continue With</span>
                     <div class="flex-grow border-t border-gray-200"></div>
                 </div>
 
-                <button onclick="window.handleGoogleLogin()" class="w-full border border-gray-300 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-50 transition flex justify-center items-center gap-3">
+                <button onclick="window.handleGoogleLogin()" class="w-full border border-gray-200 text-gray-700 font-bold py-3.5 rounded-xl hover:bg-gray-50 transition flex justify-center items-center gap-3 bg-white">
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
                     Sign in with Google
                 </button>
 
-                <div id="errorMsg" class="hidden bg-red-50 text-red-600 text-sm p-3 rounded-lg text-center border border-red-100"></div>
+                <div id="errorMsg" class="hidden bg-red-50 text-red-600 text-sm p-4 rounded-xl text-center border border-red-100 font-medium"></div>
             </div>
             <div id="recaptcha-container" class="absolute bottom-0 right-0"></div>
         </div>
