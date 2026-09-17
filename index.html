@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZynexCart - Professional Login</title>
+    <title>ZynexCart - Shop & Checkout</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Modern Firebase SDKs via CDN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        // Added signInWithPhoneNumber and RecaptchaVerifier
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, signInWithPhoneNumber, RecaptchaVerifier } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { 
+            getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, 
+            onAuthStateChanged, signOut, signInWithPhoneNumber, RecaptchaVerifier 
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
 
-        // Aapka Real Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDI15D4x7_Lo6w9Eh9M5HPQBXFLq2zFklM",
             authDomain: "zynexcart-web.firebaseapp.com",
@@ -25,7 +26,6 @@
             measurementId: "G-P9WTMDQEPW"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const auth = getAuth(app);
@@ -35,99 +35,219 @@
             if (!window.recaptchaVerifier) {
                 window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
                     'size': 'invisible',
-                    'callback': (response) => { console.log("reCAPTCHA solved"); }
+                    'callback': () => { console.log("reCAPTCHA solved"); }
                 });
             }
         };
 
-        // UI Functions
-        window.openModal = () => { document.getElementById('authModal').classList.remove('hidden'); };
+        // ============ UI FUNCTIONS ============
+        window.openModal = () => document.getElementById('authModal').classList.remove('hidden');
         window.closeModal = () => { 
             document.getElementById('authModal').classList.add('hidden'); 
             window.hideError(); 
         };
         
         window.switchTab = (tab) => {
+            const emailForm = document.getElementById('formEmail');
+            const phoneForm = document.getElementById('formPhone');
+            const otpForm = document.getElementById('formOTP');
+            const tabEmail = document.getElementById('tabEmail');
+            const tabPhone = document.getElementById('tabPhone');
+            
             if(tab === 'email') {
-                document.getElementById('formEmail').classList.remove('hidden');
-                document.getElementById('formPhone').classList.add('hidden');
-                document.getElementById('formOTP').classList.add('hidden'); // Hide OTP form
-                document.getElementById('tabEmail').className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
-                document.getElementById('tabPhone').className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
+                emailForm.classList.remove('hidden');
+                phoneForm.classList.add('hidden');
+                otpForm.classList.add('hidden');
+                tabEmail.className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
+                tabPhone.className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
             } else {
-                document.getElementById('formEmail').classList.add('hidden');
-                document.getElementById('formPhone').classList.remove('hidden');
-                document.getElementById('formOTP').classList.add('hidden'); // Hide OTP form
-                document.getElementById('tabPhone').className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
-                document.getElementById('tabEmail').className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
+                emailForm.classList.add('hidden');
+                phoneForm.classList.remove('hidden');
+                otpForm.classList.add('hidden');
+                tabPhone.className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
+                tabEmail.className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
             }
             window.hideError();
+        };
+
+        window.showOTPForm = () => {
+            document.getElementById('formPhone').classList.add('hidden');
+            document.getElementById('formOTP').classList.remove('hidden');
         };
 
         function showError(msg) {
             const el = document.getElementById('errorMsg');
-            el.innerText = msg;
+            el.innerText = msg; 
             el.classList.remove('hidden');
         }
-        window.hideError = () => { document.getElementById('errorMsg').classList.add('hidden'); };
+        window.hideError = () => document.getElementById('errorMsg').classList.add('hidden');
 
-        // Real Email Login
-        window.handleEmailLogin = async () => {
-            const email = document.getElementById('emailInput').value;
-            const pass = document.getElementById('passInput').value;
-            const loader = document.getElementById('loaderEmail');
+        // ============ E-COMMERCE LOGIC ============
+        const products = [
+            { id: 1, name: "Wireless Noise-Cancel Headphones", price: 2499, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" },
+            { id: 2, name: "Smart Watch Series 7", price: 3999, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" },
+            { id: 3, name: "Ergonomic Mechanical Keyboard", price: 1899, image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80" },
+            { id: 4, name: "Premium Running Shoes", price: 3299, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" }
+        ];
 
-            if(!email || !pass) return showError("Please fill all fields");
+        let cart = JSON.parse(localStorage.getItem('zynex_cart')) || [];
 
-            loader.style.display = 'block';
-            window.hideError();
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group">
+                    <div class="h-48 overflow-hidden bg-gray-100">
+                        <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${p.name}">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-1 truncate">${p.name}</h3>
+                        <p class="text-secondary font-bold text-lg mb-3">₹${p.price}</p>
+                        <button onclick="window.addToCart(${p.id})" class="w-full bg-primary text-white font-semibold py-2 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-                window.closeModal();
-            } catch (error) {
-                showError(error.message);
-            } finally {
-                loader.style.display = 'none';
+        window.addToCart = (productId) => {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            saveCart();
+            updateCartUI();
+            
+            // Visual feedback
+            const btn = event.target.closest('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> Added!`;
+            btn.classList.add('bg-green-600');
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('bg-green-600');
+            }, 1000);
+        };
+
+        window.removeFromCart = (productId) => {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            renderCartPage();
+        };
+
+        function saveCart() {
+            localStorage.setItem('zynex_cart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').innerText = count;
+        }
+
+        function renderCartPage() {
+            const container = document.getElementById('cartItems');
+            const summary = document.getElementById('cartSummary');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="p-12 text-center text-gray-500"><i class="fa-solid fa-cart-arrow-down text-4xl mb-3 text-gray-300"></i><p>Your cart is empty.</p><button onclick="window.showPage('home')" class="mt-4 text-secondary font-bold hover:underline">Start Shopping</button></div>`;
+                summary.classList.add('hidden');
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                total += item.price * item.quantity;
+                return `
+                <div class="flex items-center gap-4 p-4 border-b border-gray-100 last:border-0">
+                    <img src="${item.image}" class="w-20 h-20 object-cover rounded-lg bg-gray-100">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-800">${item.name}</h3>
+                        <p class="text-secondary font-semibold">₹${item.price} x ${item.quantity}</p>
+                    </div>
+                    <button onclick="window.removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 p-2">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>`;
+            }).join('');
+
+            document.getElementById('cartTotal').innerText = total;
+            summary.classList.remove('hidden');
+        }
+
+        window.showPage = (pageName) => {
+            document.getElementById('page-home').classList.add('hidden');
+            document.getElementById('page-cart').classList.add('hidden');
+            document.getElementById(`page-${pageName}`).classList.remove('hidden');
+            if (pageName === 'cart') renderCartPage();
+        };
+
+        // ============ CHECKOUT & AUTHENTICATION LOGIC ============
+        window.handleCheckout = () => {
+            if (cart.length === 0) return alert("Cart is empty!");
+            
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                // Agar logged in nahi hai, toh Login Modal khol do
+                window.openModal();
+            } else {
+                // Agar logged in hai, toh order place kar do
+                const total = document.getElementById('cartTotal').innerText;
+                alert(`✅ Order Placed Successfully!\nTotal: ₹${total}\nThank you, ${currentUser.displayName || currentUser.phoneNumber || currentUser.email.split('@')[0]}!`);
+                cart = [];
+                saveCart();
+                updateCartUI();
+                window.showPage('home');
             }
         };
 
-        // Real Google Login
+        window.handleEmailLogin = async () => {
+            const email = document.getElementById('emailInput').value;
+            const pass = document.getElementById('passInput').value;
+            if(!email || !pass) return showError("Please fill all fields");
+            
+            document.getElementById('loaderEmail').style.display = 'block';
+            window.hideError();
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.closeModal();
+                window.handleCheckout(); // Auto checkout after login
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                document.getElementById('loaderEmail').style.display = 'none';
+            }
+        };
+
         window.handleGoogleLogin = async () => {
             try {
                 const provider = new GoogleAuthProvider();
                 await signInWithPopup(auth, provider);
                 window.closeModal();
+                window.handleCheckout(); // Auto checkout after login
             } catch (error) {
                 showError(error.message);
             }
         };
 
-        // ============ PHONE OTP LOGIC ============
         window.sendOTP = async () => {
             const phone = document.getElementById('phoneInput').value.trim();
             if(!phone || phone.length < 10) return showError("Please enter a valid 10-digit number");
             
-            const loader = document.getElementById('loaderPhone');
-            loader.style.display = 'block';
+            document.getElementById('loaderPhone').style.display = 'block';
             window.hideError();
-            
             try {
                 window.setupRecaptcha();
                 const appVerifier = window.recaptchaVerifier;
                 const fullPhone = "+91" + phone;
-                
-                // Send OTP
                 window.confirmationResult = await signInWithPhoneNumber(auth, fullPhone, appVerifier);
-                loader.style.display = 'none';
-                
-                // Hide Phone form and Show OTP form
-                document.getElementById('formPhone').classList.add('hidden');
-                document.getElementById('formOTP').classList.remove('hidden');
+                document.getElementById('loaderPhone').style.display = 'none';
+                window.showOTPForm();
             } catch (error) {
-                loader.style.display = 'none';
+                document.getElementById('loaderPhone').style.display = 'none';
                 showError("Error: " + error.message);
-                console.error(error);
             }
         };
 
@@ -135,69 +255,61 @@
             const otp = document.getElementById('otpInput').value.trim();
             if(!otp || otp.length !== 6) return showError("Enter valid 6-digit OTP");
             
-            const loader = document.getElementById('loaderOTP');
-            loader.style.display = 'block';
+            document.getElementById('loaderOTP').style.display = 'block';
             window.hideError();
-            
             try {
                 await window.confirmationResult.confirm(otp);
                 window.closeModal();
+                window.handleCheckout(); // Auto checkout after login
             } catch (error) {
-                loader.style.display = 'none';
+                document.getElementById('loaderOTP').style.display = 'none';
                 showError("Invalid OTP. Please try again.");
             }
         };
 
-        // Header Update Logic (Updated to support Phone Number display)
+        // ============ HEADER UPDATE ============
         window.updateHeader = (user) => {
             const section = document.getElementById('userSection');
             if(user) {
-                // Fixed crash when user logs in via phone (no email)
-                const name = user.displayName || user.phoneNumber || user.email.split('@')[0];
+                const name = user.displayName || user.phoneNumber || (user.email ? user.email.split('@')[0] : 'User');
                 const img = user.photoURL || `https://ui-avatars.com/api/?name=${name}&background=0F2C59&color=fff`;
-                
                 section.innerHTML = `
-                    <div class="flex items-center gap-3 cursor-pointer group">
+                    <div class="flex items-center gap-3 cursor-pointer">
                         <img src="${img}" class="w-9 h-9 rounded-full border-2 border-white shadow-sm">
                         <div class="hidden md:block text-right">
                             <p class="text-sm font-bold text-primary leading-none">${name}</p>
-                            <p class="text-[10px] text-gray-500">My Account</p>
+                            <button onclick="window.logout()" class="text-[10px] text-red-500 font-semibold hover:text-red-700">Logout</button>
                         </div>
-                    </div>
-                    <button onclick="window.logout()" class="text-xs text-red-500 font-semibold hover:text-red-700">Logout</button>
-                `;
+                    </div>`;
             } else {
                 section.innerHTML = `
                     <button onclick="window.openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition">
                         <i class="fa-regular fa-user text-xl"></i>
                         <span class="font-semibold hidden sm:block">Login</span>
-                    </button>
-                `;
+                    </button>`;
             }
         };
 
         window.logout = () => {
-            signOut(auth).then(() => {
-                window.updateHeader(null);
-            }).catch((error) => {
-                console.error("Logout error:", error);
-                window.updateHeader(null);
-            });
+            signOut(auth).then(() => window.updateHeader(null));
         };
 
-        // Page Load check
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                window.updateHeader(user);
-            } else {
-                window.updateHeader(null);
-            }
-        });
+        // ============ INITIALIZATION ============
+        window.onload = () => {
+            renderProducts();
+            updateCartUI();
+            onAuthStateChanged(auth, (user) => {
+                if (user) window.updateHeader(user);
+                else window.updateHeader(null);
+            });
+        };
     </script>
 
     <style>
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #FF6B00; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -205,101 +317,114 @@
     <!-- HEADER -->
     <header class="bg-white shadow-sm sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-            <div class="text-2xl font-bold text-primary">Zynex<span class="text-secondary italic">Cart</span></div>
-            
-            <!-- User Profile Section (Dynamic) -->
-            <div id="userSection" class="flex items-center gap-4">
-                <button onclick="openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition">
-                    <i class="fa-regular fa-user text-xl"></i>
-                    <span class="font-semibold hidden sm:block">Login</span>
+            <div class="text-2xl font-bold text-primary cursor-pointer" onclick="window.showPage('home')">
+                Zynex<span class="text-secondary italic">Cart</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <button onclick="window.showPage('cart')" class="relative text-gray-600 hover:text-primary transition">
+                    <i class="fa-solid fa-cart-shopping text-2xl"></i>
+                    <span id="cartCount" class="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
                 </button>
+                <div id="userSection">
+                    <button onclick="window.openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition">
+                        <i class="fa-regular fa-user text-xl"></i>
+                        <span class="font-semibold hidden sm:block">Login</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- LOGIN MODAL -->
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto p-4 sm:p-8 min-h-screen">
+        <!-- PAGE 1: PRODUCT LISTING -->
+        <div id="page-home" class="fade-in">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Trending Products</h1>
+            <p class="text-gray-500 mb-8">Browse our latest collection. No login required to add to cart!</p>
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        </div>
+
+        <!-- PAGE 2: CART PAGE -->
+        <div id="page-cart" class="hidden fade-in max-w-3xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Your Shopping Cart</h1>
+            <div id="cartItems" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6"></div>
+            <div id="cartSummary" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-4 text-lg font-bold text-gray-800">
+                    <span>Total Amount:</span>
+                    <span class="text-secondary">₹<span id="cartTotal">0</span></span>
+                </div>
+                <button onclick="window.handleCheckout()" class="w-full bg-secondary text-white font-bold py-4 rounded-lg hover:bg-orange-600 transition text-lg shadow-lg shadow-orange-200">
+                    Proceed to Checkout <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- LOGIN MODAL (Triggered ONLY on Checkout) -->
     <div id="authModal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
-        
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="window.closeModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden fade-in">
             <div class="bg-primary p-6 text-center relative">
-                <button onclick="closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-                <h2 class="text-2xl font-bold text-white mb-1">Welcome Back</h2>
-                <p class="text-blue-200 text-sm">Login to access your orders & addresses</p>
+                <button onclick="window.closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <h2 class="text-2xl font-bold text-white mb-1">Login Required</h2>
+                <p class="text-blue-200 text-sm">Please login to complete your purchase</p>
             </div>
 
             <div class="flex border-b">
-                <button id="tabEmail" onclick="switchTab('email')" class="flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50">Email / Password</button>
-                <button id="tabPhone" onclick="switchTab('phone')" class="flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary">Phone Number</button>
+                <button id="tabEmail" onclick="window.switchTab('email')" class="flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50">Email</button>
+                <button id="tabPhone" onclick="window.switchTab('phone')" class="flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary">Phone Number</button>
             </div>
 
             <div class="p-6 space-y-4">
                 <!-- Email Form -->
                 <div id="formEmail" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Email Address</label>
-                        <input type="email" id="emailInput" placeholder="name@example.com" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Password</label>
-                        <input type="password" id="passInput" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition">
-                    </div>
-                    <button onclick="handleEmailLogin()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
-                        <span>Login with Email</span>
+                    <input type="email" id="emailInput" placeholder="Email Address" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none">
+                    <input type="password" id="passInput" placeholder="Password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none">
+                    <button onclick="window.handleEmailLogin()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
+                        <span>Login & Checkout</span>
                         <div class="loader" id="loaderEmail"></div>
                     </button>
                 </div>
 
                 <!-- Phone Form -->
                 <div id="formPhone" class="hidden space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Mobile Number</label>
-                        <div class="flex">
-                            <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-600 text-sm">+91</span>
-                            <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="10" class="w-full px-4 py-3 rounded-r-lg border border-gray-300 focus:border-secondary outline-none">
-                        </div>
+                    <div class="flex">
+                        <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 text-gray-600 text-sm font-bold">+91</span>
+                        <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="10" class="w-full px-4 py-3 rounded-r-lg border border-gray-300 focus:border-secondary outline-none">
                     </div>
-                    <button onclick="sendOTP()" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition flex justify-center items-center gap-2">
+                    <button onclick="window.sendOTP()" class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition flex justify-center items-center gap-2">
                         <span>Send OTP</span>
                         <div class="loader" id="loaderPhone"></div>
                     </button>
                 </div>
 
-                <!-- OTP Verification Form -->
+                <!-- OTP Form -->
                 <div id="formOTP" class="hidden space-y-4">
                     <p class="text-sm text-gray-600 text-center">Enter the 6-digit code sent to your phone</p>
-                    <input type="text" id="otpInput" maxlength="6" placeholder="123456" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none text-center text-2xl font-bold tracking-widest transition">
-                    <button onclick="verifyOTP()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
-                        <span>Verify & Login</span>
+                    <input type="text" id="otpInput" maxlength="6" placeholder="123456" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none text-center text-2xl font-bold tracking-widest">
+                    <button onclick="window.verifyOTP()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
+                        <span>Verify & Checkout</span>
                         <div class="loader" id="loaderOTP"></div>
                     </button>
-                    <button onclick="switchTab('phone')" class="w-full text-sm text-gray-500 hover:text-primary font-semibold mt-2">Change Phone Number</button>
+                    <button onclick="window.switchTab('phone')" class="w-full text-sm text-gray-500 hover:text-primary font-semibold">Change Phone Number</button>
                 </div>
 
                 <div class="relative flex py-2 items-center">
                     <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs">OR CONTINUE WITH</span>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold">OR</span>
                     <div class="flex-grow border-t border-gray-200"></div>
                 </div>
 
-                <button onclick="handleGoogleLogin()" class="w-full border border-gray-300 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-50 transition flex justify-center items-center gap-3">
+                <button onclick="window.handleGoogleLogin()" class="w-full border border-gray-300 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-50 transition flex justify-center items-center gap-3">
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
                     Sign in with Google
                 </button>
 
                 <div id="errorMsg" class="hidden bg-red-50 text-red-600 text-sm p-3 rounded-lg text-center border border-red-100"></div>
             </div>
-            
-            <!-- Hidden reCAPTCHA container (Required for Phone Auth) -->
             <div id="recaptcha-container" class="absolute bottom-0 right-0"></div>
         </div>
     </div>
-
-    <!-- CONTENT PLACEHOLDER -->
-    <main class="max-w-7xl mx-auto p-8 text-center">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Start Shopping</h1>
-        <p class="text-gray-500">Login to see your personalized recommendations.</p>
-    </main>
 
 </body>
 </html>
