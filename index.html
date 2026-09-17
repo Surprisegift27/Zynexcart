@@ -3,101 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ZynexCart — Shop Smart, Live Better</title>
-<meta name="description" content="ZynexCart — Quality products, great deals and a simple shopping experience.">
+
+<meta name="description" content="ZynexCart - Trendy Products, Best Quality, Fast Delivery">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:Arial,Helvetica,sans-serif;background:#f7f8fb;color:#172033}
-button,input{font:inherit}
-button{cursor:pointer;border:0}
-a{text-decoration:none;color:inherit}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f7fa;
+  color:#172033;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+  border:0;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+/* COLORS */
 :root{
   --navy:#0b132b;
   --orange:#ff6b00;
-  --light:#f7f8fb;
+  --light:#f5f7fa;
   --border:#e5e7eb;
   --muted:#64748b;
-  --green:#16a34a;
 }
 
-/* TOP */
-.top-bar{
+/* TOP BAR */
+.topbar{
   background:var(--navy);
-  color:#fff;
+  color:white;
   text-align:center;
-  padding:8px 12px;
-  font-size:12px
+  padding:9px 10px;
+  font-size:12px;
 }
 
 /* HEADER */
 header{
-  background:#fff;
+  background:white;
+  border-bottom:1px solid var(--border);
   position:sticky;
   top:0;
   z-index:1000;
-  border-bottom:1px solid var(--border)
 }
-.header-main{
-  max-width:1250px;
+
+.header{
+  max-width:1200px;
   margin:auto;
-  padding:13px 18px;
+  padding:14px 16px;
   display:flex;
   align-items:center;
-  gap:22px
+  gap:20px;
 }
-.logo{min-width:190px}
-.logo-name{
-  font-size:27px;
-  font-weight:900;
-  color:var(--navy)
-}
-.logo-name span{color:var(--orange)}
-.tagline{font-size:10px;color:var(--muted);margin-top:2px}
 
-.search-box{
-  flex:1;
-  height:46px;
-  display:flex;
-  background:#f1f5f9;
-  border:1px solid #e2e8f0;
-  border-radius:9px;
-  overflow:hidden
+.logo{
+  min-width:190px;
 }
-.search-box input{
+
+.logo h1{
+  color:var(--navy);
+  font-size:27px;
+}
+
+.logo h1 span{
+  color:var(--orange);
+}
+
+.logo p{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+}
+
+/* SEARCH */
+.search{
+  flex:1;
+  display:flex;
+  height:44px;
+  background:#f1f5f9;
+  border:1px solid #dfe5ec;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.search input{
   flex:1;
   border:0;
   outline:0;
   background:transparent;
-  padding:0 15px;
-  font-size:14px
-}
-.search-box button{
-  width:52px;
-  background:var(--orange);
-  color:white;
-  font-size:18px
+  padding:0 14px;
 }
 
-.header-actions{
+.search button{
+  width:50px;
+  background:var(--orange);
+  color:white;
+}
+
+/* ACTIONS */
+.actions{
   display:flex;
-  gap:17px;
-  align-items:center
+  gap:15px;
 }
+
 .action{
-  text-align:center;
-  font-size:11px;
+  background:white;
   color:#334155;
+  font-size:11px;
+  text-align:center;
   position:relative;
-  min-width:42px
 }
-.action-icon{display:block;font-size:21px;margin-bottom:2px}
+
+.action-icon{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+
 .cart-count{
   position:absolute;
-  top:-5px;
-  right:1px;
+  top:-7px;
+  right:-6px;
   background:var(--orange);
   color:white;
   width:18px;
@@ -105,119 +146,1369 @@ header{
   border-radius:50%;
   font-size:10px;
   display:flex;
-  align-items:center;
   justify-content:center;
-  font-weight:bold
+  align-items:center;
 }
 
-/* NAV */
-nav{background:var(--navy);color:white}
-.nav-inner{
-  max-width:1250px;
+/* NAVIGATION */
+nav{
+  background:var(--navy);
+  color:white;
+}
+
+.nav{
+  max-width:1200px;
   margin:auto;
   display:flex;
   gap:28px;
-  padding:11px 18px;
-  font-size:13px;
+  padding:11px 16px;
   overflow-x:auto;
-  white-space:nowrap
+  white-space:nowrap;
+  font-size:13px;
 }
-.nav-inner a:hover{color:#ff9b50}
 
-/* MAIN */
-.container{max-width:1250px;margin:auto;padding:0 18px}
+/* CONTAINER */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:0 16px;
+}
 
 /* HERO */
-.hero{padding:18px 0}
-.hero-card{
-  min-height:350px;
-  border-radius:18px;
+.hero{
+  padding:18px 0;
+}
+
+.hero-box{
+  min-height:330px;
+  border-radius:16px;
   background:linear-gradient(120deg,#0b132b,#172554);
   color:white;
-  padding:48px;
+  padding:45px;
+  display:flex;
+  align-items:center;
   position:relative;
   overflow:hidden;
-  display:flex;
-  align-items:center
 }
-.hero-content{max-width:620px;position:relative;z-index:2}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:620px;
+}
+
 .hero-small{
   color:#ff9b50;
   font-size:13px;
   font-weight:bold;
   text-transform:uppercase;
-  letter-spacing:1.5px;
-  margin-bottom:13px
+  letter-spacing:1px;
+  margin-bottom:12px;
 }
-.hero h1{font-size:47px;line-height:1.08;margin-bottom:16px}
-.hero h1 span{color:#ff7a1a}
+
+.hero h2{
+  font-size:45px;
+  line-height:1.1;
+  margin-bottom:15px;
+}
+
+.hero h2 span{
+  color:var(--orange);
+}
+
 .hero p{
   color:#dbe4f0;
   font-size:15px;
-  line-height:1.7;
-  margin-bottom:25px
+  line-height:1.6;
+  margin-bottom:23px;
 }
-.hero-btn{
+
+.shop-btn{
   display:inline-block;
   background:var(--orange);
   color:white;
   padding:13px 23px;
   border-radius:8px;
   font-weight:bold;
-  font-size:14px
 }
-.hero-shape{
+
+.hero-circle{
   position:absolute;
-  right:-100px;
-  width:470px;
-  height:470px;
+  right:-120px;
+  width:430px;
+  height:430px;
   border-radius:50%;
-  background:rgba(255,107,0,.13)
+  background:rgba(255,107,0,.13);
 }
 
 /* SECTION */
-.section{padding:30px 0}
-.section-heading{
+.section{
+  padding:28px 0;
+}
+
+.heading{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:17px
-}
-.section-heading h2{font-size:22px}
-.view-all{
-  color:var(--orange);
-  font-weight:bold;
-  font-size:13px;
-  cursor:pointer
+  margin-bottom:16px;
 }
 
-/* CATEGORY */
+.heading h2{
+  font-size:22px;
+}
+
+.view{
+  color:var(--orange);
+  font-size:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* CATEGORIES */
 .categories{
   display:grid;
   grid-template-columns:repeat(6,1fr);
-  gap:12px
+  gap:12px;
 }
+
 .category{
   background:white;
   border:1px solid var(--border);
-  border-radius:12px;
+  border-radius:11px;
   padding:18px 8px;
   text-align:center;
+  cursor:pointer;
   transition:.2s;
-  cursor:pointer
 }
+
 .category:hover{
-  transform:translateY(-3px);
   border-color:var(--orange);
-  box-shadow:0 8px 20px rgba(0,0,0,.06)
+  transform:translateY(-2px);
 }
-.category-icon{font-size:32px;margin-bottom:8px}
-.category h3{font-size:13px}
+
+.category-icon{
+  font-size:32px;
+  margin-bottom:7px;
+}
+
+.category h3{
+  font-size:13px;
+}
 
 /* PRODUCTS */
 .products{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:15px
+  gap:15px;
 }
+
 .product{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.product-image{
+  height:190px;
+  background:#eef2f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:65px;
+  cursor:pointer;
+}
+
+.product-info{
+  padding:13px;
+}
+
+.product-category{
+  color:var(--muted);
+  font-size:10px;
+  margin-bottom:6px;
+}
+
+.product-name{
+  font-size:14px;
+  font-weight:bold;
+  line-height:1.4;
+  min-height:40px;
+}
+
+.rating{
+  color:#f59e0b;
+  font-size:12px;
+  margin:7px 0;
+}
+
+.price{
+  color:var(--navy);
+  font-size:18px;
+  font-weight:bold;
+}
+
+.old-price{
+  color:#94a3b8;
+  font-size:11px;
+  text-decoration:line-through;
+  margin-left:5px;
+}
+
+.discount{
+  color:#16a34a;
+  font-size:11px;
+  margin-left:5px;
+}
+
+.add{
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  border-radius:7px;
+  background:var(--navy);
+  color:white;
+  font-weight:bold;
+}
+
+.add:hover{
+  background:var(--orange);
+}
+
+/* FEATURES */
+.features{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.feature{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:18px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.feature-icon{
+  font-size:27px;
+}
+
+.feature h3{
+  font-size:13px;
+  margin-bottom:4px;
+}
+
+.feature p{
+  color:var(--muted);
+  font-size:11px;
+}
+
+/* NEWSLETTER */
+.newsletter{
+  background:var(--navy);
+  color:white;
+  padding:32px 15px;
+  text-align:center;
+  border-radius:14px;
+  margin:25px 0 35px;
+}
+
+.newsletter h2{
+  margin-bottom:8px;
+}
+
+.newsletter p{
+  color:#cbd5e1;
+  font-size:13px;
+  margin-bottom:16px;
+}
+
+.newsletter-box{
+  max-width:480px;
+  margin:auto;
+  display:flex;
+  gap:7px;
+}
+
+.newsletter-box input{
+  flex:1;
+  padding:12px;
+  border:0;
+  border-radius:7px;
+  outline:0;
+}
+
+.newsletter-box button{
+  background:var(--orange);
+  color:white;
+  padding:0 18px;
+  border-radius:7px;
+  font-weight:bold;
+}
+
+/* FOOTER */
+footer{
+  background:#07101f;
+  color:white;
+  padding:40px 16px 20px;
+}
+
+.footer{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:30px;
+}
+
+.footer-logo{
+  font-size:24px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.footer-logo span{
+  color:var(--orange);
+}
+
+.footer p{
+  color:#94a3b8;
+  font-size:12px;
+  line-height:1.7;
+}
+
+footer h3{
+  font-size:13px;
+  margin-bottom:12px;
+}
+
+footer li{
+  list-style:none;
+  color:#94a3b8;
+  font-size:12px;
+  margin-bottom:9px;
+}
+
+.copyright{
+  max-width:1200px;
+  margin:25px auto 0;
+  padding-top:15px;
+  border-top:1px solid #1e293b;
+  text-align:center;
+  color:#64748b;
+  font-size:11px;
+}
+
+/* CART */
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:2000;
+}
+
+.overlay.show{
+  display:block;
+}
+
+.cart{
+  position:fixed;
+  right:-420px;
+  top:0;
+  width:400px;
+  max-width:94%;
+  height:100%;
+  background:white;
+  z-index:3000;
+  transition:.3s;
+  display:flex;
+  flex-direction:column;
+}
+
+.cart.show{
+  right:0;
+}
+
+.cart-header{
+  padding:18px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#f1f5f9;
+}
+
+.cart-list{
+  flex:1;
+  overflow:auto;
+  padding:15px;
+}
+
+.cart-item{
+  display:flex;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.cart-img{
+  width:60px;
+  height:60px;
+  background:#eef2f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  font-size:28px;
+}
+
+.cart-info{
+  flex:1;
+}
+
+.cart-name{
+  font-size:13px;
+  font-weight:bold;
+}
+
+.qty{
+  display:flex;
+  gap:9px;
+  align-items:center;
+  margin-top:7px;
+}
+
+.qty button{
+  width:25px;
+  height:25px;
+  background:#e2e8f0;
+  border-radius:5px;
+}
+
+.remove{
+  color:#ef4444;
+  background:none;
+  font-size:11px;
+  margin-top:5px;
+}
+
+.cart-bottom{
+  padding:17px;
+  border-top:1px solid var(--border);
+}
+
+.total-row{
+  display:flex;
+  justify-content:space-between;
+  font-weight:bold;
+  margin-bottom:12px;
+}
+
+.checkout{
+  width:100%;
+  background:var(--orange);
+  color:white;
+  padding:13px;
+  border-radius:7px;
+  font-weight:bold;
+}
+
+/* MODAL */
+.modal-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:4000;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+
+.modal-bg.show{
+  display:flex;
+}
+
+.modal{
+  width:550px;
+  max-width:100%;
+  max-height:90vh;
+  overflow:auto;
+  background:white;
+  border-radius:13px;
+  padding:22px;
+  position:relative;
+}
+
+.modal h2{
+  margin-bottom:15px;
+}
+
+.modal-close{
+  position:absolute;
+  right:12px;
+  top:12px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#f1f5f9;
+}
+
+/* FORM */
+.form-group{
+  margin-bottom:13px;
+}
+
+.form-group label{
+  display:block;
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.form-group input,
+.form-group textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #dbe1e8;
+  border-radius:7px;
+  outline:0;
+}
+
+.form-group textarea{
+  min-height:75px;
+}
+
+.place-order{
+  width:100%;
+  padding:13px;
+  background:var(--orange);
+  color:white;
+  border-radius:7px;
+  font-weight:bold;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111827;
+  color:white;
+  padding:12px 18px;
+  border-radius:7px;
+  font-size:13px;
+  display:none;
+  z-index:5000;
+}
+
+.toast.show{
+  display:block;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+  .header{
+    flex-wrap:wrap;
+  }
+
+  .logo{
+    min-width:auto;
+  }
+
+  .search{
+    order:3;
+    flex-basis:100%;
+  }
+
+  .categories{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .products{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .features{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .footer{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px){
+
+  .header{
+    padding:10px 12px;
+    gap:10px;
+  }
+
+  .logo h1{
+    font-size:22px;
+  }
+
+  .logo p{
+    font-size:8px;
+  }
+
+  .actions{
+    margin-left:auto;
+    gap:8px;
+  }
+
+  .action{
+    font-size:9px;
+  }
+
+  .hero-box{
+    min-height:300px;
+    padding:28px 20px;
+  }
+
+  .hero h2{
+    font-size:34px;
+  }
+
+  .hero p{
+    font-size:13px;
+  }
+
+  .hero-circle{
+    right:-190px;
+  }
+
+  .categories{
+    gap:7px;
+  }
+
+  .category{
+    padding:13px 4px;
+  }
+
+  .category-icon{
+    font-size:27px;
+  }
+
+  .category h3{
+    font-size:10px;
+  }
+
+  .products{
+    gap:9px;
+  }
+
+  .product-image{
+    height:145px;
+    font-size:50px;
+  }
+
+  .product-info{
+    padding:10px;
+  }
+
+  .product-name{
+    font-size:12px;
+  }
+
+  .price{
+    font-size:16px;
+  }
+
+  .discount{
+    display:block;
+    margin:3px 0;
+  }
+
+  .add{
+    padding:9px;
+    font-size:12px;
+  }
+
+  .features{
+    grid-template-columns:1fr;
+  }
+
+  .newsletter-box{
+    flex-direction:column;
+  }
+
+  .newsletter-box button{
+    padding:12px;
+  }
+
+  .footer{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .footer > div:first-child{
+    grid-column:1/-1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+🚚 Free Shipping on Selected Orders &nbsp; | &nbsp; 🛍️ Shop Smart, Live Better
+</div>
+
+<!-- HEADER -->
+<header>
+
+<div class="header">
+
+<a href="#" class="logo">
+<h1>Zynex<span>Cart</span></h1>
+<p>Shop Smart, Live Better</p>
+</a>
+
+<div class="search">
+<input
+id="searchInput"
+type="search"
+placeholder="Search for products..."
+>
+<button onclick="searchProducts()">🔍</button>
+</div>
+
+<div class="actions">
+
+<button class="action" onclick="showToast('Account coming soon')">
+<span class="action-icon">👤</span>
+Account
+</button>
+
+<button class="action" onclick="showWishlist()">
+<span class="action-icon">❤️</span>
+Wishlist
+</button>
+
+<button class="action" onclick="openCart()">
+<span class="action-icon">🛒</span>
+Cart
+<span class="cart-count" id="cartCount">0</span>
+</button>
+
+</div>
+
+</div>
+
+<nav>
+<div class="nav">
+
+<a href="#">Home</a>
+<a href="#categories">Categories</a>
+<a href="#products">All Products</a>
+<a href="#deals">Deals</a>
+<a href="#products">New Arrivals</a>
+<a href="#products">Best Sellers</a>
+<a href="#footer">Contact</a>
+
+</div>
+</nav>
+
+</header>
+
+<!-- MAIN -->
+<main>
+
+<!-- HERO -->
+<section class="hero">
+
+<div class="container">
+
+<div class="hero-box">
+
+<div class="hero-content">
+
+<div class="hero-small">
+Welcome to ZynexCart
+</div>
+
+<h2>
+Shop Smart.<br>
+<span>Live Better.</span>
+</h2>
+
+<p>
+Trendy Products • Best Quality • Fast Delivery
+</p>
+
+<a href="#products" class="shop-btn">
+Shop Now →
+</a>
+
+</div>
+
+<div class="hero-circle"></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CATEGORIES -->
+<section class="section" id="categories">
+
+<div class="container">
+
+<div class="heading">
+
+<h2>Shop by Category</h2>
+
+<span class="view" onclick="showAllProducts()">
+View All →
+</span>
+
+</div>
+
+<div class="categories">
+
+<div class="category" onclick="filterCategory('Fashion')">
+<div class="category-icon">👕</div>
+<h3>Fashion</h3>
+</div>
+
+<div class="category" onclick="filterCategory('Electronics')">
+<div class="category-icon">📱</div>
+<h3>Electronics</h3>
+</div>
+
+<div class="category" onclick="filterCategory('Home & Kitchen')">
+<div class="category-icon">🏠</div>
+<h3>Home & Kitchen</h3>
+</div>
+
+<div class="category" onclick="filterCategory('Beauty')">
+<div class="category-icon">💄</div>
+<h3>Beauty</h3>
+</div>
+
+<div class="category" onclick="filterCategory('Fitness')">
+<div class="category-icon">🏋️</div>
+<h3>Fitness</h3>
+</div>
+
+<div class="category" onclick="filterCategory('Accessories')">
+<div class="category-icon">🎒</div>
+<h3>Accessories</h3>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+
+<div class="container">
+
+<div class="heading">
+
+<h2 id="productTitle">
+Trending Products
+</h2>
+
+<span class="view" onclick="showAllProducts()">
+View All →
+</span>
+
+</div>
+
+<div class="products" id="productGrid"></div>
+
+</div>
+
+</section>
+
+
+<!-- FEATURES -->
+<section class="section">
+
+<div class="container">
+
+<div class="features">
+
+<div class="feature">
+<div class="feature-icon">🚚</div>
+<div>
+<h3>Fast Delivery</h3>
+<p>Quick & reliable delivery</p>
+</div>
+</div>
+
+<div class="feature">
+<div class="feature-icon">🔒</div>
+<div>
+<h3>Secure Shopping</h3>
+<p>Safe shopping experience</p>
+</div>
+</div>
+
+<div class="feature">
+<div class="feature-icon">💯</div>
+<div>
+<h3>Quality Products</h3>
+<p>Products selected for you</p>
+</div>
+</div>
+
+<div class="feature">
+<div class="feature-icon">💬</div>
+<div>
+<h3>Customer Support</h3>
+<p>We're here to help</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DEALS -->
+<section class="container" id="deals">
+
+<div class="newsletter">
+
+<h2>Get the Latest Deals</h2>
+
+<p>
+Subscribe for new products and special offers.
+</p>
+
+<div class="newsletter-box">
+
+<input
+id="email"
+type="email"
+placeholder="Enter your email address"
+>
+
+<button onclick="subscribe()">
+Subscribe
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer id="footer">
+
+<div class="footer">
+
+<div>
+
+<div class="footer-logo">
+Zynex<span>Cart</span>
+</div>
+
+<p>
+Trendy Products • Best Quality • Fast Delivery
+</p>
+
+<p style="margin-top:8px;">
+Shop Smart, Live Better.
+</p>
+
+</div>
+
+
+<div>
+
+<h3>Shop</h3>
+
+<ul>
+<li onclick="showAllProducts()">All Products</li>
+<li onclick="showAllProducts()">New Arrivals</li>
+<li onclick="showAllProducts()">Best Sellers</li>
+<li onclick="document.getElementById('deals').scrollIntoView()">Deals</li>
+</ul>
+
+</div>
+
+
+<div>
+
+<h3>Customer Care</h3>
+
+<ul>
+<li onclick="showToast('Contact Us coming soon')">Contact Us</li>
+<li onclick="showToast('Shipping information coming soon')">Shipping</li>
+<li onclick="showToast('Returns information coming soon')">Returns</li>
+<li onclick="showToast('FAQs coming soon')">FAQs</li>
+</ul>
+
+</div>
+
+
+<div>
+
+<h3>Company</h3>
+
+<ul>
+<li onclick="showToast('About ZynexCart coming soon')">About Us</li>
+<li onclick="showToast('Privacy Policy coming soon')">Privacy Policy</li>
+<li onclick="showToast('Terms coming soon')">Terms & Conditions</li>
+</ul>
+
+</div>
+
+</div>
+
+
+<div class="copyright">
+© 2026 ZynexCart. All rights reserved.
+</div>
+
+</footer>
+
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+
+<!-- CART -->
+<div class="cart" id="cart">
+
+<div class="cart-header">
+
+<h2>🛒 Your Cart</h2>
+
+<button class="close" onclick="closeCart()">
+✕
+</button>
+
+</div>
+
+
+<div class="cart-list" id="cartList"></div>
+
+
+<div class="cart-bottom" id="cartBottom"></div>
+
+</div>
+
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-bg" id="checkoutModal">
+
+<div class="modal">
+
+<button class="modal-close" onclick="closeCheckout()">
+✕
+</button>
+
+<h2>📦 Checkout</h2>
+
+
+<div class="form-group">
+
+<label>Full Name *</label>
+
+<input
+id="customerName"
+type="text"
+placeholder="Enter your name"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Mobile Number *</label>
+
+<input
+id="customerPhone"
+type="tel"
+placeholder="10 digit mobile number"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Delivery Address *</label>
+
+<textarea
+id="customerAddress"
+placeholder="House no., street, area"
+></textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label>City *</label>
+
+<input
+id="customerCity"
+type="text"
+placeholder="City"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Pincode *</label>
+
+<input
+id="customerPin"
+type="text"
+placeholder="6 digit pincode"
+>
+
+</div>
+
+
+<button class="place-order" onclick="placeOrder()">
+Place Order — Cash on Delivery
+</button>
+
+</div>
+
+</div>
+
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* PRODUCTS */
+
+const products = [
+
+{
+id:1,
+name:"Wireless Bluetooth Headphones",
+category:"Electronics",
+price:1499,
+oldPrice:2499,
+rating:"★★★★★",
+icon:"🎧"
+},
+
+{
+id:2,
+name:"Smart Fitness Watch",
+category:"Electronics",
+price:1999,
+oldPrice:3499,
+rating:"★★★★☆",
+icon:"⌚"
+},
+
+{
+id:3,
+name:"Premium Travel Backpack",
+category:"Accessories",
+price:899,
+oldPrice:1499,
+rating:"★★★★★",
+icon:"🎒"
+},
+
+{
+id:4,
+name:"Lightweight Running Shoes",
+category:"Fashion",
+price:1299,
+oldPrice:2199,
+rating:"★★★★☆",
+icon:"👟"
+},
+
+{
+id:5,
+name:"Classic Cotton T-Shirt",
+category:"Fashion",
+price:499,
+oldPrice:799,
+rating:"★★★★☆",
+icon:"👕"
+},
+
+{
+id:6,
+name:"Smartphone Stand",
+category:"Electronics",
+price:299,
+oldPrice:499,
+rating:"★★★★☆",
+icon:"📱"
+},
+
+{
+id:7,
+name:"Non-Stick Kitchen Pan",
+category:"Home & Kitchen",
+price:799,
+oldPrice:1199,
+rating:"★★★★☆",
+icon:"🍳"
+},
+
+{
+id:8,
+name:"Stainless Steel Bottle",
+category:"Home & Kitchen",
+price:399,
+oldPrice:699,
+rating:"★★★★★",
+icon:"🥤"
+},
+
+{
+id:9,
+name:"Beauty Care Kit",
+category:"Beauty",
+price:699,
+oldPrice:999,
+rating:"★★★★☆",
+icon:"💄"
+},
+
+{
+id:10,
+name:"Yoga Fitness Mat",
+category:"Fitness",
+price:599,
+oldPrice:899,
+rating:"★★★★★",
+icon:"🧘"
+},
+
+{
+id:11,
+name:"Adjustable Dumbbells",
+category:"Fitness",
+price:1499,
+oldPrice:1999,
+rating:"★★★★☆",
+icon:"🏋️"
+},
+
+{
+id:12,
+name:"Sling Crossbody Bag",
+category:"Accessories",
+price:549,
+oldPrice:899,
+rating:"★★★★★",
+icon:"👜"
+}
+
+];
+
+
+/* CART */
+
+let cart = [];
+
+
+/* MONEY */
+
+function money(value){
+return "₹" + value.toLocaleString("en-IN");
+}
+
+
+/* RENDER PRODUCTS */
+
+function renderProducts(list){
+
+const grid=document.getElementById("productGrid");
+
+grid.innerHTML="";
+
+
+if(list.length===0){
+
+grid.innerHTML=
+"<p style='padding:30px;background:white;border-radius:10px;'>No products found.</p>";
+
+return;
+
+}
+
+
+list.forEach(function(product){
+
+const discount=Math.round(
+((product.oldPrice-product.price)/product.oldPrice)*100
+);
+
+const card=document.createElement("div");
+
+card.className="product";
+
+
+card.innerHTML=`
+
+<div
+class="product-image"
+onclick="showToast('${product.name}')">
+
+${product.icon}
+
+</div>
+
+<div class="product-info">
+
+<div class="product-category">
+${product.category}
+</div>
+
+<div class="product-name">
+${product.name}
+</div>
+
+<div class="rating">
+${product.rating}
+</div>
+
+<div class="price">
+
+${money(product.price)}
+
+<span class="old-price">
+${money(product.oldPrice)}
+</span>
+
+<span class="discount">
+${discoun
