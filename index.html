@@ -30,7 +30,7 @@
         const analytics = getAnalytics(app);
         const auth = getAuth(app);
 
-        // ============ RECAPTCHA SETUP (Required for Phone OTP) ============
+        // ============ RECAPTCHA SETUP ============
         window.setupRecaptcha = () => {
             if (!window.recaptchaVerifier) {
                 window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
@@ -95,16 +95,25 @@
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = products.map(p => `
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group">
-                    <div class="h-48 overflow-hidden bg-gray-100">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group flex flex-col">
+                    <div class="h-48 overflow-hidden bg-gray-100 relative">
                         <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${p.name}">
+                        <span class="absolute top-2 right-2 bg-secondary text-white text-xs font-bold px-2 py-1 rounded">Hot</span>
                     </div>
-                    <div class="p-4">
+                    <div class="p-4 flex flex-col flex-grow">
                         <h3 class="font-bold text-gray-800 mb-1 truncate">${p.name}</h3>
-                        <p class="text-secondary font-bold text-lg mb-3">₹${p.price}</p>
-                        <button onclick="window.addToCart(${p.id})" class="w-full bg-primary text-white font-semibold py-2 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                        </button>
+                        <p class="text-secondary font-bold text-xl mb-4">₹${p.price}</p>
+                        
+                        <div class="mt-auto space-y-2">
+                            <!-- Add to Cart Button -->
+                            <button onclick="window.addToCart(${p.id})" class="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <!-- Buy Now Button -->
+                            <button onclick="window.buyNow(${p.id})" class="w-full bg-secondary text-white font-semibold py-2.5 rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2 shadow-md shadow-orange-100">
+                                <i class="fa-solid fa-bolt"></i> Buy Now
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -130,6 +139,13 @@
                 btn.innerHTML = originalText;
                 btn.classList.remove('bg-green-600');
             }, 1000);
+        };
+
+        window.buyNow = (productId) => {
+            window.addToCart(productId);
+            setTimeout(() => {
+                window.showPage('cart');
+            }, 300);
         };
 
         window.removeFromCart = (productId) => {
@@ -195,7 +211,7 @@
             } else {
                 // Agar logged in hai, toh order place kar do
                 const total = document.getElementById('cartTotal').innerText;
-                alert(`✅ Order Placed Successfully!\nTotal: ₹${total}\nThank you, ${currentUser.displayName || currentUser.phoneNumber || currentUser.email.split('@')[0]}!`);
+                alert(`✅ Order Placed Successfully!\nTotal: ₹${total}\nPayment Method: Credit/Debit Card (Simulated)\nThank you, ${currentUser.displayName || currentUser.phoneNumber || currentUser.email.split('@')[0]}!`);
                 cart = [];
                 saveCart();
                 updateCartUI();
@@ -348,14 +364,27 @@
         <div id="page-cart" class="hidden fade-in max-w-3xl mx-auto">
             <h1 class="text-3xl font-bold text-gray-800 mb-6">Your Shopping Cart</h1>
             <div id="cartItems" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6"></div>
+            
             <div id="cartSummary" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div class="flex justify-between items-center mb-4 text-lg font-bold text-gray-800">
-                    <span>Total Amount:</span>
-                    <span class="text-secondary">₹<span id="cartTotal">0</span></span>
+                <div class="flex justify-between items-center mb-2 text-gray-600">
+                    <span>Subtotal</span>
+                    <span>₹<span id="cartTotal">0</span></span>
                 </div>
-                <button onclick="window.handleCheckout()" class="w-full bg-secondary text-white font-bold py-4 rounded-lg hover:bg-orange-600 transition text-lg shadow-lg shadow-orange-200">
-                    Proceed to Checkout <i class="fa-solid fa-arrow-right ml-2"></i>
+                <div class="flex justify-between items-center mb-6 text-gray-600">
+                    <span>Shipping</span>
+                    <span class="text-green-600 font-semibold">FREE</span>
+                </div>
+                <div class="flex justify-between items-center mb-6 text-xl font-bold text-gray-800 border-t pt-4">
+                    <span>Total Amount</span>
+                    <span class="text-secondary">₹<span id="cartTotalFinal">0</span></span>
+                </div>
+                
+                <!-- Card Payment Visual Cue -->
+                <button onclick="window.handleCheckout()" class="w-full bg-secondary text-white font-bold py-4 rounded-lg hover:bg-orange-600 transition text-lg shadow-lg shadow-orange-200 flex items-center justify-center gap-3">
+                    <i class="fa-regular fa-credit-card text-xl"></i> 
+                    Proceed to Pay (Card/UPI)
                 </button>
+                <p class="text-center text-xs text-gray-400 mt-3"><i class="fa-solid fa-lock"></i> Secure SSL Encrypted Checkout</p>
             </div>
         </div>
     </main>
@@ -367,7 +396,7 @@
             <div class="bg-primary p-6 text-center relative">
                 <button onclick="window.closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
                 <h2 class="text-2xl font-bold text-white mb-1">Login Required</h2>
-                <p class="text-blue-200 text-sm">Please login to complete your purchase</p>
+                <p class="text-blue-200 text-sm">Please login to complete your secure payment</p>
             </div>
 
             <div class="flex border-b">
@@ -381,7 +410,7 @@
                     <input type="email" id="emailInput" placeholder="Email Address" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none">
                     <input type="password" id="passInput" placeholder="Password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none">
                     <button onclick="window.handleEmailLogin()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
-                        <span>Login & Checkout</span>
+                        <span>Login & Pay</span>
                         <div class="loader" id="loaderEmail"></div>
                     </button>
                 </div>
@@ -403,7 +432,7 @@
                     <p class="text-sm text-gray-600 text-center">Enter the 6-digit code sent to your phone</p>
                     <input type="text" id="otpInput" maxlength="6" placeholder="123456" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary outline-none text-center text-2xl font-bold tracking-widest">
                     <button onclick="window.verifyOTP()" class="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition flex justify-center items-center gap-2">
-                        <span>Verify & Checkout</span>
+                        <span>Verify & Pay</span>
                         <div class="loader" id="loaderOTP"></div>
                     </button>
                     <button onclick="window.switchTab('phone')" class="w-full text-sm text-gray-500 hover:text-primary font-semibold">Change Phone Number</button>
@@ -426,5 +455,14 @@
         </div>
     </div>
 
+    <script>
+        // Sync total display
+        const observer = new MutationObserver(() => {
+            const total = document.getElementById('cartTotal').innerText;
+            const finalTotal = document.getElementById('cartTotalFinal');
+            if(finalTotal) finalTotal.innerText = total;
+        });
+        observer.observe(document.getElementById('cartTotal'), { childList: true });
+    </script>
 </body>
 </html>
