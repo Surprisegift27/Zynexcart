@@ -3,79 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZynexCart - 30,000+ products delivered to your doorstep</title>
-    <meta name="description" content="Shop online for groceries and get your order delivered to your doorstep. Enjoy delivery of 30,000+ products with ZynexCart">
-    <meta name="keywords" content="Buy Grocery Online, Online Grocery, ZynexCart, Grocery Store, Free Delivery, Best Prices">
+    <title>ZynexCart - Shop Smart, Live Better</title>
+    <meta name="description" content="ZynexCart offers trendy products, best quality, and fast delivery. Shop smart, live better.">
     
-    <!-- Tailwind CSS for modern, clean styling -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#059669', // Emerald Green (Freshness)
-                        primaryDark: '#047857',
-                        secondary: '#F97316', // Vibrant Orange (Call to Action)
-                        secondaryDark: '#EA580C',
-                        background: '#F8FAFC',
+                        zynexBlue: '#0F2C59', /* Deep Navy from Logo */
+                        zynexOrange: '#FF6B00', /* Vibrant Orange from Logo */
+                        zynexLight: '#F3F4F6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        script: ['Dancing Script', 'cursive'],
                     }
                 }
             }
         }
     </script>
     
-    <!-- Font Awesome for Icons -->
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        .tagline-font { font-family: 'Dancing Script', cursive; }
         
-        /* Smooth hover effect for product cards */
-        .product-card { transition: all 0.3s ease; }
-        .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        /* Custom scrollbar for horizontal scrolling categories */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-background text-slate-800">
+<body class="bg-gray-50 text-slate-800">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-zynexBlue text-white text-xs py-2 text-center font-medium tracking-wide">
+        Fast Delivery across India | Use code <span class="text-zynexOrange font-bold">ZYNEX10</span> for 10% off
+    </div>
 
     <!-- Header / Navbar -->
-    <header class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200">
+    <header class="sticky top-0 z-50 bg-white shadow-md border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <!-- Logo & Location -->
-                <div class="flex items-center gap-6">
-                    <a href="/" class="flex items-center gap-2 group">
-                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-md shadow-primary/30 group-hover:scale-105 transition">Z</div>
-                        <span class="text-2xl font-bold text-primary tracking-tight">ZynexCart</span>
-                    </a>
-                    <div class="hidden md:flex flex-col cursor-pointer hover:bg-slate-50 p-2 rounded-lg transition">
-                        <span class="text-xs font-semibold text-slate-500">Delivery in 10 minutes</span>
-                        <div class="flex items-center gap-1 text-sm font-bold text-slate-800">
-                            <span>Home - Delhi, India</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-primary"></i>
-                        </div>
+                
+                <!-- Logo Section -->
+                <a href="/" class="flex flex-col group">
+                    <div class="flex items-center gap-1">
+                        <!-- Text Logo mimicking the image -->
+                        <span class="text-3xl font-extrabold text-zynexBlue tracking-tight">Zynex</span>
+                        <span class="text-3xl font-extrabold text-zynexOrange italic">Cart</span>
                     </div>
-                </div>
+                    <span class="tagline-font text-zynexBlue text-lg leading-none mt-[-5px] ml-1">Shop Smart, Live Better</span>
+                </a>
 
-                <!-- Search Bar -->
-                <div class="flex-1 max-w-2xl mx-4 hidden md:block">
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" placeholder='Search "milk", "bread", "sugar"...' 
-                               class="w-full pl-12 pr-4 py-3 bg-slate-100 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all">
-                    </div>
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
+                    <input type="text" placeholder='Search for "Milk", "Bread", "Snacks"...' 
+                           class="w-full pl-5 pr-12 py-3 bg-gray-100 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-zynexOrange focus:bg-white transition-all">
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-zynexOrange text-white rounded-full hover:bg-orange-600 transition flex items-center justify-center">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
                 </div>
 
                 <!-- Right Actions -->
-                <div class="flex items-center gap-4">
-                    <button class="hidden md:flex items-center gap-2 px-4 py-2 text-slate-700 font-semibold hover:bg-slate-100 rounded-lg transition">
-                        <i class="fa-regular fa-user"></i> Login
+                <div class="flex items-center gap-3 sm:gap-6">
+                    <div class="hidden lg:flex flex-col cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition text-right">
+                        <span class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Delivery in</span>
+                        <div class="flex items-center justify-end gap-1 text-sm font-bold text-zynexBlue">
+                            <span>10 Mins</span>
+                            <i class="fa-solid fa-chevron-down text-xs text-zynexOrange"></i>
+                        </div>
+                    </div>
+                    
+                    <button class="flex flex-col items-center justify-center text-zynexBlue hover:text-zynexOrange transition">
+                        <i class="fa-regular fa-user text-xl mb-1"></i>
+                        <span class="text-xs font-semibold hidden sm:block">Login</span>
                     </button>
-                    <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-primaryDark transition shadow-md shadow-primary/20">
-                        <i class="fa-solid fa-cart-shopping"></i> 
-                        <span class="hidden sm:inline">My Cart</span>
-                        <span class="bg-white text-primary text-xs font-bold px-1.5 py-0.5 rounded-full">0</span>
+                    
+                    <button class="relative flex flex-col items-center justify-center text-zynexBlue hover:text-zynexOrange transition">
+                        <div class="relative">
+                            <i class="fa-solid fa-cart-shopping text-xl mb-1"></i>
+                            <span class="absolute -top-2 -right-2 bg-zynexOrange text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">2</span>
+                        </div>
+                        <span class="text-xs font-semibold hidden sm:block">My Cart</span>
                     </button>
                 </div>
             </div>
@@ -83,252 +98,270 @@
             <!-- Mobile Search Bar -->
             <div class="md:hidden pb-4">
                 <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" placeholder='Search for products...' 
-                           class="w-full pl-12 pr-4 py-3 bg-slate-100 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder='Search products...' 
+                           class="w-full pl-10 pr-4 py-2.5 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-zynexOrange">
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="bg-gradient-to-r from-primary to-emerald-400 rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between shadow-lg shadow-primary/20 relative overflow-hidden">
-            <!-- Decorative circle -->
-            <div class="absolute -right-10 -top-10 w-64 h-64 bg-white/10 rounded-full blur-2xl"></div>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="bg-gradient-to-r from-zynexBlue to-blue-900 rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between shadow-xl relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
             
             <div class="md:w-1/2 mb-8 md:mb-0 relative z-10">
-                <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">Fastest Delivery</span>
-                <h1 class="text-4xl md:text-5xl font-bold mt-4 mb-4 leading-tight">Groceries delivered<br>to your doorstep</h1>
-                <p class="text-emerald-50 text-lg mb-6">Get 30,000+ products delivered in minutes. Fresh vegetables, dairy, snacks, and more at the best prices.</p>
-                <button class="bg-secondary hover:bg-secondaryDark text-white font-bold py-3.5 px-8 rounded-xl transition shadow-lg shadow-secondary/30 flex items-center gap-2">
-                    Shop Now <i class="fa-solid fa-arrow-right"></i>
+                <div class="inline-block bg-zynexOrange text-white text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">Superfast Delivery</div>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">Groceries at your<br>doorstep in <span class="text-zynexOrange">minutes</span></h1>
+                <p class="text-blue-100 text-lg mb-8 max-w-md">Experience the best quality products and trendy items with ZynexCart. Shop smart, live better.</p>
+                <button class="bg-zynexOrange hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-xl transition shadow-lg shadow-orange-500/30 flex items-center gap-2">
+                    Start Shopping <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
+            
+            <!-- Hero Image Placeholder -->
             <div class="md:w-1/2 flex justify-center relative z-10">
-                <div class="w-64 h-64 md:w-80 md:h-80 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20 shadow-inner">
-                    <i class="fa-solid fa-basket-shopping text-8xl text-white/90"></i>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-zynexOrange blur-2xl opacity-20 rounded-full"></div>
+                    <i class="fa-solid fa-basket-shopping text-9xl text-white drop-shadow-2xl animate-bounce" style="animation-duration: 3s;"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- USP / Features Bar (From Logo) -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4 hover:border-zynexOrange transition group">
+                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-zynexOrange group-hover:bg-zynexOrange group-hover:text-white transition">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-zynexBlue">Trendy Products</h3>
+                    <p class="text-xs text-gray-500">Latest arrivals daily</p>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4 hover:border-zynexBlue transition group">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-zynexBlue group-hover:bg-zynexBlue group-hover:text-white transition">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-zynexBlue">Best Quality</h3>
+                    <p class="text-xs text-gray-500">100% genuine items</p>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4 hover:border-zynexOrange transition group">
+                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-zynexOrange group-hover:bg-zynexOrange group-hover:text-white transition">
+                    <i class="fa-solid fa-truck-fast text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-zynexBlue">Fast Delivery</h3>
+                    <p class="text-xs text-gray-500">Under 15 minutes</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Categories Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h2 class="text-2xl font-bold text-slate-800 mb-6">Shop by Category</h2>
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-            <!-- Category Items -->
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary hover:shadow-md transition group">
-                <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition">
-                    <i class="fa-solid fa-apple-whole text-2xl text-primary"></i>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h2 class="text-2xl font-bold text-zynexBlue mb-6 flex items-center gap-2">
+            Shop by Category <span class="h-px flex-1 bg-gray-200"></span>
+        </h2>
+        <div class="flex gap-4 overflow-x-auto hide-scroll pb-4">
+            <!-- Category Item -->
+            <div class="min-w-[100px] flex flex-col items-center gap-3 cursor-pointer group">
+                <div class="w-20 h-20 bg-white rounded-full border-2 border-gray-100 flex items-center justify-center shadow-sm group-hover:border-zynexOrange group-hover:shadow-md transition">
+                    <i class="fa-solid fa-apple-whole text-3xl text-zynexBlue group-hover:text-zynexOrange transition"></i>
                 </div>
-                <span class="text-sm font-semibold text-slate-700 text-center">Fruits & Veg</span>
+                <span class="text-sm font-semibold text-gray-700 group-hover:text-zynexBlue">Fruits</span>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary hover:shadow-md transition group">
-                <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition">
-                    <i class="fa-solid fa-cow text-2xl text-primary"></i>
+            <div class="min-w-[100px] flex flex-col items-center gap-3 cursor-pointer group">
+                <div class="w-20 h-20 bg-white rounded-full border-2 border-gray-100 flex items-center justify-center shadow-sm group-hover:border-zynexOrange group-hover:shadow-md transition">
+                    <i class="fa-solid fa-carrot text-3xl text-zynexBlue group-hover:text-zynexOrange transition"></i>
                 </div>
-                <span class="text-sm font-semibold text-slate-700 text-center">Dairy & Bread</span>
+                <span class="text-sm font-semibold text-gray-700 group-hover:text-zynexBlue">Vegetables</span>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary hover:shadow-md transition group">
-                <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition">
-                    <i class="fa-solid fa-cookie-bite text-2xl text-primary"></i>
+            <div class="min-w-[100px] flex flex-col items-center gap-3 cursor-pointer group">
+                <div class="w-20 h-20 bg-white rounded-full border-2 border-gray-100 flex items-center justify-center shadow-sm group-hover:border-zynexOrange group-hover:shadow-md transition">
+                    <i class="fa-solid fa-cow text-3xl text-zynexBlue group-hover:text-zynexOrange transition"></i>
                 </div>
-                <span class="text-sm font-semibold text-slate-700 text-center">Snacks</span>
+                <span class="text-sm font-semibold text-gray-700 group-hover:text-zynexBlue">Dairy</span>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary hover:shadow-md transition group">
-                <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition">
-                    <i class="fa-solid fa-bottle-water text-2xl text-primary"></i>
+            <div class="min-w-[100px] flex flex-col items-center gap-3 cursor-pointer group">
+                <div class="w-20 h-20 bg-white rounded-full border-2 border-gray-100 flex items-center justify-center shadow-sm group-hover:border-zynexOrange group-hover:shadow-md transition">
+                    <i class="fa-solid fa-cookie-bite text-3xl text-zynexBlue group-hover:text-zynexOrange transition"></i>
                 </div>
-                <span class="text-sm font-semibold text-slate-700 text-center">Beverages</span>
+                <span class="text-sm font-semibold text-gray-700 group-hover:text-zynexBlue">Snacks</span>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary hover:shadow-md transition group">
-                <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition">
-                    <i class="fa-solid fa-soap text-2xl text-primary"></i>
+            <div class="min-w-[100px] flex flex-col items-center gap-3 cursor-pointer group">
+                <div class="w-20 h-20 bg-white rounded-full border-2 border-gray-100 flex items-center justify-center shadow-sm group-hover:border-zynexOrange group-hover:shadow-md transition">
+                    <i class="fa-solid fa-bottle-droplet text-3xl text-zynexBlue group-hover:text-zynexOrange transition"></i>
                 </div>
-                <span class="text-sm font-semibold text-slate-700 text-center">Cleaning</span>
+                <span class="text-sm font-semibold text-gray-700 group-hover:text-zynexBlue">Drinks</span>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary hover:shadow-md transition group">
-                <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition">
-                    <i class="fa-solid fa-pump-soap text-2xl text-primary"></i>
+            <div class="min-w-[100px] flex flex-col items-center gap-3 cursor-pointer group">
+                <div class="w-20 h-20 bg-white rounded-full border-2 border-gray-100 flex items-center justify-center shadow-sm group-hover:border-zynexOrange group-hover:shadow-md transition">
+                    <i class="fa-solid fa-pump-soap text-3xl text-zynexBlue group-hover:text-zynexOrange transition"></i>
                 </div>
-                <span class="text-sm font-semibold text-slate-700 text-center">Personal Care</span>
+                <span class="text-sm font-semibold text-gray-700 group-hover:text-zynexBlue">Beauty</span>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary hover:shadow-md transition group">
-                <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition">
-                    <i class="fa-solid fa-baby text-2xl text-primary"></i>
+             <div class="min-w-[100px] flex flex-col items-center gap-3 cursor-pointer group">
+                <div class="w-20 h-20 bg-white rounded-full border-2 border-gray-100 flex items-center justify-center shadow-sm group-hover:border-zynexOrange group-hover:shadow-md transition">
+                    <i class="fa-solid fa-bowl-rice text-3xl text-zynexBlue group-hover:text-zynexOrange transition"></i>
                 </div>
-                <span class="text-sm font-semibold text-slate-700 text-center">Baby Care</span>
-            </div>
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary hover:shadow-md transition group">
-                <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition">
-                    <i class="fa-solid fa-ellipsis text-2xl text-primary"></i>
-                </div>
-                <span class="text-sm font-semibold text-slate-700 text-center">More</span>
+                <span class="text-sm font-semibold text-gray-700 group-hover:text-zynexBlue">Staples</span>
             </div>
         </div>
     </section>
 
-    <!-- Featured Products -->
+    <!-- Featured Products Grid -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-slate-800">Bestsellers</h2>
-            <a href="#" class="text-primary font-semibold hover:text-primaryDark flex items-center gap-1">See all <i class="fa-solid fa-chevron-right text-xs"></i></a>
+        <div class="flex justify-between items-end mb-6">
+            <h2 class="text-2xl font-bold text-zynexBlue">Best Sellers</h2>
+            <a href="#" class="text-zynexOrange font-bold text-sm hover:underline">View All</a>
         </div>
+        
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             <!-- Product Card 1 -->
-            <div class="product-card bg-white rounded-xl border border-slate-100 p-4 relative group">
-                <div class="absolute top-3 left-3 bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">10 mins</div>
-                <div class="h-32 flex items-center justify-center mb-4">
-                    <i class="fa-solid fa-cart-plus text-6xl text-slate-200 group-hover:text-primary/30 transition"></i>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg hover:border-zynexOrange/30 transition duration-300 relative group">
+                <div class="absolute top-2 left-2 bg-zynexBlue text-white text-[10px] font-bold px-2 py-0.5 rounded">BESTSELLER</div>
+                <div class="h-32 flex items-center justify-center mb-2 bg-gray-50 rounded-lg group-hover:bg-orange-50 transition">
+                    <i class="fa-solid fa-cart-plus text-5xl text-gray-300 group-hover:text-zynexOrange transition"></i>
                 </div>
-                <h3 class="font-semibold text-slate-800 mb-1 truncate">Amul Taaza Milk</h3>
-                <p class="text-xs text-slate-500 mb-3">500 ml</p>
-                <div class="flex justify-between items-center mt-auto">
+                <h3 class="font-bold text-gray-800 mb-1 truncate">Amul Taaza Milk</h3>
+                <p class="text-xs text-gray-500 mb-3">500 ml</p>
+                <div class="flex justify-between items-center">
                     <div class="flex flex-col">
-                        <span class="text-sm font-bold text-slate-800">₹27</span>
-                        <span class="text-xs text-slate-400 line-through">₹30</span>
+                        <span class="text-sm font-bold text-gray-900">27</span>
+                        <span class="text-[10px] text-gray-400 line-through">₹30</span>
                     </div>
-                    <button class="bg-white border border-primary text-primary font-bold text-sm px-4 py-1.5 rounded-lg hover:bg-primary hover:text-white transition uppercase">Add</button>
+                    <button class="bg-white border border-zynexBlue text-zynexBlue font-bold text-xs px-4 py-1.5 rounded-lg hover:bg-zynexBlue hover:text-white transition uppercase">Add</button>
                 </div>
             </div>
 
             <!-- Product Card 2 -->
-            <div class="product-card bg-white rounded-xl border border-slate-100 p-4 relative group">
-                <div class="absolute top-3 left-3 bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">10 mins</div>
-                <div class="h-32 flex items-center justify-center mb-4">
-                    <i class="fa-solid fa-bread-slice text-6xl text-slate-200 group-hover:text-primary/30 transition"></i>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg hover:border-zynexOrange/30 transition duration-300 relative group">
+                 <div class="absolute top-2 left-2 bg-zynexOrange text-white text-[10px] font-bold px-2 py-0.5 rounded">15% OFF</div>
+                <div class="h-32 flex items-center justify-center mb-2 bg-gray-50 rounded-lg group-hover:bg-orange-50 transition">
+                    <i class="fa-solid fa-bread-slice text-5xl text-gray-300 group-hover:text-zynexOrange transition"></i>
                 </div>
-                <h3 class="font-semibold text-slate-800 mb-1 truncate">Harvest Gold Bread</h3>
-                <p class="text-xs text-slate-500 mb-3">400 g</p>
-                <div class="flex justify-between items-center mt-auto">
+                <h3 class="font-bold text-gray-800 mb-1 truncate">Harvest Gold Bread</h3>
+                <p class="text-xs text-gray-500 mb-3">400 g</p>
+                <div class="flex justify-between items-center">
                     <div class="flex flex-col">
-                        <span class="text-sm font-bold text-slate-800">₹45</span>
+                        <span class="text-sm font-bold text-gray-900">₹45</span>
                     </div>
-                    <button class="bg-white border border-primary text-primary font-bold text-sm px-4 py-1.5 rounded-lg hover:bg-primary hover:text-white transition uppercase">Add</button>
+                    <button class="bg-white border border-zynexBlue text-zynexBlue font-bold text-xs px-4 py-1.5 rounded-lg hover:bg-zynexBlue hover:text-white transition uppercase">Add</button>
                 </div>
             </div>
 
             <!-- Product Card 3 -->
-            <div class="product-card bg-white rounded-xl border border-slate-100 p-4 relative group">
-                <div class="absolute top-3 left-3 bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">15 mins</div>
-                <div class="h-32 flex items-center justify-center mb-4">
-                    <i class="fa-solid fa-egg text-6xl text-slate-200 group-hover:text-primary/30 transition"></i>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg hover:border-zynexOrange/30 transition duration-300 relative group">
+                <div class="h-32 flex items-center justify-center mb-2 bg-gray-50 rounded-lg group-hover:bg-orange-50 transition">
+                    <i class="fa-solid fa-egg text-5xl text-gray-300 group-hover:text-zynexOrange transition"></i>
                 </div>
-                <h3 class="font-semibold text-slate-800 mb-1 truncate">Farm Fresh Eggs</h3>
-                <p class="text-xs text-slate-500 mb-3">6 pcs</p>
-                <div class="flex justify-between items-center mt-auto">
+                <h3 class="font-bold text-gray-800 mb-1 truncate">Farm Fresh Eggs</h3>
+                <p class="text-xs text-gray-500 mb-3">6 pcs</p>
+                <div class="flex justify-between items-center">
                     <div class="flex flex-col">
-                        <span class="text-sm font-bold text-slate-800">₹65</span>
+                        <span class="text-sm font-bold text-gray-900">₹65</span>
                     </div>
-                    <button class="bg-white border border-primary text-primary font-bold text-sm px-4 py-1.5 rounded-lg hover:bg-primary hover:text-white transition uppercase">Add</button>
+                    <button class="bg-white border border-zynexBlue text-zynexBlue font-bold text-xs px-4 py-1.5 rounded-lg hover:bg-zynexBlue hover:text-white transition uppercase">Add</button>
                 </div>
             </div>
 
             <!-- Product Card 4 -->
-            <div class="product-card bg-white rounded-xl border border-slate-100 p-4 relative group">
-                <div class="absolute top-3 left-3 bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">10 mins</div>
-                <div class="h-32 flex items-center justify-center mb-4">
-                    <i class="fa-solid fa-bag-shopping text-6xl text-slate-200 group-hover:text-primary/30 transition"></i>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg hover:border-zynexOrange/30 transition duration-300 relative group">
+                <div class="h-32 flex items-center justify-center mb-2 bg-gray-50 rounded-lg group-hover:bg-orange-50 transition">
+                    <i class="fa-solid fa-bag-shopping text-5xl text-gray-300 group-hover:text-zynexOrange transition"></i>
                 </div>
-                <h3 class="font-semibold text-slate-800 mb-1 truncate">Lay's Classic Salted</h3>
-                <p class="text-xs text-slate-500 mb-3">50 g</p>
-                <div class="flex justify-between items-center mt-auto">
+                <h3 class="font-bold text-gray-800 mb-1 truncate">Lay's Classic Salted</h3>
+                <p class="text-xs text-gray-500 mb-3">50 g</p>
+                <div class="flex justify-between items-center">
                     <div class="flex flex-col">
-                        <span class="text-sm font-bold text-slate-800">₹20</span>
+                        <span class="text-sm font-bold text-gray-900">₹20</span>
                     </div>
-                    <button class="bg-white border border-primary text-primary font-bold text-sm px-4 py-1.5 rounded-lg hover:bg-primary hover:text-white transition uppercase">Add</button>
+                    <button class="bg-white border border-zynexBlue text-zynexBlue font-bold text-xs px-4 py-1.5 rounded-lg hover:bg-zynexBlue hover:text-white transition uppercase">Add</button>
                 </div>
             </div>
 
             <!-- Product Card 5 -->
-            <div class="product-card bg-white rounded-xl border border-slate-100 p-4 relative group">
-                <div class="absolute top-3 left-3 bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">10 mins</div>
-                <div class="h-32 flex items-center justify-center mb-4">
-                    <i class="fa-solid fa-mug-hot text-6xl text-slate-200 group-hover:text-primary/30 transition"></i>
+            <div class="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-lg hover:border-zynexOrange/30 transition duration-300 relative group">
+                <div class="h-32 flex items-center justify-center mb-2 bg-gray-50 rounded-lg group-hover:bg-orange-50 transition">
+                    <i class="fa-solid fa-mug-hot text-5xl text-gray-300 group-hover:text-zynexOrange transition"></i>
                 </div>
-                <h3 class="font-semibold text-slate-800 mb-1 truncate">Tata Tea Gold</h3>
-                <p class="text-xs text-slate-500 mb-3">250 g</p>
-                <div class="flex justify-between items-center mt-auto">
+                <h3 class="font-bold text-gray-800 mb-1 truncate">Tata Tea Gold</h3>
+                <p class="text-xs text-gray-500 mb-3">250 g</p>
+                <div class="flex justify-between items-center">
                     <div class="flex flex-col">
-                        <span class="text-sm font-bold text-slate-800">₹140</span>
-                        <span class="text-xs text-slate-400 line-through">₹160</span>
+                        <span class="text-sm font-bold text-gray-900">₹140</span>
+                        <span class="text-[10px] text-gray-400 line-through">₹160</span>
                     </div>
-                    <button class="bg-white border border-primary text-primary font-bold text-sm px-4 py-1.5 rounded-lg hover:bg-primary hover:text-white transition uppercase">Add</button>
+                    <button class="bg-white border border-zynexBlue text-zynexBlue font-bold text-xs px-4 py-1.5 rounded-lg hover:bg-zynexBlue hover:text-white transition uppercase">Add</button>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Useful Links -->
-                <div>
-                    <h3 class="text-lg font-bold text-slate-800 mb-4">Useful Links</h3>
-                    <div class="grid grid-cols-2 gap-y-3 gap-x-2">
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Blog</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Privacy Policy</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Terms of Use</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">FAQs</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Security</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Contact Us</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Partner with us</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Franchise</a>
+    <footer class="bg-white border-t border-gray-200 mt-12 pt-12 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Brand Info -->
+                <div class="col-span-1 md:col-span-1">
+                     <div class="flex items-center gap-1 mb-2">
+                        <span class="text-2xl font-extrabold text-zynexBlue">Zynex</span>
+                        <span class="text-2xl font-extrabold text-zynexOrange italic">Cart</span>
                     </div>
+                    <p class="tagline-font text-zynexBlue text-xl mb-4">Shop Smart, Live Better</p>
+                    <p class="text-sm text-gray-500 mb-4">Your one-stop shop for trendy products, best quality goods, and lightning-fast delivery.</p>
                 </div>
 
-                <!-- Categories -->
+                <!-- Links -->
                 <div>
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold text-slate-800">Categories</h3>
-                        <a href="#" class="text-sm font-semibold text-primary hover:text-primaryDark flex items-center gap-1">see all <i class="fa-solid fa-chevron-right text-xs"></i></a>
-                    </div>
-                    <div class="grid grid-cols-2 gap-y-3 gap-x-2">
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Print Store</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">E-Gift Cards</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Rakhi Gifts</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">ZynexCart Bistro</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">ZynexCart Ambulance</a>
-                        <a href="#" class="text-sm text-slate-600 hover:text-primary transition">Feeding India</a>
-                    </div>
+                    <h3 class="text-sm font-bold text-zynexBlue uppercase tracking-wider mb-4">Company</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-zynexOrange transition">About Us</a></li>
+                        <li><a href="#" class="hover:text-zynexOrange transition">Careers</a></li>
+                        <li><a href="#" class="hover:text-zynexOrange transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-zynexOrange transition">Press</a></li>
+                    </ul>
                 </div>
 
-                <!-- Download App & Social -->
+                <!-- Help -->
                 <div>
-                    <h3 class="text-lg font-bold text-slate-800 mb-4">Download App</h3>
+                    <h3 class="text-sm font-bold text-zynexBlue uppercase tracking-wider mb-4">Help</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-zynexOrange transition">Payments</a></li>
+                        <li><a href="#" class="hover:text-zynexOrange transition">Shipping</a></li>
+                        <li><a href="#" class="hover:text-zynexOrange transition">Cancellation</a></li>
+                        <li><a href="#" class="hover:text-zynexOrange transition">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social & App -->
+                <div>
+                    <h3 class="text-sm font-bold text-zynexBlue uppercase tracking-wider mb-4">Social</h3>
                     <div class="flex gap-3 mb-6">
-                        <button class="bg-slate-900 text-white px-4 py-2.5 rounded-lg flex items-center gap-3 hover:bg-slate-800 transition">
-                            <i class="fa-brands fa-apple text-2xl"></i>
-                            <div class="text-left">
-                                <div class="text-[10px] leading-none text-slate-300">Download on the</div>
-                                <div class="text-sm font-bold leading-none mt-0.5">App Store</div>
-                            </div>
-                        </button>
-                        <button class="bg-slate-900 text-white px-4 py-2.5 rounded-lg flex items-center gap-3 hover:bg-slate-800 transition">
-                            <i class="fa-brands fa-google-play text-xl"></i>
-                            <div class="text-left">
-                                <div class="text-[10px] leading-none text-slate-300">GET IT ON</div>
-                                <div class="text-sm font-bold leading-none mt-0.5">Google Play</div>
-                            </div>
-                        </button>
+                        <a href="#" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-zynexBlue hover:bg-zynexBlue hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-zynexBlue hover:bg-zynexBlue hover:text-white transition"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-zynexBlue hover:bg-zynexBlue hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-800 mb-3">Follow Us</h3>
-                    <div class="flex gap-3">
-                        <a href="#" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 hover:bg-primary hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 hover:bg-primary hover:text-white transition"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 hover:bg-primary hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+                    <div class="flex gap-2">
+                         <button class="bg-zynexBlue text-white px-3 py-2 rounded-lg text-xs flex items-center gap-2 hover:bg-blue-900 transition">
+                            <i class="fa-brands fa-google-play"></i> Get it on Play Store
+                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="border-t border-slate-200 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-sm text-slate-500">© ZynexCart Commerce Private Limited, 2016-2026</p>
-                <div class="flex items-center gap-2 text-sm text-slate-500">
-                    <span>Made with</span>
-                    <i class="fa-solid fa-heart text-red-500"></i>
-                    <span>in India</span>
+            <div class="border-t border-gray-100 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
+                <p>&copy; 2024 ZynexCart Commerce Pvt Ltd. All rights reserved.</p>
+                <div class="flex gap-4 mt-2 md:mt-0">
+                    <a href="#" class="hover:text-zynexBlue">Privacy Policy</a>
+                    <a href="#" class="hover:text-zynexBlue">Terms of Service</a>
                 </div>
             </div>
         </div>
