@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Product details — ZynexCart"
+  >
+
+  <title>Product — ZynexCart</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+
+    <div class="container header-inner">
+
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="ZynexCart">
+      </a>
+
+      <a href="products.html" class="location-btn">
+        📍 Shop Products
+      </a>
+
+      <form class="search-box" id="searchForm">
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search products..."
+          autocomplete="off"
+        >
+        <button type="submit">🔍</button>
+      </form>
+
+      <nav class="header-actions">
+
+        <a href="login.html" class="account-link">
+          👤 Login
+        </a>
+
+        <a href="cart.html" class="cart-link">
+          🛒 Cart
+          <span id="cartCount">0</span>
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <!-- PRODUCT DETAILS -->
+  <main class="container product-page">
+
+    <div id="productDetails">
+      <!-- Product details will load here -->
+    </div>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+
+    <div class="container">
+
+      <div class="footer-bottom">
+        <p>© 2026 ZynexCart. All rights reserved.</p>
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- JAVASCRIPT -->
+  <script src="js/app.js"></script>
+  <script src="js/products.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const productDetails =
+        document.getElementById("productDetails");
+
+      const params = new URLSearchParams(
+        window.location.search
+      );
+
+      const productId =
+        Number(params.get("id"));
+
+      const product =
+        products.find(item => item.id === productId);
+
+      if (!product) {
+
+        productDetails.innerHTML = `
+          <div class="empty-cart">
+            <h2>Product not found 😕</h2>
+            <p>The product you're looking for is unavailable.</p>
+            <a
+              href="products.html"
+              class="btn-primary"
+            >
+              Browse Products
+            </a>
+          </div>
+        `;
+
+        return;
+      }
+
+      productDetails.innerHTML = `
+
+        <div class="product-detail-card">
+
+          <div class="product-detail-image">
+            <img
+              src="${product.image}"
+              alt="${product.name}"
+            >
+          </div>
+
+
+          <div class="product-detail-info">
+
+            <span class="product-category">
+              ${formatCategory(product.category)}
+            </span>
+
+            <h1>${product.name}</h1>
+
+            <p class="product-unit">
+              ${product.unit}
+            </p>
+
+
+            <div class="product-price">
+
+              <strong>
+                ${formatPrice(product.price)}
+              </strong>
+
+              <span class="product-mrp">
+                ${formatPrice(product.mrp)}
+              </span>
+
+              <span class="product-discount">
+                ${product.discount}% OFF
+              </span>
+
+            </div>
+
+
+            <p class="product-description">
+              Fresh and quality ${product.name}
+              available at ZynexCart.
+              Shop easily and get your essentials
+              delivered quickly.
+            </p>
+
+
+            <button
+              class="btn-primary add-detail-btn"
+              id="addProductBtn"
+            >
+              ADD TO CART
+            </button>
+
+
+            <a
+              href="cart.html"
+              class="continue-shopping"
+            >
+              Go to Cart →
+            </a>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      const addButton =
+        document.getElementById("addProductBtn");
+
+      addButton.addEventListener("click", () => {
+
+        addToCart(product);
+
+        addButton.textContent = "ADDED ✓";
+
+        setTimeout(() => {
+          addButton.textContent = "ADD TO CART";
+        }, 1200);
+
+      });
+
+    });
+  </script>
+
+</body>
+</html>
