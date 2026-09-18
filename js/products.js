@@ -100,6 +100,90 @@ function formatCategory(category) {
 
 
 /* =========================================
+   GET PRODUCT QUANTITY
+   ========================================= */
+
+function getProductQuantity(productId) {
+
+  const cart = getCart();
+
+  const item = cart.find(
+    product => Number(product.id) === Number(productId)
+  );
+
+  return item ? Number(item.quantity) : 0;
+}
+
+
+/* =========================================
+   CREATE PRODUCT BUTTON
+   ========================================= */
+
+function createProductButton(product) {
+
+  const quantity =
+    getProductQuantity(product.id);
+
+
+  /* ===============================
+     PRODUCT NOT IN CART
+     =============================== */
+
+  if (quantity <= 0) {
+
+    return `
+      <button
+        class="add-btn"
+        type="button"
+        data-product-id="${product.id}"
+      >
+        ADD
+      </button>
+    `;
+
+  }
+
+
+  /* ===============================
+     PRODUCT ALREADY IN CART
+     =============================== */
+
+  return `
+    <button
+      class="add-btn added"
+      type="button"
+      data-product-id="${product.id}"
+      aria-label="Change quantity of ${product.name}"
+    >
+
+      <span
+        class="qty-minus"
+        data-action="minus"
+        role="button"
+        aria-label="Decrease quantity"
+      >
+        −
+      </span>
+
+      <span class="qty-number">
+        ${quantity}
+      </span>
+
+      <span
+        class="qty-plus"
+        data-action="plus"
+        role="button"
+        aria-label="Increase quantity"
+      >
+        +
+      </span>
+
+    </button>
+  `;
+}
+
+
+/* =========================================
    CREATE PRODUCT CARD
    ========================================= */
 
@@ -157,13 +241,7 @@ function createProductCard(product) {
         </div>
 
 
-        <button
-          class="add-btn"
-          type="button"
-          data-product-id="${product.id}"
-        >
-          ADD
-        </button>
+        ${createProductButton(product)}
 
       </div>
 
@@ -199,7 +277,95 @@ function displayFeaturedProducts() {
 
 
 /* =========================================
-   ADD TO CART BUTTONS
+   REFRESH PRODUCT BUTTON
+   ========================================= */
+
+function refreshProductButton(productId) {
+
+  const buttons =
+    document.querySelectorAll(
+      `.add-btn[data-product-id="${productId}"]`
+    );
+
+
+  buttons.forEach(button => {
+
+    const product =
+      products.find(
+        item => item.id === Number(productId)
+      );
+
+
+    if (!product) {
+      return;
+    }
+
+
+    const quantity =
+      getProductQuantity(productId);
+
+
+    /* ===============================
+       CART EMPTY
+       =============================== */
+
+    if (quantity <= 0) {
+
+      button.className = "add-btn";
+
+      button.innerHTML = "ADD";
+
+      button.removeAttribute("aria-label");
+
+      return;
+    }
+
+
+    /* ===============================
+       CART HAS PRODUCT
+       =============================== */
+
+    button.className = "add-btn added";
+
+    button.setAttribute(
+      "aria-label",
+      `Change quantity of ${product.name}`
+    );
+
+
+    button.innerHTML = `
+
+      <span
+        class="qty-minus"
+        data-action="minus"
+        role="button"
+        aria-label="Decrease quantity"
+      >
+        −
+      </span>
+
+      <span class="qty-number">
+        ${quantity}
+      </span>
+
+      <span
+        class="qty-plus"
+        data-action="plus"
+        role="button"
+        aria-label="Increase quantity"
+      >
+        +
+      </span>
+
+    `;
+
+  });
+
+}
+
+
+/* =========================================
+   ADD / QUANTITY BUTTONS
    ========================================= */
 
 function setupAddToCartButtons() {
@@ -210,14 +376,16 @@ function setupAddToCartButtons() {
 
   buttons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener("click", event => {
 
       const productId =
         Number(button.dataset.productId);
 
 
       const product =
-        products.find(item => item.id === productId);
+        products.find(
+          item => item.id === productId
+        );
 
 
       if (!product) {
@@ -225,17 +393,82 @@ function setupAddToCartButtons() {
       }
 
 
+      /* ===============================
+         PLUS
+         =============================== */
+
+      const plus =
+        event.target.closest(
+          '[data-action="plus"]'
+        );
+
+
+      if (plus) {
+
+        addToCart(product);
+
+        refreshProductButton(productId);
+
+        return;
+      }
+
+
+      /* ===============================
+         MINUS
+         =============================== */
+
+      const minus =
+        event.target.closest(
+          '[data-action="minus"]'
+        );
+
+
+      if (minus) {
+
+        changeCartQuantity(productId, -1);
+
+        refreshProductButton(productId);
+
+        return;
+      }
+
+
+      /* ===============================
+         ADD
+         =============================== */
+
       addToCart(product);
 
-
-      button.textContent = "ADDED ✓";
-
-
-      setTimeout(() => {
-        button.textContent = "ADD";
-      }, 1000);
+      refreshProductButton(productId);
 
     });
+
+  });
+
+}
+
+
+/* =========================================
+   SYNC PRODUCTS WITH CART
+   ========================================= */
+
+function syncProductButtons() {
+
+  const buttons =
+    document.querySelectorAll(".add-btn");
+
+
+  buttons.forEach(button => {
+
+    const productId =
+      Number(button.dataset.productId);
+
+
+    if (productId) {
+
+      refreshProductButton(productId);
+
+    }
 
   });
 
@@ -248,5 +481,11 @@ function setupAddToCartButtons() {
 
 document.addEventListener(
   "DOMContentLoaded",
-  displayFeaturedProducts
+  () => {
+
+    displayFeaturedProducts();
+
+    updateCartCount();
+
+  }
 );
