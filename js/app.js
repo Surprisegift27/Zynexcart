@@ -1,206 +1,456 @@
-/* =========================================
-   ZYNEXCART — MAIN APP
-   ========================================= */
+/* =====================================================
+   ZYNEXCART — GLOBAL CART SYSTEM
+   Dynamic Cart + LocalStorage
+   ===================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
-  updateCartCount();
-  setupSearch();
-});
+const CART_STORAGE_KEY = "zynexcart_cart";
 
 
-/* =========================================
-   CART COUNT
-   ========================================= */
+/* =====================================================
+   GET CART
+   ===================================================== */
 
 function getCart() {
   try {
-    const cart = localStorage.getItem("zynexcart_cart");
+    const cart = JSON.parse(
+      localStorage.getItem(CART_STORAGE_KEY)
+    );
 
-    if (!cart) {
-      return [];
-    }
-
-    return JSON.parse(cart);
-
+    return Array.isArray(cart) ? cart : [];
   } catch (error) {
-    console.error("Unable to read cart:", error);
+    console.error("Cart read error:", error);
     return [];
   }
 }
 
 
-function updateCartCount() {
-  const cart = getCart();
+/* =====================================================
+   SAVE CART
+   ===================================================== */
 
-  const count = cart.reduce((total, item) => {
-    return total + Number(item.quantity || 0);
-  }, 0);
+function saveCart(cart) {
+  localStorage.setItem(
+    CART_STORAGE_KEY,
+    JSON.stringify(cart)
+  );
 
-  const cartCountElements =
-    document.querySelectorAll("#cartCount");
+  updateCartHeader();
 
-  cartCountElements.forEach((element) => {
-    element.textContent = count;
-  });
+  document.dispatchEvent(
+    new CustomEvent("zynexcart:cartUpdated", {
+      detail: cart
+    })
+  );
 }
 
 
-/* =========================================
+/* =====================================================
+   CART TOTAL ITEMS
+   ===================================================== */
+
+function getCartItemCount() {
+  const cart = getCart();
+
+  return cart.reduce(
+    (total, item) => total + Number(item.quantity || 0),
+    0
+  );
+}
+
+
+/* =====================================================
+   CART TOTAL AMOUNT
+   ===================================================== */
+
+function getCartTotal() {
+  const cart = getCart();
+
+  return cart.reduce(
+    (total, item) =>
+      total +
+      Number(item.price || 0) *
+      Number(item.quantity || 0),
+    0
+  );
+}
+
+
+/* =====================================================
+   FORMAT PRICE
+   ===================================================== */
+
+function formatPrice(price) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0
+  }).format(Number(price) || 0);
+}
+
+
+/* =====================================================
+   UPDATE HEADER CART
+   ===================================================== */
+
+function updateCartHeader() {
+  const itemCount = getCartItemCount();
+  const totalAmount = getCartTotal();
+
+  /*
+     Main cart count
+  */
+
+  const cartCount = document.getElementById("cartCount");
+
+  if (cartCount) {
+    cartCount.textContent = itemCount;
+  }
+
+
+  /*
+     Optional detailed cart count
+     Example:
+     1 item
+     2 items
+  */
+
+  const cartItemsText =
+    document.getElementById("cartItemsText");
+
+  if (cartItemsText) {
+    cartItemsText.textContent =
+      `${itemCount} ${itemCount === 1 ? "item" : "items"}`;
+  }
+
+
+  /*
+     Optional cart total
+     Example:
+     ₹120
+  */
+
+  const cartTotal =
+    document.getElementById("cartTotal");
+
+  if (cartTotal) {
+    cartTotal.textContent =
+      formatPrice(totalAmount);
+  }
+
+
+  /*
+     Optional combined cart information
+  */
+
+  const cartSummary =
+    document.getElementById("cartSummary");
+
+  if (cartSummary) {
+    cartSummary.textContent =
+      `${itemCount} ${itemCount === 1 ? "item" : "items"} • ${formatPrice(totalAmount)}`;
+  }
+
+
+  /*
+     Empty cart state
+  */
+
+  if (itemCount === 0) {
+
+    if (cartItemsText) {
+      cartItemsText.textContent = "0 items";
+    }
+
+    if (cartTotal) {
+      cartTotal.textContent = "₹0";
+    }
+
+    if (cartSummary) {
+      cartSummary.textContent = "0 items • ₹0";
+    }
+  }
+}
+
+
+/* =====================================================
+   ADD TO CART
+   ===================================================== */
+
+function addToCart(product) {
+
+  if (!product || product.id === undefined) {
+    console.error("Invalid product:", product);
+    return;
+  }
+
+  const cart = getCart();
+
+  const productId = String(product.id);
+
+  const existingItem = cart.find(
+    item => String(item.id) === productId
+  );
+
+
+  /*
+     Same product already exists
+     → Increase quantity
+  */
+
+  if (existingItem) {
+
+    existingItem.quantity =
+      Number(existingItem.quantity || 0) + 1;
+
+  } else {
+
+    /*
+       New product
+       → Add with quantity 1
+    */
+
+    cart.push({
+      id: product.id,
+      name: product.name || "",
+      price: Number(product.price || 0),
+      mrp: Number(product.mrp || 0),
+      unit: product.unit || "",
+      image: product.image || "",
+      category: product.category || "",
+      quantity: 1
+    });
+  }
+
+
+  saveCart(cart);
+}
+
+
+/* =====================================================
+   REMOVE FROM CART
+   ===================================================== */
+
+function removeFromCart(productId) {
+
+  let cart = getCart();
+
+  cart = cart.filter(
+    item => String(item.id) !== String(productId)
+  );
+
+  saveCart(cart);
+}
+
+
+/* =====================================================
+   CHANGE QUANTITY
+   ===================================================== */
+
+function changeCartQuantity(productId, change) {
+
+  const cart = getCart();
+
+  const item = cart.find(
+    product =>
+      String(product.id) === String(productId)
+  );
+
+  if (!item) {
+    return;
+  }
+
+
+  item.quantity =
+    Number(item.quantity || 0) + Number(change);
+
+
+  /*
+     Quantity 0 or less
+     → Automatically remove product
+  */
+
+  if (item.quantity <= 0) {
+
+    const updatedCart = cart.filter(
+      product =>
+        String(product.id) !== String(productId)
+    );
+
+    saveCart(updatedCart);
+
+    return;
+  }
+
+
+  saveCart(cart);
+}
+
+
+/* =====================================================
+   SET EXACT QUANTITY
+   ===================================================== */
+
+function setCartQuantity(productId, quantity) {
+
+  const cart = getCart();
+
+  const item = cart.find(
+    product =>
+      String(product.id) === String(productId)
+  );
+
+  if (!item) {
+    return;
+  }
+
+
+  const newQuantity = Number(quantity);
+
+
+  if (newQuantity <= 0) {
+
+    removeFromCart(productId);
+
+    return;
+  }
+
+
+  item.quantity = newQuantity;
+
+  saveCart(cart);
+}
+
+
+/* =====================================================
+   CLEAR CART
+   ===================================================== */
+
+function clearCart() {
+
+  localStorage.removeItem(
+    CART_STORAGE_KEY
+  );
+
+  updateCartHeader();
+
+  document.dispatchEvent(
+    new CustomEvent("zynexcart:cartUpdated", {
+      detail: []
+    })
+  );
+}
+
+
+/* =====================================================
    SEARCH
-   ========================================= */
+   ===================================================== */
 
 function setupSearch() {
 
   const searchForm =
-    document.querySelector("#searchForm");
+    document.getElementById("searchForm");
 
   const searchInput =
-    document.querySelector("#searchInput");
+    document.getElementById("searchInput");
+
 
   if (!searchForm || !searchInput) {
     return;
   }
 
 
-  searchForm.addEventListener("submit", (event) => {
+  searchForm.addEventListener(
+    "submit",
+    function (event) {
 
-    event.preventDefault();
+      event.preventDefault();
 
-    const searchTerm =
-      searchInput.value.trim();
+      const query =
+        searchInput.value.trim();
 
 
-    if (!searchTerm) {
-      return;
+      if (!query) {
+        return;
+      }
+
+
+      window.location.href =
+        `products.html?search=${encodeURIComponent(query)}`;
     }
-
-
-    window.location.href =
-      `products.html?search=${encodeURIComponent(searchTerm)}`;
-
-  });
-
-}
-
-
-/* =========================================
-   ADD TO CART
-   ========================================= */
-
-function addToCart(product) {
-
-  const cart = getCart();
-
-  const existingProduct =
-    cart.find(item => item.id === product.id);
-
-
-  if (existingProduct) {
-
-    existingProduct.quantity += 1;
-
-  } else {
-
-    cart.push({
-      ...product,
-      quantity: 1
-    });
-
-  }
-
-
-  localStorage.setItem(
-    "zynexcart_cart",
-    JSON.stringify(cart)
   );
-
-
-  updateCartCount();
-
 }
 
 
-/* =========================================
-   REMOVE FROM CART
-   ========================================= */
+/* =====================================================
+   INITIALIZE
+   ===================================================== */
 
-function removeFromCart(productId) {
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
 
-  const cart = getCart();
+    updateCartHeader();
 
-  const updatedCart =
-    cart.filter(item => item.id !== productId);
-
-
-  localStorage.setItem(
-    "zynexcart_cart",
-    JSON.stringify(updatedCart)
-  );
-
-
-  updateCartCount();
-
-}
-
-
-/* =========================================
-   CHANGE CART QUANTITY
-   ========================================= */
-
-function changeCartQuantity(productId, change) {
-
-  const cart = getCart();
-
-  const product =
-    cart.find(item => item.id === productId);
-
-
-  if (!product) {
-    return;
+    setupSearch();
   }
+);
 
 
-  product.quantity += change;
+/* =====================================================
+   UPDATE WHEN CART CHANGES
+   ===================================================== */
 
+document.addEventListener(
+  "zynexcart:cartUpdated",
+  function () {
 
-  if (product.quantity <= 0) {
-
-    const updatedCart =
-      cart.filter(item => item.id !== productId);
-
-    localStorage.setItem(
-      "zynexcart_cart",
-      JSON.stringify(updatedCart)
-    );
-
-  } else {
-
-    localStorage.setItem(
-      "zynexcart_cart",
-      JSON.stringify(cart)
-    );
-
+    updateCartHeader();
   }
+);
 
 
-  updateCartCount();
+/* =====================================================
+   MULTI-TAB SUPPORT
+   ===================================================== */
 
-}
+window.addEventListener(
+  "storage",
+  function (event) {
 
-
-/* =========================================
-   FORMAT PRICE
-   ========================================= */
-
-function formatPrice(price) {
-
-  return new Intl.NumberFormat(
-    "en-IN",
-    {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0
+    if (event.key === CART_STORAGE_KEY) {
+      updateCartHeader();
     }
-  ).format(price);
+  }
+);
 
-}
+
+/* =====================================================
+   GLOBAL FUNCTIONS
+   ===================================================== */
+
+window.getCart = getCart;
+window.saveCart = saveCart;
+
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+
+window.changeCartQuantity =
+  changeCartQuantity;
+
+window.setCartQuantity =
+  setCartQuantity;
+
+window.clearCart =
+  clearCart;
+
+window.getCartItemCount =
+  getCartItemCount;
+
+window.getCartTotal =
+  getCartTotal;
+
+window.formatPrice =
+  formatPrice;
+
+window.updateCartHeader =
+  updateCartHeader;
