@@ -1,450 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZynexCart - Shop Smart, Live Better</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Custom Brand Colors based on your Logo -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0F2C59',   // Navy Blue from Logo
-                        secondary: '#FF6B00', // Orange from Logo
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Firebase SDKs (Modular) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { 
-            getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, 
-            onAuthStateChanged, signOut, signInWithPhoneNumber, RecaptchaVerifier 
-        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+  <meta name="description" content="ZynexCart - Shop smart, live better.">
+  <meta name="theme-color" content="#071b3a">
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDI15D4x7_Lo6w9Eh9M5HPQBXFLq2zFklM",
-            authDomain: "zynexcart-web.firebaseapp.com",
-            projectId: "zynexcart-web",
-            storageBucket: "zynexcart-web.firebasestorage.app",
-            messagingSenderId: "328652532886",
-            appId: "1:328652532886:web:b6552b9f2cdb2f290066b7",
-            measurementId: "G-P9WTMDQEPW"
-        };
+  <title>ZynexCart — Shop Smart, Live Better</title>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // --- RECAPTCHA SETUP FOR PHONE AUTH ---
-        window.setupRecaptcha = () => {
-            if (!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                    'size': 'invisible',
-                    'callback': () => console.log("reCAPTCHA solved")
-                });
-            }
-        };
-
-        // --- UI FUNCTIONS ---
-        window.openModal = () => document.getElementById('authModal').classList.remove('hidden');
-        window.closeModal = () => { 
-            document.getElementById('authModal').classList.add('hidden'); 
-            window.hideError(); 
-        };
-        
-        window.switchTab = (tab) => {
-            const emailForm = document.getElementById('formEmail');
-            const phoneForm = document.getElementById('formPhone');
-            const otpForm = document.getElementById('formOTP');
-            const tabEmail = document.getElementById('tabEmail');
-            const tabPhone = document.getElementById('tabPhone');
-            
-            if(tab === 'email') {
-                emailForm.classList.remove('hidden');
-                phoneForm.classList.add('hidden');
-                otpForm.classList.add('hidden');
-                tabEmail.className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
-                tabPhone.className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
-            } else {
-                emailForm.classList.add('hidden');
-                phoneForm.classList.remove('hidden');
-                otpForm.classList.add('hidden');
-                tabPhone.className = "flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50";
-                tabEmail.className = "flex-1 py-3 text-sm font-bold text-gray-500 hover:text-primary";
-            }
-            window.hideError();
-        };
-
-        window.showOTPForm = () => {
-            document.getElementById('formPhone').classList.add('hidden');
-            document.getElementById('formOTP').classList.remove('hidden');
-        };
-
-        function showError(msg) {
-            const el = document.getElementById('errorMsg');
-            el.innerText = msg; 
-            el.classList.remove('hidden');
-        }
-        window.hideError = () => document.getElementById('errorMsg').classList.add('hidden');
-
-        // --- E-COMMERCE LOGIC ---
-        const products = [
-            { id: 1, name: "Wireless Noise-Cancel Headphones", price: 2499, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" },
-            { id: 2, name: "Smart Watch Series 7", price: 3999, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" },
-            { id: 3, name: "Ergonomic Mechanical Keyboard", price: 1899, image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80" },
-            { id: 4, name: "Premium Running Shoes", price: 3299, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" }
-        ];
-
-        let cart = JSON.parse(localStorage.getItem('zynex_cart')) || [];
-
-        function renderProducts() {
-            const grid = document.getElementById('productGrid');
-            if (!grid) return;
-            
-            grid.innerHTML = products.map(p => `
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col h-full">
-                    <div class="h-56 overflow-hidden bg-gray-100 relative">
-                        <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="${p.name}">
-                        <span class="absolute top-3 right-3 bg-secondary text-white text-xs font-bold px-2 py-1 rounded-md shadow-sm">Hot Deal</span>
-                    </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-gray-800 mb-2 line-clamp-2 h-12">${p.name}</h3>
-                        <p class="text-secondary font-extrabold text-2xl mb-5">₹${p.price}</p>
-                        
-                        <div class="mt-auto space-y-3">
-                            <button onclick="window.addToCart(${p.id})" class="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2 cursor-pointer shadow-sm">
-                                <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                            </button>
-                            <button onclick="window.buyNow(${p.id})" class="w-full bg-secondary text-white font-semibold py-3 rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2 shadow-md shadow-orange-200 cursor-pointer">
-                                <i class="fa-solid fa-bolt"></i> Buy Now
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        window.addToCart = (productId) => {
-            const product = products.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-            saveCart();
-            updateCartUI();
-            
-            // Button Feedback
-            const btn = event.target.closest('button');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-check"></i> Added`;
-            btn.classList.replace('bg-primary', 'bg-green-600');
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-                btn.classList.replace('bg-green-600', 'bg-primary');
-            }, 1000);
-        };
-
-        window.buyNow = (productId) => {
-            window.addToCart(productId);
-            setTimeout(() => window.showPage('cart'), 400);
-        };
-
-        window.removeFromCart = (productId) => {
-            cart = cart.filter(item => item.id !== productId);
-            saveCart();
-            renderCartPage();
-        };
-
-        function saveCart() { localStorage.setItem('zynex_cart', JSON.stringify(cart)); }
-
-        function updateCartUI() {
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const el = document.getElementById('cartCount');
-            if(el) el.innerText = count;
-        }
-
-        function renderCartPage() {
-            const container = document.getElementById('cartItems');
-            const summary = document.getElementById('cartSummary');
-            
-            if (cart.length === 0) {
-                container.innerHTML = `<div class="p-16 text-center text-gray-500"><i class="fa-solid fa-basket-shopping text-5xl mb-4 text-gray-300"></i><p class="text-lg">Your cart is empty.</p><button onclick="window.showPage('home')" class="mt-6 text-secondary font-bold hover:underline text-lg">Start Shopping</button></div>`;
-                summary.classList.add('hidden');
-                return;
-            }
-
-            let total = 0;
-            container.innerHTML = cart.map(item => {
-                total += item.price * item.quantity;
-                return `
-                <div class="flex items-center gap-5 p-5 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition">
-                    <img src="${item.image}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 shadow-sm">
-                    <div class="flex-1">
-                        <h3 class="font-bold text-gray-800 text-lg">${item.name}</h3>
-                        <p class="text-secondary font-bold mt-1">₹${item.price} x ${item.quantity}</p>
-                    </div>
-                    <button onclick="window.removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 p-3 rounded-full hover:bg-red-50 transition">
-                        <i class="fa-solid fa-trash-can text-xl"></i>
-                    </button>
-                </div>`;
-            }).join('');
-
-            document.getElementById('cartTotal').innerText = total;
-            const finalTotal = document.getElementById('cartTotalFinal');
-            if (finalTotal) finalTotal.innerText = total;
-            summary.classList.remove('hidden');
-        }
-
-        window.showPage = (pageName) => {
-            document.getElementById('page-home').classList.add('hidden');
-            document.getElementById('page-cart').classList.add('hidden');
-            document.getElementById(`page-${pageName}`).classList.remove('hidden');
-            if (pageName === 'cart') renderCartPage();
-            window.scrollTo(0,0);
-        };
-
-        // --- CHECKOUT & AUTH LOGIC ---
-        window.handleCheckout = () => {
-            if (cart.length === 0) return alert("Cart is empty!");
-            const currentUser = auth.currentUser;
-            if (!currentUser) {
-                window.openModal();
-            } else {
-                const total = document.getElementById('cartTotal').innerText;
-                alert(`✅ Order Placed Successfully!\n\nTotal: ₹${total}\nPayment: Credit/Debit Card (Simulated)\nUser: ${currentUser.displayName || currentUser.phoneNumber || currentUser.email.split('@')[0]}`);
-                cart = [];
-                saveCart();
-                updateCartUI();
-                window.showPage('home');
-            }
-        };
-
-        window.handleEmailLogin = async () => {
-            const email = document.getElementById('emailInput').value;
-            const pass = document.getElementById('passInput').value;
-            if(!email || !pass) return showError("Please fill all fields");
-            
-            document.getElementById('loaderEmail').style.display = 'block';
-            window.hideError();
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-                window.closeModal();
-                window.handleCheckout();
-            } catch (error) { showError(error.message); }
-            finally { document.getElementById('loaderEmail').style.display = 'none'; }
-        };
-
-        window.handleGoogleLogin = async () => {
-            try {
-                const provider = new GoogleAuthProvider();
-                await signInWithPopup(auth, provider);
-                window.closeModal();
-                window.handleCheckout();
-            } catch (error) { showError(error.message); }
-        };
-
-        window.sendOTP = async () => {
-            const phone = document.getElementById('phoneInput').value.trim();
-            if(!phone || phone.length < 10) return showError("Enter valid 10-digit number");
-            
-            document.getElementById('loaderPhone').style.display = 'block';
-            window.hideError();
-            try {
-                window.setupRecaptcha();
-                const fullPhone = "+91" + phone;
-                window.confirmationResult = await signInWithPhoneNumber(auth, fullPhone, window.recaptchaVerifier);
-                document.getElementById('loaderPhone').style.display = 'none';
-                window.showOTPForm();
-            } catch (error) {
-                document.getElementById('loaderPhone').style.display = 'none';
-                showError("Error: " + error.message);
-            }
-        };
-
-        window.verifyOTP = async () => {
-            const otp = document.getElementById('otpInput').value.trim();
-            if(!otp || otp.length !== 6) return showError("Enter 6-digit OTP");
-            
-            document.getElementById('loaderOTP').style.display = 'block';
-            window.hideError();
-            try {
-                await window.confirmationResult.confirm(otp);
-                window.closeModal();
-                window.handleCheckout();
-            } catch (error) {
-                document.getElementById('loaderOTP').style.display = 'none';
-                showError("Invalid OTP");
-            }
-        };
-
-        // --- HEADER UPDATE ---
-        window.updateHeader = (user) => {
-            const section = document.getElementById('userSection');
-            if(user) {
-                const name = user.displayName || user.phoneNumber || (user.email ? user.email.split('@')[0] : 'User');
-                const img = user.photoURL || `https://ui-avatars.com/api/?name=${name}&background=0F2C59&color=fff`;
-                section.innerHTML = `
-                    <div class="flex items-center gap-3 cursor-pointer group">
-                        <img src="${img}" class="w-10 h-10 rounded-full border-2 border-primary shadow-sm group-hover:scale-105 transition">
-                        <div class="hidden md:block text-right">
-                            <p class="text-sm font-bold text-primary leading-tight">${name}</p>
-                            <button onclick="window.logout()" class="text-[10px] text-red-500 font-semibold hover:text-red-700">Logout</button>
-                        </div>
-                    </div>`;
-            } else {
-                section.innerHTML = `
-                    <button onclick="window.openModal()" class="flex items-center gap-2 text-primary hover:text-secondary transition font-semibold">
-                        <i class="fa-regular fa-user text-xl"></i>
-                        <span class="hidden sm:block">Login</span>
-                    </button>`;
-            }
-        };
-
-        window.logout = () => signOut(auth).then(() => window.updateHeader(null));
-
-        // --- INITIALIZATION (FIXED TIMING ISSUE) ---
-        document.addEventListener('DOMContentLoaded', () => {
-            renderProducts();
-            updateCartUI();
-            console.log("✅ ZynexCart Loaded Successfully");
-        });
-        
-        onAuthStateChanged(auth, (user) => window.updateHeader(user));
-    </script>
-
-    <style>
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #FF6B00; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-gray-50 font-sans text-gray-800">
 
-    <!-- HEADER -->
-    <header class="bg-white shadow-md sticky top-0 z-40 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
-            <div class="text-3xl font-extrabold text-primary cursor-pointer tracking-tight" onclick="window.showPage('home')">
-                Zynex<span class="text-secondary italic">Cart</span>
-            </div>
-            <div class="flex items-center gap-8">
-                <button onclick="window.showPage('cart')" class="relative text-gray-600 hover:text-primary transition p-2">
-                    <i class="fa-solid fa-cart-shopping text-2xl"></i>
-                    <span id="cartCount" class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">0</span>
-                </button>
-                <div id="userSection"></div>
-            </div>
-        </div>
-    </header>
+<body>
 
-    <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto p-4 sm:p-8 min-h-screen pb-20">
-        <!-- HOME PAGE -->
-        <div id="page-home" class="fade-in">
-            <div class="mb-10 text-center sm:text-left">
-                <h1 class="text-4xl font-extrabold text-primary mb-3">Trending Products</h1>
-                <p class="text-gray-500 text-lg">Shop smart with our latest collection. No login required to browse!</p>
-            </div>
-            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
-        </div>
+  <!-- HEADER -->
+  <header class="site-header">
 
-        <!-- CART PAGE -->
-        <div id="page-cart" class="hidden fade-in max-w-4xl mx-auto">
-            <h1 class="text-3xl font-extrabold text-primary mb-8">Your Shopping Cart</h1>
-            <div id="cartItems" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8"></div>
-            
-            <div id="cartSummary" class="hidden bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                <div class="space-y-3 mb-8">
-                    <div class="flex justify-between text-gray-600 text-lg"><span>Subtotal</span><span>₹<span id="cartTotal">0</span></span></div>
-                    <div class="flex justify-between text-gray-600 text-lg"><span>Shipping</span><span class="text-green-600 font-bold">FREE</span></div>
-                    <div class="border-t pt-4 flex justify-between text-2xl font-extrabold text-primary"><span>Total Amount</span><span class="text-secondary">₹<span id="cartTotalFinal">0</span></span></div>
-                </div>
-                
-                <button onclick="window.handleCheckout()" class="w-full bg-secondary text-white font-bold py-5 rounded-xl hover:bg-orange-600 transition text-xl shadow-xl shadow-orange-200 flex items-center justify-center gap-3 transform hover:-translate-y-1 duration-200">
-                    <i class="fa-regular fa-credit-card text-2xl"></i> 
-                    Proceed to Pay (Card/UPI)
-                </button>
-                <p class="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-2"><i class="fa-solid fa-lock"></i> Secure SSL Encrypted Checkout</p>
-            </div>
-        </div>
-    </main>
+    <div class="header-container">
 
-    <!-- LOGIN MODAL -->
-    <div id="authModal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="window.closeModal()"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden fade-in border border-gray-100">
-            <div class="bg-primary p-8 text-center relative">
-                <button onclick="window.closeModal()" class="absolute top-4 right-4 text-white/60 hover:text-white transition"><i class="fa-solid fa-xmark text-2xl"></i></button>
-                <h2 class="text-2xl font-bold text-white mb-2">Login Required</h2>
-                <p class="text-blue-200 text-sm">Complete your secure payment</p>
-            </div>
+      <!-- LOGO -->
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="ZynexCart">
+      </a>
 
-            <div class="flex border-b">
-                <button id="tabEmail" onclick="window.switchTab('email')" class="flex-1 py-4 text-sm font-bold text-primary border-b-2 border-primary bg-blue-50">Email</button>
-                <button id="tabPhone" onclick="window.switchTab('phone')" class="flex-1 py-4 text-sm font-bold text-gray-500 hover:text-primary">Phone Number</button>
-            </div>
+      <!-- LOCATION -->
+      <button class="location-btn" type="button">
+        📍 <span>Enter location</span>
+      </button>
 
-            <div class="p-8 space-y-5">
-                <!-- Email Form -->
-                <div id="formEmail" class="space-y-4">
-                    <input type="email" id="emailInput" placeholder="Email Address" class="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:border-secondary focus:ring-2 focus:ring-orange-100 outline-none transition bg-gray-50">
-                    <input type="password" id="passInput" placeholder="Password" class="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:border-secondary focus:ring-2 focus:ring-orange-100 outline-none transition bg-gray-50">
-                    <button onclick="window.handleEmailLogin()" class="w-full bg-secondary text-white font-bold py-3.5 rounded-xl hover:bg-orange-600 transition flex justify-center items-center gap-2 shadow-lg shadow-orange-100">
-                        <span>Login & Pay</span>
-                        <div class="loader" id="loaderEmail"></div>
-                    </button>
-                </div>
+      <!-- SEARCH -->
+      <form class="search-box" id="searchForm">
+        <span class="search-icon">🔍</span>
 
-                <!-- Phone Form -->
-                <div id="formPhone" class="hidden space-y-4">
-                    <div class="flex">
-                        <span class="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-gray-200 bg-gray-100 text-gray-600 text-sm font-bold">+91</span>
-                        <input type="tel" id="phoneInput" placeholder="98765 43210" maxlength="10" class="w-full px-5 py-3.5 rounded-r-xl border border-gray-200 focus:border-secondary outline-none transition bg-gray-50">
-                    </div>
-                    <button onclick="window.sendOTP()" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-blue-900 transition flex justify-center items-center gap-2 shadow-lg shadow-blue-100">
-                        <span>Send OTP</span>
-                        <div class="loader" id="loaderPhone"></div>
-                    </button>
-                </div>
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search for products..."
+          autocomplete="off"
+        >
 
-                <!-- OTP Form -->
-                <div id="formOTP" class="hidden space-y-4">
-                    <p class="text-sm text-gray-600 text-center font-medium">Enter 6-digit code sent to your phone</p>
-                    <input type="text" id="otpInput" maxlength="6" placeholder="1 2 3 4 5 6" class="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:border-secondary outline-none text-center text-2xl font-bold tracking-[0.5em] transition bg-gray-50">
-                    <button onclick="window.verifyOTP()" class="w-full bg-secondary text-white font-bold py-3.5 rounded-xl hover:bg-orange-600 transition flex justify-center items-center gap-2 shadow-lg shadow-orange-100">
-                        <span>Verify & Pay</span>
-                        <div class="loader" id="loaderOTP"></div>
-                    </button>
-                    <button onclick="window.switchTab('phone')" class="w-full text-sm text-gray-500 hover:text-primary font-semibold py-2">Change Phone Number</button>
-                </div>
+      </form>
 
-                <div class="relative flex py-2 items-center">
-                    <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold uppercase">Or Continue With</span>
-                    <div class="flex-grow border-t border-gray-200"></div>
-                </div>
+      <!-- ACCOUNT -->
+      <a href="login.html" class="account-btn">
+        👤 <span>Login</span>
+      </a>
 
-                <button onclick="window.handleGoogleLogin()" class="w-full border border-gray-200 text-gray-700 font-bold py-3.5 rounded-xl hover:bg-gray-50 transition flex justify-center items-center gap-3 bg-white">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
-                    Sign in with Google
-                </button>
+      <!-- CART -->
+      <a href="cart.html" class="cart-btn">
+        🛒
+        <span>Cart</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
 
-                <div id="errorMsg" class="hidden bg-red-50 text-red-600 text-sm p-4 rounded-xl text-center border border-red-100 font-medium"></div>
-            </div>
-            <div id="recaptcha-container" class="absolute bottom-0 right-0"></div>
-        </div>
     </div>
+
+  </header>
+
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero-section">
+
+      <div class="hero-content">
+
+        <p class="hero-label">WELCOME TO ZYNEXCART</p>
+
+        <h1>
+          Shop Smart,<br>
+          <span>Live Better.</span>
+        </h1>
+
+        <p class="hero-text">
+          Discover trending products, everyday essentials
+          and great deals — all in one place.
+        </p>
+
+        <a href="products.html" class="primary-btn">
+          Shop Now →
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+    <section class="section">
+
+      <div class="section-heading">
+        <div>
+          <p class="section-label">EXPLORE</p>
+          <h2>Shop by Category</h2>
+        </div>
+
+        <a href="products.html" class="view-all">
+          View All →
+        </a>
+      </div>
+
+
+      <div class="category-grid">
+
+        <a href="products.html?category=grocery" class="category-card">
+          <div class="category-icon">🥦</div>
+          <h3>Grocery</h3>
+          <p>Daily essentials</p>
+        </a>
+
+        <a href="products.html?category=snacks" class="category-card">
+          <div class="category-icon">🍪</div>
+          <h3>Snacks</h3>
+          <p>Tasty favourites</p>
+        </a>
+
+        <a href="products.html?category=personal-care" class="category-card">
+          <div class="category-icon">🧴</div>
+          <h3>Personal Care</h3>
+          <p>Care essentials</p>
+        </a>
+
+        <a href="products.html?category=household" class="category-card">
+          <div class="category-icon">🧹</div>
+          <h3>Household</h3>
+          <p>Home essentials</p>
+        </a>
+
+        <a href="products.html?category=beverages" class="category-card">
+          <div class="category-icon">🥤</div>
+          <h3>Beverages</h3>
+          <p>Drinks & more</p>
+        </a>
+
+        <a href="products.html?category=beauty" class="category-card">
+          <div class="category-icon">✨</div>
+          <h3>Beauty</h3>
+          <p>Beauty products</p>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- PROMOTIONAL BANNER -->
+    <section class="section">
+
+      <div class="promo-banner">
+
+        <div>
+          <p class="promo-label">ZYNEXCART OFFERS</p>
+
+          <h2>
+            Great products.<br>
+            Better prices.
+          </h2>
+
+          <p>
+            Explore our latest deals and discover something
+            you’ll love.
+          </p>
+
+          <a href="products.html" class="secondary-btn">
+            Explore Deals →
+          </a>
+        </div>
+
+        <div class="promo-symbol">
+          🛍️
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- TRENDING PRODUCTS -->
+    <section class="section">
+
+      <div class="section-heading">
+
+        <div>
+          <p class="section-label">TRENDING NOW</p>
+          <h2>Popular Products</h2>
+        </div>
+
+        <a href="products.html" class="view-all">
+          View All →
+        </a>
+
+      </div>
+
+
+      <div class="product-grid" id="featuredProducts">
+
+        <!-- Products will be loaded by JavaScript -->
+
+      </div>
+
+    </section>
+
+
+    <!-- WHY ZYNEXCART -->
+    <section class="section">
+
+      <div class="section-heading">
+        <div>
+          <p class="section-label">WHY ZYNEXCART</p>
+          <h2>Shopping made simple</h2>
+        </div>
+      </div>
+
+
+      <div class="benefits-grid">
+
+        <div class="benefit-card">
+          <div>🛍️</div>
+          <h3>Trendy Products</h3>
+          <p>Discover products for everyday needs and more.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div>🛡️</div>
+          <h3>Best Quality</h3>
+          <p>Shop with confidence from our product collection.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div>🚚</div>
+          <h3>Fast Delivery</h3>
+          <p>Quick and convenient shopping experience.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+
+    <div class="footer-container">
+
+      <div class="footer-brand">
+
+        <img src="assets/logo.png" alt="ZynexCart">
+
+        <p>
+          Shop Smart, Live Better.
+        </p>
+
+      </div>
+
+
+      <div class="footer-links">
+
+        <div>
+          <h3>Shop</h3>
+          <a href="products.html">All Products</a>
+          <a href="products.html">Categories</a>
+          <a href="cart.html">Cart</a>
+        </div>
+
+        <div>
+          <h3>Account</h3>
+          <a href="login.html">Login</a>
+          <a href="profile.html">Profile</a>
+          <a href="orders.html">My Orders</a>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <p>
+        © 2026 ZynexCart. All rights reserved.
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <!-- JAVASCRIPT -->
+  <script src="js/app.js"></script>
+
+</body>
+</html>
+<script src="js/app.js"></script>
+<script src="js/products.js"></script>
 
 </body>
 </html>
