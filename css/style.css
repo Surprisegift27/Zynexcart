@@ -1397,3 +1397,69 @@ section {
   padding: 0;
 
   borde
+   /* =========================================
+   PRODUCT CARD — QUANTITY CONTROL FIX
+   ========================================= */
+
+.product-card .add-btn.added {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: calc(100% - 24px);
+  min-height: 42px;
+
+  padding: 4px 7px;
+}
+
+
+/* Minus / Plus */
+
+.product-card .add-btn .qty-minus,
+.product-card .add-btn .qty-plus {
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 31px;
+
+  border-radius: 7px;
+
+  color: #ffffff;
+
+  font-size: 21px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+
+/* Hover */
+
+.product-card .add-btn .qty-minus:hover,
+.product-card .add-btn .qty-plus:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+
+/* Quantity */
+
+.product-card .add-btn .qty-number {
+  min-width: 32px;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 900;
+
+  text-align: center;
+
+  pointer-events: none;
+}
