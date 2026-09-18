@@ -1749,3 +1749,305 @@ input:focus-visible {
     font-size: 12px;
   }
 }
+/* =========================================================
+   ZYNEXCART — FINAL HOME PAGE LAYOUT FIX
+   ========================================================= */
+
+/* ---------- PAGE BASE ---------- */
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+
+/* ---------- HEADER ---------- */
+
+.header-container {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+
+/* ---------- MAIN CONTENT WIDTH ---------- */
+
+main {
+  width: 100%;
+}
+
+
+/* ---------- HOME SECTIONS ---------- */
+
+.section {
+  width: min(1200px, calc(100% - 32px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* ---------- HERO ---------- */
+
+.hero-section {
+  width: min(1200px, calc(100% - 32px));
+  margin: 24px auto 0;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+
+/* ---------- CATEGORY SECTION ---------- */
+
+.category-grid {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 16px;
+  margin-top: 20px;
+}
+
+
+/* ---------- CATEGORY CARD ---------- */
+
+.category-card {
+  width: 100%;
+  min-height: 140px;
+
+  padding: 22px 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  text-decoration: none;
+
+  background: #ffffff;
+  border: 1px solid #e7eaf0;
+  border-radius: 16px;
+
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #ff7a00;
+
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.10);
+}
+
+
+/* ---------- CATEGORY ICON ---------- */
+
+.category-card .category-icon {
+  width: 52px;
+  height: 52px;
+
+  margin-bottom: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  font-size: 27px;
+  line-height: 1;
+
+  background: #fff5eb;
+  border-radius: 14px;
+}
+
+
+/* ---------- CATEGORY TITLE ---------- */
+
+.category-card h3 {
+  display: block;
+
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  line-height: 1.3;
+
+  color: #172033;
+}
+
+
+/* ---------- CATEGORY DESCRIPTION ---------- */
+
+.category-card p {
+  display: block;
+
+  width: 100%;
+
+  margin: 5px 0 0;
+  padding: 0;
+
+  font-size: 13px;
+  font-weight: 400;
+
+  line-height: 1.4;
+
+  color: #737b87;
+}
+
+
+/* ---------- PRODUCT GRID ---------- */
+
+.product-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+
+/* ---------- PROMO BANNER ---------- */
+
+.promo-banner {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* ---------- BENEFITS ---------- */
+
+.benefits-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .header-container,
+  .section,
+  .hero-section {
+    width: min(100% - 24px, 760px);
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+
+  .header-container,
+  .section,
+  .hero-section {
+    width: calc(100% - 20px);
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .category-card {
+    min-height: 115px;
+    padding: 15px 8px;
+
+    border-radius: 13px;
+  }
+
+  .category-card .category-icon {
+    width: 44px;
+    height: 44px;
+
+    margin-bottom: 7px;
+
+    font-size: 23px;
+
+    border-radius: 12px;
+  }
+
+  .category-card h3 {
+    font-size: 14px;
+  }
+
+  .category-card p {
+    font-size: 11px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+  .category-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .category-card h3 {
+    font-size: 13px;
+  }
+
+  .category-card p {
+    font-size: 10px;
+  }
+
+}
