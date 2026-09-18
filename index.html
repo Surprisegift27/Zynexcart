@@ -2,71 +2,202 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <meta
     name="description"
     content="ZynexCart - Shop smart, live better. Discover everyday essentials, trending products and great deals."
   >
 
-  <meta name="theme-color" content="#071b3a">
+  <meta
+    name="theme-color"
+    content="#071b3a"
+  >
 
   <title>ZynexCart — Shop Smart, Live Better</title>
 
-  <link rel="stylesheet" href="css/style.css">
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+
 </head>
+
 
 <body>
 
+
   <!-- =====================================================
        HEADER
+       Logo → Location → Search → Cart → Login
        ===================================================== -->
 
   <header class="site-header">
 
     <div class="header-container">
 
-      <!-- LOGO -->
-      <a href="index.html" class="brand">
-        <img src="assets/logo.png" alt="ZynexCart">
+
+      <!-- =================================================
+           LOGO
+           ================================================= -->
+
+      <a
+        href="index.html"
+        class="brand"
+        aria-label="ZynexCart Home"
+      >
+
+        <img
+          src="assets/logo.png"
+          alt="ZynexCart"
+        >
+
       </a>
 
-      <!-- LOCATION -->
-      <button class="location-btn" type="button">
-        📍 <span>Enter location</span>
+
+      <!-- =================================================
+           LOCATION
+           ================================================= -->
+
+      <button
+        class="location-btn"
+        type="button"
+        aria-label="Select delivery location"
+      >
+
+        <span class="location-icon">
+          📍
+        </span>
+
+        <span class="location-text">
+          Enter location
+        </span>
+
       </button>
 
-      <!-- SEARCH -->
-      <form class="search-box" id="searchForm">
 
-        <span class="search-icon">🔍</span>
+      <!-- =================================================
+           SEARCH
+           ================================================= -->
+
+      <form
+        class="search-box"
+        id="searchForm"
+      >
+
+        <span
+          class="search-icon"
+          aria-hidden="true"
+        >
+          🔍
+        </span>
 
         <input
           type="search"
           id="searchInput"
           placeholder="Search for products..."
           autocomplete="off"
+          aria-label="Search products"
         >
 
       </form>
 
-      <!-- LOGIN -->
-      <a href="login.html" class="account-btn">
-        👤 <span>Login</span>
-      </a>
 
-      <!-- CART -->
-      <a href="cart.html" class="cart-btn">
+      <!-- =================================================
+           CART
+           Dynamic:
+           3 items
+           ₹347
+           ================================================= -->
 
-        🛒
-        <span>Cart</span>
+      <a
+        href="cart.html"
+        class="cart-link"
+        aria-label="Shopping cart"
+      >
 
-        <span class="cart-count" id="cartCount">
-          0
+        <!-- PROFESSIONAL CART SVG ICON -->
+
+        <span
+          class="cart-icon"
+          aria-hidden="true"
+        >
+
+          <svg
+            viewBox="0 0 32 32"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+
+            <path
+              d="M4 5h3l3.2 15.2a2 2 0 0 0 2 1.6h10.9a2 2 0 0 0 1.9-1.4L28 10H8"
+              stroke="currentColor"
+              stroke-width="2.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+
+            <circle
+              cx="13"
+              cy="27"
+              r="1.8"
+              fill="currentColor"
+            />
+
+            <circle
+              cx="24"
+              cy="27"
+              r="1.8"
+              fill="currentColor"
+            />
+
+          </svg>
+
+        </span>
+
+
+        <!-- CART INFORMATION -->
+
+        <span class="cart-info">
+
+          <span id="cartItemsText">
+            0 items
+          </span>
+
+          <span id="cartTotal">
+            ₹0
+          </span>
+
         </span>
 
       </a>
+
+
+      <!-- =================================================
+           LOGIN
+           ================================================= -->
+
+      <a
+        href="login.html"
+        class="account-link"
+      >
+
+        <span class="account-icon">
+          👤
+        </span>
+
+        <span>
+          Login
+        </span>
+
+      </a>
+
 
     </div>
 
@@ -102,7 +233,10 @@
           and great deals — all in one place.
         </p>
 
-        <a href="products.html" class="primary-btn">
+        <a
+          href="products.html"
+          class="primary-btn"
+        >
           Shop Now →
         </a>
 
@@ -131,7 +265,10 @@
 
         </div>
 
-        <a href="products.html" class="view-all">
+        <a
+          href="products.html"
+          class="view-all"
+        >
           View All →
         </a>
 
@@ -388,6 +525,8 @@
       <div class="benefits-grid">
 
 
+        <!-- BENEFIT 1 -->
+
         <div class="benefit-card">
 
           <div>
@@ -405,6 +544,8 @@
         </div>
 
 
+        <!-- BENEFIT 2 -->
+
         <div class="benefit-card">
 
           <div>
@@ -421,6 +562,8 @@
 
         </div>
 
+
+        <!-- BENEFIT 3 -->
 
         <div class="benefit-card">
 
@@ -542,7 +685,10 @@
        ===================================================== -->
 
   <script src="js/app.js"></script>
+
   <script src="js/products.js"></script>
 
+
 </body>
+
 </html>
