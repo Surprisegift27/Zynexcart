@@ -196,8 +196,10 @@ input::placeholder {
 
 .logo {
   display: block;
+
   width: 130px;
   height: auto;
+
   object-fit: contain;
 }
 
@@ -304,6 +306,7 @@ input::placeholder {
   flex-shrink: 0;
 
   font-size: 16px;
+
   opacity: 0.7;
 }
 
@@ -751,7 +754,9 @@ main {
 }
 
 
-/* Old hero support */
+/* =====================================================
+   OLD HERO SUPPORT
+   ===================================================== */
 
 .hero {
   position: relative;
@@ -1069,6 +1074,8 @@ section {
 
   font-size: 13px;
   font-weight: 800;
+
+  cursor: pointer;
 }
 
 .secondary-btn:hover {
@@ -1302,7 +1309,8 @@ section {
     background 0.2s ease,
     border-color 0.2s ease,
     color 0.2s ease,
-    transform 0.15s ease;
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
 }
 
 .product-card .add-btn:hover {
@@ -1325,7 +1333,9 @@ section {
 .product-card .add-btn.added {
   justify-content: space-between;
 
-  padding: 4px 7px;
+  min-height: 42px;
+
+  padding: 4px 6px;
 
   background: var(--success);
 
@@ -1334,6 +1344,9 @@ section {
   color: var(--white);
 
   cursor: default;
+
+  box-shadow:
+    0 4px 10px rgba(22, 131, 75, 0.16);
 }
 
 .product-card .add-btn.added:hover {
@@ -1346,28 +1359,10 @@ section {
 
 
 /* =====================================================
-   QUANTITY CONTROLS
+   QUANTITY BUTTONS
    ===================================================== */
 
 .product-card .add-btn .qty-minus,
 .product-card .add-btn .qty-plus {
   width: 32px;
-  height: 32px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex: 0 0 32px;
-
-  border: 0;
-  border-radius: 7px;
-
-  background: rgba(255, 255, 255, 0.18);
-
-  color: var(--white);
-
-  font-size: 18px;
-  font-weight: 900;
-
-  lin
+  height: 32p
