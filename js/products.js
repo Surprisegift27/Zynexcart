@@ -3,6 +3,11 @@
    Professional Product + Quantity Controls
    ========================================= */
 
+
+/* =========================================
+   PRODUCT DATA
+   ========================================= */
+
 const products = [
   {
     id: 1,
@@ -93,8 +98,19 @@ const products = [
 
 function formatCategory(category) {
   return category
-    .replace("-", " ")
+    .replace(/-/g, " ")
     .replace(/\b\w/g, letter => letter.toUpperCase());
+}
+
+
+/* =========================================
+   GET PRODUCT
+   ========================================= */
+
+function getProductById(productId) {
+  return products.find(
+    product => Number(product.id) === Number(productId)
+  );
 }
 
 
@@ -103,14 +119,13 @@ function formatCategory(category) {
    ========================================= */
 
 function getProductQuantity(productId) {
-
   const cart = getCart();
 
   const item = cart.find(
     item => Number(item.id) === Number(productId)
   );
 
-  return item ? Number(item.quantity) : 0;
+  return item ? Number(item.quantity || 0) : 0;
 }
 
 
@@ -122,14 +137,15 @@ function createProductButton(product) {
 
   const quantity = getProductQuantity(product.id);
 
-  /* PRODUCT NOT IN CART */
+  /* -----------------------------
+     ADD STATE
+     ----------------------------- */
 
   if (quantity <= 0) {
-
     return `
       <button
-        class="add-btn"
         type="button"
+        class="add-btn"
         data-product-id="${product.id}"
       >
         ADD
@@ -138,7 +154,9 @@ function createProductButton(product) {
   }
 
 
-  /* PRODUCT ALREADY IN CART */
+  /* -----------------------------
+     QUANTITY STATE
+     ----------------------------- */
 
   return `
     <div
@@ -158,7 +176,9 @@ function createProductButton(product) {
       <span
         class="qty-number"
         aria-live="polite"
-      >${quantity}</span>
+      >
+        ${quantity}
+      </span>
 
       <button
         type="button"
@@ -186,6 +206,7 @@ function createProductCard(product) {
       <a
         href="product.html?id=${product.id}"
         class="product-image"
+        aria-label="View ${product.name}"
       >
 
         <img
@@ -196,6 +217,7 @@ function createProductCard(product) {
         >
 
       </a>
+
 
       <div class="product-info">
 
@@ -210,6 +232,7 @@ function createProductCard(product) {
         <p class="product-unit">
           ${product.unit}
         </p>
+
 
         <div class="product-price-row">
 
@@ -226,6 +249,7 @@ function createProductCard(product) {
           </span>
 
         </div>
+
 
         ${createProductButton(product)}
 
@@ -249,11 +273,10 @@ function displayFeaturedProducts() {
     return;
   }
 
-  container.innerHTML =
-    products
-      .slice(0, 8)
-      .map(createProductCard)
-      .join("");
+  container.innerHTML = products
+    .slice(0, 8)
+    .map(createProductCard)
+    .join("");
 
   setupProductControls();
 }
@@ -265,38 +288,47 @@ function displayFeaturedProducts() {
 
 function refreshProductButton(productId) {
 
+  const product =
+    getProductById(productId);
+
+  if (!product) {
+    return;
+  }
+
+  const quantity =
+    getProductQuantity(productId);
+
   const controls =
     document.querySelectorAll(
       `.add-btn[data-product-id="${productId}"]`
     );
 
+
   controls.forEach(control => {
 
-    const product =
-      products.find(
-        item => Number(item.id) === Number(productId)
-      );
-
-    if (!product) {
-      return;
-    }
-
-    const quantity =
-      getProductQuantity(productId);
-
-
-    /* =====================================
-       CART EMPTY → SHOW ADD
-       ===================================== */
+    /* ---------------------------------
+       CART EMPTY → ADD BUTTON
+       --------------------------------- */
 
     if (quantity <= 0) {
+
+      if (
+        control.tagName === "BUTTON" &&
+        !control.classList.contains("added")
+      ) {
+        return;
+      }
 
       const addButton =
         document.createElement("button");
 
       addButton.type = "button";
+
       addButton.className = "add-btn";
-      addButton.dataset.productId = productId;
+
+      addButton.dataset.productId =
+        productId;
+
       addButton.textContent = "ADD";
 
       control.replaceWith(addButton);
@@ -307,10 +339,9 @@ function refreshProductButton(productId) {
     }
 
 
-    /* =====================================
-       EXISTING QUANTITY BOX
-       UPDATE ONLY NUMBER
-       ===================================== */
+    /* ---------------------------------
+       ALREADY QUANTITY CONTROL
+       --------------------------------- */
 
     if (control.classList.contains("added")) {
 
@@ -325,9 +356,9 @@ function refreshProductButton(productId) {
     }
 
 
-    /* =====================================
-       ADD → QUANTITY BOX
-       ===================================== */
+    /* ---------------------------------
+       ADD → QUANTITY CONTROL
+       --------------------------------- */
 
     const quantityControl =
       document.createElement("div");
@@ -352,7 +383,9 @@ function refreshProductButton(productId) {
       <span
         class="qty-number"
         aria-live="polite"
-      >${quantity}</span>
+      >
+        ${quantity}
+      </span>
 
       <button
         type="button"
@@ -379,9 +412,11 @@ function refreshProductButton(productId) {
 
 function setupSingleProductControl(control) {
 
-  if (!control) {
+  if (!control || control.dataset.bound === "true") {
     return;
   }
+
+  control.dataset.bound = "true";
 
 
   /* =======================================
@@ -399,9 +434,7 @@ function setupSingleProductControl(control) {
         Number(control.dataset.productId);
 
       const product =
-        products.find(
-          item => item.id === productId
-        );
+        getProductById(productId);
 
       if (!product) {
         return;
@@ -409,9 +442,9 @@ function setupSingleProductControl(control) {
 
       addToCart(product);
 
-      updateCartCount();
-
       refreshProductButton(productId);
+
+      updateCartCount();
 
     });
 
@@ -427,24 +460,32 @@ function setupSingleProductControl(control) {
     return;
   }
 
+
   control.addEventListener("click", event => {
 
     /*
-      IMPORTANT:
-      Only the actual + / − button
-      can trigger quantity changes.
+      ONLY REAL + / − BUTTONS WORK.
 
-      Number click = NOTHING
-      Empty area click = NOTHING
+      Number → no action.
+      Empty area → no action.
     */
 
-    const actionButton = event.target;
-
-    if (
-      !actionButton.matches(
+    const actionButton =
+      event.target.closest(
         "button.qty-minus, button.qty-plus"
-      )
-    ) {
+      );
+
+    if (!actionButton) {
+      return;
+    }
+
+
+    /*
+      Make sure the clicked button
+      actually belongs to this control.
+    */
+
+    if (!control.contains(actionButton)) {
       return;
     }
 
@@ -453,9 +494,7 @@ function setupSingleProductControl(control) {
       Number(control.dataset.productId);
 
     const product =
-      products.find(
-        item => item.id === productId
-      );
+      getProductById(productId);
 
     if (!product) {
       return;
@@ -472,9 +511,9 @@ function setupSingleProductControl(control) {
 
       addToCart(product);
 
-      updateCartCount();
-
       refreshProductButton(productId);
+
+      updateCartCount();
 
       return;
     }
@@ -493,11 +532,10 @@ function setupSingleProductControl(control) {
         -1
       );
 
-      updateCartCount();
-
       refreshProductButton(productId);
 
-      return;
+      updateCartCount();
+
     }
 
   });
@@ -540,9 +578,7 @@ function syncProductButtons() {
       Number(control.dataset.productId);
 
     if (productId) {
-
       refreshProductButton(productId);
-
     }
 
   });
