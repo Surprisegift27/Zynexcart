@@ -1,5 +1,6 @@
 /* =========================================
    ZYNEXCART — PRODUCTS
+   Professional Product + Quantity Controls
    ========================================= */
 
 const products = [
@@ -91,11 +92,9 @@ const products = [
    ========================================= */
 
 function formatCategory(category) {
-
   return category
     .replace("-", " ")
     .replace(/\b\w/g, letter => letter.toUpperCase());
-
 }
 
 
@@ -121,13 +120,9 @@ function getProductQuantity(productId) {
 
 function createProductButton(product) {
 
-  const quantity =
-    getProductQuantity(product.id);
+  const quantity = getProductQuantity(product.id);
 
-
-  /* ===============================
-     PRODUCT NOT IN CART
-     =============================== */
+  /* PRODUCT NOT IN CART */
 
   if (quantity <= 0) {
 
@@ -140,45 +135,43 @@ function createProductButton(product) {
         ADD
       </button>
     `;
-
   }
 
 
-  /* ===============================
-     PRODUCT ALREADY IN CART
-     =============================== */
+  /* PRODUCT ALREADY IN CART */
 
   return `
-    <button
+    <div
       class="add-btn added"
-      type="button"
       data-product-id="${product.id}"
-      aria-label="Change quantity of ${product.name}"
     >
 
-      <span
+      <button
+        type="button"
         class="qty-minus"
         data-action="minus"
-        role="button"
-        aria-label="Decrease quantity"
+        aria-label="Decrease ${product.name} quantity"
       >
         −
-      </span>
+      </button>
 
-      <span class="qty-number">
+      <span
+        class="qty-number"
+        aria-live="polite"
+      >
         ${quantity}
       </span>
 
-      <span
+      <button
+        type="button"
         class="qty-plus"
         data-action="plus"
-        role="button"
-        aria-label="Increase quantity"
+        aria-label="Increase ${product.name} quantity"
       >
         +
-      </span>
+      </button>
 
-    </button>
+    </div>
   `;
 }
 
@@ -206,23 +199,19 @@ function createProductCard(product) {
 
       </a>
 
-
       <div class="product-info">
 
         <div class="product-category">
           ${formatCategory(product.category)}
         </div>
 
-
         <h3 class="product-name">
           ${product.name}
         </h3>
 
-
         <p class="product-unit">
           ${product.unit}
         </p>
-
 
         <div class="product-price-row">
 
@@ -239,7 +228,6 @@ function createProductCard(product) {
           </span>
 
         </div>
-
 
         ${createProductButton(product)}
 
@@ -263,16 +251,13 @@ function displayFeaturedProducts() {
     return;
   }
 
-
   container.innerHTML =
     products
       .slice(0, 8)
       .map(createProductCard)
       .join("");
 
-
-  setupAddToCartButtons();
-
+  setupProductControls();
 }
 
 
@@ -282,187 +267,252 @@ function displayFeaturedProducts() {
 
 function refreshProductButton(productId) {
 
-  const buttons =
+  const controls =
     document.querySelectorAll(
       `.add-btn[data-product-id="${productId}"]`
     );
 
-
-  buttons.forEach(button => {
+  controls.forEach(control => {
 
     const product =
       products.find(
         item => item.id === Number(productId)
       );
 
-
     if (!product) {
       return;
     }
-
 
     const quantity =
       getProductQuantity(productId);
 
 
-    /* ===============================
-       CART EMPTY
-       =============================== */
+    /* CART EMPTY */
 
     if (quantity <= 0) {
 
-      button.className = "add-btn";
+      const addButton =
+        document.createElement("button");
 
-      button.innerHTML = "ADD";
+      addButton.type = "button";
+      addButton.className = "add-btn";
+      addButton.dataset.productId = productId;
+      addButton.textContent = "ADD";
 
-      button.removeAttribute("aria-label");
+      control.replaceWith(addButton);
+
+      setupSingleProductControl(addButton);
 
       return;
     }
 
 
-    /* ===============================
-       CART HAS PRODUCT
-       =============================== */
+    /* CART HAS PRODUCT */
 
-    button.className = "add-btn added";
+    const quantityControl =
+      document.createElement("div");
 
-    button.setAttribute(
-      "aria-label",
-      `Change quantity of ${product.name}`
-    );
+    quantityControl.className =
+      "add-btn added";
 
+    quantityControl.dataset.productId =
+      productId;
 
-    button.innerHTML = `
+    quantityControl.innerHTML = `
 
-      <span
+      <button
+        type="button"
         class="qty-minus"
         data-action="minus"
-        role="button"
-        aria-label="Decrease quantity"
+        aria-label="Decrease ${product.name} quantity"
       >
         −
-      </span>
+      </button>
 
-      <span class="qty-number">
+      <span
+        class="qty-number"
+        aria-live="polite"
+      >
         ${quantity}
       </span>
 
-      <span
+      <button
+        type="button"
         class="qty-plus"
         data-action="plus"
-        role="button"
-        aria-label="Increase quantity"
+        aria-label="Increase ${product.name} quantity"
       >
         +
-      </span>
+      </button>
 
     `;
 
-  });
+    control.replaceWith(quantityControl);
 
+    setupSingleProductControl(quantityControl);
+
+  });
 }
 
 
 /* =========================================
-   ADD / QUANTITY BUTTONS
+   SETUP SINGLE PRODUCT CONTROL
    ========================================= */
 
-function setupAddToCartButtons() {
+function setupSingleProductControl(control) {
 
-  const buttons =
-    document.querySelectorAll(".add-btn");
+  if (!control) {
+    return;
+  }
 
 
-  buttons.forEach(button => {
+  /* =======================================
+     ADD BUTTON
+     ======================================= */
 
-    button.addEventListener("click", event => {
+  if (
+    control.tagName === "BUTTON" &&
+    !control.classList.contains("added")
+  ) {
+
+    control.addEventListener("click", () => {
 
       const productId =
-        Number(button.dataset.productId);
-
+        Number(control.dataset.productId);
 
       const product =
         products.find(
           item => item.id === productId
         );
 
-
       if (!product) {
         return;
       }
 
-
-      /* ===============================
-         PLUS
-         =============================== */
-
-      const plus =
-        event.target.closest(
-          '[data-action="plus"]'
-        );
-
-
-      if (plus) {
-
-        addToCart(product);
-
-        refreshProductButton(productId);
-
-        return;
-      }
-
-
-      /* ===============================
-         MINUS
-         =============================== */
-
-      const minus =
-        event.target.closest(
-          '[data-action="minus"]'
-        );
-
-
-      if (minus) {
-
-        changeCartQuantity(productId, -1);
-
-        refreshProductButton(productId);
-
-        return;
-      }
-
-
-      /* ===============================
-         ADD
-         =============================== */
-
       addToCart(product);
+
+      updateCartCount();
 
       refreshProductButton(productId);
 
     });
 
-  });
+    return;
+  }
 
+
+  /* =======================================
+     QUANTITY CONTROL
+     ======================================= */
+
+  control.addEventListener("click", event => {
+
+    const actionButton =
+      event.target.closest(
+        "button[data-action]"
+      );
+
+
+    /*
+      IMPORTANT:
+      Only actual − or + buttons work.
+      Clicking the number or empty area does nothing.
+    */
+
+    if (!actionButton) {
+      return;
+    }
+
+
+    const productId =
+      Number(control.dataset.productId);
+
+    const product =
+      products.find(
+        item => item.id === productId
+      );
+
+    if (!product) {
+      return;
+    }
+
+
+    const action =
+      actionButton.dataset.action;
+
+
+    /* =====================================
+       PLUS
+       ===================================== */
+
+    if (action === "plus") {
+
+      addToCart(product);
+
+      updateCartCount();
+
+      refreshProductButton(productId);
+
+      return;
+    }
+
+
+    /* =====================================
+       MINUS
+       ===================================== */
+
+    if (action === "minus") {
+
+      changeCartQuantity(
+        productId,
+        -1
+      );
+
+      updateCartCount();
+
+      refreshProductButton(productId);
+
+      return;
+    }
+
+  });
 }
 
 
 /* =========================================
-   SYNC PRODUCTS WITH CART
+   SETUP ALL PRODUCT CONTROLS
+   ========================================= */
+
+function setupProductControls() {
+
+  const controls =
+    document.querySelectorAll(
+      ".add-btn[data-product-id]"
+    );
+
+  controls.forEach(control => {
+
+    setupSingleProductControl(control);
+
+  });
+}
+
+
+/* =========================================
+   SYNC PRODUCT BUTTONS
    ========================================= */
 
 function syncProductButtons() {
 
-  const buttons =
-    document.querySelectorAll(".add-btn");
+  const controls =
+    document.querySelectorAll(
+      ".add-btn[data-product-id]"
+    );
 
-
-  buttons.forEach(button => {
+  controls.forEach(control => {
 
     const productId =
-      Number(button.dataset.productId);
-
+      Number(control.dataset.productId);
 
     if (productId) {
 
@@ -471,7 +521,6 @@ function syncProductButtons() {
     }
 
   });
-
 }
 
 
