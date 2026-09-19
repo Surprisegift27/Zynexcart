@@ -115,21 +115,21 @@ function getProductQuantity(productId) {
 
 
 /* =========================================
-   CREATE ADD / QUANTITY CONTROL
+   CREATE PRODUCT BUTTON
    ========================================= */
 
 function createProductButton(product) {
 
   const quantity = getProductQuantity(product.id);
 
-  /* ADD BUTTON */
+  /* PRODUCT NOT IN CART */
 
   if (quantity <= 0) {
 
     return `
       <button
-        type="button"
         class="add-btn"
+        type="button"
         data-product-id="${product.id}"
       >
         ADD
@@ -138,7 +138,7 @@ function createProductButton(product) {
   }
 
 
-  /* QUANTITY CONTROL */
+  /* PRODUCT ALREADY IN CART */
 
   return `
     <div
@@ -187,12 +187,14 @@ function createProductCard(product) {
         href="product.html?id=${product.id}"
         class="product-image"
       >
+
         <img
           src="${product.image}"
           alt="${product.name}"
           loading="lazy"
           onerror="this.style.display='none'"
         >
+
       </a>
 
       <div class="product-info">
@@ -243,49 +245,51 @@ function displayFeaturedProducts() {
   const container =
     document.querySelector("#featuredProducts");
 
-  if (!container) return;
+  if (!container) {
+    return;
+  }
 
-  container.innerHTML = products
-    .slice(0, 8)
-    .map(createProductCard)
-    .join("");
+  container.innerHTML =
+    products
+      .slice(0, 8)
+      .map(createProductCard)
+      .join("");
 
   setupProductControls();
 }
 
 
 /* =========================================
-   RENDER PRODUCT CONTROL
+   REFRESH PRODUCT BUTTON
    ========================================= */
 
-function renderProductControl(productId) {
+function refreshProductButton(productId) {
 
-  const product = products.find(
-    item => Number(item.id) === Number(productId)
-  );
-
-  if (!product) return;
-
-  const quantity = getProductQuantity(productId);
-
-  const controls = document.querySelectorAll(
-    `.add-btn[data-product-id="${productId}"]`
-  );
+  const controls =
+    document.querySelectorAll(
+      `.add-btn[data-product-id="${productId}"]`
+    );
 
   controls.forEach(control => {
 
-    /* ================================
-       SHOW ADD BUTTON
-       ================================ */
+    const product =
+      products.find(
+        item => Number(item.id) === Number(productId)
+      );
+
+    if (!product) {
+      return;
+    }
+
+    const quantity =
+      getProductQuantity(productId);
+
+
+    /* =====================================
+       CART EMPTY → SHOW ADD
+       ===================================== */
 
     if (quantity <= 0) {
-
-      if (
-        control.tagName === "BUTTON" &&
-        !control.classList.contains("added")
-      ) {
-        return;
-      }
 
       const addButton =
         document.createElement("button");
@@ -303,13 +307,12 @@ function renderProductControl(productId) {
     }
 
 
-    /* ================================
-       EXISTING QUANTITY CONTROL
-       ================================ */
+    /* =====================================
+       EXISTING QUANTITY BOX
+       UPDATE ONLY NUMBER
+       ===================================== */
 
-    if (
-      control.classList.contains("added")
-    ) {
+    if (control.classList.contains("added")) {
 
       const number =
         control.querySelector(".qty-number");
@@ -322,9 +325,9 @@ function renderProductControl(productId) {
     }
 
 
-    /* ================================
-       CONVERT ADD → QUANTITY CONTROL
-       ================================ */
+    /* =====================================
+       ADD → QUANTITY BOX
+       ===================================== */
 
     const quantityControl =
       document.createElement("div");
@@ -371,54 +374,80 @@ function renderProductControl(productId) {
 
 
 /* =========================================
-   ADD BUTTON
+   SETUP SINGLE PRODUCT CONTROL
    ========================================= */
 
-function setupAddButton(button) {
+function setupSingleProductControl(control) {
 
-  button.addEventListener("click", () => {
-
-    const productId =
-      Number(button.dataset.productId);
-
-    const product =
-      products.find(
-        item => item.id === productId
-      );
-
-    if (!product) return;
-
-    addToCart(product);
-
-    updateCartCount();
-
-    renderProductControl(productId);
-
-  });
-}
+  if (!control) {
+    return;
+  }
 
 
-/* =========================================
-   QUANTITY CONTROL
-   ========================================= */
+  /* =======================================
+     ADD BUTTON
+     ======================================= */
 
-function setupQuantityControl(control) {
+  if (
+    control.tagName === "BUTTON" &&
+    !control.classList.contains("added")
+  ) {
+
+    control.addEventListener("click", () => {
+
+      const productId =
+        Number(control.dataset.productId);
+
+      const product =
+        products.find(
+          item => item.id === productId
+        );
+
+      if (!product) {
+        return;
+      }
+
+      addToCart(product);
+
+      updateCartCount();
+
+      refreshProductButton(productId);
+
+    });
+
+    return;
+  }
+
+
+  /* =======================================
+     QUANTITY CONTROL
+     ======================================= */
+
+  if (!control.classList.contains("added")) {
+    return;
+  }
 
   control.addEventListener("click", event => {
 
     /*
-      Only the actual + / − buttons
-      are allowed to perform an action.
+      IMPORTANT:
+      Only the actual + / − button
+      can trigger quantity changes.
+
+      Number click = NOTHING
+      Empty area click = NOTHING
     */
 
-    const button =
-      event.target.closest(
-        "button[data-action]"
-      );
+    const actionButton = event.target;
 
-    if (!button) {
+    if (
+      !actionButton.matches(
+        "button.qty-minus, button.qty-plus"
+      )
+    ) {
       return;
     }
+
 
     const productId =
       Number(control.dataset.productId);
@@ -428,33 +457,36 @@ function setupQuantityControl(control) {
         item => item.id === productId
       );
 
-    if (!product) return;
+    if (!product) {
+      return;
+    }
 
-    const action =
-      button.dataset.action;
 
-
-    /* ================================
+    /* =====================================
        PLUS
-       ================================ */
+       ===================================== */
 
-    if (action === "plus") {
+    if (
+      actionButton.classList.contains("qty-plus")
+    ) {
 
       addToCart(product);
 
       updateCartCount();
 
-      renderProductControl(productId);
+      refreshProductButton(productId);
 
       return;
     }
 
 
-    /* ================================
+    /* =====================================
        MINUS
-       ================================ */
+       ===================================== */
 
-    if (action === "minus") {
+    if (
+      actionButton.classList.contains("qty-minus")
+    ) {
 
       changeCartQuantity(
         productId,
@@ -463,7 +495,7 @@ function setupQuantityControl(control) {
 
       updateCartCount();
 
-      renderProductControl(productId);
+      refreshProductButton(productId);
 
       return;
     }
@@ -473,41 +505,7 @@ function setupQuantityControl(control) {
 
 
 /* =========================================
-   SETUP SINGLE CONTROL
-   ========================================= */
-
-function setupSingleProductControl(control) {
-
-  if (!control) return;
-
-
-  /* ADD */
-
-  if (
-    control.tagName === "BUTTON" &&
-    !control.classList.contains("added")
-  ) {
-
-    setupAddButton(control);
-
-    return;
-  }
-
-
-  /* QUANTITY */
-
-  if (
-    control.classList.contains("added")
-  ) {
-
-    setupQuantityControl(control);
-
-  }
-}
-
-
-/* =========================================
-   SETUP ALL CONTROLS
+   SETUP ALL PRODUCT CONTROLS
    ========================================= */
 
 function setupProductControls() {
@@ -526,7 +524,7 @@ function setupProductControls() {
 
 
 /* =========================================
-   SYNC ALL PRODUCT BUTTONS
+   SYNC PRODUCT BUTTONS
    ========================================= */
 
 function syncProductButtons() {
@@ -543,7 +541,7 @@ function syncProductButtons() {
 
     if (productId) {
 
-      renderProductControl(productId);
+      refreshProductButton(productId);
 
     }
 
@@ -552,7 +550,7 @@ function syncProductButtons() {
 
 
 /* =========================================
-   START
+   START PRODUCTS
    ========================================= */
 
 document.addEventListener(
