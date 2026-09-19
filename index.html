@@ -35,10 +35,7 @@
 
   <!-- =====================================================
        HEADER
-       Responsive:
-       Desktop → Logo | Delivery + Location | Search | Login | Cart
-       Mobile  → Logo + Location + Account + Cart
-                   Search on next row
+       Logo → Location → Search → Cart → Login
        ===================================================== -->
 
   <header class="site-header">
@@ -47,7 +44,7 @@
 
 
       <!-- =================================================
-           BRAND / LOGO
+           LOGO
            ================================================= -->
 
       <a
@@ -65,7 +62,7 @@
 
 
       <!-- =================================================
-           DELIVERY + LOCATION
+           LOCATION
            ================================================= -->
 
       <button
@@ -74,34 +71,12 @@
         aria-label="Select delivery location"
       >
 
-        <span class="location-content">
+        <span class="location-icon">
+          📍
+        </span>
 
-          <span class="delivery-time">
-            Delivery in 15 minutes
-          </span>
-
-          <span class="location-row">
-
-            <span
-              class="location-icon"
-              aria-hidden="true"
-            >
-              📍
-            </span>
-
-            <span class="location-text">
-              Enter location
-            </span>
-
-            <span
-              class="location-arrow"
-              aria-hidden="true"
-            >
-              ▾
-            </span>
-
-          </span>
-
+        <span class="location-text">
+          Enter location
         </span>
 
       </button>
@@ -114,7 +89,6 @@
       <form
         class="search-box"
         id="searchForm"
-        role="search"
       >
 
         <span
@@ -136,34 +110,10 @@
 
 
       <!-- =================================================
-           ACCOUNT / LOGIN
-           ================================================= -->
-
-      <a
-        href="login.html"
-        class="account-link"
-        aria-label="Login to your account"
-      >
-
-        <span
-          class="account-icon"
-          aria-hidden="true"
-        >
-          👤
-        </span>
-
-        <span class="account-text">
-          Login
-        </span>
-
-      </a>
-
-
-      <!-- =================================================
            CART
            Dynamic:
-           0 items
-           ₹0
+           3 items
+           ₹347
            ================================================= -->
 
       <a
@@ -171,6 +121,8 @@
         class="cart-link"
         aria-label="Shopping cart"
       >
+
+        <!-- PROFESSIONAL CART SVG ICON -->
 
         <span
           class="cart-icon"
@@ -210,6 +162,8 @@
         </span>
 
 
+        <!-- CART INFORMATION -->
+
         <span class="cart-info">
 
           <span id="cartItemsText">
@@ -220,6 +174,26 @@
             ₹0
           </span>
 
+        </span>
+
+      </a>
+
+
+      <!-- =================================================
+           LOGIN
+           ================================================= -->
+
+      <a
+        href="login.html"
+        class="account-link"
+      >
+
+        <span class="account-icon">
+          👤
+        </span>
+
+        <span>
+          Login
         </span>
 
       </a>
@@ -551,6 +525,8 @@
       <div class="benefits-grid">
 
 
+        <!-- BENEFIT 1 -->
+
         <div class="benefit-card">
 
           <div>
@@ -568,6 +544,8 @@
         </div>
 
 
+        <!-- BENEFIT 2 -->
+
         <div class="benefit-card">
 
           <div>
@@ -584,6 +562,8 @@
 
         </div>
 
+
+        <!-- BENEFIT 3 -->
 
         <div class="benefit-card">
 
@@ -619,6 +599,8 @@
     <div class="footer-container">
 
 
+      <!-- FOOTER BRAND -->
+
       <div class="footer-brand">
 
         <img
@@ -632,6 +614,8 @@
 
       </div>
 
+
+      <!-- FOOTER LINKS -->
 
       <div class="footer-links">
 
@@ -682,6 +666,8 @@
 
     </div>
 
+
+    <!-- COPYRIGHT -->
 
     <div class="footer-bottom">
 
