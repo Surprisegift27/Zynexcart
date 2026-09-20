@@ -1,1 +1,315 @@
+/* =====================================================
+   ZYNEXCART — HOME PAGE
+   ===================================================== */
 
+
+/* =====================================================
+   HERO
+   ===================================================== */
+
+.hero-section {
+  position: relative;
+
+  width: min(1200px, calc(100% - 40px));
+
+  min-height: 340px;
+
+  margin: 24px auto 52px;
+
+  padding: 64px 60px;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  border-radius: var(--radius-xl);
+
+  background:
+    linear-gradient(
+      135deg,
+      #071b3a 0%,
+      #0c2c5d 55%,
+      #123d76 100%
+    );
+
+  color: var(--white);
+
+  box-shadow: var(--shadow);
+}
+
+.hero-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 440px;
+  height: 440px;
+
+  right: -130px;
+  top: -180px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 107, 0, 0.12);
+
+  pointer-events: none;
+}
+
+.hero-section::after {
+  content: "";
+
+  position: absolute;
+
+  width: 190px;
+  height: 190px;
+
+  right: 150px;
+  bottom: -105px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+
+  z-index: 2;
+
+  max-width: 700px;
+}
+
+.hero-label {
+  margin-bottom: 12px;
+
+  color: #ffb27d;
+
+  font-size: 12px;
+  font-weight: 900;
+
+  letter-spacing: 1.5px;
+}
+
+.hero-section h1 {
+  margin-bottom: 18px;
+
+  color: var(--white);
+
+  font-size: clamp(38px, 5vw, 62px);
+
+  line-height: 1.04;
+
+  letter-spacing: -1.8px;
+}
+
+.hero-section h1 span {
+  color: #ff9a52;
+}
+
+.hero-section p {
+  max-width: 600px;
+
+  margin-bottom: 28px;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 18px;
+
+  line-height: 1.7;
+}
+
+.hero-text {
+  margin-bottom: 28px;
+}
+
+
+/* =====================================================
+   OLD HERO SUPPORT
+   ===================================================== */
+
+.hero {
+  position: relative;
+
+  padding: 78px 0;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #071b3a 0%,
+      #0c2c5d 55%,
+      #123d76 100%
+    );
+
+  color: var(--white);
+}
+
+
+/* =====================================================
+   SECTIONS
+   ===================================================== */
+
+.section {
+  width: min(1200px, calc(100% - 40px));
+
+  margin-inline: auto;
+
+  margin-bottom: 52px;
+}
+
+section {
+  margin-bottom: 52px;
+}
+
+.section-heading,
+.page-heading {
+  margin-bottom: 24px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.section-heading h2,
+.page-heading h1 {
+  color: var(--navy);
+
+  letter-spacing: -0.6px;
+}
+
+.section-heading h2 {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.section-heading p,
+.page-heading p {
+  margin-top: 6px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+}
+
+.section-label {
+  color: var(--primary) !important;
+
+  font-size: 11px !important;
+
+  font-weight: 900;
+
+  letter-spacing: 1.2px;
+
+  text-transform: uppercase;
+}
+
+.view-all {
+  flex-shrink: 0;
+
+  color: var(--primary);
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.view-all:hover {
+  text-decoration: underline;
+}
+
+
+/* =====================================================
+   PROMO BANNER
+   ===================================================== */
+
+.promo-banner {
+  position: relative;
+
+  width: 100%;
+  min-height: 190px;
+
+  padding: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  overflow: hidden;
+
+  border: 1px solid #ffe0cd;
+
+  border-radius: var(--radius-xl);
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff0e5,
+      #fff9f5
+    );
+}
+
+.promo-label {
+  margin-bottom: 8px;
+
+  color: var(--primary) !important;
+
+  font-size: 11px !important;
+
+  font-weight: 900;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+.promo-banner h2 {
+  margin-bottom: 8px;
+
+  color: var(--navy);
+
+  font-size: 25px;
+
+  line-height: 1.25;
+}
+
+.promo-banner p {
+  color: var(--muted);
+}
+
+.secondary-btn {
+  min-height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 18px;
+
+  padding: 0 17px;
+
+  border: 1px solid #ffd0b2;
+
+  border-radius: 10px;
+
+  background: var(--white);
+
+  color: var(--primary);
+
+  font-size: 13px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.secondary-btn:hover {
+  background: var(--primary-light);
+
+  border-color: var(--primary);
+}
