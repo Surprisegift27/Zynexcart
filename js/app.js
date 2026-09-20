@@ -12,16 +12,37 @@ const CART_STORAGE_KEY = "zynexcart_cart";
 
 
 /* =========================================
-   PAGE INITIALIZATION
+   APP INITIALIZATION
    ========================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeZynexCart() {
 
   updateCartHeader();
 
   setupSearch();
 
-});
+}
+
+
+/*
+ * Important:
+ * app.js index.html mein dynamically load hota hai.
+ * Isliye sirf DOMContentLoaded par depend nahi karna.
+ */
+
+if (document.readyState === "loading") {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeZynexCart,
+    { once: true }
+  );
+
+} else {
+
+  initializeZynexCart();
+
+}
 
 
 /* =========================================
@@ -32,28 +53,41 @@ function getCart() {
 
   try {
 
-    const cart =
+    const storedCart =
       localStorage.getItem(CART_STORAGE_KEY);
 
-    if (!cart) {
+    if (!storedCart) {
       return [];
     }
 
-    const parsedCart = JSON.parse(cart);
+    const parsedCart =
+      JSON.parse(storedCart);
 
-    return Array.isArray(parsedCart)
-      ? parsedCart
-      : [];
+    if (!Array.isArray(parsedCart)) {
+      return [];
+    }
+
+    return parsedCart.filter(item => {
+
+      return (
+        item &&
+        item.id !== undefined &&
+        Number(item.quantity) > 0
+      );
+
+    });
 
   } catch (error) {
 
     console.error(
-      "Unable to read cart:",
+      "ZynexCart: Unable to read cart.",
       error
     );
 
     return [];
+
   }
+
 }
 
 
@@ -63,21 +97,47 @@ function getCart() {
 
 function saveCart(cart) {
 
-  localStorage.setItem(
-    CART_STORAGE_KEY,
-    JSON.stringify(cart)
-  );
+  try {
 
-  updateCartHeader();
+    const validCart =
+      Array.isArray(cart)
+        ? cart.filter(item => {
 
-  /*
-     Tell other cart components
-     that cart has changed.
-  */
+            return (
+              item &&
+              item.id !== undefined &&
+              Number(item.quantity) > 0
+            );
 
-  document.dispatchEvent(
-    new CustomEvent("zynexcart:cartUpdated")
-  );
+          })
+        : [];
+
+
+    localStorage.setItem(
+      CART_STORAGE_KEY,
+      JSON.stringify(validCart)
+    );
+
+
+    updateCartHeader();
+
+
+    document.dispatchEvent(
+      new CustomEvent(
+        "zynexcart:cartUpdated"
+      )
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "ZynexCart: Unable to save cart.",
+      error
+    );
+
+  }
+
 }
 
 
@@ -98,6 +158,7 @@ function getCartItemCount() {
     },
     0
   );
+
 }
 
 
@@ -121,6 +182,7 @@ function getCartTotal() {
     },
     0
   );
+
 }
 
 
@@ -155,31 +217,27 @@ function updateCartHeader() {
     getCartTotal();
 
 
-  /* -----------------------------------------
-     CART COUNT
-     ----------------------------------------- */
+  /* CART COUNT */
 
   const cartCountElements =
     document.querySelectorAll("#cartCount");
 
-  cartCountElements.forEach((element) => {
+  cartCountElements.forEach(element => {
 
-    element.textContent = itemCount;
+    element.textContent =
+      itemCount;
 
   });
 
 
-  /* -----------------------------------------
-     CART ITEMS TEXT
-     Example: 1 item / 2 items
-     ----------------------------------------- */
+  /* CART ITEMS TEXT */
 
   const cartItemsText =
     document.querySelectorAll(
       "#cartItemsText"
     );
 
-  cartItemsText.forEach((element) => {
+  cartItemsText.forEach(element => {
 
     element.textContent =
       `${itemCount} ${
@@ -191,17 +249,14 @@ function updateCartHeader() {
   });
 
 
-  /* -----------------------------------------
-     CART TOTAL
-     Example: ₹120
-     ----------------------------------------- */
+  /* CART TOTAL */
 
   const cartTotalElements =
     document.querySelectorAll(
       "#cartTotal"
     );
 
-  cartTotalElements.forEach((element) => {
+  cartTotalElements.forEach(element => {
 
     element.textContent =
       formatPrice(totalAmount);
@@ -209,18 +264,14 @@ function updateCartHeader() {
   });
 
 
-  /* -----------------------------------------
-     COMBINED CART SUMMARY
-     Example:
-     2 items • ₹240
-     ----------------------------------------- */
+  /* CART SUMMARY */
 
   const cartSummaryElements =
     document.querySelectorAll(
       "#cartSummary"
     );
 
-  cartSummaryElements.forEach((element) => {
+  cartSummaryElements.forEach(element => {
 
     element.textContent =
       `${itemCount} ${
@@ -231,35 +282,6 @@ function updateCartHeader() {
 
   });
 
-
-  /* -----------------------------------------
-     EMPTY CART DISPLAY
-     ----------------------------------------- */
-
-  if (itemCount === 0) {
-
-    cartItemsText.forEach((element) => {
-
-      element.textContent = "0 items";
-
-    });
-
-
-    cartTotalElements.forEach((element) => {
-
-      element.textContent = "₹0";
-
-    });
-
-
-    cartSummaryElements.forEach((element) => {
-
-      element.textContent =
-        "0 items • ₹0";
-
-    });
-
-  }
 
 }
 
@@ -282,11 +304,26 @@ function setupSearch() {
   }
 
 
+  /*
+   * Prevent duplicate search listeners.
+   */
+
+  if (
+    searchForm.dataset.searchReady === "true"
+  ) {
+    return;
+  }
+
+
+  searchForm.dataset.searchReady = "true";
+
+
   searchForm.addEventListener(
     "submit",
-    (event) => {
+    event => {
 
       event.preventDefault();
+
 
       const searchTerm =
         searchInput.value.trim();
@@ -314,18 +351,23 @@ function setupSearch() {
 
 function addToCart(product) {
 
-  if (!product || product.id === undefined) {
+  if (
+    !product ||
+    product.id === undefined
+  ) {
 
     console.error(
-      "Invalid product:",
+      "ZynexCart: Invalid product.",
       product
     );
 
     return;
+
   }
 
 
-  const cart = getCart();
+  const cart =
+    getCart();
 
 
   const existingProduct =
@@ -336,10 +378,7 @@ function addToCart(product) {
     );
 
 
-  /* -----------------------------------------
-     PRODUCT ALREADY EXISTS
-     → Increase quantity
-     ----------------------------------------- */
+  /* EXISTING PRODUCT */
 
   if (existingProduct) {
 
@@ -349,10 +388,7 @@ function addToCart(product) {
   }
 
 
-  /* -----------------------------------------
-     NEW PRODUCT
-     → Add quantity 1
-     ----------------------------------------- */
+  /* NEW PRODUCT */
 
   else {
 
@@ -362,15 +398,20 @@ function addToCart(product) {
 
       name: product.name || "",
 
-      price: Number(product.price || 0),
+      price:
+        Number(product.price || 0),
 
-      mrp: Number(product.mrp || 0),
+      mrp:
+        Number(product.mrp || 0),
 
-      unit: product.unit || "",
+      unit:
+        product.unit || "",
 
-      image: product.image || "",
+      image:
+        product.image || "",
 
-      category: product.category || "",
+      category:
+        product.category || "",
 
       quantity: 1
 
@@ -390,7 +431,8 @@ function addToCart(product) {
 
 function removeFromCart(productId) {
 
-  const cart = getCart();
+  const cart =
+    getCart();
 
 
   const updatedCart =
@@ -415,7 +457,8 @@ function changeCartQuantity(
   change
 ) {
 
-  const cart = getCart();
+  const cart =
+    getCart();
 
 
   const product =
@@ -436,24 +479,12 @@ function changeCartQuantity(
     Number(change || 0);
 
 
-  /* -----------------------------------------
-     Quantity 0 or below
-     → Remove product
-     ----------------------------------------- */
-
   if (product.quantity <= 0) {
 
-    const updatedCart =
-      cart.filter(
-        item =>
-          String(item.id) !==
-          String(productId)
-      );
-
-
-    saveCart(updatedCart);
+    removeFromCart(productId);
 
     return;
+
   }
 
 
@@ -471,7 +502,8 @@ function setCartQuantity(
   quantity
 ) {
 
-  const cart = getCart();
+  const cart =
+    getCart();
 
 
   const product =
@@ -491,11 +523,15 @@ function setCartQuantity(
     Number(quantity);
 
 
-  if (newQuantity <= 0) {
+  if (
+    !Number.isFinite(newQuantity) ||
+    newQuantity <= 0
+  ) {
 
     removeFromCart(productId);
 
     return;
+
   }
 
 
@@ -532,12 +568,12 @@ function clearCart() {
 
 
 /* =========================================
-   REFRESH CART WHEN LOCALSTORAGE CHANGES
+   LOCALSTORAGE SYNC
    ========================================= */
 
 window.addEventListener(
   "storage",
-  (event) => {
+  event => {
 
     if (
       event.key === CART_STORAGE_KEY
@@ -552,7 +588,7 @@ window.addEventListener(
 
 
 /* =========================================
-   UPDATE HEADER AFTER CART CHANGE
+   CART UPDATE EVENT
    ========================================= */
 
 document.addEventListener(
