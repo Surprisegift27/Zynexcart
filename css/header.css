@@ -1,1 +1,404 @@
+/* =====================================================
+   ZYNEXCART — HEADER
+   ===================================================== */
 
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  width: 100%;
+
+  background: rgba(255, 255, 255, 0.98);
+
+  border-bottom: 1px solid var(--border);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+
+.header-container {
+  width: min(1400px, calc(100% - 40px));
+
+  min-height: 72px;
+
+  margin-inline: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    auto
+    minmax(280px, 1fr)
+    auto
+    auto;
+
+  grid-template-areas:
+    "brand location search cart account";
+
+  align-items: center;
+
+  gap: 16px;
+}
+
+
+/* =====================================================
+   BRAND / LOGO
+   ===================================================== */
+
+.brand {
+  grid-area: brand;
+
+  display: flex;
+  align-items: center;
+
+  min-width: 120px;
+
+  transition: opacity 0.2s ease;
+}
+
+.brand:hover {
+  opacity: 0.9;
+}
+
+.brand img,
+.logo {
+  width: 130px;
+  height: auto;
+
+  display: block;
+
+  object-fit: contain;
+}
+
+
+/* =====================================================
+   LOCATION
+   ===================================================== */
+
+.location-btn {
+  grid-area: location;
+
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 13px;
+
+  border: 1px solid #ffd7bd;
+  border-radius: var(--radius);
+
+  background: var(--primary-light);
+  color: var(--primary);
+
+  font-size: 12px;
+  font-weight: 800;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.location-btn:hover {
+  background: #ffeadb;
+  border-color: #ffc49d;
+  transform: translateY(-1px);
+}
+
+.location-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.location-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+.search-box {
+  grid-area: search;
+
+  width: 100%;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+
+  background: #f5f6f8;
+
+  border: 1px solid #eef0f3;
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.search-box:hover {
+  background: #f1f2f5;
+}
+
+.search-box:focus-within {
+  background: var(--white);
+
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px rgba(255, 107, 0, 0.10);
+}
+
+.search-icon {
+  width: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  font-size: 16px;
+
+  opacity: 0.7;
+}
+
+.search-box input {
+  flex: 1;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0 14px 0 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: var(--text);
+
+  font-size: 14px;
+}
+
+.search-box button {
+  width: 46px;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   CART
+   ===================================================== */
+
+.cart-link {
+  grid-area: cart;
+
+  min-width: 110px;
+  min-height: 50px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 5px 12px;
+
+  border-radius: 10px;
+
+  background: var(--success);
+  color: var(--white);
+
+  box-shadow:
+    0 4px 12px rgba(22, 131, 75, 0.14);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cart-link:hover {
+  background: var(--success-dark);
+  color: var(--white);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 16px rgba(22, 131, 75, 0.20);
+}
+
+.cart-icon {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 28px;
+}
+
+.cart-icon svg {
+  width: 25px;
+  height: 25px;
+
+  display: block;
+}
+
+.cart-info {
+  min-width: 52px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  line-height: 1.15;
+}
+
+#cartItemsText {
+  font-size: 11px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+#cartTotal {
+  margin-top: 2px;
+
+  font-size: 12px;
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   LOGIN / ACCOUNT
+   ===================================================== */
+
+.account-link {
+  grid-area: account;
+
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 11px;
+
+  border-radius: 10px;
+
+  color: var(--text);
+
+  font-size: 13px;
+  font-weight: 800;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.account-link:hover {
+  background: #f3f4f6;
+  color: var(--primary);
+}
+
+.account-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+
+/* =====================================================
+   OLD HEADER SUPPORT
+   ===================================================== */
+
+.account-btn {
+  min-height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 0 11px;
+
+  border-radius: var(--radius);
+
+  color: var(--text);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cart-btn {
+  min-width: 108px;
+  min-height: 50px;
+
+  display: grid;
+
+  grid-template-columns: 30px 1fr;
+  grid-template-rows: 1fr 1fr;
+
+  align-items: center;
+
+  column-gap: 5px;
+
+  padding: 5px 12px;
+
+  border-radius: 10px;
+
+  background: var(--success);
+  color: var(--white);
+}
+
+.cart-count {
+  grid-column: 2;
+  grid-row: 1;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.cart-amount {
+  grid-column: 2;
+  grid-row: 2;
+
+  font-size: 12px;
+  font-weight: 900;
+}
