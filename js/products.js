@@ -589,13 +589,30 @@ function syncProductButtons() {
    START PRODUCTS
    ========================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+function initProducts() {
 
-    displayFeaturedProducts();
+  displayFeaturedProducts();
 
-    updateCartCount();
+  updateCartCount();
 
-  }
-);
+}
+
+
+/*
+   Support both:
+   1. Normal page loading
+   2. Dynamically loaded components
+*/
+
+if (document.readyState === "loading") {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initProducts
+  );
+
+} else {
+
+  initProducts();
+
+}
