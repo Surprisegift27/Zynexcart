@@ -1,1 +1,167 @@
+/* =====================================================
+   ZYNEXCART — BASE / FOUNDATION
+   ===================================================== */
 
+:root {
+  --primary: #ff6b00;
+  --primary-dark: #e85f00;
+  --primary-light: #fff3e9;
+
+  --navy: #071b3a;
+  --navy-light: #102b55;
+
+  --text: #172033;
+  --muted: #6b7280;
+  --muted-light: #9aa0aa;
+
+  --white: #ffffff;
+
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+
+  --border: #e5e7eb;
+  --border-light: #eef0f3;
+
+  --success: #16834b;
+  --success-dark: #137443;
+  --success-light: #eaf7ef;
+
+  --danger: #d33a2c;
+
+  --shadow-sm: 0 2px 8px rgba(7, 27, 58, 0.05);
+  --shadow: 0 8px 24px rgba(7, 27, 58, 0.08);
+  --shadow-lg: 0 16px 40px rgba(7, 27, 58, 0.12);
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+
+/* =====================================================
+   RESET
+   ===================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  background: var(--bg);
+  color: var(--text);
+
+  line-height: 1.5;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input::placeholder {
+  color: var(--muted-light);
+}
+
+
+/* =====================================================
+   GLOBAL CONTAINER
+   ===================================================== */
+
+.container {
+  width: min(1200px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+
+/* =====================================================
+   MAIN
+   ===================================================== */
+
+main {
+  width: 100%;
+}
+
+
+/* =====================================================
+   COMMON BUTTONS
+   ===================================================== */
+
+.primary-btn,
+.btn-primary {
+  min-height: 46px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 21px;
+
+  border: 0;
+  border-radius: var(--radius);
+
+  background: var(--primary);
+  color: var(--white);
+
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.primary-btn:hover,
+.btn-primary:hover {
+  background: var(--primary-dark);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 7px 18px rgba(255, 107, 0, 0.24);
+}
+
+.primary-btn:active,
+.btn-primary:active {
+  transform: translateY(0);
+}
