@@ -32,57 +32,44 @@
 
 <body>
 
-
-  <!-- COMPONENT: HEADER -->
-
+  <!-- HEADER -->
   <div id="header-component"></div>
 
 
-  <!-- COMPONENT: HERO -->
-
+  <!-- HERO -->
   <div id="hero-component"></div>
 
 
-  <!-- COMPONENT: CATEGORIES -->
-
+  <!-- CATEGORIES -->
   <div id="categories-component"></div>
 
 
-  <!-- COMPONENT: POPULAR PRODUCTS -->
-
+  <!-- POPULAR PRODUCTS -->
   <div id="popular-products-component"></div>
 
 
-  <!-- COMPONENT: PROMO BANNER -->
-
+  <!-- PROMO BANNER -->
   <div id="promo-banner-component"></div>
 
 
-  <!-- COMPONENT: BENEFITS -->
-
+  <!-- BENEFITS -->
   <div id="benefits-component"></div>
 
 
-  <!-- COMPONENT: FOOTER -->
-
+  <!-- FOOTER -->
   <div id="footer-component"></div>
 
 
-  <!-- =====================================================
-       COMPONENT LOADER
-       ===================================================== -->
-
   <script>
 
-    async function loadComponent(
-      componentId,
-      filePath
-    ) {
+    async function loadComponent(elementId, filePath) {
 
-      const container =
-        document.getElementById(componentId);
+      const element =
+        document.getElementById(elementId);
 
-      if (!container) return;
+      if (!element) {
+        return;
+      }
 
       try {
 
@@ -91,17 +78,17 @@
 
         if (!response.ok) {
           throw new Error(
-            `Failed to load ${filePath}`
+            `Unable to load ${filePath}`
           );
         }
 
-        container.innerHTML =
+        element.innerHTML =
           await response.text();
 
       } catch (error) {
 
         console.error(
-          "Component loading error:",
+          "ZynexCart component error:",
           error
         );
 
@@ -110,60 +97,78 @@
     }
 
 
-    async function loadAllComponents() {
+    async function loadComponents() {
 
-      await Promise.all([
+      await loadComponent(
+        "header-component",
+        "components/header.html"
+      );
 
-        loadComponent(
-          "header-component",
-          "components/header.html"
-        ),
+      await loadComponent(
+        "hero-component",
+        "components/hero.html"
+      );
 
-        loadComponent(
-          "hero-component",
-          "components/hero.html"
-        ),
+      await loadComponent(
+        "categories-component",
+        "components/categories.html"
+      );
 
-        loadComponent(
-          "categories-component",
-          "components/categories.html"
-        ),
+      await loadComponent(
+        "popular-products-component",
+        "components/popular-products.html"
+      );
 
-        loadComponent(
-          "popular-products-component",
-          "components/popular-products.html"
-        ),
+      await loadComponent(
+        "promo-banner-component",
+        "components/promo-banner.html"
+      );
 
-        loadComponent(
-          "promo-banner-component",
-          "components/promo-banner.html"
-        ),
+      await loadComponent(
+        "benefits-component",
+        "components/benefits.html"
+      );
 
-        loadComponent(
-          "benefits-component",
-          "components/benefits.html"
-        ),
+      await loadComponent(
+        "footer-component",
+        "components/footer.html"
+      );
 
-        loadComponent(
-          "footer-component",
-          "components/footer.html"
-        )
 
-      ]);
+      /*
+       * IMPORTANT:
+       * Components are now completely loaded.
+       * Only after that do we load ZynexCart JS.
+       */
+
+      const appScript =
+        document.createElement("script");
+
+      appScript.src = "js/app.js";
+
+      document.body.appendChild(appScript);
+
+
+      appScript.onload = () => {
+
+        const productsScript =
+          document.createElement("script");
+
+        productsScript.src =
+          "js/products.js";
+
+        document.body.appendChild(
+          productsScript
+        );
+
+      };
 
     }
 
 
-    loadAllComponents();
+    loadComponents();
 
   </script>
-
-
-  <!-- EXISTING ZYNEXCART JAVASCRIPT -->
-
-  <script src="js/app.js"></script>
-
-  <script src="js/products.js"></script>
 
 
 </body>
