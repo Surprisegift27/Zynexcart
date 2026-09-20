@@ -1,256 +1,230 @@
-<!DOCTYPE html>
-<html lang="en">
+/* =====================================================
+   ZYNEXCART — PROFESSIONAL QUANTITY CONTROLS
+   ===================================================== */
 
-<head>
+.quantity-control {
+  display: inline-flex;
+  align-items: center;
 
-  <meta charset="UTF-8">
+  height: 38px;
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  overflow: hidden;
 
-  <meta
-    name="description"
-    content="ZynexCart - Shop smart, live better. Discover everyday essentials, trending products and great deals."
-  >
+  border: 1px solid var(--primary);
+  border-radius: 10px;
 
-  <meta
-    name="theme-color"
-    content="#071b3a"
-  >
+  background: var(--white);
 
-  <title>ZynexCart — Shop Smart, Live Better</title>
+  box-shadow:
+    0 3px 10px rgba(255, 107, 0, 0.10);
+}
 
+/* PLUS / MINUS */
 
-  <!-- =================================================
-       ZYNEXCART MODULAR CSS
-       ================================================= -->
+.quantity-control button {
+  width: 36px;
+  height: 36px;
 
-  <link
-    rel="stylesheet"
-    href="css/base.css"
-  >
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  <link
-    rel="stylesheet"
-    href="css/header.css"
-  >
+  padding: 0;
 
-  <link
-    rel="stylesheet"
-    href="css/categories.css"
-  >
+  border: 0;
 
-  <link
-    rel="stylesheet"
-    href="css/home.css"
-  >
+  background: var(--primary);
+  color: var(--white);
 
-  <link
-    rel="stylesheet"
-    href="css/products.css"
-  >
+  font-family: inherit;
+  font-size: 19px;
+  font-weight: 800;
 
-  <link
-    rel="stylesheet"
-    href="css/responsive.css"
-  >
+  line-height: 1;
 
-</head>
+  cursor: pointer;
 
+  transition:
+    background 0.18s ease,
+    transform 0.12s ease;
+}
 
-<body>
+.quantity-control button:hover {
+  background: var(--primary-dark);
+}
 
+.quantity-control button:active {
+  transform: scale(0.92);
+}
 
-  <!-- =================================================
-       HEADER
-       ================================================= -->
+/* QUANTITY NUMBER */
 
-  <div id="header-component"></div>
+.quantity-control span,
+.quantity-control .quantity {
+  min-width: 34px;
+  height: 36px;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  <!-- =================================================
-       HERO
-       ================================================= -->
+  background: var(--white);
+  color: var(--text);
 
-  <div id="hero-component"></div>
+  font-size: 13px;
+  font-weight: 800;
 
+  user-select: none;
+}
 
-  <!-- =================================================
-       CATEGORIES
-       ================================================= -->
+/* =====================================================
+   ADD BUTTON
+   ===================================================== */
 
-  <div id="categories-component"></div>
+.add-to-cart,
+.add-btn,
+.product-add-btn {
+  min-height: 38px;
 
+  padding: 0 15px;
 
-  <!-- =================================================
-       POPULAR PRODUCTS
-       ================================================= -->
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  <div id="popular-products-component"></div>
+  gap: 6px;
 
+  border: 1px solid var(--primary);
+  border-radius: 10px;
 
-  <!-- =================================================
-       PROMO BANNER
-       ================================================= -->
+  background: var(--white);
+  color: var(--primary);
 
-  <div id="promo-banner-component"></div>
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 850;
 
+  cursor: pointer;
 
-  <!-- =================================================
-       BENEFITS
-       ================================================= -->
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.12s ease,
+    box-shadow 0.18s ease;
+}
 
-  <div id="benefits-component"></div>
+.add-to-cart:hover,
+.add-btn:hover,
+.product-add-btn:hover {
+  background: var(--primary);
+  color: var(--white);
 
+  box-shadow:
+    0 4px 12px rgba(255, 107, 0, 0.18);
 
-  <!-- =================================================
-       FOOTER
-       ================================================= -->
+  transform: translateY(-1px);
+}
 
-  <div id="footer-component"></div>
+.add-to-cart:active,
+.add-btn:active,
+.product-add-btn:active {
+  transform: translateY(0);
+}
 
+/* =====================================================
+   PRODUCT CARD QUANTITY STATE
+   ===================================================== */
 
-  <!-- =================================================
-       COMPONENT LOADER
-       ================================================= -->
+.product-card .quantity-control {
+  width: auto;
 
-  <script>
+  margin-left: auto;
+}
 
-    async function loadComponent(elementId, filePath) {
+.product-card .quantity-control button {
+  flex: 0 0 36px;
+}
 
-      const element =
-        document.getElementById(elementId);
+.product-card .quantity-control span,
+.product-card .quantity-control .quantity {
+  flex: 0 0 34px;
+}
 
-      if (!element) {
-        return;
-      }
+/* =====================================================
+   MOBILE
+   ===================================================== */
 
-      try {
+@media screen and (max-width: 768px) {
 
-        const response =
-          await fetch(filePath);
+  .quantity-control {
+    height: 36px;
 
-        if (!response.ok) {
+    border-radius: 9px;
+  }
 
-          throw new Error(
-            `Unable to load ${filePath}`
-          );
+  .quantity-control button {
+    width: 34px;
+    height: 34px;
 
-        }
+    font-size: 18px;
+  }
 
-        element.innerHTML =
-          await response.text();
+  .quantity-control span,
+  .quantity-control .quantity {
+    min-width: 32px;
+    height: 34px;
 
-      } catch (error) {
+    font-size: 12px;
+  }
 
-        console.error(
-          "ZynexCart component error:",
-          error
-        );
+  .add-to-cart,
+  .add-btn,
+  .product-add-btn {
+    min-height: 36px;
 
-      }
+    padding: 0 12px;
 
-    }
+    border-radius: 9px;
 
+    font-size: 11px;
+  }
 
-    async function loadComponents() {
+}
 
-      /*
-       * Load all HTML components first.
-       */
+/* =====================================================
+   SMALL PHONES
+   ===================================================== */
 
-      await loadComponent(
-        "header-component",
-        "components/header.html"
-      );
+@media screen and (max-width: 390px) {
 
-      await loadComponent(
-        "hero-component",
-        "components/hero.html"
-      );
+  .quantity-control {
+    height: 34px;
+  }
 
-      await loadComponent(
-        "categories-component",
-        "components/categories.html"
-      );
+  .quantity-control button {
+    width: 31px;
+    height: 32px;
 
-      await loadComponent(
-        "popular-products-component",
-        "components/popular-products.html"
-      );
+    font-size: 17px;
+  }
 
-      await loadComponent(
-        "promo-banner-component",
-        "components/promo-banner.html"
-      );
+  .quantity-control span,
+  .quantity-control .quantity {
+    min-width: 29px;
+    height: 32px;
 
-      await loadComponent(
-        "benefits-component",
-        "components/benefits.html"
-      );
+    font-size: 11px;
+  }
 
-      await loadComponent(
-        "footer-component",
-        "components/footer.html"
-      );
+  .add-to-cart,
+  .add-btn,
+  .product-add-btn {
+    min-height: 34px;
 
+    padding: 0 10px;
 
-      /*
-       * Components are completely loaded.
-       * Now load the main application JavaScript.
-       */
+    font-size: 10px;
+  }
 
-      const appScript =
-        document.createElement("script");
-
-      appScript.src = "js/app.js";
-
-      document.body.appendChild(
-        appScript
-      );
-
-
-      /*
-       * Load products.js only after app.js.
-       */
-
-      appScript.onload = () => {
-
-        const productsScript =
-          document.createElement("script");
-
-        productsScript.src =
-          "js/products.js";
-
-        document.body.appendChild(
-          productsScript
-        );
-
-      };
-
-
-      appScript.onerror = () => {
-
-        console.error(
-          "ZynexCart error: Unable to load js/app.js"
-        );
-
-      };
-
-    }
-
-
-    /*
-     * Start component loading.
-     */
-
-    loadComponents();
-
-  </script>
-
-
-</body>
-
-</html>
+}
