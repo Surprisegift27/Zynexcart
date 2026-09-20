@@ -15,9 +15,22 @@
     content="Shop groceries, snacks, beauty, personal care and household products on ZynexCart."
   >
 
+  <meta
+    name="theme-color"
+    content="#071b3a"
+  >
+
   <title>Products — ZynexCart</title>
 
-  <link rel="stylesheet" href="css/style.css">
+
+  <!-- =================================================
+       ZYNEXCART — MODULAR CSS
+       ================================================= -->
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="css/responsive.css">
 
 </head>
 
@@ -25,7 +38,9 @@
 <body>
 
 
-  <!-- ================= HEADER ================= -->
+  <!-- =================================================
+       HEADER
+       ================================================= -->
 
   <header class="site-header">
 
@@ -71,6 +86,7 @@
           id="searchInput"
           placeholder="Search products..."
           autocomplete="off"
+          aria-label="Search products"
         >
 
         <button
@@ -116,7 +132,9 @@
 
 
 
-  <!-- ================= PRODUCTS PAGE ================= -->
+  <!-- =================================================
+       PRODUCTS PAGE
+       ================================================= -->
 
   <main class="container products-page">
 
@@ -137,7 +155,9 @@
 
 
 
-    <!-- ================= CATEGORY FILTERS ================= -->
+    <!-- =================================================
+         CATEGORY FILTERS
+         ================================================= -->
 
     <div class="category-filters">
 
@@ -209,7 +229,9 @@
 
 
 
-    <!-- ================= PRODUCTS ================= -->
+    <!-- =================================================
+         PRODUCTS
+         ================================================= -->
 
     <section>
 
@@ -246,7 +268,9 @@
 
 
 
-  <!-- ================= FOOTER ================= -->
+  <!-- =================================================
+       FOOTER
+       ================================================= -->
 
   <footer class="site-footer">
 
@@ -266,7 +290,9 @@
 
 
 
-  <!-- ================= JAVASCRIPT ================= -->
+  <!-- =================================================
+       JAVASCRIPT
+       ================================================= -->
 
   <script src="js/app.js"></script>
 
@@ -277,18 +303,14 @@
 
     document.addEventListener("DOMContentLoaded", () => {
 
-
       const productsGrid =
         document.getElementById("productsGrid");
-
 
       const noProducts =
         document.getElementById("noProducts");
 
-
       const filterButtons =
         document.querySelectorAll(".category-filter");
-
 
 
       /* =================================================
@@ -296,7 +318,6 @@
          ================================================= */
 
       function displayProducts(list) {
-
 
         if (list.length === 0) {
 
@@ -308,26 +329,19 @@
 
         }
 
-
         noProducts.style.display = "none";
 
-
         productsGrid.innerHTML = list.map(product => `
-
 
           <article
             class="product-card"
             data-product-id="${product.id}"
           >
 
-
-            <!-- PRODUCT CLICK AREA -->
-
             <a
               href="product.html?id=${product.id}"
               class="product-card-link"
             >
-
 
               <div class="product-image">
 
@@ -340,61 +354,40 @@
               </div>
 
 
-
               <div class="product-info">
 
-
                 <span class="product-category">
-
                   ${formatCategory(product.category)}
-
                 </span>
-
 
                 <h3>
                   ${product.name}
                 </h3>
 
-
                 <p class="product-unit">
-
                   ${product.unit}
-
                 </p>
 
 
                 <div class="product-price">
 
-
                   <strong>
-
                     ${formatPrice(product.price)}
-
                   </strong>
 
-
                   <span class="product-mrp">
-
                     ${formatPrice(product.mrp)}
-
                   </span>
-
 
                   <span class="product-discount">
-
                     ${product.discount}% OFF
-
                   </span>
-
 
                 </div>
 
-
               </div>
 
-
             </a>
-
 
 
             <!-- ADD / QUANTITY BUTTON -->
@@ -407,12 +400,9 @@
               ADD
             </button>
 
-
           </article>
 
-
         `).join("");
-
 
         setupProductButtons();
 
@@ -426,42 +416,33 @@
 
       function setupProductButtons() {
 
-
         const addButtons =
           document.querySelectorAll(".add-btn");
 
 
         addButtons.forEach(button => {
 
-
           const productId =
             Number(button.dataset.productId);
-
 
           const product =
             products.find(
               item => item.id === productId
             );
 
-
           if (!product) return;
-
 
 
           /* UPDATE BUTTON */
 
           function updateButton() {
 
-
-            const cart =
-              getCart();
-
+            const cart = getCart();
 
             const cartItem =
               cart.find(
                 item => item.id === productId
               );
-
 
             const quantity =
               cartItem
@@ -469,29 +450,22 @@
                 : 0;
 
 
-
             /* NOT IN CART */
 
             if (quantity <= 0) {
 
-
               button.classList.remove("added");
 
-
-              button.innerHTML =
-                "ADD";
-
+              button.innerHTML = "ADD";
 
               return;
 
             }
 
 
-
             /* IN CART */
 
             button.classList.add("added");
-
 
             button.innerHTML = `
 
@@ -512,11 +486,9 @@
           }
 
 
-
           /* INITIAL STATE */
 
           updateButton();
-
 
 
           /* BUTTON CLICK */
@@ -525,11 +497,9 @@
             "click",
             event => {
 
-
               event.preventDefault();
 
               event.stopPropagation();
-
 
 
               /* PLUS */
@@ -540,20 +510,16 @@
                 )
               ) {
 
-
                 changeCartQuantity(
                   productId,
                   1
                 );
 
-
                 updateButton();
-
 
                 return;
 
               }
-
 
 
               /* MINUS */
@@ -564,29 +530,23 @@
                 )
               ) {
 
-
                 changeCartQuantity(
                   productId,
                   -1
                 );
 
-
                 updateButton();
-
 
                 return;
 
               }
 
 
-
               /* ADD */
 
               addToCart(product);
 
-
               updateButton();
-
 
             }
           );
@@ -602,7 +562,6 @@
          ================================================= */
 
       function filterProducts(category) {
-
 
         if (category === "all") {
 
@@ -632,16 +591,12 @@
 
       filterButtons.forEach(button => {
 
-
         button.addEventListener(
           "click",
           () => {
 
-
             filterButtons.forEach(btn => {
-
               btn.classList.remove("active");
-
             });
 
 
@@ -686,15 +641,13 @@
 
       if (search) {
 
-
         const searchInput =
           document.getElementById(
             "searchInput"
           );
 
 
-        searchInput.value =
-          search;
+        searchInput.value = search;
 
 
         const searchTerm =
@@ -720,9 +673,7 @@
 
 
         filterButtons.forEach(btn => {
-
           btn.classList.remove("active");
-
         });
 
 
@@ -738,7 +689,6 @@
 
       else if (category) {
 
-
         const categoryButton =
           document.querySelector(
             `[data-category="${category}"]`
@@ -747,11 +697,8 @@
 
         if (categoryButton) {
 
-
           filterButtons.forEach(btn => {
-
             btn.classList.remove("active");
-
           });
 
 
@@ -772,16 +719,13 @@
 
       else {
 
-
         displayProducts(products);
 
       }
 
-
     });
 
   </script>
-
 
 </body>
 
