@@ -119,13 +119,16 @@ function getProductById(productId) {
    ========================================= */
 
 function getProductQuantity(productId) {
+
   const cart = getCart();
 
   const item = cart.find(
     item => Number(item.id) === Number(productId)
   );
 
-  return item ? Number(item.quantity || 0) : 0;
+  return item
+    ? Number(item.quantity || 0)
+    : 0;
 }
 
 
@@ -135,13 +138,16 @@ function getProductQuantity(productId) {
 
 function createProductButton(product) {
 
-  const quantity = getProductQuantity(product.id);
+  const quantity =
+    getProductQuantity(product.id);
 
-  /* -----------------------------
+
+  /* -----------------------------------------
      ADD STATE
-     ----------------------------- */
+     ----------------------------------------- */
 
   if (quantity <= 0) {
+
     return `
       <button
         type="button"
@@ -154,9 +160,9 @@ function createProductButton(product) {
   }
 
 
-  /* -----------------------------
+  /* -----------------------------------------
      QUANTITY STATE
-     ----------------------------- */
+     ----------------------------------------- */
 
   return `
     <div
@@ -412,7 +418,10 @@ function refreshProductButton(productId) {
 
 function setupSingleProductControl(control) {
 
-  if (!control || control.dataset.bound === "true") {
+  if (
+    !control ||
+    control.dataset.bound === "true"
+  ) {
     return;
   }
 
@@ -463,13 +472,6 @@ function setupSingleProductControl(control) {
 
   control.addEventListener("click", event => {
 
-    /*
-      ONLY REAL + / − BUTTONS WORK.
-
-      Number → no action.
-      Empty area → no action.
-    */
-
     const actionButton =
       event.target.closest(
         "button.qty-minus, button.qty-plus"
@@ -479,11 +481,6 @@ function setupSingleProductControl(control) {
       return;
     }
 
-
-    /*
-      Make sure the clicked button
-      actually belongs to this control.
-    */
 
     if (!control.contains(actionButton)) {
       return;
