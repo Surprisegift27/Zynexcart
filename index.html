@@ -33,1128 +33,138 @@
 <body>
 
 
-  <!-- =====================================================
-       HEADER
-       ===================================================== -->
+  <!-- COMPONENT: HEADER -->
 
-  <header class="site-header">
-
-    <div class="header-container">
-
-      <!-- LOGO -->
-
-      <a
-        href="index.html"
-        class="brand"
-        aria-label="ZynexCart Home"
-      >
-
-        <img
-          src="assets/logo.png"
-          alt="ZynexCart"
-          class="logo"
-        >
-
-      </a>
+  <div id="header-component"></div>
 
 
-      <!-- LOCATION -->
+  <!-- COMPONENT: HERO -->
 
-      <button
-        class="location-btn"
-        type="button"
-        aria-label="Select delivery location"
-      >
-
-        <span
-          class="location-icon"
-          aria-hidden="true"
-        >
-          📍
-        </span>
-
-        <span class="location-text">
-          Enter location
-        </span>
-
-      </button>
+  <div id="hero-component"></div>
 
 
-      <!-- SEARCH -->
+  <!-- COMPONENT: CATEGORIES -->
 
-      <form
-        class="search-box"
-        id="searchForm"
-        role="search"
-      >
-
-        <span
-          class="search-icon"
-          aria-hidden="true"
-        >
-          🔍
-        </span>
-
-        <input
-          type="search"
-          id="searchInput"
-          placeholder="Search for products..."
-          autocomplete="off"
-          aria-label="Search products"
-        >
-
-      </form>
+  <div id="categories-component"></div>
 
 
-      <!-- CART -->
+  <!-- COMPONENT: POPULAR PRODUCTS -->
 
-      <a
-        href="cart.html"
-        class="cart-link"
-        aria-label="Shopping cart"
-      >
-
-        <span
-          class="cart-icon"
-          aria-hidden="true"
-        >
-
-          <svg
-            viewBox="0 0 32 32"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-          >
-
-            <path
-              d="M4 5h3l3.2 15.2a2 2 0 0 0 2 1.6h10.9a2 2 0 0 0 1.9-1.4L28 10H8"
-              stroke="currentColor"
-              stroke-width="2.3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-
-            <circle
-              cx="13"
-              cy="27"
-              r="1.8"
-              fill="currentColor"
-            />
-
-            <circle
-              cx="24"
-              cy="27"
-              r="1.8"
-              fill="currentColor"
-            />
-
-          </svg>
-
-        </span>
+  <div id="popular-products-component"></div>
 
 
-        <span class="cart-info">
+  <!-- COMPONENT: PROMO BANNER -->
 
-          <span id="cartItemsText">
-            0 items
-          </span>
-
-          <span id="cartTotal">
-            ₹0
-          </span>
-
-        </span>
-
-      </a>
+  <div id="promo-banner-component"></div>
 
 
-      <!-- LOGIN -->
+  <!-- COMPONENT: BENEFITS -->
 
-      <a
-        href="login.html"
-        class="account-link"
-        aria-label="Login to your account"
-      >
+  <div id="benefits-component"></div>
 
-        <span
-          class="account-icon"
-          aria-hidden="true"
-        >
-          👤
-        </span>
 
-        <span>
-          Login
-        </span>
+  <!-- COMPONENT: FOOTER -->
 
-      </a>
-
-    </div>
-
-  </header>
-
+  <div id="footer-component"></div>
 
 
   <!-- =====================================================
-       CATEGORY NAVIGATION
+       COMPONENT LOADER
        ===================================================== -->
 
-  <nav
-    class="category-nav"
-    aria-label="Product categories"
-  >
+  <script>
 
-    <div class="category-nav-container">
+    async function loadComponent(
+      componentId,
+      filePath
+    ) {
 
-      <a
-        href="products.html"
-        class="category-nav-item active"
-      >
-        All
-      </a>
+      const container =
+        document.getElementById(componentId);
 
-      <a
-        href="products.html?category=grocery"
-        class="category-nav-item"
-      >
-        Grocery
-      </a>
+      if (!container) return;
 
-      <a
-        href="products.html?category=snacks"
-        class="category-nav-item"
-      >
-        Snacks
-      </a>
+      try {
 
-      <a
-        href="products.html?category=beverages"
-        class="category-nav-item"
-      >
-        Beverages
-      </a>
+        const response =
+          await fetch(filePath);
 
-      <a
-        href="products.html?category=personal-care"
-        class="category-nav-item"
-      >
-        Personal Care
-      </a>
+        if (!response.ok) {
+          throw new Error(
+            `Failed to load ${filePath}`
+          );
+        }
 
-      <a
-        href="products.html?category=beauty"
-        class="category-nav-item"
-      >
-        Beauty
-      </a>
+        container.innerHTML =
+          await response.text();
 
-      <a
-        href="products.html?category=household"
-        class="category-nav-item"
-      >
-        Household
-      </a>
+      } catch (error) {
 
-      <a
-        href="products.html"
-        class="category-nav-item"
-      >
-        Offers
-      </a>
+        console.error(
+          "Component loading error:",
+          error
+        );
 
-    </div>
+      }
 
-  </nav>
+    }
 
 
+    async function loadAllComponents() {
 
-  <!-- =====================================================
-       MAIN CONTENT
-       ===================================================== -->
+      await Promise.all([
 
-  <main>
+        loadComponent(
+          "header-component",
+          "components/header.html"
+        ),
 
+        loadComponent(
+          "hero-component",
+          "components/hero.html"
+        ),
 
-    <!-- ===================================================
-         HERO
-         =================================================== -->
+        loadComponent(
+          "categories-component",
+          "components/categories.html"
+        ),
 
-    <section class="hero-section">
+        loadComponent(
+          "popular-products-component",
+          "components/popular-products.html"
+        ),
 
-      <div class="hero-content">
+        loadComponent(
+          "promo-banner-component",
+          "components/promo-banner.html"
+        ),
 
-        <p class="hero-label">
-          WELCOME TO ZYNEXCART
-        </p>
+        loadComponent(
+          "benefits-component",
+          "components/benefits.html"
+        ),
 
-        <h1>
-          Shop Smart,<br>
-          <span>Live Better.</span>
-        </h1>
+        loadComponent(
+          "footer-component",
+          "components/footer.html"
+        )
 
-        <p class="hero-text">
-          Discover trending products, everyday essentials
-          and great deals — all in one place.
-        </p>
+      ]);
 
-        <a
-          href="products.html"
-          class="primary-btn"
-        >
-          Shop Now →
-        </a>
+    }
 
-      </div>
 
-    </section>
+    loadAllComponents();
 
+  </script>
 
 
-    <!-- ===================================================
-         SHOP BY CATEGORY
-         =================================================== -->
-
-    <section class="section">
-
-      <div class="section-heading">
-
-        <div>
-
-          <p class="section-label">
-            EXPLORE
-          </p>
-
-          <h2>
-            Shop by Category
-          </h2>
-
-        </div>
-
-        <a
-          href="products.html"
-          class="view-all"
-        >
-          View All →
-        </a>
-
-      </div>
-
-
-      <div class="category-grid">
-
-
-        <!-- 01 -->
-
-        <a
-          href="products.html?category=paan"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/paan.png"
-              alt="Paan Corner"
-            >
-
-          </div>
-
-          <h3>
-            Paan Corner
-          </h3>
-
-          <p>
-            Paan & mouth fresheners
-          </p>
-
-        </a>
-
-
-        <!-- 02 -->
-
-        <a
-          href="products.html?category=dairy-bread-eggs"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/dairy-bread-eggs.png"
-              alt="Dairy, Bread & Eggs"
-            >
-
-          </div>
-
-          <h3>
-            Dairy, Bread & Eggs
-          </h3>
-
-          <p>
-            Fresh everyday essentials
-          </p>
-
-        </a>
-
-
-        <!-- 03 -->
-
-        <a
-          href="products.html?category=fruits-vegetables"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/fruits-vegetables.png"
-              alt="Fruits & Vegetables"
-            >
-
-          </div>
-
-          <h3>
-            Fruits & Vegetables
-          </h3>
-
-          <p>
-            Fresh & healthy choices
-          </p>
-
-        </a>
-
-
-        <!-- 04 -->
-
-        <a
-          href="products.html?category=cold-drinks-juices"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/cold-drinks-juices.png"
-              alt="Cold Drinks & Juices"
-            >
-
-          </div>
-
-          <h3>
-            Cold Drinks & Juices
-          </h3>
-
-          <p>
-            Refreshing drinks
-          </p>
-
-        </a>
-
-
-        <!-- 05 -->
-
-        <a
-          href="products.html?category=snacks-munchies"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/snacks-munchies.png"
-              alt="Snacks & Munchies"
-            >
-
-          </div>
-
-          <h3>
-            Snacks & Munchies
-          </h3>
-
-          <p>
-            Tasty favourites
-          </p>
-
-        </a>
-
-
-        <!-- 06 -->
-
-        <a
-          href="products.html?category=breakfast-instant-food"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/breakfast-instant-food.png"
-              alt="Breakfast & Instant Food"
-            >
-
-          </div>
-
-          <h3>
-            Breakfast & Instant Food
-          </h3>
-
-          <p>
-            Quick & easy meals
-          </p>
-
-        </a>
-
-
-        <!-- 07 -->
-
-        <a
-          href="products.html?category=sweet-tooth"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/sweet-tooth.png"
-              alt="Sweet Tooth"
-            >
-
-          </div>
-
-          <h3>
-            Sweet Tooth
-          </h3>
-
-          <p>
-            Sweets & desserts
-          </p>
-
-        </a>
-
-
-        <!-- 08 -->
-
-        <a
-          href="products.html?category=bakery-biscuits"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/bakery-biscuits.png"
-              alt="Bakery & Biscuits"
-            >
-
-          </div>
-
-          <h3>
-            Bakery & Biscuits
-          </h3>
-
-          <p>
-            Fresh bakery favourites
-          </p>
-
-        </a>
-
-
-        <!-- 09 -->
-
-        <a
-          href="products.html?category=tea-coffee-milk"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/tea-coffee-milk.png"
-              alt="Tea, Coffee & Milk Drinks"
-            >
-
-          </div>
-
-          <h3>
-            Tea, Coffee & Milk Drinks
-          </h3>
-
-          <p>
-            Hot & refreshing drinks
-          </p>
-
-        </a>
-
-
-        <!-- 10 -->
-
-        <a
-          href="products.html?category=atta-rice-dal"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/atta-rice-dal.png"
-              alt="Atta, Rice & Dal"
-            >
-
-          </div>
-
-          <h3>
-            Atta, Rice & Dal
-          </h3>
-
-          <p>
-            Kitchen staples
-          </p>
-
-        </a>
-
-
-        <!-- 11 -->
-
-        <a
-          href="products.html?category=masala-oil"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/masala-oil.png"
-              alt="Masala, Oil & More"
-            >
-
-          </div>
-
-          <h3>
-            Masala, Oil & More
-          </h3>
-
-          <p>
-            Cooking essentials
-          </p>
-
-        </a>
-
-
-        <!-- 12 -->
-
-        <a
-          href="products.html?category=sauces-spreads"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/sauces-spreads.png"
-              alt="Sauces & Spreads"
-            >
-
-          </div>
-
-          <h3>
-            Sauces & Spreads
-          </h3>
-
-          <p>
-            Flavours for every meal
-          </p>
-
-        </a>
-
-
-        <!-- 13 -->
-
-        <a
-          href="products.html?category=chicken-meat-fish"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/chicken-meat-fish.png"
-              alt="Chicken, Meat & Fish"
-            >
-
-          </div>
-
-          <h3>
-            Chicken, Meat & Fish
-          </h3>
-
-          <p>
-            Fresh non-veg essentials
-          </p>
-
-        </a>
-
-
-        <!-- 14 -->
-
-        <a
-          href="products.html?category=organic-healthy"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/organic-healthy.png"
-              alt="Organic & Healthy Living"
-            >
-
-          </div>
-
-          <h3>
-            Organic & Healthy Living
-          </h3>
-
-          <p>
-            Healthy everyday choices
-          </p>
-
-        </a>
-
-
-        <!-- 15 -->
-
-        <a
-          href="products.html?category=baby-care"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/baby-care.png"
-              alt="Baby Care"
-            >
-
-          </div>
-
-          <h3>
-            Baby Care
-          </h3>
-
-          <p>
-            Care for little ones
-          </p>
-
-        </a>
-
-
-        <!-- 16 -->
-
-        <a
-          href="products.html?category=pharma-wellness"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/pharma-wellness.png"
-              alt="Pharma & Wellness"
-            >
-
-          </div>
-
-          <h3>
-            Pharma & Wellness
-          </h3>
-
-          <p>
-            Health & wellness essentials
-          </p>
-
-        </a>
-
-
-        <!-- 17 -->
-
-        <a
-          href="products.html?category=cleaning-essentials"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/cleaning-essentials.png"
-              alt="Cleaning Essentials"
-            >
-
-          </div>
-
-          <h3>
-            Cleaning Essentials
-          </h3>
-
-          <p>
-            Keep your home clean
-          </p>
-
-        </a>
-
-
-        <!-- 18 -->
-
-        <a
-          href="products.html?category=home-office"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/home-office.png"
-              alt="Home & Office"
-            >
-
-          </div>
-
-          <h3>
-            Home & Office
-          </h3>
-
-          <p>
-            Everyday home essentials
-          </p>
-
-        </a>
-
-
-        <!-- 19 -->
-
-        <a
-          href="products.html?category=personal-care"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/personal-care.png"
-              alt="Personal Care"
-            >
-
-          </div>
-
-          <h3>
-            Personal Care
-          </h3>
-
-          <p>
-            Daily care essentials
-          </p>
-
-        </a>
-
-
-        <!-- 20 -->
-
-        <a
-          href="products.html?category=pet-care"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/pet-care.png"
-              alt="Pet Care"
-            >
-
-          </div>
-
-          <h3>
-            Pet Care
-          </h3>
-
-          <p>
-            Essentials for your pets
-          </p>
-
-        </a>
-
-
-        <!-- 21 -->
-
-        <a
-          href="products.html?category=offers"
-          class="category-card"
-        >
-
-          <div class="category-icon">
-
-            <img
-              src="assets/categories/offers.png"
-              alt="Offers & Deals"
-            >
-
-          </div>
-
-          <h3>
-            Offers & Deals
-          </h3>
-
-          <p>
-            Save more on every order
-          </p>
-
-        </a>
-
-
-      </div>
-
-    </section>
-
-
-
-    <!-- ===================================================
-         TRENDING / POPULAR PRODUCTS
-         =================================================== -->
-
-    <section class="section">
-
-      <div class="section-heading">
-
-        <div>
-
-          <p class="section-label">
-            TRENDING NOW
-          </p>
-
-          <h2>
-            Popular Products
-          </h2>
-
-        </div>
-
-        <a
-          href="products.html"
-          class="view-all"
-        >
-          View All →
-        </a>
-
-      </div>
-
-
-      <div
-        class="product-grid"
-        id="featuredProducts"
-      >
-
-        <!-- Products are loaded by products.js -->
-
-      </div>
-
-    </section>
-
-
-
-    <!-- ===================================================
-         PROMOTIONAL BANNER
-         =================================================== -->
-
-    <section class="section">
-
-      <div class="promo-banner">
-
-        <div>
-
-          <p class="promo-label">
-            ZYNEXCART OFFERS
-          </p>
-
-          <h2>
-            Great products.<br>
-            Better prices.
-          </h2>
-
-          <p>
-            Explore our latest deals and discover something
-            you’ll love.
-          </p>
-
-          <a
-            href="products.html"
-            class="secondary-btn"
-          >
-            Explore Deals →
-          </a>
-
-        </div>
-
-        <div
-          class="promo-symbol"
-          aria-hidden="true"
-        >
-          🛍️
-        </div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- ===================================================
-         WHY ZYNEXCART
-         =================================================== -->
-
-    <section class="section">
-
-      <div class="section-heading">
-
-        <div>
-
-          <p class="section-label">
-            WHY ZYNEXCART
-          </p>
-
-          <h2>
-            Shopping made simple
-          </h2>
-
-        </div>
-
-      </div>
-
-
-      <div class="benefits-grid">
-
-
-        <!-- BENEFIT 1 -->
-
-        <div class="benefit-card">
-
-          <div
-            class="benefit-icon"
-            aria-hidden="true"
-          >
-            🛍️
-          </div>
-
-          <h3>
-            Trendy Products
-          </h3>
-
-          <p>
-            Discover products for everyday needs and more.
-          </p>
-
-        </div>
-
-
-        <!-- BENEFIT 2 -->
-
-        <div class="benefit-card">
-
-          <div
-            class="benefit-icon"
-            aria-hidden="true"
-          >
-            🛡️
-          </div>
-
-          <h3>
-            Best Quality
-          </h3>
-
-          <p>
-            Shop with confidence from our product collection.
-          </p>
-
-        </div>
-
-
-        <!-- BENEFIT 3 -->
-
-        <div class="benefit-card">
-
-          <div
-            class="benefit-icon"
-            aria-hidden="true"
-          >
-            🚚
-          </div>
-
-          <h3>
-            Fast Delivery
-          </h3>
-
-          <p>
-            Quick and convenient shopping experience.
-          </p>
-
-        </div>
-
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-
-  <!-- =====================================================
-       FOOTER
-       ===================================================== -->
-
-  <footer class="site-footer">
-
-    <div class="footer-container">
-
-      <div class="footer-support">
-
-        <h3>
-          Support
-        </h3>
-
-        <p>
-          Email:
-          <a href="mailto:zynexcart@gmail.com">
-            zynexcart@gmail.com
-          </a>
-        </p>
-
-        <p>
-          Phone:
-          <a href="tel:+917070965745">
-            +91 70709 65745
-          </a>
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="footer-bottom">
-
-      <p>
-        © 2026 ZynexCart. All rights reserved.
-      </p>
-
-    </div>
-
-  </footer>
-
-
-
-  <!-- =====================================================
-       JAVASCRIPT
-       ===================================================== -->
+  <!-- EXISTING ZYNEXCART JAVASCRIPT -->
 
   <script src="js/app.js"></script>
+
   <script src="js/products.js"></script>
+
 
 </body>
 
