@@ -1373,3 +1373,440 @@ section {
 
 /* =====================================================
    QUANTITY B
+/* =====================================================
+   ZYNEXCART — MOBILE FINAL FIX
+   ===================================================== */
+
+@media (max-width: 640px) {
+
+  /* ---------- PAGE WIDTH ---------- */
+
+  .container,
+  .section {
+    width: calc(100% - 20px);
+  }
+
+
+  /* ---------- HEADER ---------- */
+
+  .header-container {
+    width: calc(100% - 16px);
+
+    min-height: auto;
+
+    padding: 8px 0;
+
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto
+      auto;
+
+    grid-template-areas:
+      "brand cart account"
+      "search search search";
+
+    gap: 8px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand img,
+  .logo {
+    width: 105px;
+    height: auto;
+  }
+
+  .cart-link {
+    min-width: 82px;
+    min-height: 42px;
+
+    padding: 4px 8px;
+
+    gap: 5px;
+  }
+
+  .cart-icon {
+    width: 23px;
+    height: 23px;
+    flex-basis: 23px;
+  }
+
+  .cart-icon svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .cart-info {
+    min-width: 42px;
+  }
+
+  #cartItemsText {
+    font-size: 9px;
+  }
+
+  #cartTotal {
+    font-size: 10px;
+  }
+
+  .account-link {
+    min-height: 42px;
+
+    padding: 0 6px;
+
+    font-size: 11px;
+  }
+
+
+  /* ---------- SEARCH ---------- */
+
+  .search-box {
+    width: 100%;
+    height: 42px;
+
+    border-radius: 10px;
+  }
+
+  .search-icon {
+    width: 38px;
+
+    font-size: 15px;
+  }
+
+  .search-box input {
+    font-size: 13px;
+  }
+
+
+  /* ---------- CATEGORY NAV ---------- */
+
+  .category-nav-container {
+    width: calc(100% - 20px);
+
+    min-height: 44px;
+
+    gap: 18px;
+  }
+
+  .category-nav-item {
+    min-height: 44px;
+
+    font-size: 11px;
+  }
+
+
+  /* ---------- HERO ---------- */
+
+  .hero-section {
+    width: calc(100% - 20px);
+
+    min-height: 250px;
+
+    margin: 16px auto 32px;
+
+    padding: 30px 20px;
+
+    border-radius: 16px;
+  }
+
+  .hero-label {
+    margin-bottom: 8px;
+
+    font-size: 9px;
+  }
+
+  .hero-section h1 {
+    margin-bottom: 13px;
+
+    font-size: 32px;
+
+    line-height: 1.08;
+
+    letter-spacing: -0.8px;
+  }
+
+  .hero-section p {
+    margin-bottom: 20px;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+  }
+
+
+  /* =================================================
+     CATEGORIES
+     EXACTLY 3 PER ROW
+     ================================================= */
+
+  .category-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 8px;
+  }
+
+  .category-card {
+    width: 100%;
+    min-width: 0;
+
+    min-height: 112px;
+
+    padding: 12px 5px;
+
+    border-radius: 12px;
+  }
+
+  .category-card .category-icon {
+    width: 44px;
+    height: 44px;
+
+    margin-bottom: 7px;
+
+    border-radius: 11px;
+  }
+
+  .category-card .category-icon img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+  }
+
+  .category-card h3 {
+    width: 100%;
+
+    font-size: 11px;
+
+    line-height: 1.25;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+  }
+
+  .category-card p {
+    display: none;
+  }
+
+
+  /* ---------- SECTION HEADING ---------- */
+
+  .section {
+    margin-bottom: 36px;
+  }
+
+  .section-heading {
+    margin-bottom: 15px;
+
+    align-items: center;
+
+    gap: 8px;
+  }
+
+  .section-heading h2 {
+    font-size: 20px;
+  }
+
+  .section-heading p {
+    font-size: 11px;
+  }
+
+  .view-all {
+    font-size: 11px;
+  }
+
+
+  /* ---------- PRODUCTS ---------- */
+
+  .product-grid {
+    width: 100%;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .product-card {
+    border-radius: 12px;
+  }
+
+  .product-image {
+    height: 165px;
+  }
+
+  .product-image img {
+    padding: 13px;
+  }
+
+  .product-info {
+    padding: 10px 9px 8px;
+  }
+
+  .product-category {
+    margin-bottom: 4px;
+
+    font-size: 8px;
+  }
+
+  .product-info h3 {
+    min-height: auto;
+
+    margin-bottom: 3px;
+
+    font-size: 12px;
+
+    line-height: 1.3;
+  }
+
+  .product-unit {
+    margin-bottom: 7px;
+
+    font-size: 10px;
+  }
+
+  .product-price-row {
+    gap: 5px;
+
+    margin-bottom: 8px;
+  }
+
+  .product-price,
+  .product-price strong {
+    font-size: 14px;
+  }
+
+  .product-mrp {
+    font-size: 9px;
+  }
+
+  .product-discount {
+    padding: 2px 4px;
+
+    font-size: 8px;
+  }
+
+  .product-card .add-btn {
+    width: calc(100% - 16px);
+
+    min-height: 38px;
+
+    margin: 0 8px 8px;
+
+    padding: 0 7px;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+  }
+
+  .product-card .add-btn .qty-minus,
+  .product-card .add-btn .qty-plus {
+    width: 27px;
+    height: 27px;
+
+    border-radius: 7px;
+
+    font-size: 16px;
+  }
+
+  .product-card .add-btn .qty-value {
+    min-width: 20px;
+
+    font-size: 12px;
+  }
+
+
+  /* ---------- PROMO ---------- */
+
+  .promo-banner {
+    min-height: auto;
+
+    padding: 22px 18px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    border-radius: 15px;
+  }
+
+  .promo-banner h2 {
+    font-size: 19px;
+  }
+
+  .promo-banner p {
+    font-size: 12px;
+  }
+
+  .secondary-btn {
+    min-height: 40px;
+
+    margin-top: 12px;
+
+    padding: 0 15px;
+
+    font-size: 12px;
+  }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 390px) {
+
+  .category-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 6px;
+  }
+
+  .category-card {
+    min-height: 105px;
+
+    padding: 10px 4px;
+  }
+
+  .category-card .category-icon {
+    width: 40px;
+    height: 40px;
+
+    margin-bottom: 6px;
+  }
+
+  .category-card h3 {
+    font-size: 10px;
+  }
+
+  .product-grid {
+    gap: 8px;
+  }
+
+  .product-image {
+    height: 150px;
+  }
+
+  .brand img,
+  .logo {
+    width: 98px;
+  }
+
+  .cart-link {
+    min-width: 76px;
+  }
+}
