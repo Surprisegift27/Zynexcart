@@ -1,256 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="description"
-    content="ZynexCart - Shop smart, live better. Discover everyday essentials, trending products and great deals."
-  >
-
-  <meta
-    name="theme-color"
-    content="#071b3a"
-  >
-
-  <title>ZynexCart — Shop Smart, Live Better</title>
-
-
-  <!-- =================================================
-       ZYNEXCART MODULAR CSS
-       ================================================= -->
-
-  <link
-    rel="stylesheet"
-    href="css/base.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="css/header.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="css/categories.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="css/home.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="css/products.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="css/responsive.css"
-  >
-
-</head>
-
-
-<body>
-
-
-  <!-- =================================================
-       HEADER
-       ================================================= -->
-
-  <div id="header-component"></div>
-
-
-  <!-- =================================================
-       HERO
-       ================================================= -->
-
-  <div id="hero-component"></div>
-
-
-  <!-- =================================================
-       CATEGORIES
-       ================================================= -->
-
-  <div id="categories-component"></div>
-
-
-  <!-- =================================================
-       POPULAR PRODUCTS
-       ================================================= -->
-
-  <div id="popular-products-component"></div>
-
-
-  <!-- =================================================
-       PROMO BANNER
-       ================================================= -->
-
-  <div id="promo-banner-component"></div>
-
-
-  <!-- =================================================
-       BENEFITS
-       ================================================= -->
-
-  <div id="benefits-component"></div>
-
-
-  <!-- =================================================
-       FOOTER
-       ================================================= -->
-
-  <div id="footer-component"></div>
-
-
-  <!-- =================================================
-       COMPONENT LOADER
-       ================================================= -->
-
-  <script>
-
-    async function loadComponent(elementId, filePath) {
-
-      const element =
-        document.getElementById(elementId);
-
-      if (!element) {
-        return;
-      }
-
-      try {
-
-        const response =
-          await fetch(filePath);
-
-        if (!response.ok) {
-
-          throw new Error(
-            `Unable to load ${filePath}`
-          );
-
-        }
-
-        element.innerHTML =
-          await response.text();
-
-      } catch (error) {
-
-        console.error(
-          "ZynexCart component error:",
-          error
-        );
-
-      }
-
-    }
-
-
-    async function loadComponents() {
-
-      /*
-       * Load all HTML components first.
-       */
-
-      await loadComponent(
-        "header-component",
-        "components/header.html"
-      );
-
-      await loadComponent(
-        "hero-component",
-        "components/hero.html"
-      );
-
-      await loadComponent(
-        "categories-component",
-        "components/categories.html"
-      );
-
-      await loadComponent(
-        "popular-products-component",
-        "components/popular-products.html"
-      );
-
-      await loadComponent(
-        "promo-banner-component",
-        "components/promo-banner.html"
-      );
-
-      await loadComponent(
-        "benefits-component",
-        "components/benefits.html"
-      );
-
-      await loadComponent(
-        "footer-component",
-        "components/footer.html"
-      );
-
-
-      /*
-       * Components are completely loaded.
-       * Now load the main application JavaScript.
-       */
-
-      const appScript =
-        document.createElement("script");
-
-      appScript.src = "js/app.js";
-
-      document.body.appendChild(
-        appScript
-      );
-
-
-      /*
-       * Load products.js only after app.js.
-       */
-
-      appScript.onload = () => {
-
-        const productsScript =
-          document.createElement("script");
-
-        productsScript.src =
-          "js/products.js";
-
-        document.body.appendChild(
-          productsScript
-        );
-
-      };
-
-
-      appScript.onerror = () => {
-
-        console.error(
-          "ZynexCart error: Unable to load js/app.js"
-        );
-
-      };
-
-    }
-
-
-    /*
-     * Start component loading.
-     */
-
-    loadComponents();
-
-  </script>
-
-
-</body>
-
-</html>
+/* =====================================================
+   ZYNEXCART — PROFESSIONAL +/- QUANTITY BUTTONS
+   ===================================================== */
+
+.quantity-control button {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin: 0 5px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.96);
+  color: #172033;
+
+  font-family: Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.12),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.12s ease,
+    box-shadow 0.18s ease;
+}
+
+/* Hover */
+.quantity-control button:hover {
+  background: #ffffff;
+  color: #071b3a;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.16),
+    inset 0 0 0 1px rgba(7, 27, 58, 0.12);
+}
+
+/* Press */
+.quantity-control button:active {
+  transform: scale(0.92);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Quantity number */
+.quantity-control span,
+.quantity-control .quantity {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .quantity-control button {
+    width: 34px;
+    height: 34px;
+    margin: 0 4px;
+    border-radius: 8px;
+    font-size: 20px;
+  }
+
+  .quantity-control span,
+  .quantity-control .quantity {
+    font-size: 14px;
+  }
+}
+
+/* Small phones */
+@media screen and (max-width: 390px) {
+  .quantity-control button {
+    width: 31px;
+    height: 31px;
+    margin: 0 3px;
+    border-radius: 7px;
+    font-size: 18px;
+  }
+}
