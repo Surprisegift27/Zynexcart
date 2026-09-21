@@ -403,7 +403,7 @@
 
 
   /* ===================================================
-     CATEGORY GRID
+     CATEGORY GRID — MOBILE
      =================================================== */
 
   .category-grid {
@@ -411,20 +411,26 @@
 
     display: grid !important;
 
+    /* 3 categories per row — fixed requirement */
     grid-template-columns:
       repeat(3, minmax(0, 1fr)) !important;
 
-    gap: 8px !important;
+    gap: 14px 8px !important;
   }
+
+
+  /* ===================================================
+     CATEGORY CARD — CLEAN / FRESH LAYOUT
+     =================================================== */
 
   .category-card {
     width: 100% !important;
 
     min-width: 0 !important;
 
-    min-height: 112px !important;
+    min-height: 0 !important;
 
-    padding: 12px 5px !important;
+    padding: 0 !important;
 
     display: flex !important;
 
@@ -432,21 +438,38 @@
 
     align-items: center !important;
 
-    justify-content: center !important;
+    justify-content: flex-start !important;
 
-    overflow: hidden !important;
+    overflow: visible !important;
 
-    border-radius: 12px !important;
+    background: transparent !important;
+
+    border: 0 !important;
+
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+
   }
 
+
+  /* ===================================================
+     CATEGORY IMAGE
+     Screen width ke according automatically resize
+     =================================================== */
+
   .category-card .category-icon {
-    width: 44px !important;
-    height: 44px !important;
+    width: 100% !important;
 
-    min-width: 44px !important;
-    min-height: 44px !important;
+    height: auto !important;
 
-    margin-bottom: 7px !important;
+    aspect-ratio: 1 / 1 !important;
+
+    min-width: 0 !important;
+
+    min-height: 0 !important;
+
+    margin-bottom: 8px !important;
 
     display: flex !important;
 
@@ -456,31 +479,50 @@
 
     overflow: hidden !important;
 
-    border-radius: 11px !important;
+    border-radius: 14px !important;
+
+    background: var(--primary-light) !important;
+
+    border: 1px solid var(--border) !important;
+
+    box-shadow: var(--shadow-sm) !important;
 
     font-size: 0 !important;
   }
 
   .category-card .category-icon img {
     width: 100% !important;
+
     height: 100% !important;
 
     max-width: 100% !important;
+
     max-height: 100% !important;
 
-    object-fit: contain !important;
+    object-fit: cover !important;
 
     display: block !important;
   }
+
+
+  /* ===================================================
+     CATEGORY NAME
+     =================================================== */
 
   .category-card h3 {
     width: 100% !important;
 
     margin: 0 !important;
 
+    padding: 0 !important;
+
+    color: var(--navy) !important;
+
     font-size: 11px !important;
 
-    line-height: 1.25 !important;
+    font-weight: 800 !important;
+
+    line-height: 1.3 !important;
 
     text-align: center !important;
 
@@ -710,31 +752,43 @@
   }
 
 
-  /* ---------- CATEGORIES ---------- */
+  /* ===================================================
+     CATEGORIES — SMALL MOBILE
+     =================================================== */
 
   .category-grid {
     grid-template-columns:
       repeat(3, minmax(0, 1fr)) !important;
 
-    gap: 6px !important;
+    gap: 12px 6px !important;
   }
 
   .category-card {
-    min-height: 105px !important;
+    min-height: 0 !important;
 
-    padding: 10px 4px !important;
+    padding: 0 !important;
   }
 
   .category-card .category-icon {
-    width: 40px !important;
-    height: 40px !important;
+    width: 100% !important;
 
-    min-width: 40px !important;
-    min-height: 40px !important;
+    height: auto !important;
+
+    aspect-ratio: 1 / 1 !important;
+
+    min-width: 0 !important;
+
+    min-height: 0 !important;
+
+    margin-bottom: 7px !important;
+
+    border-radius: 12px !important;
   }
 
   .category-card h3 {
     font-size: 10px !important;
+
+    line-height: 1.3 !important;
   }
 
 
@@ -843,20 +897,40 @@
     font-size: 9px !important;
   }
 
+
+  /* ---------- CATEGORIES ---------- */
+
+  .category-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr)) !important;
+
+    gap: 10px 5px !important;
+  }
+
   .category-card {
-    min-height: 100px !important;
+    min-height: 0 !important;
   }
 
   .category-card .category-icon {
-    width: 38px !important;
-    height: 38px !important;
+    width: 100% !important;
 
-    min-width: 38px !important;
-    min-height: 38px !important;
+    height: auto !important;
+
+    aspect-ratio: 1 / 1 !important;
+
+    min-width: 0 !important;
+
+    min-height: 0 !important;
+
+    margin-bottom: 6px !important;
+
+    border-radius: 11px !important;
   }
 
   .category-card h3 {
     font-size: 9.5px !important;
+
+    line-height: 1.3 !important;
   }
 
 }
