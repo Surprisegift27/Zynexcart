@@ -1,19 +1,19 @@
 /* =========================================
    ZYNEXCART — MAIN APP
-   Professional Dynamic Cart System
-========================================= */
+   Dynamic Cart System
+   ========================================= */
 
 
 /* =========================================
    CART STORAGE KEY
-========================================= */
+   ========================================= */
 
 const CART_STORAGE_KEY = "zynexcart_cart";
 
 
 /* =========================================
    APP INITIALIZATION
-========================================= */
+   ========================================= */
 
 function initializeZynexCart() {
 
@@ -25,9 +25,9 @@ function initializeZynexCart() {
 
 
 /*
- * app.js dynamically load ho sakta hai.
- * Isliye DOMContentLoaded + already-loaded
- * dono situations handle ki ja rahi hain.
+ * Important:
+ * app.js index.html mein dynamically load hota hai.
+ * Isliye sirf DOMContentLoaded par depend nahi karna.
  */
 
 if (document.readyState === "loading") {
@@ -47,7 +47,7 @@ if (document.readyState === "loading") {
 
 /* =========================================
    GET CART
-========================================= */
+   ========================================= */
 
 function getCart() {
 
@@ -93,7 +93,7 @@ function getCart() {
 
 /* =========================================
    SAVE CART
-========================================= */
+   ========================================= */
 
 function saveCart(cart) {
 
@@ -113,27 +113,14 @@ function saveCart(cart) {
         : [];
 
 
-    /* -------------------------------------
-       SAVE TO LOCAL STORAGE
-    ------------------------------------- */
-
     localStorage.setItem(
       CART_STORAGE_KEY,
       JSON.stringify(validCart)
     );
 
 
-    /* -------------------------------------
-       UPDATE HEADER IMMEDIATELY
-    ------------------------------------- */
-
     updateCartHeader();
 
-
-    /* -------------------------------------
-       TELL ALL ZYNEXCART COMPONENTS
-       CART HAS CHANGED
-    ------------------------------------- */
 
     document.dispatchEvent(
       new CustomEvent(
@@ -156,12 +143,11 @@ function saveCart(cart) {
 
 /* =========================================
    TOTAL ITEM QUANTITY
-========================================= */
+   ========================================= */
 
 function getCartItemCount() {
 
-  const cart =
-    getCart();
+  const cart = getCart();
 
   return cart.reduce(
     (total, item) => {
@@ -178,12 +164,11 @@ function getCartItemCount() {
 
 /* =========================================
    TOTAL CART AMOUNT
-========================================= */
+   ========================================= */
 
 function getCartTotal() {
 
-  const cart =
-    getCart();
+  const cart = getCart();
 
   return cart.reduce(
     (total, item) => {
@@ -203,7 +188,7 @@ function getCartTotal() {
 
 /* =========================================
    FORMAT PRICE
-========================================= */
+   ========================================= */
 
 function formatPrice(price) {
 
@@ -214,16 +199,14 @@ function formatPrice(price) {
       currency: "INR",
       maximumFractionDigits: 0
     }
-  ).format(
-    Number(price) || 0
-  );
+  ).format(Number(price) || 0);
 
 }
 
 
 /* =========================================
    UPDATE CART HEADER
-========================================= */
+   ========================================= */
 
 function updateCartHeader() {
 
@@ -234,155 +217,105 @@ function updateCartHeader() {
     getCartTotal();
 
 
-  /* =====================================
-     OLD CART COUNT SUPPORT
-  ===================================== */
+  /* CART COUNT */
 
   const cartCountElements =
-    document.querySelectorAll(
-      "#cartCount"
-    );
+    document.querySelectorAll("#cartCount");
 
-  cartCountElements.forEach(
-    element => {
+  cartCountElements.forEach(element => {
 
-      element.textContent =
-        itemCount;
+    element.textContent =
+      itemCount;
 
-    }
-  );
+  });
 
 
-  /* =====================================
-     HEADER ITEM TEXT
-  ===================================== */
+  /* CART ITEMS TEXT */
 
   const cartItemsText =
     document.querySelectorAll(
       "#cartItemsText"
     );
 
-  cartItemsText.forEach(
-    element => {
+  cartItemsText.forEach(element => {
 
-      element.textContent =
-        `${itemCount} ${
-          itemCount === 1
-            ? "item"
-            : "items"
-        }`;
+    element.textContent =
+      `${itemCount} ${
+        itemCount === 1
+          ? "item"
+          : "items"
+      }`;
 
-    }
-  );
+  });
 
 
-  /* =====================================
-     HEADER TOTAL
-  ===================================== */
+  /* CART TOTAL */
 
   const cartTotalElements =
     document.querySelectorAll(
       "#cartTotal"
     );
 
-  cartTotalElements.forEach(
-    element => {
+  cartTotalElements.forEach(element => {
 
-      element.textContent =
-        formatPrice(totalAmount);
+    element.textContent =
+      formatPrice(totalAmount);
 
-    }
-  );
+  });
 
 
-  /* =====================================
-     CART SUMMARY
-  ===================================== */
+  /* CART SUMMARY */
 
   const cartSummaryElements =
     document.querySelectorAll(
       "#cartSummary"
     );
 
-  cartSummaryElements.forEach(
-    element => {
+  cartSummaryElements.forEach(element => {
 
-      element.textContent =
-        `${itemCount} ${
-          itemCount === 1
-            ? "item"
-            : "items"
-        } • ${formatPrice(totalAmount)}`;
+    element.textContent =
+      `${itemCount} ${
+        itemCount === 1
+          ? "item"
+          : "items"
+      } • ${formatPrice(totalAmount)}`;
 
-    }
-  );
+  });
 
-}
-
-
-/* =========================================
-   UPDATE CART COUNT
-   BACKWARD COMPATIBILITY
-========================================= */
-
-/*
- * products.js aur purane pages
- * updateCartCount() use kar sakte hain.
- *
- * Isliye is function ko maintain
- * kiya gaya hai.
- */
-
-function updateCartCount() {
-
-  updateCartHeader();
 
 }
 
 
 /* =========================================
    SEARCH
-========================================= */
+   ========================================= */
 
 function setupSearch() {
 
   const searchForm =
-    document.querySelector(
-      "#searchForm"
-    );
+    document.querySelector("#searchForm");
 
   const searchInput =
-    document.querySelector(
-      "#searchInput"
-    );
+    document.querySelector("#searchInput");
 
 
-  if (
-    !searchForm ||
-    !searchInput
-  ) {
-
+  if (!searchForm || !searchInput) {
     return;
-
   }
 
 
-  /* -------------------------------------
-     PREVENT DUPLICATE LISTENER
-  ------------------------------------- */
+  /*
+   * Prevent duplicate search listeners.
+   */
 
   if (
-    searchForm.dataset.searchReady ===
-    "true"
+    searchForm.dataset.searchReady === "true"
   ) {
-
     return;
-
   }
 
 
-  searchForm.dataset.searchReady =
-    "true";
+  searchForm.dataset.searchReady = "true";
 
 
   searchForm.addEventListener(
@@ -414,7 +347,7 @@ function setupSearch() {
 
 /* =========================================
    ADD TO CART
-========================================= */
+   ========================================= */
 
 function addToCart(product) {
 
@@ -445,23 +378,17 @@ function addToCart(product) {
     );
 
 
-  /* =====================================
-     EXISTING PRODUCT
-  ===================================== */
+  /* EXISTING PRODUCT */
 
   if (existingProduct) {
 
     existingProduct.quantity =
-      Number(
-        existingProduct.quantity || 0
-      ) + 1;
+      Number(existingProduct.quantity || 0) + 1;
 
   }
 
 
-  /* =====================================
-     NEW PRODUCT
-  ===================================== */
+  /* NEW PRODUCT */
 
   else {
 
@@ -469,8 +396,7 @@ function addToCart(product) {
 
       id: product.id,
 
-      name:
-        product.name || "",
+      name: product.name || "",
 
       price:
         Number(product.price || 0),
@@ -501,7 +427,7 @@ function addToCart(product) {
 
 /* =========================================
    REMOVE FROM CART
-========================================= */
+   ========================================= */
 
 function removeFromCart(productId) {
 
@@ -524,7 +450,7 @@ function removeFromCart(productId) {
 
 /* =========================================
    CHANGE CART QUANTITY
-========================================= */
+   ========================================= */
 
 function changeCartQuantity(
   productId,
@@ -549,25 +475,13 @@ function changeCartQuantity(
 
 
   product.quantity =
-    Number(
-      product.quantity || 0
-    ) +
-    Number(
-      change || 0
-    );
+    Number(product.quantity || 0) +
+    Number(change || 0);
 
 
-  /* -------------------------------------
-     QUANTITY ZERO → REMOVE PRODUCT
-  ------------------------------------- */
+  if (product.quantity <= 0) {
 
-  if (
-    product.quantity <= 0
-  ) {
-
-    removeFromCart(
-      productId
-    );
+    removeFromCart(productId);
 
     return;
 
@@ -581,7 +495,7 @@ function changeCartQuantity(
 
 /* =========================================
    SET EXACT QUANTITY
-========================================= */
+   ========================================= */
 
 function setCartQuantity(
   productId,
@@ -610,15 +524,11 @@ function setCartQuantity(
 
 
   if (
-    !Number.isFinite(
-      newQuantity
-    ) ||
+    !Number.isFinite(newQuantity) ||
     newQuantity <= 0
   ) {
 
-    removeFromCart(
-      productId
-    );
+    removeFromCart(productId);
 
     return;
 
@@ -636,7 +546,7 @@ function setCartQuantity(
 
 /* =========================================
    CLEAR ENTIRE CART
-========================================= */
+   ========================================= */
 
 function clearCart() {
 
@@ -658,32 +568,18 @@ function clearCart() {
 
 
 /* =========================================
-   LOCAL STORAGE SYNC
-========================================= */
-
-/*
- * Agar same cart doosre browser tab
- * mein change hota hai to current tab
- * bhi update hoga.
- */
+   LOCALSTORAGE SYNC
+   ========================================= */
 
 window.addEventListener(
   "storage",
   event => {
 
     if (
-      event.key ===
-      CART_STORAGE_KEY
+      event.key === CART_STORAGE_KEY
     ) {
 
       updateCartHeader();
-
-
-      document.dispatchEvent(
-        new CustomEvent(
-          "zynexcart:cartUpdated"
-        )
-      );
 
     }
 
@@ -693,12 +589,7 @@ window.addEventListener(
 
 /* =========================================
    CART UPDATE EVENT
-========================================= */
-
-/*
- * Cart mein koi bhi change hone par
- * product cards + header ko sync karna.
- */
+   ========================================= */
 
 document.addEventListener(
   "zynexcart:cartUpdated",
@@ -711,43 +602,8 @@ document.addEventListener(
 
 
 /* =========================================
-   HEADER COMPONENT SYNC
-========================================= */
-
-/*
- * Agar header dynamically load hota hai,
- * header DOM mein aane ke baad cart
- * automatically update ho jayega.
- */
-
-const headerObserver =
-  new MutationObserver(
-    () => {
-
-      updateCartHeader();
-
-      setupSearch();
-
-    }
-  );
-
-
-if (document.body) {
-
-  headerObserver.observe(
-    document.body,
-    {
-      childList: true,
-      subtree: true
-    }
-  );
-
-}
-
-
-/* =========================================
    GLOBAL FUNCTIONS
-========================================= */
+   ========================================= */
 
 window.getCart =
   getCart;
@@ -781,6 +637,3 @@ window.formatPrice =
 
 window.updateCartHeader =
   updateCartHeader;
-
-window.updateCartCount =
-  updateCartCount;
