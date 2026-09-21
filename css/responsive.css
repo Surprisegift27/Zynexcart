@@ -181,6 +181,9 @@
   body {
     width: 100%;
     overflow-x: hidden;
+
+    /* Fixed two-row mobile header ke liye */
+    padding-top: 108px;
   }
 
   .container,
@@ -629,6 +632,11 @@
    ===================================================== */
 
 @media screen and (max-width: 390px) {
+
+  /* Fixed header spacing */
+  body {
+    padding-top: 104px;
+  }
 
   .container,
   .section {
