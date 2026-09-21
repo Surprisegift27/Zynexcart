@@ -57,6 +57,9 @@ body {
   min-height: 100vh;
   margin: 0;
 
+  /* Fixed header ke liye top spacing */
+  padding-top: 72px;
+
   font-family:
     Inter,
     -apple-system,
