@@ -1,19 +1,19 @@
 /* =========================================
    ZYNEXCART — MAIN APP
-   Dynamic Cart System
-   ========================================= */
+   Professional Dynamic Cart System
+========================================= */
 
 
 /* =========================================
    CART STORAGE KEY
-   ========================================= */
+========================================= */
 
 const CART_STORAGE_KEY = "zynexcart_cart";
 
 
 /* =========================================
    APP INITIALIZATION
-   ========================================= */
+========================================= */
 
 function initializeZynexCart() {
 
@@ -25,9 +25,9 @@ function initializeZynexCart() {
 
 
 /*
- * Important:
- * app.js index.html mein dynamically load hota hai.
- * Isliye sirf DOMContentLoaded par depend nahi karna.
+ * app.js dynamically load ho sakta hai.
+ * Isliye DOMContentLoaded aur already-loaded
+ * dono situations handle ki ja rahi hain.
  */
 
 if (document.readyState === "loading") {
@@ -47,7 +47,7 @@ if (document.readyState === "loading") {
 
 /* =========================================
    GET CART
-   ========================================= */
+========================================= */
 
 function getCart() {
 
@@ -93,7 +93,7 @@ function getCart() {
 
 /* =========================================
    SAVE CART
-   ========================================= */
+========================================= */
 
 function saveCart(cart) {
 
@@ -113,21 +113,30 @@ function saveCart(cart) {
         : [];
 
 
+    /* SAVE CART */
+
     localStorage.setItem(
       CART_STORAGE_KEY,
       JSON.stringify(validCart)
     );
 
 
+    /* UPDATE HEADER */
+
     updateCartHeader();
 
+
+    /*
+     * IMPORTANT:
+     * Tell all ZynexCart pages/components
+     * that cart has changed.
+     */
 
     document.dispatchEvent(
       new CustomEvent(
         "zynexcart:cartUpdated"
       )
     );
-
 
   } catch (error) {
 
@@ -143,11 +152,12 @@ function saveCart(cart) {
 
 /* =========================================
    TOTAL ITEM QUANTITY
-   ========================================= */
+========================================= */
 
 function getCartItemCount() {
 
-  const cart = getCart();
+  const cart =
+    getCart();
 
   return cart.reduce(
     (total, item) => {
@@ -164,11 +174,12 @@ function getCartItemCount() {
 
 /* =========================================
    TOTAL CART AMOUNT
-   ========================================= */
+========================================= */
 
 function getCartTotal() {
 
-  const cart = getCart();
+  const cart =
+    getCart();
 
   return cart.reduce(
     (total, item) => {
@@ -188,7 +199,7 @@ function getCartTotal() {
 
 /* =========================================
    FORMAT PRICE
-   ========================================= */
+========================================= */
 
 function formatPrice(price) {
 
@@ -199,14 +210,16 @@ function formatPrice(price) {
       currency: "INR",
       maximumFractionDigits: 0
     }
-  ).format(Number(price) || 0);
+  ).format(
+    Number(price) || 0
+  );
 
 }
 
 
 /* =========================================
    UPDATE CART HEADER
-   ========================================= */
+========================================= */
 
 function updateCartHeader() {
 
@@ -217,105 +230,151 @@ function updateCartHeader() {
     getCartTotal();
 
 
-  /* CART COUNT */
+  /* =====================================
+     OLD CART COUNT
+  ===================================== */
 
   const cartCountElements =
-    document.querySelectorAll("#cartCount");
+    document.querySelectorAll(
+      "#cartCount"
+    );
 
-  cartCountElements.forEach(element => {
+  cartCountElements.forEach(
+    element => {
 
-    element.textContent =
-      itemCount;
+      element.textContent =
+        itemCount;
 
-  });
+    }
+  );
 
 
-  /* CART ITEMS TEXT */
+  /* =====================================
+     HEADER ITEM TEXT
+  ===================================== */
 
   const cartItemsText =
     document.querySelectorAll(
       "#cartItemsText"
     );
 
-  cartItemsText.forEach(element => {
+  cartItemsText.forEach(
+    element => {
 
-    element.textContent =
-      `${itemCount} ${
-        itemCount === 1
-          ? "item"
-          : "items"
-      }`;
+      element.textContent =
+        `${itemCount} ${
+          itemCount === 1
+            ? "item"
+            : "items"
+        }`;
 
-  });
+    }
+  );
 
 
-  /* CART TOTAL */
+  /* =====================================
+     HEADER TOTAL
+  ===================================== */
 
   const cartTotalElements =
     document.querySelectorAll(
       "#cartTotal"
     );
 
-  cartTotalElements.forEach(element => {
+  cartTotalElements.forEach(
+    element => {
 
-    element.textContent =
-      formatPrice(totalAmount);
+      element.textContent =
+        formatPrice(totalAmount);
 
-  });
+    }
+  );
 
 
-  /* CART SUMMARY */
+  /* =====================================
+     CART SUMMARY
+  ===================================== */
 
   const cartSummaryElements =
     document.querySelectorAll(
       "#cartSummary"
     );
 
-  cartSummaryElements.forEach(element => {
+  cartSummaryElements.forEach(
+    element => {
 
-    element.textContent =
-      `${itemCount} ${
-        itemCount === 1
-          ? "item"
-          : "items"
-      } • ${formatPrice(totalAmount)}`;
+      element.textContent =
+        `${itemCount} ${
+          itemCount === 1
+            ? "item"
+            : "items"
+        } • ${formatPrice(totalAmount)}`;
 
-  });
+    }
+  );
 
+}
+
+
+/* =========================================
+   UPDATE CART COUNT
+========================================= */
+
+/*
+ * Backward compatibility ke liye.
+ *
+ * products.js agar updateCartCount()
+ * call karega to header bhi update hoga.
+ */
+
+function updateCartCount() {
+
+  updateCartHeader();
 
 }
 
 
 /* =========================================
    SEARCH
-   ========================================= */
+========================================= */
 
 function setupSearch() {
 
   const searchForm =
-    document.querySelector("#searchForm");
+    document.querySelector(
+      "#searchForm"
+    );
 
   const searchInput =
-    document.querySelector("#searchInput");
+    document.querySelector(
+      "#searchInput"
+    );
 
-
-  if (!searchForm || !searchInput) {
-    return;
-  }
-
-
-  /*
-   * Prevent duplicate search listeners.
-   */
 
   if (
-    searchForm.dataset.searchReady === "true"
+    !searchForm ||
+    !searchInput
   ) {
+
     return;
+
   }
 
 
-  searchForm.dataset.searchReady = "true";
+  /* Prevent duplicate listener */
+
+  if (
+    searchForm.dataset.searchReady ===
+    "true"
+  ) {
+
+    return;
+
+  }
+
+
+  searchForm.dataset.searchReady =
+    "true";
 
 
   searchForm.addEventListener(
@@ -347,7 +406,7 @@ function setupSearch() {
 
 /* =========================================
    ADD TO CART
-   ========================================= */
+========================================= */
 
 function addToCart(product) {
 
@@ -383,7 +442,9 @@ function addToCart(product) {
   if (existingProduct) {
 
     existingProduct.quantity =
-      Number(existingProduct.quantity || 0) + 1;
+      Number(
+        existingProduct.quantity || 0
+      ) + 1;
 
   }
 
@@ -396,7 +457,8 @@ function addToCart(product) {
 
       id: product.id,
 
-      name: product.name || "",
+      name:
+        product.name || "",
 
       price:
         Number(product.price || 0),
@@ -427,7 +489,7 @@ function addToCart(product) {
 
 /* =========================================
    REMOVE FROM CART
-   ========================================= */
+========================================= */
 
 function removeFromCart(productId) {
 
@@ -450,7 +512,7 @@ function removeFromCart(productId) {
 
 /* =========================================
    CHANGE CART QUANTITY
-   ========================================= */
+========================================= */
 
 function changeCartQuantity(
   productId,
@@ -475,13 +537,23 @@ function changeCartQuantity(
 
 
   product.quantity =
-    Number(product.quantity || 0) +
-    Number(change || 0);
+    Number(
+      product.quantity || 0
+    ) +
+    Number(
+      change || 0
+    );
 
 
-  if (product.quantity <= 0) {
+  /* Quantity 0 → Remove */
 
-    removeFromCart(productId);
+  if (
+    product.quantity <= 0
+  ) {
+
+    removeFromCart(
+      productId
+    );
 
     return;
 
@@ -495,7 +567,7 @@ function changeCartQuantity(
 
 /* =========================================
    SET EXACT QUANTITY
-   ========================================= */
+========================================= */
 
 function setCartQuantity(
   productId,
@@ -524,11 +596,15 @@ function setCartQuantity(
 
 
   if (
-    !Number.isFinite(newQuantity) ||
+    !Number.isFinite(
+      newQuantity
+    ) ||
     newQuantity <= 0
   ) {
 
-    removeFromCart(productId);
+    removeFromCart(
+      productId
+    );
 
     return;
 
@@ -546,7 +622,7 @@ function setCartQuantity(
 
 /* =========================================
    CLEAR ENTIRE CART
-   ========================================= */
+========================================= */
 
 function clearCart() {
 
@@ -568,18 +644,26 @@ function clearCart() {
 
 
 /* =========================================
-   LOCALSTORAGE SYNC
-   ========================================= */
+   LOCAL STORAGE SYNC
+========================================= */
 
 window.addEventListener(
   "storage",
   event => {
 
     if (
-      event.key === CART_STORAGE_KEY
+      event.key ===
+      CART_STORAGE_KEY
     ) {
 
       updateCartHeader();
+
+
+      document.dispatchEvent(
+        new CustomEvent(
+          "zynexcart:cartUpdated"
+        )
+      );
 
     }
 
@@ -589,7 +673,15 @@ window.addEventListener(
 
 /* =========================================
    CART UPDATE EVENT
-   ========================================= */
+========================================= */
+
+/*
+ * Cart mein koi bhi change hone par
+ * header immediately update hoga.
+ *
+ * products.js bhi isi event ko listen
+ * karke product quantity sync karega.
+ */
 
 document.addEventListener(
   "zynexcart:cartUpdated",
@@ -603,7 +695,7 @@ document.addEventListener(
 
 /* =========================================
    GLOBAL FUNCTIONS
-   ========================================= */
+========================================= */
 
 window.getCart =
   getCart;
@@ -637,3 +729,6 @@ window.formatPrice =
 
 window.updateCartHeader =
   updateCartHeader;
+
+window.updateCartCount =
+  updateCartCount;
