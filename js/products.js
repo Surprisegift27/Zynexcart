@@ -1,12 +1,12 @@
 /* =========================================
    ZYNEXCART — PRODUCTS
    Professional Product + Quantity Controls
-   ========================================= */
+========================================= */
 
 
 /* =========================================
    PRODUCT DATA
-   ========================================= */
+========================================= */
 
 const products = [
   {
@@ -94,7 +94,7 @@ const products = [
 
 /* =========================================
    FORMAT CATEGORY
-   ========================================= */
+========================================= */
 
 function formatCategory(category) {
   return category
@@ -105,7 +105,7 @@ function formatCategory(category) {
 
 /* =========================================
    GET PRODUCT
-   ========================================= */
+========================================= */
 
 function getProductById(productId) {
   return products.find(
@@ -116,11 +116,19 @@ function getProductById(productId) {
 
 /* =========================================
    GET PRODUCT QUANTITY
-   ========================================= */
+========================================= */
 
 function getProductQuantity(productId) {
 
+  if (typeof getCart !== "function") {
+    return 0;
+  }
+
   const cart = getCart();
+
+  if (!Array.isArray(cart)) {
+    return 0;
+  }
 
   const item = cart.find(
     item => Number(item.id) === Number(productId)
@@ -134,7 +142,7 @@ function getProductQuantity(productId) {
 
 /* =========================================
    CREATE PRODUCT BUTTON
-   ========================================= */
+========================================= */
 
 function createProductButton(product) {
 
@@ -144,7 +152,7 @@ function createProductButton(product) {
 
   /* -----------------------------------------
      ADD STATE
-     ----------------------------------------- */
+  ----------------------------------------- */
 
   if (quantity <= 0) {
 
@@ -157,12 +165,13 @@ function createProductButton(product) {
         ADD
       </button>
     `;
+
   }
 
 
   /* -----------------------------------------
      QUANTITY STATE
-     ----------------------------------------- */
+  ----------------------------------------- */
 
   return `
     <div
@@ -202,7 +211,7 @@ function createProductButton(product) {
 
 /* =========================================
    CREATE PRODUCT CARD
-   ========================================= */
+========================================= */
 
 function createProductCard(product) {
 
@@ -268,7 +277,7 @@ function createProductCard(product) {
 
 /* =========================================
    DISPLAY FEATURED PRODUCTS
-   ========================================= */
+========================================= */
 
 function displayFeaturedProducts() {
 
@@ -289,8 +298,56 @@ function displayFeaturedProducts() {
 
 
 /* =========================================
+   CREATE QUANTITY CONTROL
+========================================= */
+
+function createQuantityControl(product, quantity) {
+
+  const quantityControl =
+    document.createElement("div");
+
+  quantityControl.className =
+    "add-btn added";
+
+  quantityControl.dataset.productId =
+    product.id;
+
+  quantityControl.innerHTML = `
+
+    <button
+      type="button"
+      class="qty-minus"
+      data-action="minus"
+      aria-label="Decrease ${product.name} quantity"
+    >
+      −
+    </button>
+
+    <span
+      class="qty-number"
+      aria-live="polite"
+    >
+      ${quantity}
+    </span>
+
+    <button
+      type="button"
+      class="qty-plus"
+      data-action="plus"
+      aria-label="Increase ${product.name} quantity"
+    >
+      +
+    </button>
+
+  `;
+
+  return quantityControl;
+}
+
+
+/* =========================================
    REFRESH PRODUCT BUTTON
-   ========================================= */
+========================================= */
 
 function refreshProductButton(productId) {
 
@@ -312,9 +369,10 @@ function refreshProductButton(productId) {
 
   controls.forEach(control => {
 
-    /* ---------------------------------
+
+    /* -------------------------------------
        CART EMPTY → ADD BUTTON
-       --------------------------------- */
+    ------------------------------------- */
 
     if (quantity <= 0) {
 
@@ -345,11 +403,13 @@ function refreshProductButton(productId) {
     }
 
 
-    /* ---------------------------------
+    /* -------------------------------------
        ALREADY QUANTITY CONTROL
-       --------------------------------- */
+    ------------------------------------- */
 
-    if (control.classList.contains("added")) {
+    if (
+      control.classList.contains("added")
+    ) {
 
       const number =
         control.querySelector(".qty-number");
@@ -362,51 +422,23 @@ function refreshProductButton(productId) {
     }
 
 
-    /* ---------------------------------
+    /* -------------------------------------
        ADD → QUANTITY CONTROL
-       --------------------------------- */
+    ------------------------------------- */
 
     const quantityControl =
-      document.createElement("div");
+      createQuantityControl(
+        product,
+        quantity
+      );
 
-    quantityControl.className =
-      "add-btn added";
+    control.replaceWith(
+      quantityControl
+    );
 
-    quantityControl.dataset.productId =
-      productId;
-
-    quantityControl.innerHTML = `
-
-      <button
-        type="button"
-        class="qty-minus"
-        data-action="minus"
-        aria-label="Decrease ${product.name} quantity"
-      >
-        −
-      </button>
-
-      <span
-        class="qty-number"
-        aria-live="polite"
-      >
-        ${quantity}
-      </span>
-
-      <button
-        type="button"
-        class="qty-plus"
-        data-action="plus"
-        aria-label="Increase ${product.name} quantity"
-      >
-        +
-      </button>
-
-    `;
-
-    control.replaceWith(quantityControl);
-
-    setupSingleProductControl(quantityControl);
+    setupSingleProductControl(
+      quantityControl
+    );
 
   });
 }
@@ -414,7 +446,7 @@ function refreshProductButton(productId) {
 
 /* =========================================
    SETUP SINGLE PRODUCT CONTROL
-   ========================================= */
+========================================= */
 
 function setupSingleProductControl(control) {
 
@@ -430,14 +462,68 @@ function setupSingleProductControl(control) {
 
   /* =======================================
      ADD BUTTON
-     ======================================= */
+  ======================================= */
 
   if (
     control.tagName === "BUTTON" &&
     !control.classList.contains("added")
   ) {
 
-    control.addEventListener("click", () => {
+    control.addEventListener(
+      "click",
+      () => {
+
+        const productId =
+          Number(control.dataset.productId);
+
+        const product =
+          getProductById(productId);
+
+        if (!product) {
+          return;
+        }
+
+        addToCart(product);
+
+        refreshProductButton(productId);
+
+        updateCartCount();
+
+      }
+    );
+
+    return;
+  }
+
+
+  /* =======================================
+     QUANTITY CONTROL
+  ======================================= */
+
+  if (
+    !control.classList.contains("added")
+  ) {
+    return;
+  }
+
+
+  control.addEventListener(
+    "click",
+    event => {
+
+      const actionButton =
+        event.target.closest(
+          "button.qty-minus, button.qty-plus"
+        );
+
+      if (!actionButton) {
+        return;
+      }
+
+      if (!control.contains(actionButton)) {
+        return;
+      }
+
 
       const productId =
         Number(control.dataset.productId);
@@ -449,99 +535,56 @@ function setupSingleProductControl(control) {
         return;
       }
 
-      addToCart(product);
 
-      refreshProductButton(productId);
+      /* =====================================
+         PLUS
+      ===================================== */
 
-      updateCartCount();
+      if (
+        actionButton.classList.contains(
+          "qty-plus"
+        )
+      ) {
 
-    });
+        addToCart(product);
 
-    return;
-  }
+        refreshProductButton(productId);
 
+        updateCartCount();
 
-  /* =======================================
-     QUANTITY CONTROL
-     ======================================= */
-
-  if (!control.classList.contains("added")) {
-    return;
-  }
-
-
-  control.addEventListener("click", event => {
-
-    const actionButton =
-      event.target.closest(
-        "button.qty-minus, button.qty-plus"
-      );
-
-    if (!actionButton) {
-      return;
-    }
+        return;
+      }
 
 
-    if (!control.contains(actionButton)) {
-      return;
-    }
+      /* =====================================
+         MINUS
+      ===================================== */
 
+      if (
+        actionButton.classList.contains(
+          "qty-minus"
+        )
+      ) {
 
-    const productId =
-      Number(control.dataset.productId);
+        changeCartQuantity(
+          productId,
+          -1
+        );
 
-    const product =
-      getProductById(productId);
+        refreshProductButton(productId);
 
-    if (!product) {
-      return;
-    }
+        updateCartCount();
 
-
-    /* =====================================
-       PLUS
-       ===================================== */
-
-    if (
-      actionButton.classList.contains("qty-plus")
-    ) {
-
-      addToCart(product);
-
-      refreshProductButton(productId);
-
-      updateCartCount();
-
-      return;
-    }
-
-
-    /* =====================================
-       MINUS
-       ===================================== */
-
-    if (
-      actionButton.classList.contains("qty-minus")
-    ) {
-
-      changeCartQuantity(
-        productId,
-        -1
-      );
-
-      refreshProductButton(productId);
-
-      updateCartCount();
+      }
 
     }
-
-  });
+  );
 }
 
 
 /* =========================================
    SETUP ALL PRODUCT CONTROLS
-   ========================================= */
+========================================= */
 
 function setupProductControls() {
 
@@ -560,7 +603,7 @@ function setupProductControls() {
 
 /* =========================================
    SYNC PRODUCT BUTTONS
-   ========================================= */
+========================================= */
 
 function syncProductButtons() {
 
@@ -569,22 +612,68 @@ function syncProductButtons() {
       ".add-btn[data-product-id]"
     );
 
+  const productIds = new Set();
+
   controls.forEach(control => {
 
     const productId =
       Number(control.dataset.productId);
 
     if (productId) {
-      refreshProductButton(productId);
+      productIds.add(productId);
     }
+
+  });
+
+
+  productIds.forEach(productId => {
+
+    refreshProductButton(productId);
 
   });
 }
 
 
 /* =========================================
+   CART UPDATE LISTENER
+========================================= */
+
+/*
+   IMPORTANT:
+
+   Cart page par jab:
+
+   +  → quantity increase
+   −  → quantity decrease
+   Remove → product remove
+
+   hota hai, app.js se:
+
+   zynexcart:cartUpdated
+
+   event dispatch hona chahiye.
+
+   Ye listener us event ko receive karke
+   product page ko immediately sync karta hai.
+
+   Refresh ki zarurat nahi hogi.
+*/
+
+document.addEventListener(
+  "zynexcart:cartUpdated",
+  () => {
+
+    syncProductButtons();
+
+    updateCartCount();
+
+  }
+);
+
+
+/* =========================================
    START PRODUCTS
-   ========================================= */
+========================================= */
 
 function initProducts() {
 
@@ -595,13 +684,15 @@ function initProducts() {
 }
 
 
-/*
-   Support both:
-   1. Normal page loading
-   2. Dynamically loaded components
-*/
+/* =========================================
+   SUPPORT BOTH:
+   1. NORMAL PAGE LOADING
+   2. DYNAMICALLY LOADED COMPONENTS
+========================================= */
 
-if (document.readyState === "loading") {
+if (
+  document.readyState === "loading"
+) {
 
   document.addEventListener(
     "DOMContentLoaded",
