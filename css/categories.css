@@ -102,7 +102,7 @@
   grid-template-columns:
     repeat(7, minmax(0, 1fr));
 
-  gap: 16px;
+  gap: 20px 16px;
 }
 
 
@@ -114,42 +114,39 @@
   width: 100%;
   min-width: 0;
 
-  min-height: 140px;
-
-  padding: 20px 12px;
+  padding: 0;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 
   text-align: center;
 
-  background: var(--white);
+  background: transparent;
 
-  border: 1px solid var(--border);
+  border: 0;
 
-  border-radius: var(--radius-lg);
+  border-radius: 0;
 
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  text-decoration: none;
+
+  transition: transform 0.2s ease;
 }
 
 .category-card:hover {
-  transform: translateY(-4px);
-
-  border-color: #ffd0b2;
-
-  box-shadow: var(--shadow);
+  transform: translateY(-3px);
 }
 
+
+/* =====================================================
+   CATEGORY IMAGE BOX
+   ===================================================== */
+
 .category-card .category-icon {
-  width: 54px;
-  height: 54px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
 
   margin-bottom: 10px;
 
@@ -161,12 +158,27 @@
 
   overflow: hidden;
 
-  border-radius: 14px;
+  border-radius: 18px;
 
   background: var(--primary-light);
 
+  border: 1px solid var(--border);
+
+  box-shadow: var(--shadow-sm);
+
   font-size: 28px;
   line-height: 1;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.category-card:hover .category-icon {
+  border-color: #ffd0b2;
+
+  box-shadow: var(--shadow);
 }
 
 .category-card .category-icon img {
@@ -178,8 +190,15 @@
   object-fit: contain;
 }
 
+
+/* =====================================================
+   CATEGORY NAME
+   ===================================================== */
+
 .category-card h3 {
   width: 100%;
+
+  margin: 0;
 
   color: var(--navy);
 
@@ -187,16 +206,15 @@
   font-weight: 800;
 
   line-height: 1.3;
+
+  text-align: center;
 }
 
+
+/* =====================================================
+   CATEGORY DESCRIPTION
+   ===================================================== */
+
 .category-card p {
-  width: 100%;
-
-  margin-top: 5px;
-
-  color: var(--muted);
-
-  font-size: 12px;
-
-  line-height: 1.4;
+  display: none;
 }
