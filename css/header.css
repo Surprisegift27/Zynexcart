@@ -1,5 +1,6 @@
 /* =====================================================
    ZYNEXCART — HEADER
+   Professional Responsive Header + Location System
    ===================================================== */
 
 .site-header {
@@ -20,10 +21,8 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-
 .header-container {
   width: min(1400px, calc(100% - 40px));
-
   min-height: 72px;
 
   margin-inline: auto;
@@ -41,7 +40,6 @@
     "brand location search cart account";
 
   align-items: center;
-
   gap: 16px;
 }
 
@@ -77,7 +75,7 @@
 
 
 /* =====================================================
-   LOCATION
+   LOCATION BUTTON
    ===================================================== */
 
 .location-btn {
@@ -90,6 +88,8 @@
   justify-content: center;
 
   gap: 6px;
+
+  max-width: 190px;
 
   padding: 0 13px;
 
@@ -109,23 +109,37 @@
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .location-btn:hover {
   background: #ffeadb;
   border-color: #ffc49d;
+
   transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 14px rgba(255, 107, 0, 0.08);
+}
+
+.location-btn:active {
+  transform: translateY(0);
 }
 
 .location-icon {
+  flex-shrink: 0;
+
   font-size: 15px;
   line-height: 1;
 }
 
 .location-text {
+  min-width: 0;
+
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 
@@ -438,10 +452,10 @@
   position: absolute;
   inset: 0;
 
-  background: rgba(7, 27, 58, 0.48);
+  background: rgba(7, 27, 58, 0.50);
 
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 
   animation: locationBackdropIn 0.2s ease;
 }
@@ -472,7 +486,7 @@
   border-radius: 20px;
 
   box-shadow:
-    0 24px 70px rgba(7, 27, 58, 0.20);
+    0 24px 70px rgba(7, 27, 58, 0.22);
 
   animation: locationPanelIn 0.24s ease;
 }
@@ -543,13 +557,19 @@
 
   transition:
     background 0.2s ease,
-    color 0.2s ease;
+    color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .location-back-btn:hover,
 .location-close-btn:hover {
   background: #eef0f3;
   color: var(--primary);
+}
+
+.location-back-btn:active,
+.location-close-btn:active {
+  transform: scale(0.94);
 }
 
 .location-close-btn {
@@ -563,6 +583,8 @@
    ===================================================== */
 
 .location-screen {
+  position: relative;
+
   width: 100%;
 
   overflow-y: auto;
@@ -647,7 +669,7 @@
 
 
 /* =====================================================
-   LOCATION ACTIONS
+   LOCATION ACTION BUTTONS
    ===================================================== */
 
 .location-action-btn {
@@ -692,6 +714,10 @@
 
   box-shadow:
     0 5px 16px rgba(7, 27, 58, 0.06);
+}
+
+.location-action-btn:active {
+  transform: translateY(0);
 }
 
 .current-location-action {
@@ -791,27 +817,42 @@
   position: relative;
 
   width: 100%;
-
   height: 330px;
 
   overflow: hidden;
 
   border-radius: 16px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #edf3f7 0%,
-      #f7fafb 50%,
-      #eaf0f4 100%
-    );
+  background: #edf3f7;
 
   border: 1px solid var(--border);
+
+  box-shadow:
+    0 5px 18px rgba(7, 27, 58, 0.06);
 }
+
+/* Leaflet map must fill the container */
+.location-map-container .leaflet-container {
+  width: 100%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  font-family: inherit;
+
+  z-index: 1;
+}
+
+
+/* =====================================================
+   MAP PLACEHOLDER
+   ===================================================== */
 
 .location-map-placeholder {
   position: absolute;
   inset: 0;
+
+  z-index: 2;
 
   display: flex;
   flex-direction: column;
@@ -823,6 +864,18 @@
   text-align: center;
 
   color: var(--navy);
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf3f7 0%,
+      #f7fafb 50%,
+      #eaf0f4 100%
+    );
+}
+
+.location-map-container.map-ready .location-map-placeholder {
+  display: none;
 }
 
 .map-placeholder-icon {
@@ -845,6 +898,47 @@
 
   font-size: 11px;
   line-height: 1.45;
+}
+
+
+/* =====================================================
+   LEAFLET MAP POLISH
+   ===================================================== */
+
+.location-map-container .leaflet-control-zoom {
+  margin-top: 12px;
+  margin-left: 12px;
+}
+
+.location-map-container .leaflet-control-zoom a {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--white);
+
+  color: var(--navy);
+
+  border: 0;
+
+  font-size: 18px;
+
+  box-shadow:
+    0 4px 12px rgba(7, 27, 58, 0.12);
+}
+
+.location-map-container .leaflet-control-zoom a:hover {
+  background: #f8fafc;
+  color: var(--primary);
+}
+
+.location-map-container .leaflet-control-attribution {
+  font-size: 8px;
+
+  background: rgba(255, 255, 255, 0.88);
 }
 
 
@@ -884,7 +978,7 @@
   right: 14px;
   bottom: 14px;
 
-  z-index: 4;
+  z-index: 1000;
 
   width: 44px;
   height: 44px;
@@ -899,6 +993,8 @@
 
   background: var(--white);
 
+  color: var(--navy);
+
   box-shadow:
     0 5px 16px rgba(7, 27, 58, 0.14);
 
@@ -908,14 +1004,21 @@
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    color 0.2s ease;
 }
 
 .map-current-location-btn:hover {
+  color: var(--primary);
+
   transform: scale(1.05);
 
   box-shadow:
     0 7px 20px rgba(7, 27, 58, 0.18);
+}
+
+.map-current-location-btn:active {
+  transform: scale(0.96);
 }
 
 
@@ -1028,6 +1131,16 @@
 
 .location-primary-btn:active {
   transform: translateY(0);
+}
+
+.location-primary-btn:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  transform: none;
+
+  box-shadow: none;
 }
 
 
@@ -1145,7 +1258,8 @@
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .address-field input {
@@ -1158,9 +1272,16 @@
   resize: vertical;
 }
 
+.address-field input:hover,
+.address-field textarea:hover {
+  border-color: #cfd5dc;
+}
+
 .address-field input:focus,
 .address-field textarea:focus {
   border-color: var(--primary);
+
+  background: var(--white);
 
   box-shadow:
     0 0 0 3px rgba(255, 107, 0, 0.10);
@@ -1233,7 +1354,12 @@
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
-    color 0.2s ease;
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.address-type-option:hover span {
+  border-color: #ffc49d;
 }
 
 .address-type-option input:checked + span {
@@ -1242,6 +1368,9 @@
   background: var(--primary-light);
 
   color: var(--primary);
+
+  box-shadow:
+    0 3px 10px rgba(255, 107, 0, 0.08);
 }
 
 
@@ -1274,6 +1403,124 @@
 
 .location-search-results[hidden] {
   display: none !important;
+}
+
+
+/* =====================================================
+   LOCATION ERROR / STATUS
+   ===================================================== */
+
+.location-error,
+.location-status {
+  margin-top: 10px;
+
+  padding: 10px 12px;
+
+  border-radius: 10px;
+
+  font-size: 11px;
+
+  line-height: 1.45;
+}
+
+.location-error {
+  border: 1px solid #f3caca;
+
+  background: #fff6f6;
+
+  color: #a12b2b;
+}
+
+.location-status {
+  border: 1px solid #d8e7f7;
+
+  background: #f5faff;
+
+  color: #315b7d;
+}
+
+
+/* =====================================================
+   SAVED ADDRESS CARD SUPPORT
+   ===================================================== */
+
+.saved-address-card {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  padding: 12px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  background: var(--white);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.saved-address-card:hover {
+  background: #fffaf6;
+
+  border-color: #ffd7bd;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 14px rgba(7, 27, 58, 0.06);
+}
+
+.saved-address-icon {
+  flex-shrink: 0;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f5f6f8;
+
+  font-size: 15px;
+}
+
+.saved-address-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.saved-address-content strong {
+  display: block;
+
+  color: var(--navy);
+
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.saved-address-content p {
+  margin: 3px 0 0;
+
+  color: var(--muted);
+
+  font-size: 11px;
+
+  line-height: 1.4;
 }
 
 
@@ -1314,6 +1561,7 @@
 .location-back-btn:focus-visible,
 .location-close-btn:focus-visible,
 .map-current-location-btn:focus-visible,
+.saved-address-card:focus-visible,
 .address-type-option span:focus-visible {
   outline: 3px solid rgba(255, 107, 0, 0.22);
 
@@ -1349,7 +1597,200 @@
     min-height: 60px;
 
     padding:
-      0 14px;
+      env(safe-area-inset-top)
+      14px
+      0
+      14px;
 
-    padding-top:
-      env(safe-area-inset-top);
+    box-sizing: border-box;
+  }
+
+  .location-modal-header h2 {
+    font-size: 17px;
+  }
+
+  .location-back-btn,
+  .location-close-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .location-screen {
+    padding: 16px;
+  }
+
+  .location-map-screen {
+    padding: 0 16px 16px;
+  }
+
+  .location-map-container {
+    height: 48vh;
+
+    min-height: 300px;
+    max-height: 460px;
+
+    border-radius: 14px;
+  }
+
+  .location-search-results {
+    top: 76px;
+    left: 16px;
+    right: 16px;
+
+    max-height: 260px;
+  }
+
+  .location-action-btn {
+    min-height: 64px;
+
+    padding: 11px 12px;
+
+    border-radius: 13px;
+  }
+
+  .location-action-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .location-action-content strong {
+    font-size: 13px;
+  }
+
+  .location-action-content small {
+    font-size: 10px;
+  }
+
+  .detected-location-card,
+  .confirmed-location-box {
+    border-radius: 12px;
+  }
+
+  .delivery-address-form {
+    gap: 12px;
+  }
+
+  .address-field input,
+  .address-field textarea {
+    font-size: 14px;
+  }
+
+  .location-primary-btn {
+    min-height: 50px;
+
+    border-radius: 11px;
+
+    font-size: 14px;
+  }
+}
+
+
+/* =====================================================
+   SMALL PHONES
+   ===================================================== */
+
+@media screen and (max-width: 390px) {
+
+  .location-modal-header {
+    min-height: 56px;
+
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .location-modal-header h2 {
+    font-size: 16px;
+  }
+
+  .location-screen {
+    padding: 14px;
+  }
+
+  .location-map-screen {
+    padding: 0 14px 14px;
+  }
+
+  .location-map-container {
+    min-height: 280px;
+    height: 44vh;
+
+    border-radius: 12px;
+  }
+
+  .location-search-box {
+    height: 46px;
+  }
+
+  .location-action-btn {
+    min-height: 60px;
+
+    gap: 10px;
+
+    padding: 10px;
+  }
+
+  .location-action-icon {
+    width: 36px;
+    height: 36px;
+
+    font-size: 16px;
+  }
+
+  .location-action-arrow {
+    font-size: 22px;
+  }
+
+  .address-type-options {
+    gap: 6px;
+  }
+
+  .address-type-option span {
+    min-height: 40px;
+
+    padding: 0 5px;
+
+    font-size: 10px;
+  }
+
+  .map-current-location-btn {
+    right: 10px;
+    bottom: 10px;
+
+    width: 42px;
+    height: 42px;
+  }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+   ===================================================== */
+
+@media screen and (max-width: 360px) {
+
+  .location-modal-header {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .location-screen {
+    padding: 12px;
+  }
+
+  .location-map-screen {
+    padding: 0 12px 12px;
+  }
+
+  .location-map-container {
+    min-height: 260px;
+  }
+
+  .location-action-content small {
+    font-size: 9.5px;
+  }
+
+  .confirmed-location-box,
+  .detected-location-card {
+    padding: 11px;
+  }
+}
