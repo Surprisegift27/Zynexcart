@@ -21,184 +21,326 @@
 
   <title>ZynexCart — Shop Smart, Live Better</title>
 
-  <!-- =================================================
-       ZYNEXCART — MODULAR CSS
-       ================================================= -->
 
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/header.css">
-  <link rel="stylesheet" href="css/categories.css">
-  <link rel="stylesheet" href="css/home.css">
-  <link rel="stylesheet" href="css/products.css">
-  <link rel="stylesheet" href="css/responsive.css">
+  <!-- =====================================================
+       ZYNEXCART — EXISTING CSS
+       DO NOT CHANGE DESIGN
+  ====================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="css/base.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/header.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/categories.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/home.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/products.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/responsive.css"
+  >
 
 </head>
 
+
 <body>
 
-  <!-- =================================================
-       HEADER
-       ================================================= -->
+
+  <!-- =====================================================
+       ZYNEXCART — PAGE COMPONENTS
+       EXISTING STRUCTURE PRESERVED
+  ====================================================== -->
 
   <div id="header-component"></div>
 
-
-  <!-- =================================================
-       HERO
-       ================================================= -->
-
   <div id="hero-component"></div>
-
-
-  <!-- =================================================
-       CATEGORIES
-       ================================================= -->
 
   <div id="categories-component"></div>
 
-
-  <!-- =================================================
-       POPULAR PRODUCTS
-       ================================================= -->
-
   <div id="popular-products-component"></div>
-
-
-  <!-- =================================================
-       PROMO BANNER
-       ================================================= -->
 
   <div id="promo-banner-component"></div>
 
-
-  <!-- =================================================
-       BENEFITS
-       ================================================= -->
-
   <div id="benefits-component"></div>
-
-
-  <!-- =================================================
-       FOOTER
-       ================================================= -->
 
   <div id="footer-component"></div>
 
 
-  <!-- =================================================
-       COMPONENT LOADER
-       ================================================= -->
+
+  <!-- =====================================================
+       ZYNEXCART — COMPONENT LOADER
+  ====================================================== -->
 
   <script>
 
-    async function loadComponent(elementId, filePath) {
+    (function () {
 
-      const element = document.getElementById(elementId);
+      "use strict";
 
-      if (!element) {
-        return;
-      }
 
-      try {
+      async function loadComponent(
+        elementId,
+        filePath
+      ) {
 
-        const response = await fetch(filePath);
+        const element =
+          document.getElementById(elementId);
 
-        if (!response.ok) {
-          throw new Error(`Unable to load ${filePath}`);
+        if (!element) {
+          console.warn(
+            `ZynexCart: Element #${elementId} not found.`
+          );
+
+          return;
         }
 
-        element.innerHTML = await response.text();
 
-      } catch (error) {
+        try {
 
-        console.error(
-          "ZynexCart component error:",
-          error
+          const response =
+            await fetch(filePath);
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              `Unable to load ${filePath}`
+            );
+
+          }
+
+
+          element.innerHTML =
+            await response.text();
+
+
+        } catch (error) {
+
+          console.error(
+            "ZynexCart component error:",
+            error
+          );
+
+        }
+
+      }
+
+
+
+      async function loadComponents() {
+
+        /*
+         * Components are loaded first.
+         * This keeps the existing page structure unchanged.
+         */
+
+        await loadComponent(
+          "header-component",
+          "components/header.html"
+        );
+
+
+        await loadComponent(
+          "hero-component",
+          "components/hero.html"
+        );
+
+
+        await loadComponent(
+          "categories-component",
+          "components/categories.html"
+        );
+
+
+        await loadComponent(
+          "popular-products-component",
+          "components/popular-products.html"
+        );
+
+
+        await loadComponent(
+          "promo-banner-component",
+          "components/promo-banner.html"
+        );
+
+
+        await loadComponent(
+          "benefits-component",
+          "components/benefits.html"
+        );
+
+
+        await loadComponent(
+          "footer-component",
+          "components/footer.html"
+        );
+
+
+
+        /*
+         * After all HTML components are available,
+         * load JavaScript modules in dependency order.
+         */
+
+        const scripts = [
+
+          /* =========================
+             CORE
+          ========================== */
+
+          "js/core/storage.js",
+          "js/core/utils.js",
+          "js/core/events.js",
+
+
+          /* =========================
+             CART
+          ========================== */
+
+          "js/cart/cart.js",
+          "js/cart/cart-actions.js",
+          "js/cart/cart-ui.js",
+
+
+          /* =========================
+             SEARCH
+          ========================== */
+
+          "js/search/search.js",
+
+
+          /* =========================
+             LOCATION
+          ========================== */
+
+          "js/location/location.js",
+          "js/location/location-ui.js",
+          "js/location/location-search.js",
+          "js/location/location-map.js",
+          "js/location/location-address.js",
+          "js/location/saved-addresses.js",
+
+
+          /* =========================
+             MAIN APPLICATION
+          ========================== */
+
+          "js/app.js",
+
+
+          /* =========================
+             PRODUCT DATA / EXISTING
+          ========================== */
+
+          "js/products.js"
+
+        ];
+
+
+
+        /*
+         * Load every JavaScript file sequentially.
+         *
+         * This is important because the modules
+         * depend on globals created by previous files.
+         */
+
+        for (const scriptPath of scripts) {
+
+          try {
+
+            await loadScript(scriptPath);
+
+          } catch (error) {
+
+            console.error(
+              `ZynexCart: Failed to load ${scriptPath}`,
+              error
+            );
+
+            return;
+
+          }
+
+        }
+
+
+        console.log(
+          "ZynexCart: All modules loaded successfully."
         );
 
       }
-    }
 
 
-    async function loadComponents() {
 
-      // Load HTML components
+      function loadScript(src) {
 
-      await loadComponent(
-        "header-component",
-        "components/header.html"
-      );
+        return new Promise(
+          function (resolve, reject) {
 
-      await loadComponent(
-        "hero-component",
-        "components/hero.html"
-      );
-
-      await loadComponent(
-        "categories-component",
-        "components/categories.html"
-      );
-
-      await loadComponent(
-        "popular-products-component",
-        "components/popular-products.html"
-      );
-
-      await loadComponent(
-        "promo-banner-component",
-        "components/promo-banner.html"
-      );
-
-      await loadComponent(
-        "benefits-component",
-        "components/benefits.html"
-      );
-
-      await loadComponent(
-        "footer-component",
-        "components/footer.html"
-      );
+            const script =
+              document.createElement("script");
 
 
-      // Load main application JavaScript
+            script.src = src;
 
-      const appScript = document.createElement("script");
-
-      appScript.src = "js/app.js";
-
-      document.body.appendChild(appScript);
+            script.async = false;
 
 
-      // Load products.js after app.js
+            script.onload = function () {
 
-      appScript.onload = () => {
+              resolve();
 
-        const productsScript =
-          document.createElement("script");
-
-        productsScript.src = "js/products.js";
-
-        document.body.appendChild(productsScript);
-
-      };
+            };
 
 
-      appScript.onerror = () => {
+            script.onerror = function () {
 
-        console.error(
-          "ZynexCart error: Unable to load js/app.js"
+              reject(
+                new Error(
+                  `Unable to load script: ${src}`
+                )
+              );
+
+            };
+
+
+            document.body.appendChild(script);
+
+          }
         );
 
-      };
-
-    }
+      }
 
 
-    // Start component loading
 
-    loadComponents();
+      /*
+       * Start component loading.
+       */
+
+      loadComponents();
+
+    })();
 
   </script>
+
 
 </body>
 
