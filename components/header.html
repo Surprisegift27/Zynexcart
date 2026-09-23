@@ -1,7 +1,7 @@
 <!-- =====================================================
      ZYNEXCART — HEADER
      Existing header preserved
-     Location system added
+     Professional location system
      ===================================================== -->
 
 <header class="site-header">
@@ -34,6 +34,7 @@
       aria-haspopup="dialog"
       aria-controls="locationModal"
     >
+
       <span
         class="location-icon"
         aria-hidden="true"
@@ -47,15 +48,20 @@
       >
         Enter location
       </span>
+
     </button>
 
 
-    <!-- SEARCH -->
+    <!-- =================================================
+         SEARCH
+         ================================================= -->
+
     <form
       class="search-box"
       id="searchForm"
       role="search"
     >
+
       <span
         class="search-icon"
         aria-hidden="true"
@@ -69,11 +75,15 @@
         placeholder="Search for products..."
         autocomplete="off"
         aria-label="Search products"
-      >
+      />
+
     </form>
 
 
-    <!-- CART -->
+    <!-- =================================================
+         CART
+         ================================================= -->
+
     <a
       href="cart.html"
       class="cart-link"
@@ -84,11 +94,13 @@
         class="cart-icon"
         aria-hidden="true"
       >
+
         <svg
           viewBox="0 0 32 32"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
         >
+
           <path
             d="M4 5h3l3.2 15.2a2 2 0 0 0 2 1.6h10.9a2 2 0 0 0 1.9-1.4L28 10H8"
             stroke="currentColor"
@@ -110,7 +122,9 @@
             r="1.8"
             fill="currentColor"
           />
+
         </svg>
+
       </span>
 
       <span class="cart-info">
@@ -128,12 +142,16 @@
     </a>
 
 
-    <!-- LOGIN -->
+    <!-- =================================================
+         LOGIN
+         ================================================= -->
+
     <a
       href="login.html"
       class="account-link"
       aria-label="Login to your account"
     >
+
       <span
         class="account-icon"
         aria-hidden="true"
@@ -144,6 +162,7 @@
       <span>
         Login
       </span>
+
     </a>
 
   </div>
@@ -153,7 +172,6 @@
 
 <!-- =====================================================
      ZYNEXCART — LOCATION MODAL
-     Opens when customer clicks "Enter location"
      ===================================================== -->
 
 <div
@@ -172,10 +190,17 @@
   ></div>
 
 
-  <!-- LOCATION PANEL -->
+  <!-- =================================================
+       LOCATION PANEL
+       ================================================= -->
+
   <div class="location-modal-panel">
 
-    <!-- MODAL HEADER -->
+
+    <!-- =================================================
+         MODAL HEADER
+         ================================================= -->
+
     <div class="location-modal-header">
 
       <div class="location-modal-title-wrap">
@@ -196,6 +221,7 @@
 
       </div>
 
+
       <button
         type="button"
         class="location-close-btn"
@@ -209,15 +235,15 @@
 
 
     <!-- =================================================
-         LOCATION HOME SCREEN
+         HOME SCREEN
          ================================================= -->
 
-    <div
+    <section
       class="location-screen"
       id="locationHomeScreen"
     >
 
-      <!-- SEARCH LOCATION -->
+      <!-- SEARCH -->
       <div class="location-search-box">
 
         <span
@@ -236,6 +262,14 @@
         />
 
       </div>
+
+
+      <!-- SEARCH RESULTS -->
+      <div
+        class="location-search-results"
+        id="locationSearchResults"
+        hidden
+      ></div>
 
 
       <!-- CURRENT LOCATION -->
@@ -310,7 +344,10 @@
       </button>
 
 
-      <!-- SAVED ADDRESSES -->
+      <!-- =================================================
+           SAVED ADDRESSES
+           ================================================= -->
+
       <section
         class="saved-addresses-section"
         id="savedAddressesSection"
@@ -328,27 +365,26 @@
 
       </section>
 
-    </div>
+    </section>
 
 
     <!-- =================================================
          MAP / PIN LOCATION SCREEN
          ================================================= -->
 
-    <div
+    <section
       class="location-screen location-map-screen"
       id="locationMapScreen"
       hidden
     >
 
-      <!-- MAP CONTAINER
-           Actual map provider will be connected later.
-      -->
+      <!-- MAP -->
       <div
         class="location-map-container"
         id="locationMapContainer"
       >
 
+        <!-- Initial placeholder -->
         <div
           class="location-map-placeholder"
           id="locationMapPlaceholder"
@@ -382,7 +418,7 @@
         </div>
 
 
-        <!-- CURRENT LOCATION ON MAP -->
+        <!-- CURRENT LOCATION -->
         <button
           type="button"
           class="map-current-location-btn"
@@ -395,29 +431,49 @@
       </div>
 
 
-      <!-- DETECTED ADDRESS -->
-      <div class="detected-location-card">
+      <!-- =================================================
+           DETECTED LOCATION
+           ================================================= -->
 
-        <div class="detected-location-icon">
+      <div
+        class="detected-location-card"
+        id="detectedLocationCard"
+      >
+
+        <div
+          class="detected-location-icon"
+          aria-hidden="true"
+        >
           📍
         </div>
 
         <div class="detected-location-content">
 
-          <strong id="detectedLocationTitle">
+          <strong
+            id="detectedLocationTitle"
+            class="detected-location-title"
+          >
             Location not selected
           </strong>
 
-          <p id="detectedLocationAddress">
+          <p
+            id="detectedLocationAddress"
+            class="detected-location-address"
+          >
             Move the pin or search for your address.
           </p>
+
+          <small
+            id="detectedLocationAccuracy"
+            class="detected-location-accuracy"
+          ></small>
 
         </div>
 
       </div>
 
 
-      <!-- CONFIRM LOCATION -->
+      <!-- CONFIRM -->
       <button
         type="button"
         class="location-primary-btn"
@@ -426,21 +482,24 @@
         Confirm Location
       </button>
 
-    </div>
+    </section>
 
 
     <!-- =================================================
          ADDRESS DETAILS SCREEN
          ================================================= -->
 
-    <div
+    <section
       class="location-screen location-address-screen"
       id="locationAddressScreen"
       hidden
     >
 
       <!-- CONFIRMED LOCATION -->
-      <div class="confirmed-location-box">
+      <div
+        class="confirmed-location-box"
+        id="confirmedLocationBox"
+      >
 
         <span
           class="confirmed-location-icon"
@@ -455,7 +514,10 @@
             Location confirmed
           </strong>
 
-          <p id="confirmedLocationAddress">
+          <p
+            id="confirmedLocationAddress"
+            class="confirmed-location-address"
+          >
             Your selected location
           </p>
 
@@ -464,7 +526,10 @@
       </div>
 
 
-      <!-- ADDRESS FORM -->
+      <!-- =================================================
+           ADDRESS FORM
+           ================================================= -->
+
       <form
         class="delivery-address-form"
         id="deliveryAddressForm"
@@ -526,6 +591,42 @@
         </div>
 
 
+        <!-- CITY -->
+        <div class="address-field">
+
+          <label for="addressCity">
+            City
+          </label>
+
+          <input
+            type="text"
+            id="addressCity"
+            name="city"
+            placeholder="e.g. Mumbai"
+            autocomplete="address-level2"
+          />
+
+        </div>
+
+
+        <!-- STATE -->
+        <div class="address-field">
+
+          <label for="addressState">
+            State
+          </label>
+
+          <input
+            type="text"
+            id="addressState"
+            name="state"
+            placeholder="e.g. Maharashtra"
+            autocomplete="address-level1"
+          />
+
+        </div>
+
+
         <!-- LANDMARK -->
         <div class="address-field">
 
@@ -565,7 +666,10 @@
         </div>
 
 
-        <!-- ADDRESS TYPE -->
+        <!-- =================================================
+             ADDRESS TYPE
+             ================================================= -->
+
         <fieldset class="address-type-field">
 
           <legend>
@@ -653,18 +757,8 @@
 
       </form>
 
-    </div>
+    </section>
 
-
-    <!-- =================================================
-         LOCATION SEARCH RESULTS
-         ================================================= -->
-
-    <div
-      class="location-search-results"
-      id="locationSearchResults"
-      hidden
-    ></div>
 
   </div>
 
