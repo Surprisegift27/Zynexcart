@@ -1,4 +1,8 @@
-<!-- HEADER -->
+<!-- =====================================================
+     ZYNEXCART — HEADER
+     Existing header preserved
+     Location system added
+     ===================================================== -->
 
 <header class="site-header">
 
@@ -17,11 +21,18 @@
       >
     </a>
 
-    <!-- LOCATION -->
+
+    <!-- =================================================
+         LOCATION BUTTON
+         ================================================= -->
+
     <button
       class="location-btn"
+      id="locationBtn"
       type="button"
       aria-label="Select delivery location"
+      aria-haspopup="dialog"
+      aria-controls="locationModal"
     >
       <span
         class="location-icon"
@@ -30,10 +41,14 @@
         📍
       </span>
 
-      <span class="location-text">
+      <span
+        class="location-text"
+        id="locationText"
+      >
         Enter location
       </span>
     </button>
+
 
     <!-- SEARCH -->
     <form
@@ -56,6 +71,7 @@
         aria-label="Search products"
       >
     </form>
+
 
     <!-- CART -->
     <a
@@ -98,6 +114,7 @@
       </span>
 
       <span class="cart-info">
+
         <span id="cartItemsText">
           0 items
         </span>
@@ -105,9 +122,11 @@
         <span id="cartTotal">
           ₹0
         </span>
+
       </span>
 
     </a>
+
 
     <!-- LOGIN -->
     <a
@@ -130,3 +149,523 @@
   </div>
 
 </header>
+
+
+<!-- =====================================================
+     ZYNEXCART — LOCATION MODAL
+     Opens when customer clicks "Enter location"
+     ===================================================== -->
+
+<div
+  class="location-modal"
+  id="locationModal"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="locationModalTitle"
+>
+
+  <!-- BACKDROP -->
+  <div
+    class="location-modal-backdrop"
+    id="locationModalBackdrop"
+  ></div>
+
+
+  <!-- LOCATION PANEL -->
+  <div class="location-modal-panel">
+
+    <!-- MODAL HEADER -->
+    <div class="location-modal-header">
+
+      <div class="location-modal-title-wrap">
+
+        <button
+          type="button"
+          class="location-back-btn"
+          id="locationBackBtn"
+          aria-label="Back"
+          hidden
+        >
+          ←
+        </button>
+
+        <h2 id="locationModalTitle">
+          Select Your Location
+        </h2>
+
+      </div>
+
+      <button
+        type="button"
+        class="location-close-btn"
+        id="locationCloseBtn"
+        aria-label="Close location"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <!-- =================================================
+         LOCATION HOME SCREEN
+         ================================================= -->
+
+    <div
+      class="location-screen"
+      id="locationHomeScreen"
+    >
+
+      <!-- SEARCH LOCATION -->
+      <div class="location-search-box">
+
+        <span
+          class="location-search-icon"
+          aria-hidden="true"
+        >
+          🔍
+        </span>
+
+        <input
+          type="search"
+          id="locationSearchInput"
+          placeholder="Search for apartment, street, area..."
+          autocomplete="off"
+          aria-label="Search delivery location"
+        />
+
+      </div>
+
+
+      <!-- CURRENT LOCATION -->
+      <button
+        type="button"
+        class="location-action-btn current-location-action"
+        id="useCurrentLocationBtn"
+      >
+
+        <span
+          class="location-action-icon"
+          aria-hidden="true"
+        >
+          📍
+        </span>
+
+        <span class="location-action-content">
+
+          <strong>
+            Use my current location
+          </strong>
+
+          <small>
+            Use your device location
+          </small>
+
+        </span>
+
+        <span
+          class="location-action-arrow"
+          aria-hidden="true"
+        >
+          ›
+        </span>
+
+      </button>
+
+
+      <!-- ADD NEW ADDRESS -->
+      <button
+        type="button"
+        class="location-action-btn"
+        id="addNewAddressBtn"
+      >
+
+        <span
+          class="location-action-icon"
+          aria-hidden="true"
+        >
+          ＋
+        </span>
+
+        <span class="location-action-content">
+
+          <strong>
+            Add New Address
+          </strong>
+
+          <small>
+            Set your exact delivery location
+          </small>
+
+        </span>
+
+        <span
+          class="location-action-arrow"
+          aria-hidden="true"
+        >
+          ›
+        </span>
+
+      </button>
+
+
+      <!-- SAVED ADDRESSES -->
+      <section
+        class="saved-addresses-section"
+        id="savedAddressesSection"
+        hidden
+      >
+
+        <div class="location-section-title">
+          Saved Addresses
+        </div>
+
+        <div
+          class="saved-addresses-list"
+          id="savedAddressesList"
+        ></div>
+
+      </section>
+
+    </div>
+
+
+    <!-- =================================================
+         MAP / PIN LOCATION SCREEN
+         ================================================= -->
+
+    <div
+      class="location-screen location-map-screen"
+      id="locationMapScreen"
+      hidden
+    >
+
+      <!-- MAP CONTAINER
+           Actual map provider will be connected later.
+      -->
+      <div
+        class="location-map-container"
+        id="locationMapContainer"
+      >
+
+        <div
+          class="location-map-placeholder"
+          id="locationMapPlaceholder"
+        >
+
+          <span
+            class="map-placeholder-icon"
+            aria-hidden="true"
+          >
+            🗺️
+          </span>
+
+          <strong>
+            Set your delivery location
+          </strong>
+
+          <small>
+            Move the pin to your exact delivery point
+          </small>
+
+        </div>
+
+
+        <!-- CENTER PIN -->
+        <div
+          class="map-center-pin"
+          id="mapCenterPin"
+          aria-hidden="true"
+        >
+          📍
+        </div>
+
+
+        <!-- CURRENT LOCATION ON MAP -->
+        <button
+          type="button"
+          class="map-current-location-btn"
+          id="mapCurrentLocationBtn"
+          aria-label="Use current location"
+        >
+          📍
+        </button>
+
+      </div>
+
+
+      <!-- DETECTED ADDRESS -->
+      <div class="detected-location-card">
+
+        <div class="detected-location-icon">
+          📍
+        </div>
+
+        <div class="detected-location-content">
+
+          <strong id="detectedLocationTitle">
+            Location not selected
+          </strong>
+
+          <p id="detectedLocationAddress">
+            Move the pin or search for your address.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- CONFIRM LOCATION -->
+      <button
+        type="button"
+        class="location-primary-btn"
+        id="confirmLocationBtn"
+      >
+        Confirm Location
+      </button>
+
+    </div>
+
+
+    <!-- =================================================
+         ADDRESS DETAILS SCREEN
+         ================================================= -->
+
+    <div
+      class="location-screen location-address-screen"
+      id="locationAddressScreen"
+      hidden
+    >
+
+      <!-- CONFIRMED LOCATION -->
+      <div class="confirmed-location-box">
+
+        <span
+          class="confirmed-location-icon"
+          aria-hidden="true"
+        >
+          📍
+        </span>
+
+        <div>
+
+          <strong>
+            Location confirmed
+          </strong>
+
+          <p id="confirmedLocationAddress">
+            Your selected location
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ADDRESS FORM -->
+      <form
+        class="delivery-address-form"
+        id="deliveryAddressForm"
+      >
+
+        <!-- HOUSE / FLAT / SHOP -->
+        <div class="address-field">
+
+          <label for="addressHouse">
+            House / Flat / Shop No.
+          </label>
+
+          <input
+            type="text"
+            id="addressHouse"
+            name="house"
+            placeholder="e.g. Flat 204, Shop 12"
+            autocomplete="address-line1"
+            required
+          />
+
+        </div>
+
+
+        <!-- BUILDING / SOCIETY -->
+        <div class="address-field">
+
+          <label for="addressBuilding">
+            Building / Society
+          </label>
+
+          <input
+            type="text"
+            id="addressBuilding"
+            name="building"
+            placeholder="e.g. Sunshine Apartments"
+            autocomplete="address-line2"
+          />
+
+        </div>
+
+
+        <!-- AREA / ROAD -->
+        <div class="address-field">
+
+          <label for="addressArea">
+            Area / Road
+          </label>
+
+          <input
+            type="text"
+            id="addressArea"
+            name="area"
+            placeholder="e.g. Warden Road"
+            autocomplete="street-address"
+            required
+          />
+
+        </div>
+
+
+        <!-- LANDMARK -->
+        <div class="address-field">
+
+          <label for="addressLandmark">
+            Landmark
+            <span>(Optional)</span>
+          </label>
+
+          <input
+            type="text"
+            id="addressLandmark"
+            name="landmark"
+            placeholder="e.g. Near XYZ Mall"
+          />
+
+        </div>
+
+
+        <!-- PINCODE -->
+        <div class="address-field">
+
+          <label for="addressPincode">
+            Pincode
+          </label>
+
+          <input
+            type="text"
+            id="addressPincode"
+            name="pincode"
+            placeholder="e.g. 400026"
+            inputmode="numeric"
+            maxlength="6"
+            autocomplete="postal-code"
+            required
+          />
+
+        </div>
+
+
+        <!-- ADDRESS TYPE -->
+        <fieldset class="address-type-field">
+
+          <legend>
+            Save address as
+          </legend>
+
+          <div class="address-type-options">
+
+            <label class="address-type-option">
+
+              <input
+                type="radio"
+                name="addressType"
+                value="Home"
+                checked
+              />
+
+              <span>
+                🏠 Home
+              </span>
+
+            </label>
+
+
+            <label class="address-type-option">
+
+              <input
+                type="radio"
+                name="addressType"
+                value="Work"
+              />
+
+              <span>
+                💼 Work
+              </span>
+
+            </label>
+
+
+            <label class="address-type-option">
+
+              <input
+                type="radio"
+                name="addressType"
+                value="Other"
+              />
+
+              <span>
+                📍 Other
+              </span>
+
+            </label>
+
+          </div>
+
+        </fieldset>
+
+
+        <!-- DELIVERY INSTRUCTIONS -->
+        <div class="address-field">
+
+          <label for="deliveryInstructions">
+            Delivery Instructions
+            <span>(Optional)</span>
+          </label>
+
+          <textarea
+            id="deliveryInstructions"
+            name="deliveryInstructions"
+            rows="3"
+            placeholder="e.g. Call when you reach the gate"
+          ></textarea>
+
+        </div>
+
+
+        <!-- SAVE ADDRESS -->
+        <button
+          type="submit"
+          class="location-primary-btn"
+          id="saveAddressBtn"
+        >
+          Save Address
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <!-- =================================================
+         LOCATION SEARCH RESULTS
+         ================================================= -->
+
+    <div
+      class="location-search-results"
+      id="locationSearchResults"
+      hidden
+    ></div>
+
+  </div>
+
+</div>
