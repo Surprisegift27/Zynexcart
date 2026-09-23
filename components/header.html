@@ -1,14 +1,16 @@
 <!-- =====================================================
      ZYNEXCART — HEADER
-     Existing header preserved
-     Professional location system
+     Professional Quick-Commerce Header
      ===================================================== -->
 
 <header class="site-header">
 
   <div class="header-container">
 
-    <!-- LOGO -->
+    <!-- =================================================
+         LOGO
+         ================================================= -->
+
     <a
       href="index.html"
       class="brand"
@@ -183,7 +185,10 @@
   aria-labelledby="locationModalTitle"
 >
 
-  <!-- BACKDROP -->
+  <!-- =================================================
+       BACKDROP
+       ================================================= -->
+
   <div
     class="location-modal-backdrop"
     id="locationModalBackdrop"
@@ -243,7 +248,10 @@
       id="locationHomeScreen"
     >
 
-      <!-- SEARCH -->
+      <!-- =================================================
+           LOCATION SEARCH
+           ================================================= -->
+
       <div class="location-search-box">
 
         <span
@@ -264,7 +272,10 @@
       </div>
 
 
-      <!-- SEARCH RESULTS -->
+      <!-- =================================================
+           SEARCH RESULTS
+           ================================================= -->
+
       <div
         class="location-search-results"
         id="locationSearchResults"
@@ -272,7 +283,10 @@
       ></div>
 
 
-      <!-- CURRENT LOCATION -->
+      <!-- =================================================
+           USE CURRENT LOCATION
+           ================================================= -->
+
       <button
         type="button"
         class="location-action-btn current-location-action"
@@ -308,7 +322,10 @@
       </button>
 
 
-      <!-- ADD NEW ADDRESS -->
+      <!-- =================================================
+           ADD NEW ADDRESS
+           ================================================= -->
+
       <button
         type="button"
         class="location-action-btn"
@@ -346,21 +363,35 @@
 
       <!-- =================================================
            SAVED ADDRESSES
+           Appears only when saved addresses exist.
            ================================================= -->
 
       <section
         class="saved-addresses-section"
         id="savedAddressesSection"
         hidden
+        aria-labelledby="savedAddressesTitle"
       >
 
-        <div class="location-section-title">
+        <div
+          class="location-section-title"
+          id="savedAddressesTitle"
+        >
           Saved Addresses
         </div>
 
+
+        <!--
+          IMPORTANT:
+          app.js uses #savedAddresses to render
+          saved address cards dynamically.
+        -->
+
         <div
           class="saved-addresses-list"
-          id="savedAddressesList"
+          id="savedAddresses"
+          role="list"
+          aria-label="Saved delivery addresses"
         ></div>
 
       </section>
@@ -378,13 +409,17 @@
       hidden
     >
 
-      <!-- MAP -->
+      <!-- =================================================
+           MAP
+           ================================================= -->
+
       <div
         class="location-map-container"
         id="locationMapContainer"
       >
 
-        <!-- Initial placeholder -->
+        <!-- MAP PLACEHOLDER -->
+
         <div
           class="location-map-placeholder"
           id="locationMapPlaceholder"
@@ -409,6 +444,7 @@
 
 
         <!-- CENTER PIN -->
+
         <div
           class="map-center-pin"
           id="mapCenterPin"
@@ -419,6 +455,7 @@
 
 
         <!-- CURRENT LOCATION -->
+
         <button
           type="button"
           class="map-current-location-btn"
@@ -473,7 +510,10 @@
       </div>
 
 
-      <!-- CONFIRM -->
+      <!-- =================================================
+           CONFIRM LOCATION
+           ================================================= -->
+
       <button
         type="button"
         class="location-primary-btn"
@@ -495,7 +535,10 @@
       hidden
     >
 
-      <!-- CONFIRMED LOCATION -->
+      <!-- =================================================
+           CONFIRMED LOCATION
+           ================================================= -->
+
       <div
         class="confirmed-location-box"
         id="confirmedLocationBox"
@@ -535,7 +578,10 @@
         id="deliveryAddressForm"
       >
 
-        <!-- HOUSE / FLAT / SHOP -->
+        <!-- =================================================
+             HOUSE / FLAT / SHOP
+             ================================================= -->
+
         <div class="address-field">
 
           <label for="addressHouse">
@@ -554,7 +600,10 @@
         </div>
 
 
-        <!-- BUILDING / SOCIETY -->
+        <!-- =================================================
+             BUILDING / SOCIETY
+             ================================================= -->
+
         <div class="address-field">
 
           <label for="addressBuilding">
@@ -572,7 +621,10 @@
         </div>
 
 
-        <!-- AREA / ROAD -->
+        <!-- =================================================
+             AREA / ROAD
+             ================================================= -->
+
         <div class="address-field">
 
           <label for="addressArea">
@@ -591,7 +643,10 @@
         </div>
 
 
-        <!-- CITY -->
+        <!-- =================================================
+             CITY
+             ================================================= -->
+
         <div class="address-field">
 
           <label for="addressCity">
@@ -609,7 +664,10 @@
         </div>
 
 
-        <!-- STATE -->
+        <!-- =================================================
+             STATE
+             ================================================= -->
+
         <div class="address-field">
 
           <label for="addressState">
@@ -627,7 +685,10 @@
         </div>
 
 
-        <!-- LANDMARK -->
+        <!-- =================================================
+             LANDMARK
+             ================================================= -->
+
         <div class="address-field">
 
           <label for="addressLandmark">
@@ -645,7 +706,10 @@
         </div>
 
 
-        <!-- PINCODE -->
+        <!-- =================================================
+             PINCODE
+             ================================================= -->
+
         <div class="address-field">
 
           <label for="addressPincode">
@@ -678,6 +742,8 @@
 
           <div class="address-type-options">
 
+            <!-- HOME -->
+
             <label class="address-type-option">
 
               <input
@@ -694,6 +760,8 @@
             </label>
 
 
+            <!-- WORK -->
+
             <label class="address-type-option">
 
               <input
@@ -708,6 +776,8 @@
 
             </label>
 
+
+            <!-- OTHER -->
 
             <label class="address-type-option">
 
@@ -728,7 +798,10 @@
         </fieldset>
 
 
-        <!-- DELIVERY INSTRUCTIONS -->
+        <!-- =================================================
+             DELIVERY INSTRUCTIONS
+             ================================================= -->
+
         <div class="address-field">
 
           <label for="deliveryInstructions">
@@ -746,7 +819,10 @@
         </div>
 
 
-        <!-- SAVE ADDRESS -->
+        <!-- =================================================
+             SAVE ADDRESS
+             ================================================= -->
+
         <button
           type="submit"
           class="location-primary-btn"
