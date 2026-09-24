@@ -42,9 +42,16 @@
           👤 Login
         </a>
 
-        <a href="cart.html" class="cart-link">
+        <a
+          href="cart.html"
+          class="cart-link"
+          id="cartLink"
+          aria-label="Shopping cart"
+        >
           🛒 Cart
-          <span id="cartCount">0</span>
+          <span id="cartItemsText">
+            <span id="cartCount">0</span> items
+          </span>
         </a>
 
       </nav>
@@ -68,7 +75,7 @@
       <section class="cart-items-section">
 
         <div id="cartItems">
-          <!-- Products will appear here -->
+          <!-- Cart products will be rendered here -->
         </div>
 
       </section>
@@ -84,11 +91,18 @@
           <strong id="cartTotal">₹0</strong>
         </div>
 
-        <button class="btn-primary checkout-btn" type="button">
+        <button
+          class="btn-primary checkout-btn"
+          id="checkoutBtn"
+          type="button"
+        >
           Proceed to Checkout
         </button>
 
-        <a href="products.html" class="continue-shopping">
+        <a
+          href="products.html"
+          class="continue-shopping"
+        >
           ← Continue Shopping
         </a>
 
@@ -114,8 +128,446 @@
 
 
   <!-- JAVASCRIPT -->
-  <script src="js/app.js"></script>
-  <script src="js/cart.js"></script>
+  <script>
+    "use strict";
+
+    /*
+     * ZynexCart Cart Page
+     * Loads the same modular cart system
+     * used by the main website.
+     */
+
+    const cartScripts = [
+      "js/core/storage.js",
+      "js/core/utils.js",
+      "js/core/events.js",
+
+      "js/cart/cart.js",
+      "js/cart/cart-actions.js",
+      "js/cart/cart-ui.js",
+
+      "js/search/search.js"
+    ];
+
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+
+        script.src = src;
+
+        script.onload = resolve;
+
+        script.onerror = () => {
+          reject(
+            new Error(
+              `Unable to load ${src}`
+            )
+          );
+        };
+
+        document.body.appendChild(script);
+      });
+    }
+
+    async function initializeCartPage() {
+      try {
+
+        for (const script of cartScripts) {
+          await loadScript(script);
+        }
+
+        initializeCartRendering();
+        initializeCartSearch();
+
+      } catch (error) {
+
+        console.error(
+          "ZynexCart: Cart page initialization failed.",
+          error
+        );
+
+      }
+    }
+
+
+    function initializeCartSearch() {
+
+      if (
+        window.ZynexCartSearch &&
+        typeof window.ZynexCartSearch.setupSearch ===
+          "function"
+      ) {
+        window.ZynexCartSearch.setupSearch();
+      }
+
+    }
+
+
+    function initializeCartRendering() {
+
+      const cartCore =
+        window.ZynexCartCart;
+
+      const cartActions =
+        window.ZynexCartCartActions;
+
+      const utils =
+        window.ZynexCartUtils;
+
+      const cartItemsContainer =
+        document.getElementById("cartItems");
+
+      const cartTotal =
+        document.getElementById("cartTotal");
+
+      const checkoutBtn =
+        document.getElementById("checkoutBtn");
+
+
+      if (
+        !cartCore ||
+        !cartActions ||
+        !utils ||
+        !cartItemsContainer ||
+        !cartTotal
+      ) {
+
+        console.error(
+          "ZynexCart: Cart page dependencies are missing."
+        );
+
+        return;
+      }
+
+
+      function renderCart() {
+
+        const cart =
+          cartCore.getCart();
+
+
+        if (!cart.length) {
+
+          cartItemsContainer.innerHTML = `
+            <div class="cart-empty">
+              <h2>Your cart is empty 🛒</h2>
+
+              <p>
+                Add some products to your cart
+                and they will appear here.
+              </p>
+
+              <a
+                href="products.html"
+                class="btn-primary"
+              >
+                Start Shopping
+              </a>
+            </div>
+          `;
+
+          cartTotal.textContent =
+            utils.formatPrice(0);
+
+          updateHeaderCart();
+
+          return;
+        }
+
+
+        cartItemsContainer.innerHTML =
+          cart.map(item => {
+
+            const price =
+              Number(item.price) || 0;
+
+            const quantity =
+              Number(item.quantity) || 0;
+
+            const itemTotal =
+              price * quantity;
+
+
+            return `
+              <article
+                class="cart-item"
+                data-product-id="${utils.escapeHTML(item.id)}"
+              >
+
+                <div class="cart-item-image">
+
+                  <img
+                    src="${
+                      utils.escapeHTML(
+                        item.image || "assets/logo.png"
+                      )
+                    }"
+                    alt="${
+                      utils.escapeHTML(
+                        item.name || "Product"
+                      )
+                    }"
+                  >
+
+                </div>
+
+
+                <div class="cart-item-details">
+
+                  <h3>
+                    ${
+                      utils.escapeHTML(
+                        item.name || "Product"
+                      )
+                    }
+                  </h3>
+
+                  <p class="cart-item-price">
+                    ${utils.formatPrice(price)}
+                  </p>
+
+
+                  <div class="cart-item-actions">
+
+                    <button
+                      type="button"
+                      class="cart-quantity-btn"
+                      data-action="decrease"
+                      data-product-id="${utils.escapeHTML(item.id)}"
+                      aria-label="Decrease quantity"
+                    >
+                      −
+                    </button>
+
+
+                    <span class="cart-item-quantity">
+                      ${quantity}
+                    </span>
+
+
+                    <button
+                      type="button"
+                      class="cart-quantity-btn"
+                      data-action="increase"
+                      data-product-id="${utils.escapeHTML(item.id)}"
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="cart-remove-btn"
+                      data-action="remove"
+                      data-product-id="${utils.escapeHTML(item.id)}"
+                    >
+                      Remove
+                    </button>
+
+                  </div>
+
+                </div>
+
+
+                <div class="cart-item-total">
+
+                  <strong>
+                    ${utils.formatPrice(itemTotal)}
+                  </strong>
+
+                </div>
+
+              </article>
+            `;
+
+          }).join("");
+
+
+        cartTotal.textContent =
+          utils.formatPrice(
+            cartCore.getCartTotal()
+          );
+
+
+        updateHeaderCart();
+
+      }
+
+
+      function updateHeaderCart() {
+
+        const count =
+          cartCore.getCartItemCount();
+
+        const total =
+          cartCore.getCartTotal();
+
+
+        const cartCount =
+          document.getElementById("cartCount");
+
+        const cartItemsText =
+          document.getElementById("cartItemsText");
+
+        const headerTotal =
+          document.getElementById("cartTotal");
+
+
+        if (cartCount) {
+          cartCount.textContent =
+            count;
+        }
+
+
+        if (cartItemsText) {
+
+          cartItemsText.innerHTML =
+            `<span id="cartCount">${count}</span> items`;
+
+        }
+
+
+        /*
+         * On the cart page, #cartTotal belongs
+         * to the Order Summary.
+         *
+         * Header total is handled only when
+         * a separate header total element exists.
+         */
+
+        const headerCartTotal =
+          document.querySelector(
+            ".cart-link #headerCartTotal"
+          );
+
+        if (headerCartTotal) {
+
+          headerCartTotal.textContent =
+            utils.formatPrice(total);
+
+        }
+
+      }
+
+
+      cartItemsContainer.addEventListener(
+        "click",
+        function (event) {
+
+          const button =
+            event.target.closest(
+              "[data-action]"
+            );
+
+
+          if (!button) {
+            return;
+          }
+
+
+          const productId =
+            button.dataset.productId;
+
+          const action =
+            button.dataset.action;
+
+
+          if (!productId) {
+            return;
+          }
+
+
+          if (action === "increase") {
+
+            cartActions.changeCartQuantity(
+              productId,
+              1
+            );
+
+          }
+
+
+          if (action === "decrease") {
+
+            cartActions.changeCartQuantity(
+              productId,
+              -1
+            );
+
+          }
+
+
+          if (action === "remove") {
+
+            cartActions.removeFromCart(
+              productId
+            );
+
+          }
+
+
+          renderCart();
+
+        }
+      );
+
+
+      if (checkoutBtn) {
+
+        checkoutBtn.addEventListener(
+          "click",
+          function () {
+
+            const cart =
+              cartCore.getCart();
+
+
+            if (!cart.length) {
+
+              alert(
+                "Your cart is empty."
+              );
+
+              return;
+
+            }
+
+
+            window.location.href =
+              "checkout.html";
+
+          }
+        );
+
+      }
+
+
+      renderCart();
+
+
+      window.addEventListener(
+        "storage",
+        function (event) {
+
+          if (
+            event.key === "zynexcart_cart" ||
+            event.key === null
+          ) {
+
+            renderCart();
+
+          }
+
+        }
+      );
+
+    }
+
+
+    initializeCartPage();
+
+  </script>
 
 </body>
 </html>
