@@ -1794,3 +1794,614 @@
     padding: 11px;
   }
 }
+/* =====================================================
+   ZYNEXCART — FINAL GLOBAL HEADER OVERRIDE
+   Home Page Header = Master Header
+   Desktop + Mobile
+   ===================================================== */
+
+/* =========================
+   GLOBAL HEADER
+   ========================= */
+
+.site-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+
+  width: 100% !important;
+  z-index: 1000 !important;
+
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-bottom: 1px solid var(--border) !important;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   DESKTOP HEADER
+   ========================= */
+
+.site-header .header-container {
+  width: min(1120px, calc(100% - 32px)) !important;
+  min-height: 72px !important;
+
+  margin: 0 auto !important;
+  padding: 0 !important;
+
+  display: grid !important;
+
+  grid-template-columns:
+    auto
+    auto
+    minmax(300px, 1fr)
+    auto
+    auto !important;
+
+  grid-template-areas:
+    "brand location search cart account" !important;
+
+  align-items: center !important;
+
+  gap: 12px !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================
+   LOGO
+   ========================= */
+
+.site-header .brand {
+  grid-area: brand !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  width: auto !important;
+  min-width: 120px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  flex-shrink: 0 !important;
+
+  text-decoration: none !important;
+}
+
+.site-header .brand img,
+.site-header .logo {
+  width: 130px !important;
+  height: auto !important;
+
+  max-width: 100% !important;
+
+  display: block !important;
+
+  object-fit: contain !important;
+}
+
+
+/* =========================
+   LOCATION
+   ========================= */
+
+.site-header .location-btn {
+  grid-area: location !important;
+
+  width: auto !important;
+  max-width: 190px !important;
+  min-height: 44px !important;
+
+  margin: 0 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 6px !important;
+
+  padding: 0 13px !important;
+
+  border: 1px solid #ffd7bd !important;
+  border-radius: 12px !important;
+
+  background: var(--primary-light) !important;
+  color: var(--primary) !important;
+
+  font-size: 12px !important;
+  font-weight: 800 !important;
+
+  line-height: 1 !important;
+
+  white-space: nowrap !important;
+
+  cursor: pointer !important;
+
+  box-sizing: border-box !important;
+}
+
+.site-header .location-icon {
+  flex: 0 0 auto !important;
+
+  font-size: 15px !important;
+  line-height: 1 !important;
+}
+
+.site-header .location-text {
+  min-width: 0 !important;
+
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+
+/* =========================
+   SEARCH
+   ========================= */
+
+.site-header .search-box {
+  grid-area: search !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 46px !important;
+
+  margin: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  background: #f5f6f8 !important;
+
+  border: 1px solid #eef0f3 !important;
+  border-radius: 12px !important;
+
+  overflow: hidden !important;
+
+  box-sizing: border-box !important;
+}
+
+.site-header .search-icon {
+  width: 44px !important;
+  height: 100% !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  flex: 0 0 44px !important;
+
+  font-size: 16px !important;
+
+  opacity: 0.7 !important;
+}
+
+.site-header .search-box input {
+  flex: 1 !important;
+
+  min-width: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  margin: 0 !important;
+  padding: 0 14px 0 0 !important;
+
+  border: 0 !important;
+  outline: 0 !important;
+
+  background: transparent !important;
+
+  color: var(--text) !important;
+
+  font-family: inherit !important;
+  font-size: 14px !important;
+}
+
+
+/* =========================
+   CART
+   ========================= */
+
+.site-header .cart-link {
+  grid-area: cart !important;
+
+  width: auto !important;
+  min-width: 108px !important;
+  min-height: 50px !important;
+
+  margin: 0 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 8px !important;
+
+  padding: 5px 12px !important;
+
+  border-radius: 10px !important;
+
+  background: var(--success) !important;
+  color: var(--white) !important;
+
+  text-decoration: none !important;
+
+  box-sizing: border-box !important;
+
+  box-shadow:
+    0 4px 12px rgba(22, 131, 75, 0.14) !important;
+}
+
+.site-header .cart-icon {
+  width: 28px !important;
+  height: 28px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  flex: 0 0 28px !important;
+}
+
+.site-header .cart-icon svg {
+  width: 25px !important;
+  height: 25px !important;
+
+  display: block !important;
+}
+
+.site-header .cart-info {
+  min-width: 52px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+
+  line-height: 1.15 !important;
+}
+
+.site-header #cartItemsText {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+
+  white-space: nowrap !important;
+}
+
+.site-header #cartTotal {
+  margin-top: 2px !important;
+
+  font-size: 12px !important;
+  font-weight: 900 !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* =========================
+   LOGIN
+   ========================= */
+
+.site-header .account-link {
+  grid-area: account !important;
+
+  min-height: 44px !important;
+
+  margin: 0 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 6px !important;
+
+  padding: 0 8px !important;
+
+  border-radius: 10px !important;
+
+  color: var(--text) !important;
+
+  font-size: 13px !important;
+  font-weight: 800 !important;
+
+  white-space: nowrap !important;
+
+  text-decoration: none !important;
+
+  box-sizing: border-box !important;
+}
+
+.site-header .account-icon {
+  font-size: 16px !important;
+  line-height: 1 !important;
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media screen and (max-width: 1050px) {
+
+  .site-header .header-container {
+    width: calc(100% - 24px) !important;
+
+    grid-template-columns:
+      auto
+      auto
+      minmax(220px, 1fr)
+      auto
+      auto !important;
+
+    gap: 8px !important;
+  }
+
+  .site-header .brand img,
+  .site-header .logo {
+    width: 120px !important;
+  }
+
+  .site-header .location-btn {
+    max-width: 165px !important;
+  }
+
+  .site-header .cart-link {
+    min-width: 100px !important;
+  }
+}
+
+
+/* =====================================================
+   MOBILE
+   Exact Home Page Mobile Structure
+   ===================================================== */
+
+@media screen and (max-width: 768px) {
+
+  .site-header {
+    position: fixed !important;
+
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    width: 100% !important;
+
+    z-index: 1000 !important;
+  }
+
+  .site-header .header-container {
+    width: 100% !important;
+
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    padding: 10px 14px 12px !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto
+      auto
+      auto !important;
+
+    grid-template-areas:
+      "brand location cart account"
+      "search search search search" !important;
+
+    align-items: center !important;
+
+    gap: 10px !important;
+  }
+
+
+  /* LOGO */
+
+  .site-header .brand {
+    min-width: 0 !important;
+  }
+
+  .site-header .brand img,
+  .site-header .logo {
+    width: 165px !important;
+    max-width: 100% !important;
+  }
+
+
+  /* LOCATION */
+
+  .site-header .location-btn {
+    max-width: 145px !important;
+    min-height: 48px !important;
+
+    padding: 0 12px !important;
+
+    border-radius: 14px !important;
+
+    font-size: 13px !important;
+  }
+
+  .site-header .location-icon {
+    font-size: 17px !important;
+  }
+
+
+  /* CART */
+
+  .site-header .cart-link {
+    min-width: 112px !important;
+    min-height: 50px !important;
+
+    padding: 5px 10px !important;
+
+    border-radius: 13px !important;
+
+    gap: 7px !important;
+  }
+
+  .site-header .cart-icon {
+    width: 29px !important;
+    height: 29px !important;
+
+    flex-basis: 29px !important;
+  }
+
+  .site-header .cart-icon svg {
+    width: 27px !important;
+    height: 27px !important;
+  }
+
+
+  /* LOGIN */
+
+  .site-header .account-link {
+    min-height: 48px !important;
+
+    padding: 0 4px !important;
+
+    font-size: 14px !important;
+  }
+
+  .site-header .account-icon {
+    font-size: 20px !important;
+  }
+
+
+  /* SEARCH */
+
+  .site-header .search-box {
+    width: 100% !important;
+    height: 58px !important;
+
+    border-radius: 15px !important;
+  }
+
+  .site-header .search-icon {
+    width: 48px !important;
+    flex-basis: 48px !important;
+
+    font-size: 19px !important;
+  }
+
+  .site-header .search-box input {
+    font-size: 16px !important;
+  }
+}
+
+
+/* =====================================================
+   SMALL PHONE
+   ===================================================== */
+
+@media screen and (max-width: 520px) {
+
+  .site-header .header-container {
+    padding: 9px 12px 11px !important;
+
+    gap: 8px !important;
+  }
+
+  .site-header .brand img,
+  .site-header .logo {
+    width: 145px !important;
+  }
+
+  .site-header .location-btn {
+    max-width: 132px !important;
+
+    min-height: 46px !important;
+
+    padding-inline: 10px !important;
+
+    font-size: 12px !important;
+  }
+
+  .site-header .cart-link {
+    min-width: 105px !important;
+    min-height: 48px !important;
+
+    padding-inline: 8px !important;
+  }
+
+  .site-header .account-link {
+    font-size: 13px !important;
+  }
+
+  .site-header .account-icon {
+    font-size: 18px !important;
+  }
+
+  .site-header .search-box {
+    height: 54px !important;
+
+    border-radius: 14px !important;
+  }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONE
+   ===================================================== */
+
+@media screen and (max-width: 390px) {
+
+  .site-header .header-container {
+    padding: 8px 10px 10px !important;
+
+    gap: 6px !important;
+  }
+
+  .site-header .brand img,
+  .site-header .logo {
+    width: 125px !important;
+  }
+
+  .site-header .location-btn {
+    max-width: 112px !important;
+
+    padding-inline: 8px !important;
+
+    font-size: 11px !important;
+  }
+
+  .site-header .cart-link {
+    min-width: 94px !important;
+
+    padding-inline: 6px !important;
+
+    gap: 5px !important;
+  }
+
+  .site-header .cart-icon {
+    width: 25px !important;
+    height: 25px !important;
+
+    flex-basis: 25px !important;
+  }
+
+  .site-header .cart-icon svg {
+    width: 23px !important;
+    height: 23px !important;
+  }
+
+  .site-header .account-link {
+    padding-inline: 2px !important;
+
+    font-size: 12px !important;
+  }
+
+  .site-header .account-icon {
+    font-size: 17px !important;
+  }
+}
