@@ -2,31 +2,47 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <meta
     name="description"
     content="ZynexCart Shopping Cart — Review your products and checkout."
   >
 
-  <meta name="theme-color" content="#071b3a">
+  <meta
+    name="theme-color"
+    content="#071b3a"
+  >
 
   <title>My Cart — ZynexCart</title>
 
-  <link rel="stylesheet" href="css/style.css">
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
+
 
   <style>
+
     /* =========================================================
-       ZYNEXCART — PROFESSIONAL QUICK-COMMERCE CART
-       Cart-page-specific styling only.
-       Existing global site styling remains untouched.
+       ZYNEXCART — PROFESSIONAL QUICK COMMERCE CART
        ========================================================= */
 
     .cart-page {
       padding-top: 28px;
       padding-bottom: 120px;
     }
+
+
+    /* =========================================================
+       TOP BAR
+       ========================================================= */
 
     .cart-topbar {
       display: flex;
@@ -36,26 +52,38 @@
       margin-bottom: 22px;
     }
 
+
     .cart-page-title {
       display: flex;
       align-items: center;
       gap: 14px;
+      min-width: 0;
     }
+
 
     .cart-back-btn {
       width: 42px;
       height: 42px;
-      border: 1px solid #e7e9ee;
-      border-radius: 12px;
-      background: #fff;
-      color: #071b3a;
+      flex: 0 0 42px;
+
       display: inline-flex;
       align-items: center;
       justify-content: center;
+
+      border: 1px solid #e7e9ee;
+      border-radius: 12px;
+
+      background: #ffffff;
+      color: #071b3a;
+
       text-decoration: none;
+
       font-size: 22px;
-      transition: .2s ease;
+      font-weight: 700;
+
+      transition: 0.2s ease;
     }
+
 
     .cart-back-btn:hover {
       border-color: #ff6b00;
@@ -63,29 +91,42 @@
       transform: translateX(-2px);
     }
 
+
     .cart-page-title h1 {
       margin: 0;
+
       color: #071b3a;
+
       font-size: 28px;
       line-height: 1.15;
     }
 
+
     .cart-page-title p {
       margin: 5px 0 0;
+
       color: #6b7280;
+
       font-size: 14px;
     }
 
+
     .cart-share-btn {
       border: 1px solid #dfe3ea;
-      background: #fff;
-      color: #071b3a;
       border-radius: 12px;
+
       padding: 11px 16px;
+
+      background: #ffffff;
+      color: #071b3a;
+
       font-weight: 700;
+
       cursor: pointer;
-      transition: .2s ease;
+
+      transition: 0.2s ease;
     }
+
 
     .cart-share-btn:hover {
       border-color: #00aeef;
@@ -93,479 +134,711 @@
     }
 
 
-    /* SAVINGS */
+    /* =========================================================
+       SAVINGS
+       ========================================================= */
 
     .cart-savings-banner {
-      background: linear-gradient(
-        135deg,
-        #eaf7ff,
-        #dcefff
-      );
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+
+      margin-bottom: 18px;
+      padding: 16px 20px;
+
       border: 1px solid #cfe9fa;
       border-radius: 16px;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #eaf7ff,
+          #dcefff
+        );
     }
+
 
     .cart-savings-label {
       color: #1769aa;
-      font-weight: 700;
+
       font-size: 15px;
+      font-weight: 700;
     }
+
 
     .cart-savings-value {
       color: #1769aa;
+
       font-size: 20px;
       font-weight: 800;
     }
 
 
-    /* MAIN GRID */
+    /* =========================================================
+       MAIN LAYOUT
+       ========================================================= */
 
     .cart-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
+
+      grid-template-columns:
+        minmax(0, 1fr)
+        360px;
+
       gap: 24px;
+
       align-items: start;
     }
+
 
     .cart-left-column {
       min-width: 0;
     }
 
 
-    /* DELIVERY CARD */
+    /* =========================================================
+       DELIVERY CARD
+       ========================================================= */
 
     .cart-delivery-card {
-      background: #fff;
-      border: 1px solid #e7e9ee;
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 18px;
       display: flex;
       align-items: center;
+
       gap: 15px;
-      box-shadow: 0 3px 14px rgba(7, 27, 58, .04);
+
+      margin-bottom: 18px;
+      padding: 18px;
+
+      border: 1px solid #e7e9ee;
+      border-radius: 18px;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 3px 14px
+        rgba(7, 27, 58, 0.04);
     }
+
 
     .delivery-icon {
       width: 54px;
       height: 54px;
+
       flex: 0 0 54px;
-      border-radius: 15px;
-      background: #eaf7ff;
-      color: #00aeef;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
+      border-radius: 15px;
+
+      background: #eaf7ff;
+      color: #00aeef;
+
       font-size: 26px;
     }
 
+
     .delivery-content strong {
       display: block;
-      color: #071b3a;
-      font-size: 17px;
+
       margin-bottom: 4px;
+
+      color: #071b3a;
+
+      font-size: 17px;
     }
+
 
     .delivery-content span {
       color: #6b7280;
+
       font-size: 14px;
     }
 
 
-    /* ITEMS */
+    /* =========================================================
+       CART ITEMS
+       ========================================================= */
 
     .cart-items-section {
       min-width: 0;
     }
 
+
     .cart-items-card {
-      background: #fff;
+      overflow: hidden;
+
       border: 1px solid #e7e9ee;
       border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 3px 14px rgba(7, 27, 58, .04);
+
+      background: #ffffff;
+
+      box-shadow:
+        0 3px 14px
+        rgba(7, 27, 58, 0.04);
     }
 
+
     .cart-section-heading {
-      padding: 18px 20px;
-      border-bottom: 1px solid #eef0f3;
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       gap: 10px;
+
+      padding: 18px 20px;
+
+      border-bottom: 1px solid #eef0f3;
     }
+
 
     .cart-section-heading h2 {
       margin: 0;
+
       color: #071b3a;
+
       font-size: 18px;
     }
 
+
     .cart-section-heading span {
       color: #6b7280;
+
       font-size: 13px;
     }
 
+
     .cart-item {
       display: grid;
-      grid-template-columns: 96px minmax(0, 1fr) auto;
+
+      grid-template-columns:
+        96px
+        minmax(0, 1fr)
+        auto;
+
       gap: 18px;
+
       align-items: center;
+
       padding: 20px;
+
       border-bottom: 1px solid #eef0f3;
     }
+
 
     .cart-item:last-child {
       border-bottom: 0;
     }
 
+
     .cart-item-image {
       width: 96px;
       height: 96px;
-      border-radius: 14px;
-      background: #f7f8fa;
-      border: 1px solid #e8ebef;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       overflow: hidden;
+
+      border: 1px solid #e8ebef;
+      border-radius: 14px;
+
+      background: #f7f8fa;
     }
+
 
     .cart-item-image img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+
       padding: 8px;
+
+      object-fit: contain;
     }
+
 
     .cart-item-details {
       min-width: 0;
     }
 
+
     .cart-item-details h3 {
       margin: 0 0 6px;
+
       color: #172033;
+
       font-size: 16px;
       line-height: 1.35;
     }
 
+
     .cart-item-variant {
-      color: #6b7280;
-      font-size: 13px;
       margin-bottom: 9px;
+
+      color: #6b7280;
+
+      font-size: 13px;
     }
+
 
     .cart-price-row {
       display: flex;
       align-items: center;
+
       gap: 9px;
+
       flex-wrap: wrap;
     }
 
+
     .cart-current-price {
       color: #071b3a;
+
       font-size: 17px;
       font-weight: 800;
     }
 
+
     .cart-mrp {
       color: #9ca3af;
-      text-decoration: line-through;
+
       font-size: 13px;
+
+      text-decoration: line-through;
     }
+
 
     .cart-save-text {
       color: #16834b;
+
       font-size: 12px;
       font-weight: 700;
     }
 
+
+    /* =========================================================
+       QUANTITY
+       ========================================================= */
+
     .cart-item-actions {
       display: flex;
       align-items: center;
-      gap: 0;
+
       margin-top: 13px;
     }
+
 
     .cart-quantity-control {
       display: inline-flex;
       align-items: center;
+
+      overflow: hidden;
+
       border: 1px solid #d9dfe7;
       border-radius: 10px;
-      overflow: hidden;
-      background: #fff;
+
+      background: #ffffff;
     }
+
 
     .cart-quantity-btn {
       width: 36px;
       height: 34px;
+
       border: 0;
+
       background: #071b3a;
-      color: #fff;
+      color: #ffffff;
+
       font-size: 19px;
       font-weight: 700;
+
       cursor: pointer;
-      transition: .2s ease;
+
+      transition: 0.2s ease;
     }
+
 
     .cart-quantity-btn:hover {
       background: #ff6b00;
     }
 
+
     .cart-item-quantity {
       width: 38px;
+
       text-align: center;
+
       color: #071b3a;
+
       font-size: 14px;
       font-weight: 800;
     }
 
+
     .cart-remove-btn {
       margin-left: 12px;
+
       border: 0;
+
       background: transparent;
       color: #e85f00;
+
       font-size: 13px;
       font-weight: 700;
+
       cursor: pointer;
     }
+
 
     .cart-remove-btn:hover {
       text-decoration: underline;
     }
 
+
     .cart-item-total {
       text-align: right;
+
       white-space: nowrap;
     }
 
+
     .cart-item-total strong {
       color: #071b3a;
+
       font-size: 17px;
     }
 
 
-    /* SUMMARY */
+    /* =========================================================
+       BILL DETAILS
+       ========================================================= */
 
     .cart-summary {
       position: sticky;
-      top: 90px;
-      background: #fff;
+
+      top: 80px;
+
+      align-self: start;
+
+      overflow: hidden;
+
       border: 1px solid #e7e9ee;
       border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 5px 22px rgba(7, 27, 58, .07);
+
+      background: #ffffff;
+
+      box-shadow:
+        0 5px 22px
+        rgba(7, 27, 58, 0.07);
+
+      z-index: 20;
     }
+
 
     .cart-summary-header {
       padding: 20px;
+
       border-bottom: 1px solid #eef0f3;
     }
 
+
     .cart-summary-header h2 {
       margin: 0;
+
       color: #071b3a;
+
       font-size: 19px;
     }
+
 
     .summary-content {
       padding: 18px 20px;
     }
 
+
     .summary-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       gap: 15px;
+
       margin-bottom: 14px;
+
       color: #4b5563;
+
       font-size: 14px;
     }
+
 
     .summary-row strong {
       color: #172033;
     }
 
+
     .summary-row .saved {
       color: #16834b;
+
       font-weight: 700;
     }
 
+
+    .delivery-free {
+      color: #16834b !important;
+
+      font-weight: 800;
+    }
+
+
     .summary-divider {
+      margin: 17px 0;
+
       border: 0;
       border-top: 1px solid #eef0f3;
-      margin: 17px 0;
     }
+
 
     .grand-total-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+
       gap: 15px;
+
       color: #071b3a;
+
       font-size: 18px;
       font-weight: 800;
     }
+
 
     .grand-total-row strong {
       font-size: 21px;
     }
 
-    .delivery-free {
-      color: #16834b !important;
-      font-weight: 800;
-    }
 
     .checkout-btn {
       width: 100%;
       min-height: 50px;
+
       margin-top: 20px;
+
       border: 0;
       border-radius: 12px;
+
       background: #071b3a;
-      color: #fff;
+      color: #ffffff;
+
       font-size: 15px;
       font-weight: 800;
+
       cursor: pointer;
-      transition: .2s ease;
+
+      transition: 0.2s ease;
     }
+
 
     .checkout-btn:hover {
       background: #ff6b00;
+
       transform: translateY(-1px);
     }
 
+
     .continue-shopping {
       display: block;
-      text-align: center;
+
       margin-top: 15px;
+
       color: #1769aa;
+
+      text-align: center;
+
       font-size: 14px;
       font-weight: 700;
+
       text-decoration: none;
     }
+
 
     .continue-shopping:hover {
       text-decoration: underline;
     }
 
 
-    /* EXTRA CART SECTIONS */
+    /* =========================================================
+       EXTRA CARDS
+       ========================================================= */
 
     .cart-extra-card {
-      background: #fff;
+      margin-top: 18px;
+      padding: 20px;
+
       border: 1px solid #e7e9ee;
       border-radius: 18px;
-      padding: 20px;
-      margin-top: 18px;
-      box-shadow: 0 3px 14px rgba(7, 27, 58, .04);
+
+      background: #ffffff;
+
+      box-shadow:
+        0 3px 14px
+        rgba(7, 27, 58, 0.04);
     }
+
 
     .cart-extra-card h2 {
       margin: 0 0 8px;
+
       color: #071b3a;
+
       font-size: 18px;
     }
 
+
     .cart-extra-card p {
       margin: 0;
+
       color: #6b7280;
+
       font-size: 14px;
+
       line-height: 1.5;
     }
 
+
     .tip-options {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
       gap: 10px;
+
       margin-top: 17px;
     }
 
+
     .tip-option {
       min-height: 52px;
+
       border: 1px solid #e1e5ea;
       border-radius: 11px;
-      background: #fff;
+
+      background: #ffffff;
       color: #172033;
+
       font-weight: 700;
+
       cursor: pointer;
-      transition: .2s ease;
+
+      transition: 0.2s ease;
     }
+
 
     .tip-option:hover,
     .tip-option.active {
       border-color: #ff6b00;
-      color: #ff6b00;
+
       background: #fff8f2;
+
+      color: #ff6b00;
     }
+
 
     .policy-text {
       margin-top: 10px !important;
     }
 
 
-    /* EMPTY CART */
+    /* =========================================================
+       EMPTY CART
+       ========================================================= */
 
     .cart-empty {
-      background: #fff;
-      border: 1px solid #e7e9ee;
-      border-radius: 18px;
       padding: 55px 25px;
+
+      border-radius: 18px;
+
+      background: #ffffff;
+
       text-align: center;
     }
+
 
     .cart-empty-icon {
       width: 72px;
       height: 72px;
-      margin: 0 auto 17px;
-      border-radius: 50%;
-      background: #eaf7ff;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
+      margin: 0 auto 17px;
+
+      border-radius: 50%;
+
+      background: #eaf7ff;
+
       font-size: 32px;
     }
 
+
     .cart-empty h2 {
       margin: 0 0 8px;
+
       color: #071b3a;
+
       font-size: 21px;
     }
 
+
     .cart-empty p {
-      margin: 0 auto 20px;
-      color: #6b7280;
       max-width: 420px;
+
+      margin: 0 auto 20px;
+
+      color: #6b7280;
+
       line-height: 1.5;
     }
 
+
     .empty-cart-btn {
+      min-height: 46px;
+
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 46px;
+
       padding: 0 22px;
+
       border-radius: 10px;
+
       background: #ff6b00;
-      color: #fff;
-      text-decoration: none;
+      color: #ffffff;
+
       font-weight: 800;
+
+      text-decoration: none;
     }
 
 
-    /* MOBILE STICKY CHECKOUT */
+    /* =========================================================
+       MOBILE CHECKOUT
+       ========================================================= */
 
     .mobile-checkout-bar {
       display: none;
     }
 
 
-    /* RESPONSIVE */
+    /* =========================================================
+       TABLET
+       ========================================================= */
 
     @media (max-width: 900px) {
 
@@ -573,196 +846,400 @@
         grid-template-columns: 1fr;
       }
 
+
+      /*
+       * Bill Details stays near the top while
+       * the product/content area continues below.
+       */
+
       .cart-summary {
-        position: static;
+        position: sticky;
+
+        top: 72px;
+
+        width: 100%;
+
+        order: -1;
+      }
+
+
+      .cart-left-column {
+        min-width: 0;
       }
 
     }
 
 
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
     @media (max-width: 650px) {
 
       .cart-page {
-        padding-top: 16px;
+        padding-top: 15px;
+
+        /*
+         * Space for mobile checkout bar.
+         */
         padding-bottom: 105px;
       }
+
 
       .cart-topbar {
         margin-bottom: 15px;
       }
 
+
       .cart-page-title {
-        gap: 10px;
+        gap: 9px;
       }
+
 
       .cart-back-btn {
         width: 38px;
         height: 38px;
+
+        flex-basis: 38px;
+
+        border-radius: 10px;
+
+        font-size: 20px;
       }
+
 
       .cart-page-title h1 {
         font-size: 22px;
       }
 
+
       .cart-page-title p {
         display: none;
       }
 
+
       .cart-share-btn {
         padding: 9px 12px;
+
         font-size: 13px;
       }
 
+
+      /* SAVINGS */
+
       .cart-savings-banner {
         padding: 13px 15px;
+
         border-radius: 13px;
       }
+
 
       .cart-savings-label {
         font-size: 13px;
       }
 
+
       .cart-savings-value {
         font-size: 17px;
       }
 
+
+      /* DELIVERY */
+
       .cart-delivery-card {
         padding: 14px;
+
         border-radius: 14px;
       }
+
 
       .delivery-icon {
         width: 45px;
         height: 45px;
+
         flex-basis: 45px;
+
         font-size: 21px;
       }
+
 
       .delivery-content strong {
         font-size: 15px;
       }
 
+
       .delivery-content span {
         font-size: 12px;
       }
+
+
+      /* BILL DETAILS */
+
+      .cart-summary {
+        display: block;
+
+        position: sticky;
+
+        top: 64px;
+
+        width: 100%;
+
+        border-radius: 14px;
+
+        z-index: 50;
+      }
+
+
+      .cart-summary-header {
+        padding: 15px;
+      }
+
+
+      .cart-summary-header h2 {
+        font-size: 17px;
+      }
+
+
+      .summary-content {
+        padding: 15px;
+      }
+
+
+      .summary-row {
+        margin-bottom: 10px;
+
+        font-size: 13px;
+      }
+
+
+      .grand-total-row {
+        font-size: 16px;
+      }
+
+
+      .grand-total-row strong {
+        font-size: 19px;
+      }
+
+
+      .checkout-btn {
+        min-height: 46px;
+
+        margin-top: 15px;
+
+        font-size: 14px;
+      }
+
+
+      /* PRODUCTS */
 
       .cart-items-card {
         border-radius: 14px;
       }
 
+
       .cart-section-heading {
         padding: 15px;
       }
+
 
       .cart-section-heading h2 {
         font-size: 16px;
       }
 
+
       .cart-item {
-        grid-template-columns: 78px minmax(0, 1fr);
+        grid-template-columns:
+          78px
+          minmax(0, 1fr);
+
         gap: 13px;
+
         padding: 15px;
       }
+
 
       .cart-item-image {
         width: 78px;
         height: 78px;
       }
 
+
       .cart-item-details h3 {
         font-size: 14px;
       }
+
 
       .cart-current-price {
         font-size: 15px;
       }
 
+
       .cart-item-total {
         grid-column: 2;
-        text-align: left;
+
         margin-top: -5px;
+
+        text-align: left;
       }
+
 
       .cart-item-total strong {
         font-size: 15px;
       }
+
 
       .cart-quantity-btn {
         width: 32px;
         height: 31px;
       }
 
+
       .cart-item-quantity {
         width: 34px;
       }
+
 
       .cart-remove-btn {
         font-size: 12px;
       }
 
-      .cart-summary {
-        display: none;
-      }
+
+      /* EXTRA CARDS */
 
       .cart-extra-card {
         padding: 16px;
+
         border-radius: 14px;
       }
 
+
       .tip-options {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+          repeat(2, 1fr);
       }
+
+
+      /* MOBILE CHECKOUT BAR */
 
       .mobile-checkout-bar {
         position: fixed;
+
         left: 0;
         right: 0;
         bottom: 0;
+
         z-index: 1000;
+
         display: flex;
+
         align-items: center;
         justify-content: space-between;
+
         gap: 15px;
+
         padding: 11px 14px;
-        background: rgba(255, 255, 255, .96);
+
         border-top: 1px solid #dfe3ea;
-        box-shadow: 0 -5px 20px rgba(7, 27, 58, .09);
+
+        background:
+          rgba(255, 255, 255, 0.97);
+
+        box-shadow:
+          0 -5px 20px
+          rgba(7, 27, 58, 0.09);
+
         backdrop-filter: blur(10px);
       }
 
+
       .mobile-total-label {
+        display: block;
+
         color: #6b7280;
+
         font-size: 11px;
         font-weight: 700;
+
         text-transform: uppercase;
       }
 
+
       .mobile-total {
         display: block;
+
+        margin-top: 2px;
+
         color: #071b3a;
+
         font-size: 18px;
         font-weight: 900;
-        margin-top: 2px;
       }
 
+
       .mobile-proceed-btn {
+        min-width: 130px;
+
+        padding: 13px 19px;
+
         border: 0;
         border-radius: 11px;
+
         background: #ff6b00;
-        color: #fff;
-        padding: 13px 19px;
-        min-width: 130px;
+        color: #ffffff;
+
         font-size: 14px;
         font-weight: 800;
+
         cursor: pointer;
       }
 
     }
+
+
+    /* =========================================================
+       VERY SMALL PHONES
+       ========================================================= */
+
+    @media (max-width: 380px) {
+
+      .cart-share-btn {
+        padding: 8px 10px;
+
+        font-size: 12px;
+      }
+
+
+      .cart-page-title h1 {
+        font-size: 20px;
+      }
+
+
+      .cart-summary-header {
+        padding: 13px;
+      }
+
+
+      .summary-content {
+        padding: 13px;
+      }
+
+
+      .mobile-proceed-btn {
+        min-width: 112px;
+
+        padding: 12px 14px;
+      }
+
+    }
+
   </style>
+
 </head>
 
 
 <body>
+
 
   <!-- =======================================================
        HEADER
@@ -772,11 +1249,17 @@
 
     <div class="container header-inner">
 
-      <a href="index.html" class="logo">
+
+      <a
+        href="index.html"
+        class="logo"
+      >
+
         <img
           src="assets/logo.png"
           alt="ZynexCart"
         >
+
       </a>
 
 
@@ -800,6 +1283,7 @@
           autocomplete="off"
         >
 
+
         <button
           type="submit"
           aria-label="Search"
@@ -811,6 +1295,7 @@
 
 
       <nav class="header-actions">
+
 
         <a
           href="login.html"
@@ -835,6 +1320,7 @@
 
         </a>
 
+
       </nav>
 
     </div>
@@ -844,35 +1330,42 @@
 
 
   <!-- =======================================================
-       MAIN CART
+       MAIN
        ======================================================= -->
 
   <main class="container cart-page">
 
 
-    <!-- TOP BAR -->
+    <!-- TOP -->
 
     <div class="cart-topbar">
 
+
       <div class="cart-page-title">
+
 
         <a
           href="products.html"
           class="cart-back-btn"
           aria-label="Back to products"
         >
-          ←
+          ⬅️
         </a>
+
 
         <div>
 
-          <h1>My Cart</h1>
+          <h1>
+            My Cart
+          </h1>
+
 
           <p>
             Review your items before checkout.
           </p>
 
         </div>
+
 
       </div>
 
@@ -885,6 +1378,7 @@
         ↗ Share
       </button>
 
+
     </div>
 
 
@@ -893,9 +1387,11 @@
 
     <section class="cart-savings-banner">
 
+
       <span class="cart-savings-label">
         Your total savings
       </span>
+
 
       <strong
         class="cart-savings-value"
@@ -904,16 +1400,19 @@
         ₹0
       </strong>
 
+
     </section>
 
 
 
+    <!-- CART LAYOUT -->
+
     <div class="cart-layout">
 
 
-      <!-- =================================================
-           LEFT COLUMN
-           ================================================= -->
+      <!-- ===================================================
+           LEFT
+           =================================================== -->
 
       <div class="cart-left-column">
 
@@ -922,6 +1421,7 @@
 
         <section class="cart-delivery-card">
 
+
           <div
             class="delivery-icon"
             aria-hidden="true"
@@ -929,17 +1429,22 @@
             ⏱️
           </div>
 
+
           <div class="delivery-content">
+
 
             <strong>
               Fast delivery from ZynexCart
             </strong>
 
+
             <span id="shipmentText">
               Shipment of 0 items
             </span>
 
+
           </div>
+
 
         </section>
 
@@ -949,28 +1454,33 @@
 
         <section class="cart-items-section">
 
+
           <div class="cart-items-card">
 
+
             <div class="cart-section-heading">
+
 
               <h2>
                 Cart Items
               </h2>
 
+
               <span id="cartItemHeadingCount">
                 0 items
               </span>
+
 
             </div>
 
 
             <div id="cartItems">
-
-              <!-- Products will be rendered here -->
-
+              <!-- Cart products -->
             </div>
 
+
           </div>
+
 
         </section>
 
@@ -980,17 +1490,21 @@
 
         <section class="cart-extra-card">
 
+
           <h2>
             Tip your delivery partner
           </h2>
 
+
           <p>
-            Your kindness means a lot. Your selected tip
-            will be added to your order.
+            Your kindness means a lot.
+            Your selected tip will be added
+            to your order.
           </p>
 
 
           <div class="tip-options">
+
 
             <button
               type="button"
@@ -1000,6 +1514,7 @@
               ₹20
             </button>
 
+
             <button
               type="button"
               class="tip-option"
@@ -1007,6 +1522,7 @@
             >
               ₹30
             </button>
+
 
             <button
               type="button"
@@ -1016,6 +1532,7 @@
               ₹50
             </button>
 
+
             <button
               type="button"
               class="tip-option"
@@ -1024,25 +1541,31 @@
               No Tip
             </button>
 
+
           </div>
+
 
         </section>
 
 
 
-        <!-- CANCELLATION POLICY -->
+        <!-- POLICY -->
 
         <section class="cart-extra-card">
+
 
           <h2>
             Cancellation Policy
           </h2>
 
+
           <p class="policy-text">
-            Orders can be cancelled before the order
-            enters the packing stage. Refund eligibility
-            will depend on the order and payment status.
+            Orders can be cancelled before the
+            order enters the packing stage.
+            Refund eligibility will depend on
+            the order and payment status.
           </p>
+
 
         </section>
 
@@ -1051,11 +1574,12 @@
 
 
 
-      <!-- =================================================
-           RIGHT COLUMN — BILL DETAILS
-           ================================================= -->
+      <!-- ===================================================
+           BILL DETAILS
+           =================================================== -->
 
       <aside class="cart-summary">
+
 
         <div class="cart-summary-header">
 
@@ -1106,7 +1630,6 @@
 
             <strong
               class="delivery-free"
-              id="summaryDelivery"
             >
               FREE
             </strong>
@@ -1172,28 +1695,33 @@
             ← Continue Shopping
           </a>
 
+
         </div>
+
 
       </aside>
 
 
     </div>
 
+
   </main>
 
 
 
   <!-- =======================================================
-       MOBILE STICKY CHECKOUT
+       MOBILE CHECKOUT
        ======================================================= -->
 
   <div class="mobile-checkout-bar">
+
 
     <div>
 
       <span class="mobile-total-label">
         Total
       </span>
+
 
       <strong
         class="mobile-total"
@@ -1213,6 +1741,7 @@
       Proceed →
     </button>
 
+
   </div>
 
 
@@ -1223,7 +1752,9 @@
 
   <footer class="site-footer">
 
+
     <div class="container">
+
 
       <div class="footer-bottom">
 
@@ -1233,7 +1764,9 @@
 
       </div>
 
+
     </div>
+
 
   </footer>
 
@@ -1248,24 +1781,9 @@
     "use strict";
 
 
-    /*
-     * ========================================================
-     * ZYNEXCART CART PAGE
-     * ========================================================
-     *
-     * Uses the same modular cart system as the main website.
-     *
-     * No separate cart storage is created.
-     *
-     * Cart data comes from:
-     *
-     * js/core/storage.js
-     * js/cart/cart.js
-     * js/cart/cart-actions.js
-     *
-     * ========================================================
-     */
-
+    /* ========================================================
+       MODULES
+       ======================================================== */
 
     const cartScripts = [
 
@@ -1289,7 +1807,7 @@
     function loadScript(src) {
 
       return new Promise(
-        (resolve, reject) => {
+        function(resolve, reject) {
 
           const script =
             document.createElement("script");
@@ -1301,11 +1819,11 @@
           script.onload = resolve;
 
 
-          script.onerror = () => {
+          script.onerror = function() {
 
             reject(
               new Error(
-                `Unable to load ${src}`
+                "Unable to load " + src
               )
             );
 
@@ -1321,9 +1839,14 @@
 
 
 
+    /* ========================================================
+       INITIALIZE
+       ======================================================== */
+
     async function initializeCartPage() {
 
       try {
+
 
         for (
           const script of cartScripts
@@ -1336,11 +1859,11 @@
 
         initializeCartRendering();
 
-        initializeCartSearch();
+        initializeSearch();
 
-        initializeCartShare();
+        initializeShare();
 
-        initializeTipSelection();
+        initializeTips();
 
 
       } catch (error) {
@@ -1360,7 +1883,7 @@
        SEARCH
        ======================================================== */
 
-    function initializeCartSearch() {
+    function initializeSearch() {
 
       if (
 
@@ -1385,6 +1908,7 @@
        ======================================================== */
 
     function initializeCartRendering() {
+
 
       const cartCore =
         window.ZynexCartCart;
@@ -1423,7 +1947,240 @@
 
 
 
+      /*
+       * IMPORTANT:
+       * Keep tip outside renderCart so
+       * Grand Total can always calculate.
+       */
+
+      let currentTip = 0;
+
+
+
+      /* ======================================================
+         FORMAT HELPERS
+         ====================================================== */
+
+      function updateText(
+        id,
+        value
+      ) {
+
+        const element =
+          document.getElementById(id);
+
+
+        if (element) {
+
+          element.textContent =
+            value;
+
+        }
+
+      }
+
+
+
+      function getItemMRP(item) {
+
+        const values = [
+
+          item.mrp,
+
+          item.originalPrice,
+
+          item.compareAtPrice,
+
+          item.oldPrice,
+
+          item.strikePrice
+
+        ];
+
+
+        for (
+          const value of values
+        ) {
+
+          const number =
+            Number(value);
+
+
+          if (
+
+            Number.isFinite(number) &&
+            number > 0
+
+          ) {
+
+            return number;
+
+          }
+
+        }
+
+
+        return 0;
+
+      }
+
+
+
+      function calculateSavings(cart) {
+
+        return cart.reduce(
+          function(total, item) {
+
+
+            const price =
+              Number(item.price) || 0;
+
+
+            const mrp =
+              getItemMRP(item);
+
+
+            const quantity =
+              Number(item.quantity) || 0;
+
+
+            if (mrp > price) {
+
+              return total +
+                (
+                  (mrp - price) *
+                  quantity
+                );
+
+            }
+
+
+            return total;
+
+          },
+          0
+        );
+
+      }
+
+
+
+      /* ======================================================
+         GRAND TOTAL
+         ====================================================== */
+
+      function updateGrandTotal() {
+
+
+        const itemsTotal =
+          cartCore.getCartTotal();
+
+
+        const deliveryCharge = 0;
+
+
+        const handlingCharge = 0;
+
+
+        const tip =
+          Number(currentTip) || 0;
+
+
+        const grandTotal =
+          itemsTotal +
+          deliveryCharge +
+          handlingCharge +
+          tip;
+
+
+        updateText(
+          "summaryTip",
+          utils.formatPrice(tip)
+        );
+
+
+        updateText(
+          "summaryHandling",
+          utils.formatPrice(
+            handlingCharge
+          )
+        );
+
+
+        updateText(
+          "grandTotal",
+          utils.formatPrice(
+            grandTotal
+          )
+        );
+
+
+        updateText(
+          "mobileGrandTotal",
+          utils.formatPrice(
+            grandTotal
+          )
+        );
+
+      }
+
+
+
+      /* ======================================================
+         HEADER CART
+         ====================================================== */
+
+      function updateHeaderCart() {
+
+
+        const count =
+          cartCore.getCartItemCount();
+
+
+        const cartCount =
+          document.getElementById(
+            "cartCount"
+          );
+
+
+        const cartItemsText =
+          document.getElementById(
+            "cartItemsText"
+          );
+
+
+        if (cartCount) {
+
+          cartCount.textContent =
+            count;
+
+        }
+
+
+        if (cartItemsText) {
+
+          cartItemsText.innerHTML =
+
+            `<span id="cartCount">${
+              count
+            }</span> ${
+              count === 1
+                ? "item"
+                : "items"
+            }`;
+
+        }
+
+      }
+
+
+
+      /* ======================================================
+         RENDER CART
+         ====================================================== */
+
       function renderCart() {
+
 
         const cart =
           cartCore.getCart();
@@ -1442,66 +2199,62 @@
 
 
 
-        /* --------------------------------------------
-           UPDATE COMMON CART INFORMATION
-           -------------------------------------------- */
+        /* BASIC INFORMATION */
 
         updateText(
           "cartSavings",
-          utils.formatPrice(savings)
+          utils.formatPrice(
+            savings
+          )
         );
 
 
         updateText(
           "shipmentText",
-          `Shipment of ${itemCount} ${
+          "Shipment of " +
+          itemCount +
+          " " +
+          (
             itemCount === 1
               ? "item"
               : "items"
-          }`
+          )
         );
 
 
         updateText(
           "cartItemHeadingCount",
-          `${itemCount} ${
+          itemCount +
+          " " +
+          (
             itemCount === 1
               ? "item"
               : "items"
-          }`
+          )
         );
 
 
         updateText(
           "summaryItemsTotal",
-          utils.formatPrice(itemsTotal)
+          utils.formatPrice(
+            itemsTotal
+          )
         );
 
 
         updateText(
           "summarySavings",
-          utils.formatPrice(savings)
-        );
-
-
-        updateText(
-          "summaryDelivery",
-          "FREE"
-        );
-
-
-        updateText(
-          "summaryHandling",
-          utils.formatPrice(0)
+          utils.formatPrice(
+            savings
+          )
         );
 
 
 
-        /* --------------------------------------------
-           EMPTY CART
-           -------------------------------------------- */
+        /* EMPTY CART */
 
         if (!cart.length) {
+
 
           cartItemsContainer.innerHTML = `
 
@@ -1516,8 +2269,8 @@
               </h2>
 
               <p>
-                Add your favourite everyday products
-                and they will appear here.
+                Add your favourite everyday
+                products and they will appear here.
               </p>
 
               <a
@@ -1532,7 +2285,7 @@
           `;
 
 
-          updateTipTotal(0);
+          updateGrandTotal();
 
           updateHeaderCart();
 
@@ -1542,14 +2295,12 @@
 
 
 
-        /* --------------------------------------------
-           PRODUCT ITEMS
-           -------------------------------------------- */
+        /* PRODUCT LIST */
 
         cartItemsContainer.innerHTML =
 
           cart.map(
-            function (item) {
+            function(item) {
 
 
               const price =
@@ -1570,7 +2321,12 @@
 
               const itemSaving =
                 mrp > price
-                  ? (mrp - price) * quantity
+
+                  ? (
+                      (mrp - price) *
+                      quantity
+                    )
+
                   : 0;
 
 
@@ -1585,7 +2341,9 @@
                 <article
                   class="cart-item"
                   data-product-id="${
-                    utils.escapeHTML(item.id)
+                    utils.escapeHTML(
+                      item.id
+                    )
                   }"
                 >
 
@@ -1594,7 +2352,9 @@
 
                     <img
                       src="${
-                        utils.escapeHTML(image)
+                        utils.escapeHTML(
+                          image
+                        )
                       }"
                       alt="${
                         utils.escapeHTML(
@@ -1613,68 +2373,101 @@
 
 
                     <h3>
-
                       ${
                         utils.escapeHTML(
                           item.name ||
                           "Product"
                         )
                       }
-
                     </h3>
 
 
                     ${
                       item.variant
+
                         ? `
-                          <div class="cart-item-variant">
-                            ${utils.escapeHTML(
-                              item.variant
-                            )}
+
+                          <div
+                            class="cart-item-variant"
+                          >
+                            ${
+                              utils.escapeHTML(
+                                item.variant
+                              )
+                            }
                           </div>
+
                         `
+
                         : ""
                     }
 
 
+                    <div
+                      class="cart-price-row"
+                    >
 
-                    <div class="cart-price-row">
 
                       <strong
                         class="cart-current-price"
                       >
-                        ${utils.formatPrice(price)}
+                        ${
+                          utils.formatPrice(
+                            price
+                          )
+                        }
                       </strong>
 
 
                       ${
                         mrp > price
+
                           ? `
-                            <span class="cart-mrp">
-                              ${utils.formatPrice(mrp)}
+
+                            <span
+                              class="cart-mrp"
+                            >
+                              ${
+                                utils.formatPrice(
+                                  mrp
+                                )
+                              }
                             </span>
+
                           `
+
                           : ""
                       }
 
 
                       ${
                         itemSaving > 0
+
                           ? `
-                            <span class="cart-save-text">
-                              Save ${utils.formatPrice(
-                                itemSaving
-                              )}
+
+                            <span
+                              class="cart-save-text"
+                            >
+                              Save ${
+                                utils.formatPrice(
+                                  itemSaving
+                                )
+                              }
                             </span>
+
                           `
+
                           : ""
                       }
+
 
                     </div>
 
 
 
-                    <div class="cart-item-actions">
+                    <div
+                      class="cart-item-actions"
+                    >
 
 
                       <div
@@ -1687,7 +2480,9 @@
                           class="cart-quantity-btn"
                           data-action="decrease"
                           data-product-id="${
-                            utils.escapeHTML(item.id)
+                            utils.escapeHTML(
+                              item.id
+                            )
                           }"
                           aria-label="Decrease quantity"
                         >
@@ -1707,7 +2502,9 @@
                           class="cart-quantity-btn"
                           data-action="increase"
                           data-product-id="${
-                            utils.escapeHTML(item.id)
+                            utils.escapeHTML(
+                              item.id
+                            )
                           }"
                           aria-label="Increase quantity"
                         >
@@ -1723,7 +2520,9 @@
                         class="cart-remove-btn"
                         data-action="remove"
                         data-product-id="${
-                          utils.escapeHTML(item.id)
+                          utils.escapeHTML(
+                            item.id
+                          )
                         }"
                       >
                         Remove
@@ -1732,14 +2531,21 @@
 
                     </div>
 
+
                   </div>
 
 
 
-                  <div class="cart-item-total">
+                  <div
+                    class="cart-item-total"
+                  >
 
                     <strong>
-                      ${utils.formatPrice(itemTotal)}
+                      ${
+                        utils.formatPrice(
+                          itemTotal
+                        )
+                      }
                     </strong>
 
                   </div>
@@ -1753,10 +2559,7 @@
           ).join("");
 
 
-        updateTipTotal(
-          currentTip
-        );
-
+        updateGrandTotal();
 
         updateHeaderCart();
 
@@ -1765,94 +2568,12 @@
 
 
       /* ======================================================
-         MRP / SAVINGS
-         ====================================================== */
-
-      function getItemMRP(item) {
-
-        const possibleMRP = [
-
-          item.mrp,
-
-          item.originalPrice,
-
-          item.compareAtPrice,
-
-          item.oldPrice,
-
-          item.strikePrice
-
-        ];
-
-
-        for (
-          const value of possibleMRP
-        ) {
-
-          const number =
-            Number(value);
-
-
-          if (
-            Number.isFinite(number) &&
-            number > 0
-          ) {
-
-            return number;
-
-          }
-
-        }
-
-
-        return 0;
-
-      }
-
-
-
-      function calculateSavings(cart) {
-
-        return cart.reduce(
-          function (total, item) {
-
-            const price =
-              Number(item.price) || 0;
-
-
-            const mrp =
-              getItemMRP(item);
-
-
-            const quantity =
-              Number(item.quantity) || 0;
-
-
-            if (mrp > price) {
-
-              return total +
-                ((mrp - price) * quantity);
-
-            }
-
-
-            return total;
-
-          },
-          0
-        );
-
-      }
-
-
-
-      /* ======================================================
-         CART BUTTON ACTIONS
+         PRODUCT ACTIONS
          ====================================================== */
 
       cartItemsContainer.addEventListener(
         "click",
-        function (event) {
+        function(event) {
 
 
           const button =
@@ -1930,6 +2651,7 @@
 
       function proceedToCheckout() {
 
+
         const cart =
           cartCore.getCart();
 
@@ -1986,12 +2708,38 @@
 
 
       /* ======================================================
-         STORAGE SYNC
+         CART EVENT
+         ====================================================== */
+
+      if (
+        window.ZynexCartEvents
+      ) {
+
+        window.ZynexCartEvents.on(
+
+          window.ZynexCartEvents
+            .EVENTS.CART_UPDATED,
+
+          function() {
+
+            renderCart();
+
+          }
+
+        );
+
+      }
+
+
+
+      /* ======================================================
+         STORAGE
          ====================================================== */
 
       window.addEventListener(
         "storage",
-        function (event) {
+        function(event) {
+
 
           if (
 
@@ -2011,184 +2759,20 @@
 
 
 
-      /* ======================================================
-         CART EVENT
-         ====================================================== */
-
-      if (
-        window.ZynexCartEvents
-      ) {
-
-        window.ZynexCartEvents.on(
-
-          window.ZynexCartEvents
-            .EVENTS.CART_UPDATED,
-
-          function () {
-
-            renderCart();
-
-          }
-
-        );
-
-      }
-
-
+      /* FIRST RENDER */
 
       renderCart();
-
-
-      /* ======================================================
-         HEADER
-         ====================================================== */
-
-      function updateHeaderCart() {
-
-        const count =
-          cartCore.getCartItemCount();
-
-
-        const cartCount =
-          document.getElementById(
-            "cartCount"
-          );
-
-
-        const cartItemsText =
-          document.getElementById(
-            "cartItemsText"
-          );
-
-
-        if (cartCount) {
-
-          cartCount.textContent =
-            count;
-
-        }
-
-
-        if (cartItemsText) {
-
-          cartItemsText.innerHTML =
-            `<span id="cartCount">${
-              count
-            }</span> ${
-              count === 1
-                ? "item"
-                : "items"
-            }`;
-
-        }
-
-      }
-
-
-
-      /* ======================================================
-         TIP
-         ====================================================== */
-
-      let currentTip = 0;
-
-
-      function updateTipTotal(
-        tip
-      ) {
-
-        updateText(
-          "summaryTip",
-          utils.formatPrice(tip)
-        );
-
-
-        const itemsTotal =
-          cartCore.getCartTotal();
-
-
-        const delivery =
-          0;
-
-
-        const handling =
-          0;
-
-
-        const grandTotal =
-          itemsTotal +
-          delivery +
-          handling +
-          tip;
-
-
-        updateText(
-          "grandTotal",
-          utils.formatPrice(
-            grandTotal
-          )
-        );
-
-
-        updateText(
-          "mobileGrandTotal",
-          utils.formatPrice(
-            grandTotal
-          )
-        );
-
-      }
-
-
-
-      window.setZynexCartTip =
-        function (tip) {
-
-          currentTip =
-            Math.max(
-              0,
-              Number(tip) || 0
-            );
-
-
-          updateTipTotal(
-            currentTip
-          );
-
-        };
-
-
-
-      function updateText(
-        id,
-        value
-      ) {
-
-        const element =
-          document.getElementById(
-            id
-          );
-
-
-        if (element) {
-
-          element.textContent =
-            value;
-
-        }
-
-      }
-
 
     }
 
 
 
     /* ========================================================
-       TIP SELECTION
+       TIP SYSTEM
        ======================================================== */
 
-    function initializeTipSelection() {
+    function initializeTips() {
+
 
       const buttons =
         document.querySelectorAll(
@@ -2197,15 +2781,16 @@
 
 
       buttons.forEach(
-        function (button) {
+        function(button) {
+
 
           button.addEventListener(
             "click",
-            function () {
+            function() {
 
 
               buttons.forEach(
-                function (item) {
+                function(item) {
 
                   item.classList.remove(
                     "active"
@@ -2244,6 +2829,103 @@
         }
       );
 
+
+      /*
+       * This function is connected to
+       * the cart renderer after initialization.
+       */
+
+      window.setZynexCartTip =
+        function(tip) {
+
+
+          const value =
+            Math.max(
+              0,
+              Number(tip) || 0
+            );
+
+
+          /*
+           * Find current cart totals directly.
+           */
+
+          const cartCore =
+            window.ZynexCartCart;
+
+
+          const utils =
+            window.ZynexCartUtils;
+
+
+          if (
+            !cartCore ||
+            !utils
+          ) {
+
+            return;
+
+          }
+
+
+          const itemsTotal =
+            cartCore.getCartTotal();
+
+
+          const grandTotal =
+            itemsTotal +
+            value;
+
+
+          const summaryTip =
+            document.getElementById(
+              "summaryTip"
+            );
+
+
+          const grandTotalElement =
+            document.getElementById(
+              "grandTotal"
+            );
+
+
+          const mobileTotal =
+            document.getElementById(
+              "mobileGrandTotal"
+            );
+
+
+          if (summaryTip) {
+
+            summaryTip.textContent =
+              utils.formatPrice(
+                value
+              );
+
+          }
+
+
+          if (grandTotalElement) {
+
+            grandTotalElement.textContent =
+              utils.formatPrice(
+                grandTotal
+              );
+
+          }
+
+
+          if (mobileTotal) {
+
+            mobileTotal.textContent =
+              utils.formatPrice(
+                grandTotal
+              );
+
+          }
+
+        };
+
     }
 
 
@@ -2252,7 +2934,8 @@
        SHARE
        ======================================================== */
 
-    function initializeCartShare() {
+    function initializeShare() {
+
 
       const shareButton =
         document.getElementById(
@@ -2267,7 +2950,7 @@
 
       shareButton.addEventListener(
         "click",
-        async function () {
+        async function() {
 
 
           const shareData = {
@@ -2286,6 +2969,7 @@
 
           try {
 
+
             if (
               navigator.share
             ) {
@@ -2294,7 +2978,9 @@
                 shareData
               );
 
-            } else {
+            } else if (
+              navigator.clipboard
+            ) {
 
               await navigator.clipboard.writeText(
                 window.location.href
@@ -2305,7 +2991,15 @@
                 "Cart link copied."
               );
 
+            } else {
+
+              alert(
+                "Cart link: " +
+                window.location.href
+              );
+
             }
+
 
           } catch (error) {
 
@@ -2331,4 +3025,5 @@
   </script>
 
 </body>
+
 </html>
