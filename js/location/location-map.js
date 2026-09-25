@@ -1,4 +1,6 @@
 // ZYNEXCART — LOCATION MAP
+// Optimized production version
+// Prevents duplicate map initialization and repeated location requests.
 
 (function () {
   "use strict";
@@ -17,84 +19,171 @@
   const config = locationCore.LOCATION_CONFIG;
   const state = locationCore.locationState;
 
-  /**
-   * Load Leaflet CSS + JavaScript
-   */
+  /* =====================================================
+     INTERNAL LOADING STATE
+     ===================================================== */
+
+  let leafletPromise = null;
+  let mapInitializationPromise = null;
+  let lastReverseGeocodeKey = null;
+  let reverseGeocodePromise = null;
+
+
+  /* =====================================================
+     LOAD LEAFLET
+     ===================================================== */
+
   function loadLeaflet() {
-    return new Promise(function (resolve, reject) {
-      if (window.L) {
-        state.leafletLoaded = true;
-        resolve();
-        return;
-      }
+
+    if (window.L) {
+      state.leafletLoaded = true;
+      return Promise.resolve();
+    }
+
+    if (leafletPromise) {
+      return leafletPromise;
+    }
+
+    leafletPromise = new Promise(function (resolve, reject) {
 
       const existingScript =
         document.querySelector(
           'script[data-zynexcart-leaflet="true"]'
         );
 
-      if (existingScript) {
-        existingScript.addEventListener(
-          "load",
-          function () {
-            state.leafletLoaded = true;
-            resolve();
-          }
-        );
-
-        existingScript.addEventListener(
-          "error",
-          reject
-        );
-
-        return;
-      }
-
       const existingCSS =
         document.querySelector(
           'link[data-zynexcart-leaflet="true"]'
         );
 
+
+      /* ---------- CSS ---------- */
+
       if (!existingCSS) {
-        const css = document.createElement("link");
+
+        const css =
+          document.createElement("link");
 
         css.rel = "stylesheet";
+
         css.href =
           "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
 
-        css.dataset.zynexcartLeaflet = "true";
+        css.dataset.zynexcartLeaflet =
+          "true";
 
         document.head.appendChild(css);
       }
 
-      const script = document.createElement("script");
+
+      /* ---------- EXISTING SCRIPT ---------- */
+
+      if (existingScript) {
+
+        if (window.L) {
+
+          state.leafletLoaded = true;
+
+          resolve();
+
+          return;
+        }
+
+        existingScript.addEventListener(
+          "load",
+          function () {
+
+            state.leafletLoaded = true;
+
+            resolve();
+
+          },
+          { once: true }
+        );
+
+        existingScript.addEventListener(
+          "error",
+          function () {
+
+            leafletPromise = null;
+
+            reject(
+              new Error(
+                "Unable to load Leaflet."
+              )
+            );
+
+          },
+          { once: true }
+        );
+
+        return;
+      }
+
+
+      /* ---------- NEW SCRIPT ---------- */
+
+      const script =
+        document.createElement("script");
 
       script.src =
         "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
 
       script.async = true;
 
-      script.dataset.zynexcartLeaflet = "true";
+      script.dataset.zynexcartLeaflet =
+        "true";
+
 
       script.onload = function () {
+
+        if (!window.L) {
+
+          leafletPromise = null;
+
+          reject(
+            new Error(
+              "Leaflet loaded but was not available."
+            )
+          );
+
+          return;
+        }
+
         state.leafletLoaded = true;
+
         resolve();
+
       };
+
 
       script.onerror = function () {
+
+        leafletPromise = null;
+
         reject(
-          new Error("Unable to load Leaflet.")
+          new Error(
+            "Unable to load Leaflet."
+          )
         );
+
       };
 
-      document.body.appendChild(script);
+
+      document.head.appendChild(script);
+
     });
+
+    return leafletPromise;
   }
 
-  /**
-   * Initialize map
-   */
+
+  /* =====================================================
+     INITIALIZE MAP
+     ===================================================== */
+
   async function initializeMap() {
+
     const elements =
       locationUI.getLocationElements();
 
@@ -102,92 +191,212 @@
       return;
     }
 
-    try {
-      await loadLeaflet();
 
-      if (!state.map) {
-        state.map = L.map(
-          elements.mapContainer,
-          {
-            zoomControl: true,
-            attributionControl: true
-          }
-        );
+    /* Prevent duplicate initialization */
 
-        L.tileLayer(
-          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          {
-            maxZoom: 19,
-            attribution:
-              '&copy; OpenStreetMap contributors'
-          }
-        ).addTo(state.map);
-
-        state.map.on(
-          "click",
-          function (event) {
-            const latitude =
-              event.latlng.lat;
-
-            const longitude =
-              event.latlng.lng;
-
-            setMapPosition(
-              latitude,
-              longitude,
-              true
-            );
-          }
-        );
-      }
+    if (state.map) {
 
       setTimeout(function () {
-        state.map.invalidateSize();
-      }, 100);
 
-      if (
-        Number.isFinite(Number(state.latitude)) &&
-        Number.isFinite(Number(state.longitude))
-      ) {
-        setMapPosition(
-          state.latitude,
-          state.longitude,
-          false
-        );
-      } else {
-        state.map.setView(
-          [
-            config.defaultLatitude,
-            config.defaultLongitude
-          ],
-          12
-        );
-      }
+        if (state.map) {
+          state.map.invalidateSize();
+        }
+
+      }, 50);
+
+      updateMapPositionFromState();
 
       updateMapUI();
 
-    } catch (error) {
-      console.error(
-        "ZynexCart map error:",
-        error
-      );
-
-      locationUI.showLocationError(
-        "Unable to load the map. Please try again."
-      );
+      return state.map;
     }
+
+
+    /* Prevent multiple initializeMap calls */
+
+    if (mapInitializationPromise) {
+      return mapInitializationPromise;
+    }
+
+
+    mapInitializationPromise =
+      (async function () {
+
+        try {
+
+          await loadLeaflet();
+
+
+          /* Map may have been created while waiting */
+
+          if (state.map) {
+
+            state.map.invalidateSize();
+
+            updateMapPositionFromState();
+
+            updateMapUI();
+
+            return state.map;
+          }
+
+
+          /* Create map */
+
+          state.map =
+            L.map(
+              elements.mapContainer,
+              {
+                zoomControl: true,
+                attributionControl: true
+              }
+            );
+
+
+          /* OpenStreetMap */
+
+          L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+              maxZoom: 19,
+
+              attribution:
+                "&copy; OpenStreetMap contributors"
+            }
+          ).addTo(state.map);
+
+
+          /* Map click */
+
+          state.map.on(
+            "click",
+            function (event) {
+
+              const latitude =
+                event.latlng.lat;
+
+              const longitude =
+                event.latlng.lng;
+
+              setMapPosition(
+                latitude,
+                longitude,
+                true
+              );
+
+            }
+          );
+
+
+          /* Correct map size */
+
+          setTimeout(function () {
+
+            if (state.map) {
+              state.map.invalidateSize();
+            }
+
+          }, 50);
+
+
+          /* Restore saved/current position */
+
+          updateMapPositionFromState();
+
+
+          updateMapUI();
+
+
+          return state.map;
+
+        } catch (error) {
+
+          console.error(
+            "ZynexCart map error:",
+            error
+          );
+
+          state.map = null;
+
+          locationUI.showLocationError(
+            "Unable to load the map. Please try again."
+          );
+
+          throw error;
+
+        } finally {
+
+          mapInitializationPromise =
+            null;
+
+        }
+
+      })();
+
+
+    return mapInitializationPromise;
   }
 
-  /**
-   * Set map position
-   */
+
+  /* =====================================================
+     UPDATE MAP POSITION FROM STATE
+     ===================================================== */
+
+  function updateMapPositionFromState() {
+
+    if (!state.map) {
+      return;
+    }
+
+
+    if (
+      Number.isFinite(
+        Number(state.latitude)
+      ) &&
+      Number.isFinite(
+        Number(state.longitude)
+      )
+    ) {
+
+      setMapPosition(
+        state.latitude,
+        state.longitude,
+        false
+      );
+
+      return;
+    }
+
+
+    state.map.setView(
+      [
+        config.defaultLatitude,
+        config.defaultLongitude
+      ],
+      12,
+      {
+        animate: false
+      }
+    );
+  }
+
+
+  /* =====================================================
+     SET MAP POSITION
+     ===================================================== */
+
   function setMapPosition(
     latitude,
     longitude,
     reverseGeocode = false
   ) {
-    const lat = Number(latitude);
-    const lng = Number(longitude);
+
+    const lat =
+      Number(latitude);
+
+    const lng =
+      Number(longitude);
+
 
     if (
       !Number.isFinite(lat) ||
@@ -196,15 +405,20 @@
       return;
     }
 
+
     locationCore.setCoordinates(
       lat,
       lng,
       state.accuracy
     );
 
+
     if (!state.map) {
       return;
     }
+
+
+    /* Move map */
 
     state.map.setView(
       [lat, lng],
@@ -213,23 +427,31 @@
         16
       ),
       {
-        animate: true
+        animate: false
       }
     );
 
+
+    /* Create marker once */
+
     if (!state.marker) {
-      state.marker = L.marker(
-        [lat, lng],
-        {
-          draggable: true
-        }
-      ).addTo(state.map);
+
+      state.marker =
+        L.marker(
+          [lat, lng],
+          {
+            draggable: true
+          }
+        ).addTo(state.map);
+
 
       state.marker.on(
         "dragend",
         function () {
+
           const position =
             state.marker.getLatLng();
+
 
           state.latitude =
             position.lat;
@@ -237,52 +459,83 @@
           state.longitude =
             position.lng;
 
+
           reverseGeocodeLocation(
             position.lat,
             position.lng
           );
+
         }
       );
+
     } else {
+
       state.marker.setLatLng(
         [lat, lng]
       );
+
     }
+
 
     updateMapUI();
 
+
     if (reverseGeocode) {
+
       reverseGeocodeLocation(
         lat,
         lng
       );
+
     }
+
   }
 
-  /**
-   * Open map at a location
-   */
+
+  /* =====================================================
+     OPEN MAP WITH LOCATION
+     ===================================================== */
+
   async function openMapWithLocation(
     latitude,
     longitude,
     reverseGeocode = true
   ) {
+
     locationUI.openMapScreen();
 
-    await initializeMap();
 
-    setMapPosition(
-      latitude,
-      longitude,
-      reverseGeocode
-    );
+    try {
+
+      await initializeMap();
+
+
+      setMapPosition(
+        latitude,
+        longitude,
+        reverseGeocode
+      );
+
+    } catch (error) {
+
+      console.error(
+        "ZynexCart: Unable to open map.",
+        error
+      );
+
+    }
+
   }
 
-  /**
-   * Use browser GPS location
-   */
+
+  /* =====================================================
+     USE CURRENT LOCATION
+     ===================================================== */
+
   function useCurrentLocation() {
+
     if (!navigator.geolocation) {
+
       locationUI.showLocationError(
         "Your browser does not support location services."
       );
@@ -290,27 +543,44 @@
       return;
     }
 
+
+    /* Prevent duplicate GPS requests */
+
     if (state.isLoadingLocation) {
       return;
     }
 
-    state.isLoadingLocation = true;
+
+    state.isLoadingLocation =
+      true;
+
 
     const elements =
       locationUI.getLocationElements();
 
+
+    /* Disable buttons */
+
     if (elements.currentLocationBtn) {
+
       elements.currentLocationBtn.disabled =
         true;
+
     }
+
 
     if (elements.mapCurrentLocationBtn) {
+
       elements.mapCurrentLocationBtn.disabled =
         true;
+
     }
 
+
     navigator.geolocation.getCurrentPosition(
+
       async function (position) {
+
         const latitude =
           position.coords.latitude;
 
@@ -320,6 +590,7 @@
         const accuracy =
           position.coords.accuracy;
 
+
         state.accuracy =
           Number.isFinite(
             Number(accuracy)
@@ -327,234 +598,378 @@
             ? Number(accuracy)
             : null;
 
-        state.isLoadingLocation = false;
 
-        if (elements.currentLocationBtn) {
-          elements.currentLocationBtn.disabled =
-            false;
-        }
+        state.isLoadingLocation =
+          false;
 
-        if (elements.mapCurrentLocationBtn) {
-          elements.mapCurrentLocationBtn.disabled =
-            false;
-        }
 
-        await openMapWithLocation(
-          latitude,
-          longitude,
-          true
+        enableLocationButtons(
+          elements
         );
+
+
+        try {
+
+          await openMapWithLocation(
+            latitude,
+            longitude,
+            true
+          );
+
+        } catch (error) {
+
+          console.error(
+            "ZynexCart: Current location map error.",
+            error
+          );
+
+        }
+
       },
 
+
       function (error) {
-        state.isLoadingLocation = false;
 
-        if (elements.currentLocationBtn) {
-          elements.currentLocationBtn.disabled =
-            false;
-        }
+        state.isLoadingLocation =
+          false;
 
-        if (elements.mapCurrentLocationBtn) {
-          elements.mapCurrentLocationBtn.disabled =
-            false;
-        }
+
+        enableLocationButtons(
+          elements
+        );
+
 
         let message =
           "Unable to detect your location.";
 
+
         if (error.code === 1) {
+
           message =
             "Location permission was denied. Please allow location access in your browser.";
-        }
 
-        if (error.code === 2) {
+        } else if (error.code === 2) {
+
           message =
             "Your location is currently unavailable. Please try again.";
-        }
 
-        if (error.code === 3) {
+        } else if (error.code === 3) {
+
           message =
             "Location request timed out. Please try again.";
+
         }
+
 
         locationUI.showLocationError(
           message
         );
+
       },
 
       config.geolocationOptions
+
     );
+
   }
 
-  /**
-   * Reverse geocode coordinates
-   */
+
+  /* =====================================================
+     ENABLE LOCATION BUTTONS
+     ===================================================== */
+
+  function enableLocationButtons(
+    elements
+  ) {
+
+    if (elements.currentLocationBtn) {
+
+      elements.currentLocationBtn.disabled =
+        false;
+
+    }
+
+
+    if (elements.mapCurrentLocationBtn) {
+
+      elements.mapCurrentLocationBtn.disabled =
+        false;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     REVERSE GEOCODING
+     ===================================================== */
+
   async function reverseGeocodeLocation(
     latitude,
     longitude
   ) {
-    try {
-      const url = new URL(
-        `${config.nominatimUrl}/reverse`
-      );
 
-      url.searchParams.set(
-        "format",
-        "jsonv2"
-      );
+    const lat =
+      Number(latitude);
 
-      url.searchParams.set(
-        "zoom",
-        "18"
-      );
+    const lng =
+      Number(longitude);
 
-      url.searchParams.set(
-        "addressdetails",
-        "1"
-      );
 
-      url.searchParams.set(
-        "lat",
-        latitude
-      );
-
-      url.searchParams.set(
-        "lon",
-        longitude
-      );
-
-      const response =
-        await fetch(
-          url.toString(),
-          {
-            headers: {
-              Accept:
-                "application/json"
-            }
-          }
-        );
-
-      if (!response.ok) {
-        throw new Error(
-          `Reverse geocoding failed: ${response.status}`
-        );
-      }
-
-      const data =
-        await response.json();
-
-      let address;
-
-      if (
-        locationSearch &&
-        typeof locationSearch.normalizeNominatimAddress ===
-          "function"
-      ) {
-        address =
-          locationSearch.normalizeNominatimAddress(
-            data,
-            latitude,
-            longitude
-          );
-      } else {
-        address = {
-          displayName:
-            data.display_name || "",
-
-          latitude:
-            Number(latitude),
-
-          longitude:
-            Number(longitude),
-
-          accuracy:
-            state.accuracy || null,
-
-          placeId:
-            data.place_id || "",
-
-          city:
-            data.address?.city ||
-            data.address?.town ||
-            data.address?.village ||
-            "",
-
-          state:
-            data.address?.state || "",
-
-          postcode:
-            data.address?.postcode || "",
-
-          raw: data
-        };
-      }
-
-      locationCore.setAddress(
-        address
-      );
-
-      updateMapUI();
-
-      return address;
-
-    } catch (error) {
-      console.error(
-        "ZynexCart reverse geocoding error:",
-        error
-      );
-
-      const fallbackAddress = {
-        displayName:
-          `${Number(latitude).toFixed(6)}, ${Number(longitude).toFixed(6)}`,
-
-        latitude:
-          Number(latitude),
-
-        longitude:
-          Number(longitude),
-
-        accuracy:
-          state.accuracy || null,
-
-        placeId: "",
-
-        city: "",
-        state: "",
-        postcode: ""
-      };
-
-      locationCore.setAddress(
-        fallbackAddress
-      );
-
-      updateMapUI();
-
-      return fallbackAddress;
+    if (
+      !Number.isFinite(lat) ||
+      !Number.isFinite(lng)
+    ) {
+      return null;
     }
+
+
+    /*
+     * Avoid sending exactly the same
+     * reverse-geocoding request repeatedly.
+     */
+
+    const requestKey =
+      `${lat.toFixed(6)},${lng.toFixed(6)}`;
+
+
+    if (
+      requestKey ===
+      lastReverseGeocodeKey
+    ) {
+
+      return state.address;
+
+    }
+
+
+    if (reverseGeocodePromise) {
+      return reverseGeocodePromise;
+    }
+
+
+    lastReverseGeocodeKey =
+      requestKey;
+
+
+    reverseGeocodePromise =
+      (async function () {
+
+        try {
+
+          const url =
+            new URL(
+              `${config.nominatimUrl}/reverse`
+            );
+
+
+          url.searchParams.set(
+            "format",
+            "jsonv2"
+          );
+
+          url.searchParams.set(
+            "zoom",
+            "18"
+          );
+
+          url.searchParams.set(
+            "addressdetails",
+            "1"
+          );
+
+          url.searchParams.set(
+            "lat",
+            lat
+          );
+
+          url.searchParams.set(
+            "lon",
+            lng
+          );
+
+
+          const response =
+            await fetch(
+              url.toString(),
+              {
+                headers: {
+                  Accept:
+                    "application/json"
+                }
+              }
+            );
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              `Reverse geocoding failed: ${response.status}`
+            );
+
+          }
+
+
+          const data =
+            await response.json();
+
+
+          let address;
+
+
+          if (
+            locationSearch &&
+            typeof locationSearch.normalizeNominatimAddress ===
+              "function"
+          ) {
+
+            address =
+              locationSearch.normalizeNominatimAddress(
+                data,
+                lat,
+                lng
+              );
+
+          } else {
+
+            address = {
+
+              displayName:
+                data.display_name || "",
+
+              latitude: lat,
+
+              longitude: lng,
+
+              accuracy:
+                state.accuracy ||
+                null,
+
+              placeId:
+                data.place_id ||
+                "",
+
+              city:
+                data.address?.city ||
+                data.address?.town ||
+                data.address?.village ||
+                "",
+
+              state:
+                data.address?.state ||
+                "",
+
+              postcode:
+                data.address?.postcode ||
+                "",
+
+              raw: data
+
+            };
+
+          }
+
+
+          locationCore.setAddress(
+            address
+          );
+
+
+          updateMapUI();
+
+
+          return address;
+
+
+        } catch (error) {
+
+          console.error(
+            "ZynexCart reverse geocoding error:",
+            error
+          );
+
+
+          const fallbackAddress = {
+
+            displayName:
+              `${lat.toFixed(6)}, ${lng.toFixed(6)}`,
+
+            latitude: lat,
+
+            longitude: lng,
+
+            accuracy:
+              state.accuracy ||
+              null,
+
+            placeId: "",
+
+            city: "",
+
+            state: "",
+
+            postcode: ""
+
+          };
+
+
+          locationCore.setAddress(
+            fallbackAddress
+          );
+
+
+          updateMapUI();
+
+
+          return fallbackAddress;
+
+
+        } finally {
+
+          reverseGeocodePromise =
+            null;
+
+        }
+
+      })();
+
+
+    return reverseGeocodePromise;
+
   }
 
-  /**
-   * Update map-related UI
-   */
+
+  /* =====================================================
+     UPDATE MAP UI
+     ===================================================== */
+
   function updateMapUI() {
+
     locationUI.updateDetectedLocationUI();
+
     locationUI.updateConfirmedLocation();
+
 
     const elements =
       locationUI.getLocationElements();
 
-    if (
-      elements.mapPlaceholder
-    ) {
+
+    if (elements.mapPlaceholder) {
+
       elements.mapPlaceholder.hidden =
         Boolean(state.map);
+
     }
+
   }
 
-  /**
-   * Confirm current map location
-   */
+
+  /* =====================================================
+     CONFIRM MAP LOCATION
+     ===================================================== */
+
   function confirmMapLocation() {
+
     if (
       !Number.isFinite(
         Number(state.latitude)
@@ -563,37 +978,57 @@
         Number(state.longitude)
       )
     ) {
+
       locationUI.showLocationError(
         "Please select a location on the map."
       );
 
       return;
+
     }
 
+
     if (!state.address) {
+
       reverseGeocodeLocation(
         state.latitude,
         state.longitude
       ).then(function () {
+
         locationUI.openAddressScreen();
+
       });
 
       return;
+
     }
 
+
     locationUI.openAddressScreen();
+
   }
 
-  /**
-   * Expose map module
-   */
+
+  /* =====================================================
+     EXPOSE MAP MODULE
+     ===================================================== */
+
   window.ZynexCartLocationMap = {
+
     loadLeaflet,
+
     initializeMap,
+
     setMapPosition,
+
     openMapWithLocation,
+
     useCurrentLocation,
+
     reverseGeocodeLocation,
+
     confirmMapLocation
+
   };
+
 })();
