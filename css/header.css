@@ -527,7 +527,7 @@
 
   z-index: 5000;
 
-  display: none;
+  display: flex;
 
   align-items: center;
   justify-content: center;
@@ -535,10 +535,9 @@
   padding: 20px;
 }
 
-.location-modal.is-open {
-  display: flex;
+.location-modal[hidden] {
+  display: none !important;
 }
-
 
 /* =====================================================
    LOCATION BACKDROP
