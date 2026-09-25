@@ -23,8 +23,8 @@
 
 
   <!-- =====================================================
-       ZYNEXCART — EXISTING CSS
-       DO NOT CHANGE DESIGN
+       ZYNEXCART — CSS
+       EXISTING DESIGN PRESERVED
   ====================================================== -->
 
   <link
@@ -65,7 +65,6 @@
 
   <!-- =====================================================
        ZYNEXCART — PAGE COMPONENTS
-       EXISTING STRUCTURE PRESERVED
   ====================================================== -->
 
   <div id="header-component"></div>
@@ -83,9 +82,8 @@
   <div id="footer-component"></div>
 
 
-
   <!-- =====================================================
-       ZYNEXCART — COMPONENT LOADER
+       ZYNEXCART — COMPONENT + SCRIPT LOADER
   ====================================================== -->
 
   <script>
@@ -95,6 +93,24 @@
       "use strict";
 
 
+      /*
+       * Prevent accidental double initialization.
+       */
+
+      if (
+        window.__ZYNEXCART_INDEX_INITIALIZED__
+      ) {
+        return;
+      }
+
+      window.__ZYNEXCART_INDEX_INITIALIZED__ =
+        true;
+
+
+      /* =====================================================
+         LOAD HTML COMPONENT
+      ====================================================== */
+
       async function loadComponent(
         elementId,
         filePath
@@ -103,19 +119,27 @@
         const element =
           document.getElementById(elementId);
 
+
         if (!element) {
+
           console.warn(
             `ZynexCart: Element #${elementId} not found.`
           );
 
-          return;
+          return false;
+
         }
 
 
         try {
 
           const response =
-            await fetch(filePath);
+            await fetch(
+              filePath,
+              {
+                cache: "no-cache"
+              }
+            );
 
 
           if (!response.ok) {
@@ -127,8 +151,15 @@
           }
 
 
-          element.innerHTML =
+          const html =
             await response.text();
+
+
+          element.innerHTML =
+            html;
+
+
+          return true;
 
 
         } catch (error) {
@@ -138,191 +169,127 @@
             error
           );
 
+
+          return false;
+
         }
 
       }
 
 
+      /* =====================================================
+         LOCATION MODAL INITIAL STATE
+         
+         IMPORTANT:
+         Location modal must NEVER open automatically
+         just because the page was refreshed.
+      ====================================================== */
 
-      async function loadComponents() {
+      function resetLocationModalState() {
 
-        /*
-         * Components are loaded first.
-         * This keeps the existing page structure unchanged.
-         */
-
-        await loadComponent(
-          "header-component",
-          "components/header.html"
-        );
-
-
-        await loadComponent(
-          "hero-component",
-          "components/hero.html"
-        );
+        const modal =
+          document.getElementById(
+            "locationModal"
+          );
 
 
-        await loadComponent(
-          "categories-component",
-          "components/categories.html"
-        );
-
-
-        await loadComponent(
-          "popular-products-component",
-          "components/popular-products.html"
-        );
-
-
-        await loadComponent(
-          "promo-banner-component",
-          "components/promo-banner.html"
-        );
-
-
-        await loadComponent(
-          "benefits-component",
-          "components/benefits.html"
-        );
-
-
-        await loadComponent(
-          "footer-component",
-          "components/footer.html"
-        );
-
-
-
-        /*
-         * After all HTML components are available,
-         * load JavaScript modules in dependency order.
-         */
-
-        const scripts = [
-
-          /* =========================
-             CORE
-          ========================== */
-
-          "js/core/storage.js",
-          "js/core/utils.js",
-          "js/core/events.js",
-
-
-          /* =========================
-             CART
-          ========================== */
-
-          "js/cart/cart.js",
-          "js/cart/cart-actions.js",
-          "js/cart/cart-ui.js",
-
-
-          /* =========================
-             SEARCH
-          ========================== */
-
-          "js/search/search.js",
-
-
-          /* =========================
-             LOCATION
-          ========================== */
-
-          "js/location/location.js",
-          "js/location/location-ui.js",
-          "js/location/location-search.js",
-          "js/location/location-map.js",
-          "js/location/location-address.js",
-          "js/location/saved-addresses.js",
-
-
-          /* =========================
-             MAIN APPLICATION
-          ========================== */
-
-          "js/app.js",
-
-
-          /* =========================
-             PRODUCT DATA / EXISTING
-          ========================== */
-
-          "js/products.js"
-
-        ];
-
-
-
-        /*
-         * Load every JavaScript file sequentially.
-         *
-         * This is important because the modules
-         * depend on globals created by previous files.
-         */
-
-        for (const scriptPath of scripts) {
-
-          try {
-
-            await loadScript(scriptPath);
-
-          } catch (error) {
-
-            console.error(
-              `ZynexCart: Failed to load ${scriptPath}`,
-              error
-            );
-
-            return;
-
-          }
-
+        if (!modal) {
+          return;
         }
 
 
-        console.log(
-          "ZynexCart: All modules loaded successfully."
+        /*
+         * Force modal to start closed.
+         */
+
+        modal.hidden =
+          true;
+
+
+        modal.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+
+        document.body.classList.remove(
+          "location-modal-open"
         );
 
       }
 
 
+      /* =====================================================
+         LOAD JAVASCRIPT FILE
+      ====================================================== */
 
-      function loadScript(src) {
+      function loadScript(
+        src
+      ) {
 
         return new Promise(
           function (resolve, reject) {
 
-            const script =
-              document.createElement("script");
+            /*
+             * Prevent same script from being loaded twice.
+             */
+
+            const existingScript =
+              document.querySelector(
+                `script[data-zynexcart-script="${src}"]`
+              );
 
 
-            script.src = src;
-
-            script.async = false;
-
-
-            script.onload = function () {
+            if (existingScript) {
 
               resolve();
 
-            };
+              return;
+
+            }
 
 
-            script.onerror = function () {
-
-              reject(
-                new Error(
-                  `Unable to load script: ${src}`
-                )
+            const script =
+              document.createElement(
+                "script"
               );
 
-            };
+
+            script.src =
+              src;
 
 
-            document.body.appendChild(script);
+            script.async =
+              false;
+
+
+            script.dataset.zynexcartScript =
+              src;
+
+
+            script.onload =
+              function () {
+
+                resolve();
+
+              };
+
+
+            script.onerror =
+              function () {
+
+                reject(
+                  new Error(
+                    `Unable to load script: ${src}`
+                  )
+                );
+
+              };
+
+
+            document.body.appendChild(
+              script
+            );
 
           }
         );
@@ -330,12 +297,248 @@
       }
 
 
+      /* =====================================================
+         COMPONENT LIST
+      ====================================================== */
 
-      /*
-       * Start component loading.
-       */
+      const components = [
 
-      loadComponents();
+        [
+          "header-component",
+          "components/header.html"
+        ],
+
+        [
+          "hero-component",
+          "components/hero.html"
+        ],
+
+        [
+          "categories-component",
+          "components/categories.html"
+        ],
+
+        [
+          "popular-products-component",
+          "components/popular-products.html"
+        ],
+
+        [
+          "promo-banner-component",
+          "components/promo-banner.html"
+        ],
+
+        [
+          "benefits-component",
+          "components/benefits.html"
+        ],
+
+        [
+          "footer-component",
+          "components/footer.html"
+        ]
+
+      ];
+
+
+      /* =====================================================
+         JAVASCRIPT MODULES
+         
+         Dependency order is preserved.
+      ====================================================== */
+
+      const scripts = [
+
+        /* =========================
+           CORE
+        ========================== */
+
+        "js/core/storage.js",
+        "js/core/utils.js",
+        "js/core/events.js",
+
+
+        /* =========================
+           CART
+        ========================== */
+
+        "js/cart/cart.js",
+        "js/cart/cart-actions.js",
+        "js/cart/cart-ui.js",
+
+
+        /* =========================
+           SEARCH
+        ========================== */
+
+        "js/search/search.js",
+
+
+        /* =========================
+           LOCATION
+        ========================== */
+
+        "js/location/location.js",
+        "js/location/location-ui.js",
+        "js/location/location-search.js",
+        "js/location/location-map.js",
+        "js/location/location-address.js",
+        "js/location/saved-addresses.js",
+
+
+        /* =========================
+           MAIN APPLICATION
+        ========================== */
+
+        "js/app.js",
+
+
+        /* =========================
+           PRODUCTS
+        ========================== */
+
+        "js/products.js"
+
+      ];
+
+
+      /* =====================================================
+         MAIN INITIALIZATION
+      ====================================================== */
+
+      async function initializeZynexCart() {
+
+        try {
+
+
+          /*
+           * -------------------------------------------------
+           * STEP 1
+           * Load all HTML components.
+           *
+           * Components can load in parallel because they
+           * do not depend on JavaScript modules.
+           * -------------------------------------------------
+           */
+
+          await Promise.all(
+
+            components.map(
+              function (component) {
+
+                return loadComponent(
+                  component[0],
+                  component[1]
+                );
+
+              }
+            )
+
+          );
+
+
+          /*
+           * -------------------------------------------------
+           * STEP 2
+           * IMPORTANT LOCATION FIX
+           *
+           * Header is now available.
+           * Force location modal closed before any JS
+           * location system starts.
+           * -------------------------------------------------
+           */
+
+          resetLocationModalState();
+
+
+          /*
+           * -------------------------------------------------
+           * STEP 3
+           * Load JavaScript modules sequentially.
+           *
+           * Dependency order must NOT change.
+           * -------------------------------------------------
+           */
+
+          for (
+            const scriptPath of scripts
+          ) {
+
+            try {
+
+              await loadScript(
+                scriptPath
+              );
+
+
+            } catch (error) {
+
+              console.error(
+                `ZynexCart: Failed to load ${scriptPath}`,
+                error
+              );
+
+
+              return;
+
+            }
+
+          }
+
+
+          /*
+           * -------------------------------------------------
+           * STEP 4
+           * Make absolutely sure the modal remains closed
+           * after application initialization.
+           *
+           * This prevents saved-location restoration from
+           * accidentally showing the modal.
+           * -------------------------------------------------
+           */
+
+          resetLocationModalState();
+
+
+          console.log(
+            "ZynexCart: All components and modules loaded successfully."
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "ZynexCart: Application initialization failed.",
+            error
+          );
+
+        }
+
+      }
+
+
+      /* =====================================================
+         START ZYNEXCART
+      ====================================================== */
+
+      if (
+        document.readyState ===
+        "loading"
+      ) {
+
+        document.addEventListener(
+          "DOMContentLoaded",
+          initializeZynexCart,
+          {
+            once: true
+          }
+        );
+
+      } else {
+
+        initializeZynexCart();
+
+      }
 
     })();
 
