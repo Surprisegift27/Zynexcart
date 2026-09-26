@@ -13,6 +13,7 @@ const products = [
     id: 1,
     name: "Fresh Milk",
     category: "grocery",
+    categoryId: "dairy-bread-eggs",
     unit: "1 L",
     price: 68,
     mrp: 75,
@@ -23,6 +24,7 @@ const products = [
     id: 2,
     name: "Brown Bread",
     category: "grocery",
+    categoryId: "dairy-bread-eggs",
     unit: "400 g",
     price: 45,
     mrp: 50,
@@ -33,6 +35,7 @@ const products = [
     id: 3,
     name: "Potato Chips",
     category: "snacks",
+    categoryId: "snacks-munchies",
     unit: "100 g",
     price: 35,
     mrp: 40,
@@ -43,6 +46,7 @@ const products = [
     id: 4,
     name: "Bath Soap",
     category: "personal-care",
+    categoryId: "personal-care",
     unit: "100 g",
     price: 42,
     mrp: 50,
@@ -53,6 +57,7 @@ const products = [
     id: 5,
     name: "Shampoo",
     category: "personal-care",
+    categoryId: "personal-care",
     unit: "180 ml",
     price: 149,
     mrp: 175,
@@ -63,6 +68,7 @@ const products = [
     id: 6,
     name: "Orange Juice",
     category: "beverages",
+    categoryId: "cold-drinks-juices",
     unit: "1 L",
     price: 110,
     mrp: 125,
@@ -73,6 +79,7 @@ const products = [
     id: 7,
     name: "Face Wash",
     category: "beauty",
+    categoryId: "personal-care",
     unit: "100 ml",
     price: 129,
     mrp: 150,
@@ -83,6 +90,7 @@ const products = [
     id: 8,
     name: "Dishwash Liquid",
     category: "household",
+    categoryId: "cleaning-essentials",
     unit: "500 ml",
     price: 99,
     mrp: 115,
@@ -97,9 +105,13 @@ const products = [
 ========================================= */
 
 function formatCategory(category) {
-  return category
+
+  return String(category || "")
     .replace(/-/g, " ")
-    .replace(/\b\w/g, letter => letter.toUpperCase());
+    .replace(/\b\w/g, letter =>
+      letter.toUpperCase()
+    );
+
 }
 
 
@@ -108,9 +120,12 @@ function formatCategory(category) {
 ========================================= */
 
 function getProductById(productId) {
+
   return products.find(
-    product => Number(product.id) === Number(productId)
+    product =>
+      Number(product.id) === Number(productId)
   );
+
 }
 
 
@@ -131,12 +146,14 @@ function getProductQuantity(productId) {
   }
 
   const item = cart.find(
-    item => Number(item.id) === Number(productId)
+    item =>
+      Number(item.id) === Number(productId)
   );
 
   return item
     ? Number(item.quantity || 0)
     : 0;
+
 }
 
 
@@ -206,6 +223,7 @@ function createProductButton(product) {
 
     </div>
   `;
+
 }
 
 
@@ -272,6 +290,7 @@ function createProductCard(product) {
 
     </article>
   `;
+
 }
 
 
@@ -282,7 +301,9 @@ function createProductCard(product) {
 function displayFeaturedProducts() {
 
   const container =
-    document.querySelector("#featuredProducts");
+    document.querySelector(
+      "#featuredProducts"
+    );
 
   if (!container) {
     return;
@@ -294,6 +315,7 @@ function displayFeaturedProducts() {
     .join("");
 
   setupProductControls();
+
 }
 
 
@@ -301,7 +323,10 @@ function displayFeaturedProducts() {
    CREATE QUANTITY CONTROL
 ========================================= */
 
-function createQuantityControl(product, quantity) {
+function createQuantityControl(
+  product,
+  quantity
+) {
 
   const quantityControl =
     document.createElement("div");
@@ -342,6 +367,7 @@ function createQuantityControl(product, quantity) {
   `;
 
   return quantityControl;
+
 }
 
 
@@ -397,7 +423,9 @@ function refreshProductButton(productId) {
 
       control.replaceWith(addButton);
 
-      setupSingleProductControl(addButton);
+      setupSingleProductControl(
+        addButton
+      );
 
       return;
     }
@@ -412,7 +440,9 @@ function refreshProductButton(productId) {
     ) {
 
       const number =
-        control.querySelector(".qty-number");
+        control.querySelector(
+          ".qty-number"
+        );
 
       if (number) {
         number.textContent = quantity;
@@ -441,6 +471,7 @@ function refreshProductButton(productId) {
     );
 
   });
+
 }
 
 
@@ -448,7 +479,9 @@ function refreshProductButton(productId) {
    SETUP SINGLE PRODUCT CONTROL
 ========================================= */
 
-function setupSingleProductControl(control) {
+function setupSingleProductControl(
+  control
+) {
 
   if (
     !control ||
@@ -474,7 +507,9 @@ function setupSingleProductControl(control) {
       () => {
 
         const productId =
-          Number(control.dataset.productId);
+          Number(
+            control.dataset.productId
+          );
 
         const product =
           getProductById(productId);
@@ -485,7 +520,9 @@ function setupSingleProductControl(control) {
 
         addToCart(product);
 
-        refreshProductButton(productId);
+        refreshProductButton(
+          productId
+        );
 
         updateCartCount();
 
@@ -520,13 +557,17 @@ function setupSingleProductControl(control) {
         return;
       }
 
-      if (!control.contains(actionButton)) {
+      if (
+        !control.contains(actionButton)
+      ) {
         return;
       }
 
 
       const productId =
-        Number(control.dataset.productId);
+        Number(
+          control.dataset.productId
+        );
 
       const product =
         getProductById(productId);
@@ -548,7 +589,9 @@ function setupSingleProductControl(control) {
 
         addToCart(product);
 
-        refreshProductButton(productId);
+        refreshProductButton(
+          productId
+        );
 
         updateCartCount();
 
@@ -571,7 +614,9 @@ function setupSingleProductControl(control) {
           -1
         );
 
-        refreshProductButton(productId);
+        refreshProductButton(
+          productId
+        );
 
         updateCartCount();
 
@@ -579,6 +624,7 @@ function setupSingleProductControl(control) {
 
     }
   );
+
 }
 
 
@@ -595,9 +641,12 @@ function setupProductControls() {
 
   controls.forEach(control => {
 
-    setupSingleProductControl(control);
+    setupSingleProductControl(
+      control
+    );
 
   });
+
 }
 
 
@@ -612,12 +661,15 @@ function syncProductButtons() {
       ".add-btn[data-product-id]"
     );
 
-  const productIds = new Set();
+  const productIds =
+    new Set();
 
   controls.forEach(control => {
 
     const productId =
-      Number(control.dataset.productId);
+      Number(
+        control.dataset.productId
+      );
 
     if (productId) {
       productIds.add(productId);
@@ -626,11 +678,16 @@ function syncProductButtons() {
   });
 
 
-  productIds.forEach(productId => {
+  productIds.forEach(
+    productId => {
 
-    refreshProductButton(productId);
+      refreshProductButton(
+        productId
+      );
 
-  });
+    }
+  );
+
 }
 
 
@@ -639,8 +696,6 @@ function syncProductButtons() {
 ========================================= */
 
 /*
-   IMPORTANT:
-
    Cart page par jab:
 
    +  → quantity increase
