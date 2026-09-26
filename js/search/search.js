@@ -1,5 +1,4 @@
 // ZYNEXCART — PROFESSIONAL SEARCH
-
 (function () {
   "use strict";
 
@@ -8,11 +7,10 @@
 
   const MAX_SUGGESTIONS = 6;
 
-  /*
-   * Get products safely.
-   * products.js currently defines `products` as a global
-   * lexical variable, not necessarily window.products.
-   */
+  /* =====================================================
+     GET PRODUCTS
+  ===================================================== */
+
   function getProducts() {
     try {
       if (
@@ -35,6 +33,11 @@
     return [];
   }
 
+
+  /* =====================================================
+     NORMALIZE
+  ===================================================== */
+
   function normalize(value) {
     return String(value || "")
       .toLowerCase()
@@ -42,16 +45,22 @@
       .replace(/\s+/g, " ");
   }
 
+
+  /* =====================================================
+     CATEGORY FORMAT
+  ===================================================== */
+
   function formatCategory(category) {
     return String(category || "")
       .replace(/-/g, " ")
       .replace(/\b\w/g, letter => letter.toUpperCase());
   }
 
-  /*
-   * Additional search terms for better
-   * e-commerce style product discovery.
-   */
+
+  /* =====================================================
+     SEARCH KEYWORDS
+  ===================================================== */
+
   function getProductKeywords(product) {
     const keywordMap = {
       1: [
@@ -60,6 +69,7 @@
         "dairy",
         "dairy products",
         "1 litre",
+        "1 liter",
         "1 l"
       ],
 
@@ -119,6 +129,11 @@
     return keywordMap[product.id] || [];
   }
 
+
+  /* =====================================================
+     PRODUCT SCORE
+  ===================================================== */
+
   function scoreProduct(product, query) {
     const searchQuery = normalize(query);
 
@@ -141,17 +156,17 @@
       score += 100;
     }
 
-    /* Product name starts with search */
+    /* Product name starts with query */
     if (name.startsWith(searchQuery)) {
       score += 70;
     }
 
-    /* Product name contains search */
+    /* Product name contains query */
     if (name.includes(searchQuery)) {
       score += 50;
     }
 
-    /* Category match */
+    /* Category */
     if (category === searchQuery) {
       score += 35;
     }
@@ -160,12 +175,12 @@
       score += 25;
     }
 
-    /* Unit match */
+    /* Unit */
     if (unit.includes(searchQuery)) {
       score += 10;
     }
 
-    /* Keyword match */
+    /* Keywords */
     keywords.forEach(keyword => {
       if (keyword === searchQuery) {
         score += 30;
@@ -176,6 +191,11 @@
 
     return score;
   }
+
+
+  /* =====================================================
+     SEARCH PRODUCTS
+  ===================================================== */
 
   function searchProducts(query) {
     const searchQuery = normalize(query);
@@ -202,20 +222,32 @@
       .map(result => result.product);
   }
 
-  /*
-   * Create suggestion dropdown inside the search form.
-   * This allows the dropdown to stay perfectly aligned
-   * with the search box on desktop and mobile.
-   */
+
+  /* =====================================================
+     CREATE SUGGESTION BOX
+  ===================================================== */
+
   function createSuggestionBox(searchForm) {
-    if (suggestionBox) {
-      return suggestionBox;
+    if (!searchForm) {
+      return null;
     }
 
-    suggestionBox = document.createElement("div");
+    const existing =
+      searchForm.querySelector("#searchSuggestions");
 
-    suggestionBox.className = "search-suggestions";
-    suggestionBox.id = "searchSuggestions";
+    if (existing) {
+      suggestionBox = existing;
+      return existing;
+    }
+
+    suggestionBox =
+      document.createElement("div");
+
+    suggestionBox.className =
+      "search-suggestions";
+
+    suggestionBox.id =
+      "searchSuggestions";
 
     suggestionBox.setAttribute(
       "role",
@@ -224,10 +256,17 @@
 
     suggestionBox.hidden = true;
 
-    searchForm.appendChild(suggestionBox);
+    searchForm.appendChild(
+      suggestionBox
+    );
 
     return suggestionBox;
   }
+
+
+  /* =====================================================
+     CREATE SUGGESTION
+  ===================================================== */
 
   function createSuggestion(product) {
     return `
@@ -237,6 +276,7 @@
         role="option"
         data-product-id="${product.id}"
       >
+
         <span class="search-suggestion-image">
           <img
             src="${product.image}"
@@ -247,6 +287,7 @@
         </span>
 
         <span class="search-suggestion-content">
+
           <strong class="search-suggestion-name">
             ${product.name}
           </strong>
@@ -256,6 +297,7 @@
             <span aria-hidden="true">•</span>
             ${product.unit}
           </span>
+
         </span>
 
         <span
@@ -264,28 +306,37 @@
         >
           →
         </span>
+
       </a>
     `;
   }
+
+
+  /* =====================================================
+     SHOW SUGGESTIONS
+  ===================================================== */
 
   function showSuggestions(query) {
     if (!suggestionBox) {
       return;
     }
 
-    const searchQuery = normalize(query);
+    const searchQuery =
+      normalize(query);
 
     if (!searchQuery) {
       hideSuggestions();
       return;
     }
 
-    const results = searchProducts(searchQuery);
+    const results =
+      searchProducts(searchQuery);
 
-    /*
-     * PRODUCT FOUND
-     */
+
+    /* ---------- PRODUCTS FOUND ---------- */
+
     if (results.length > 0) {
+
       suggestionBox.innerHTML = `
         <div class="search-suggestions-header">
           <span>Products</span>
@@ -319,27 +370,38 @@
       return;
     }
 
-    /*
-     * NO PRODUCT FOUND
-     */
+
+    /* ---------- NO RESULTS ---------- */
+
     suggestionBox.innerHTML = `
       <div class="search-no-results">
+
         <div class="search-no-results-icon">
           🔍
         </div>
 
         <div class="search-no-results-content">
-          <strong>No products found</strong>
+
+          <strong>
+            No products found
+          </strong>
 
           <small>
             Try another product or category
           </small>
+
         </div>
+
       </div>
     `;
 
     suggestionBox.hidden = false;
   }
+
+
+  /* =====================================================
+     HIDE SUGGESTIONS
+  ===================================================== */
 
   function hideSuggestions() {
     if (!suggestionBox) {
@@ -349,7 +411,16 @@
     suggestionBox.hidden = true;
   }
 
+
+  /* =====================================================
+     PERFORM SEARCH
+  ===================================================== */
+
   function performSearch(searchInput) {
+    if (!searchInput) {
+      return;
+    }
+
     const searchTerm =
       searchInput.value.trim();
 
@@ -359,34 +430,44 @@
       return;
     }
 
+    hideSuggestions();
+
     window.location.href =
       `products.html?search=${encodeURIComponent(
         searchTerm
       )}`;
   }
 
-  function setupSearch() {
-    if (searchInitialized) {
-      return;
+
+  /* =====================================================
+     BIND SEARCH
+  ===================================================== */
+
+  function bindSearch(searchForm, searchInput) {
+
+    if (
+      !searchForm ||
+      !searchInput
+    ) {
+      return false;
     }
 
-    const searchForm =
-      document.getElementById("searchForm");
-
-    const searchInput =
-      document.getElementById("searchInput");
-
-    if (!searchForm || !searchInput) {
-      return;
+    /* Prevent duplicate initialization */
+    if (
+      searchForm.dataset.searchBound === "true"
+    ) {
+      return true;
     }
 
-    searchInitialized = true;
+    searchForm.dataset.searchBound = "true";
 
-    createSuggestionBox(searchForm);
+    createSuggestionBox(
+      searchForm
+    );
 
-    /*
-     * LIVE SEARCH
-     */
+
+    /* ---------- INPUT ---------- */
+
     searchInput.addEventListener(
       "input",
       function () {
@@ -396,39 +477,67 @@
       }
     );
 
-    /*
-     * SHOW AGAIN WHEN INPUT GETS FOCUS
-     */
+
+    /* ---------- FOCUS ---------- */
+
     searchInput.addEventListener(
       "focus",
       function () {
-        if (
-          searchInput.value.trim()
-        ) {
-          showSuggestions(
-            searchInput.value
-          );
+
+        const value =
+          searchInput.value.trim();
+
+        if (value) {
+          showSuggestions(value);
         }
+
       }
     );
 
-    /*
-     * ENTER / SEARCH BUTTON
-     */
+
+    /* ---------- FORM SUBMIT ---------- */
+
     searchForm.addEventListener(
       "submit",
       function (event) {
+
         event.preventDefault();
 
         performSearch(
           searchInput
         );
+
       }
     );
 
-    /*
-     * SUGGESTION / VIEW ALL CLICK
-     */
+
+    /* ---------- BUTTON CLICK ---------- */
+
+    const searchButton =
+      searchForm.querySelector(
+        'button[type="submit"]'
+      );
+
+    if (searchButton) {
+
+      searchButton.addEventListener(
+        "click",
+        function (event) {
+
+          event.preventDefault();
+
+          performSearch(
+            searchInput
+          );
+
+        }
+      );
+
+    }
+
+
+    /* ---------- SUGGESTION CLICK ---------- */
+
     suggestionBox.addEventListener(
       "click",
       function (event) {
@@ -439,6 +548,7 @@
           );
 
         if (viewAllButton) {
+
           event.preventDefault();
 
           const query =
@@ -448,14 +558,17 @@
             );
 
           if (query) {
+
             window.location.href =
               `products.html?search=${encodeURIComponent(
                 query
               )}`;
+
           }
 
           return;
         }
+
 
         const suggestion =
           event.target.closest(
@@ -465,15 +578,17 @@
         if (suggestion) {
           hideSuggestions();
         }
+
       }
     );
 
-    /*
-     * CLICK OUTSIDE
-     */
+
+    /* ---------- OUTSIDE CLICK ---------- */
+
     document.addEventListener(
       "click",
       function (event) {
+
         if (
           !searchForm.contains(
             event.target
@@ -481,28 +596,119 @@
         ) {
           hideSuggestions();
         }
+
       }
     );
 
-    /*
-     * ESCAPE
-     */
+
+    /* ---------- ESCAPE ---------- */
+
     searchInput.addEventListener(
       "keydown",
       function (event) {
+
         if (
           event.key === "Escape"
         ) {
+
           hideSuggestions();
+
           searchInput.blur();
+
         }
+
       }
     );
+
+
+    return true;
   }
+
+
+  /* =====================================================
+     SETUP SEARCH
+     ===================================================== */
+
+  function setupSearch() {
+
+    if (searchInitialized) {
+      return;
+    }
+
+    const searchForm =
+      document.getElementById(
+        "searchForm"
+      );
+
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
+
+
+    /*
+     * Header may load dynamically.
+     * So don't permanently fail if it
+     * isn't available on first attempt.
+     */
+
+    if (
+      !searchForm ||
+      !searchInput
+    ) {
+
+      setTimeout(
+        setupSearch,
+        100
+      );
+
+      return;
+    }
+
+
+    const bound =
+      bindSearch(
+        searchForm,
+        searchInput
+      );
+
+    if (bound) {
+      searchInitialized = true;
+    }
+
+  }
+
+
+  /* =====================================================
+     INITIALIZE
+  ===================================================== */
+
+  if (
+    document.readyState === "loading"
+  ) {
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      setupSearch,
+      { once: true }
+    );
+
+  } else {
+
+    setupSearch();
+
+  }
+
+
+  /* =====================================================
+     PUBLIC API
+  ===================================================== */
 
   window.ZynexCartSearch = {
     setupSearch,
     searchProducts,
-    hideSuggestions
+    hideSuggestions,
+    showSuggestions
   };
+
 })();
