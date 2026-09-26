@@ -1,4 +1,6 @@
-// ZYNEXCART — PROFESSIONAL SEARCH
+// =====================================================
+// ZYNEXCART — PROFESSIONAL LIVE SEARCH
+// =====================================================
 
 (function () {
   "use strict";
@@ -8,9 +10,10 @@
 
   const MAX_SUGGESTIONS = 6;
 
-  /* =====================================================
-     GET PRODUCTS
-     ===================================================== */
+
+  // =====================================================
+  // GET PRODUCTS
+  // =====================================================
 
   function getProducts() {
     try {
@@ -35,9 +38,9 @@
   }
 
 
-  /* =====================================================
-     NORMALIZE
-     ===================================================== */
+  // =====================================================
+  // NORMALIZE
+  // =====================================================
 
   function normalize(value) {
     return String(value || "")
@@ -47,20 +50,22 @@
   }
 
 
-  /* =====================================================
-     CATEGORY FORMAT
-     ===================================================== */
+  // =====================================================
+  // FORMAT CATEGORY
+  // =====================================================
 
   function formatCategory(category) {
     return String(category || "")
       .replace(/-/g, " ")
-      .replace(/\b\w/g, letter => letter.toUpperCase());
+      .replace(/\b\w/g, function (letter) {
+        return letter.toUpperCase();
+      });
   }
 
 
-  /* =====================================================
-     SEARCH KEYWORDS
-     ===================================================== */
+  // =====================================================
+  // PRODUCT KEYWORDS
+  // =====================================================
 
   function getProductKeywords(product) {
     const keywordMap = {
@@ -69,6 +74,7 @@
         "fresh milk",
         "dairy",
         "dairy products",
+        "grocery",
         "1 litre",
         "1 liter",
         "1 l"
@@ -78,7 +84,9 @@
         "bread",
         "brown bread",
         "bakery",
-        "bakery products"
+        "bakery products",
+        "grocery",
+        "400 g"
       ],
 
       3: [
@@ -86,19 +94,23 @@
         "potato chips",
         "potato",
         "snacks",
+        "snack",
         "namkeen"
       ],
 
       4: [
         "soap",
         "bath soap",
-        "personal care"
+        "personal care",
+        "personal-care"
       ],
 
       5: [
         "shampoo",
         "hair care",
-        "personal care"
+        "haircare",
+        "personal care",
+        "personal-care"
       ],
 
       6: [
@@ -106,6 +118,7 @@
         "orange juice",
         "orange",
         "drink",
+        "drinks",
         "beverage",
         "beverages"
       ],
@@ -115,15 +128,17 @@
         "facewash",
         "skincare",
         "skin care",
-        "beauty"
+        "beauty",
+        "personal care"
       ],
 
       8: [
         "dishwash",
         "dish wash",
+        "dishwashing",
         "cleaning",
-        "household",
-        "cleaning essentials"
+        "cleaning essentials",
+        "household"
       ]
     };
 
@@ -131,9 +146,13 @@
   }
 
 
-  /* =====================================================
-     PRODUCT SCORE
-     ===================================================== */
+  // =====================================================
+  // SEARCH SCORE
+  //
+  // Important:
+  // As user types more characters, unrelated products
+  // automatically disappear.
+  // =====================================================
 
   function scoreProduct(product, query) {
     const searchQuery = normalize(query);
@@ -152,45 +171,121 @@
 
     let score = 0;
 
+
+    // -----------------------------------------------------
+    // EXACT PRODUCT NAME
+    // -----------------------------------------------------
+
     if (name === searchQuery) {
-      score += 100;
+      score += 1000;
     }
+
+
+    // -----------------------------------------------------
+    // PRODUCT NAME STARTS WITH QUERY
+    //
+    // milk -> Fresh Milk
+    // bre  -> Brown Bread
+    // sha  -> Shampoo
+    // -----------------------------------------------------
 
     if (name.startsWith(searchQuery)) {
-      score += 70;
+      score += 800;
     }
+
+
+    // -----------------------------------------------------
+    // WORD STARTS WITH QUERY
+    //
+    // "fresh milk"
+    // query "mil" -> milk
+    // -----------------------------------------------------
+
+    const nameWords = name.split(" ");
+
+    nameWords.forEach(function (word) {
+      if (word === searchQuery) {
+        score += 900;
+      } else if (word.startsWith(searchQuery)) {
+        score += 700;
+      }
+    });
+
+
+    // -----------------------------------------------------
+    // PRODUCT NAME CONTAINS QUERY
+    // -----------------------------------------------------
 
     if (name.includes(searchQuery)) {
-      score += 50;
+      score += 450;
     }
 
+
+    // -----------------------------------------------------
+    // CATEGORY MATCH
+    // -----------------------------------------------------
+
     if (category === searchQuery) {
-      score += 35;
+      score += 400;
+    }
+
+    if (category.startsWith(searchQuery)) {
+      score += 300;
     }
 
     if (category.includes(searchQuery)) {
-      score += 25;
+      score += 180;
+    }
+
+
+    // -----------------------------------------------------
+    // CATEGORY WORD MATCH
+    // -----------------------------------------------------
+
+    const categoryWords = category.split(" ");
+
+    categoryWords.forEach(function (word) {
+      if (word.startsWith(searchQuery)) {
+        score += 220;
+      }
+    });
+
+
+    // -----------------------------------------------------
+    // KEYWORD MATCH
+    // -----------------------------------------------------
+
+    keywords.forEach(function (keyword) {
+      if (keyword === searchQuery) {
+        score += 500;
+      } else if (keyword.startsWith(searchQuery)) {
+        score += 350;
+      } else if (keyword.includes(searchQuery)) {
+        score += 120;
+      }
+    });
+
+
+    // -----------------------------------------------------
+    // UNIT MATCH
+    // -----------------------------------------------------
+
+    if (unit === searchQuery) {
+      score += 100;
     }
 
     if (unit.includes(searchQuery)) {
-      score += 10;
+      score += 50;
     }
 
-    keywords.forEach(keyword => {
-      if (keyword === searchQuery) {
-        score += 30;
-      } else if (keyword.includes(searchQuery)) {
-        score += 15;
-      }
-    });
 
     return score;
   }
 
 
-  /* =====================================================
-     SEARCH PRODUCTS
-     ===================================================== */
+  // =====================================================
+  // SEARCH PRODUCTS
+  // =====================================================
 
   function searchProducts(query) {
     const searchQuery = normalize(query);
@@ -200,45 +295,55 @@
     }
 
     return getProducts()
-      .map(product => ({
-        product,
-        score: scoreProduct(product, searchQuery)
-      }))
-      .filter(result => result.score > 0)
-      .sort((a, b) => {
+      .map(function (product) {
+        return {
+          product: product,
+          score: scoreProduct(
+            product,
+            searchQuery
+          )
+        };
+      })
+
+      .filter(function (result) {
+        return result.score > 0;
+      })
+
+      .sort(function (a, b) {
         if (b.score !== a.score) {
           return b.score - a.score;
         }
 
-        return String(a.product.name).localeCompare(
+        return String(
+          a.product.name
+        ).localeCompare(
           String(b.product.name)
         );
       })
-      .map(result => result.product);
+
+      .map(function (result) {
+        return result.product;
+      });
   }
 
 
-  /* =====================================================
-     CREATE SUGGESTION BOX
-     ===================================================== */
+  // =====================================================
+  // CREATE SUGGESTION BOX
+  // =====================================================
 
   function createSuggestionBox(searchForm) {
-    if (!searchForm) {
-      return null;
+    if (suggestionBox) {
+      return suggestionBox;
     }
 
-    const existing =
-      searchForm.querySelector("#searchSuggestions");
+    suggestionBox =
+      document.createElement("div");
 
-    if (existing) {
-      suggestionBox = existing;
-      return existing;
-    }
+    suggestionBox.className =
+      "search-suggestions";
 
-    suggestionBox = document.createElement("div");
-
-    suggestionBox.className = "search-suggestions";
-    suggestionBox.id = "searchSuggestions";
+    suggestionBox.id =
+      "searchSuggestions";
 
     suggestionBox.setAttribute(
       "role",
@@ -247,47 +352,72 @@
 
     suggestionBox.hidden = true;
 
-    searchForm.appendChild(suggestionBox);
+    searchForm.appendChild(
+      suggestionBox
+    );
 
     return suggestionBox;
   }
 
 
-  /* =====================================================
-     CREATE SUGGESTION
-     ===================================================== */
+  // =====================================================
+  // CREATE PRODUCT SUGGESTION
+  // =====================================================
 
   function createSuggestion(product) {
     return `
       <a
-        href="product.html?id=${encodeURIComponent(product.id)}"
+        href="product.html?id=${encodeURIComponent(
+          product.id
+        )}"
         class="search-suggestion"
         role="option"
         data-product-id="${product.id}"
       >
 
-        <span class="search-suggestion-image">
+        <span
+          class="search-suggestion-image"
+        >
+
           <img
             src="${product.image}"
-            alt=""
+            alt="${product.name}"
             loading="lazy"
             onerror="this.style.display='none'"
           >
+
         </span>
 
-        <span class="search-suggestion-content">
 
-          <strong class="search-suggestion-name">
+        <span
+          class="search-suggestion-content"
+        >
+
+          <strong
+            class="search-suggestion-name"
+          >
             ${product.name}
           </strong>
 
-          <span class="search-suggestion-meta">
-            ${formatCategory(product.category)}
-            <span aria-hidden="true">•</span>
+
+          <span
+            class="search-suggestion-meta"
+          >
+
+            ${formatCategory(
+              product.category
+            )}
+
+            <span aria-hidden="true">
+              •
+            </span>
+
             ${product.unit}
+
           </span>
 
         </span>
+
 
         <span
           class="search-suggestion-arrow"
@@ -301,37 +431,70 @@
   }
 
 
-  /* =====================================================
-     SHOW SUGGESTIONS
-     ===================================================== */
+  // =====================================================
+  // SHOW LIVE SUGGESTIONS
+  // =====================================================
 
   function showSuggestions(query) {
     if (!suggestionBox) {
       return;
     }
 
-    const searchQuery = normalize(query);
+    const searchQuery =
+      normalize(query);
+
+
+    // -----------------------------------------------------
+    // EMPTY SEARCH
+    // -----------------------------------------------------
 
     if (!searchQuery) {
       hideSuggestions();
       return;
     }
 
-    const results = searchProducts(searchQuery);
+
+    // -----------------------------------------------------
+    // FIND MATCHING PRODUCTS
+    // -----------------------------------------------------
+
+    const results =
+      searchProducts(
+        searchQuery
+      );
+
+
+    // -----------------------------------------------------
+    // PRODUCTS FOUND
+    // -----------------------------------------------------
 
     if (results.length > 0) {
+
       suggestionBox.innerHTML = `
-        <div class="search-suggestions-header">
-          <span>Products</span>
+
+        <div
+          class="search-suggestions-header"
+        >
+          <span>
+            Products
+          </span>
         </div>
 
+
         ${results
-          .slice(0, MAX_SUGGESTIONS)
-          .map(createSuggestion)
+          .slice(
+            0,
+            MAX_SUGGESTIONS
+          )
+          .map(
+            createSuggestion
+          )
           .join("")}
 
+
         ${
-          results.length > MAX_SUGGESTIONS
+          results.length >
+          MAX_SUGGESTIONS
             ? `
               <button
                 type="button"
@@ -340,30 +503,55 @@
                   searchQuery
                 )}"
               >
-                <span>View all results</span>
-                <span aria-hidden="true">→</span>
+
+                <span>
+                  View all results
+                </span>
+
+                <span
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+
               </button>
             `
             : ""
         }
+
       `;
 
       suggestionBox.hidden = false;
+
       return;
     }
 
-    suggestionBox.innerHTML = `
-      <div class="search-no-results">
 
-        <div class="search-no-results-icon">
+    // -----------------------------------------------------
+    // NO PRODUCTS FOUND
+    // -----------------------------------------------------
+
+    suggestionBox.innerHTML = `
+
+      <div
+        class="search-no-results"
+      >
+
+        <div
+          class="search-no-results-icon"
+        >
           🔍
         </div>
 
-        <div class="search-no-results-content">
+
+        <div
+          class="search-no-results-content"
+        >
 
           <strong>
             No products found
           </strong>
+
 
           <small>
             Try another product or category
@@ -372,15 +560,16 @@
         </div>
 
       </div>
+
     `;
 
     suggestionBox.hidden = false;
   }
 
 
-  /* =====================================================
-     HIDE SUGGESTIONS
-     ===================================================== */
+  // =====================================================
+  // HIDE SUGGESTIONS
+  // =====================================================
 
   function hideSuggestions() {
     if (!suggestionBox) {
@@ -391,25 +580,19 @@
   }
 
 
-  /* =====================================================
-     PERFORM SEARCH
-     ===================================================== */
+  // =====================================================
+  // PERFORM SEARCH
+  // =====================================================
 
   function performSearch(searchInput) {
-    if (!searchInput) {
-      return;
-    }
-
     const searchTerm =
-      normalize(searchInput.value);
+      searchInput.value.trim();
 
     if (!searchTerm) {
       searchInput.focus();
       hideSuggestions();
       return;
     }
-
-    hideSuggestions();
 
     window.location.href =
       `products.html?search=${encodeURIComponent(
@@ -418,198 +601,16 @@
   }
 
 
-  /* =====================================================
-     BIND SEARCH
-     ===================================================== */
-
-  function bindSearch(searchForm, searchInput) {
-    if (
-      !searchForm ||
-      !searchInput
-    ) {
-      return false;
-    }
-
-    if (
-      searchForm.dataset.searchBound === "true"
-    ) {
-      return true;
-    }
-
-    searchForm.dataset.searchBound = "true";
-
-    createSuggestionBox(searchForm);
-
-
-    /* -----------------------------------------------------
-       LIVE SEARCH
-       ----------------------------------------------------- */
-
-    searchInput.addEventListener(
-      "input",
-      function () {
-        showSuggestions(
-          searchInput.value
-        );
-      }
-    );
-
-
-    /* -----------------------------------------------------
-       FOCUS
-       ----------------------------------------------------- */
-
-    searchInput.addEventListener(
-      "focus",
-      function () {
-        if (
-          searchInput.value.trim()
-        ) {
-          showSuggestions(
-            searchInput.value
-          );
-        }
-      }
-    );
-
-
-    /* -----------------------------------------------------
-       FORM SUBMIT
-       ----------------------------------------------------- */
-
-    searchForm.addEventListener(
-      "submit",
-      function (event) {
-        event.preventDefault();
-
-        performSearch(
-          searchInput
-        );
-      }
-    );
-
-
-    /* -----------------------------------------------------
-       SEARCH BUTTON
-       ----------------------------------------------------- */
-
-    const searchButton =
-      searchForm.querySelector(
-        'button[type="submit"]'
-      );
-
-    if (searchButton) {
-      searchButton.addEventListener(
-        "click",
-        function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-
-          performSearch(
-            searchInput
-          );
-        }
-      );
-    }
-
-
-    /* -----------------------------------------------------
-       SUGGESTION CLICK
-       ----------------------------------------------------- */
-
-    suggestionBox.addEventListener(
-      "click",
-      function (event) {
-
-        const viewAllButton =
-          event.target.closest(
-            ".search-view-all"
-          );
-
-        if (viewAllButton) {
-          event.preventDefault();
-
-          const query =
-            decodeURIComponent(
-              viewAllButton.dataset.searchQuery || ""
-            );
-
-          if (query) {
-            window.location.href =
-              `products.html?search=${encodeURIComponent(
-                query
-              )}`;
-          }
-
-          return;
-        }
-
-
-        const suggestion =
-          event.target.closest(
-            ".search-suggestion"
-          );
-
-        if (suggestion) {
-          hideSuggestions();
-        }
-
-      }
-    );
-
-
-    /* -----------------------------------------------------
-       OUTSIDE CLICK
-       ----------------------------------------------------- */
-
-    document.addEventListener(
-      "click",
-      function (event) {
-
-        if (
-          !searchForm.contains(
-            event.target
-          )
-        ) {
-          hideSuggestions();
-        }
-
-      }
-    );
-
-
-    /* -----------------------------------------------------
-       ESCAPE
-       ----------------------------------------------------- */
-
-    searchInput.addEventListener(
-      "keydown",
-      function (event) {
-
-        if (
-          event.key === "Escape"
-        ) {
-          hideSuggestions();
-          searchInput.blur();
-        }
-
-      }
-    );
-
-
-    return true;
-  }
-
-
-  /* =====================================================
-     SETUP SEARCH
-     ===================================================== */
+  // =====================================================
+  // SETUP SEARCH
+  // =====================================================
 
   function setupSearch() {
 
     if (searchInitialized) {
       return;
     }
+
 
     const searchForm =
       document.getElementById(
@@ -621,61 +622,190 @@
         "searchInput"
       );
 
+
     if (
       !searchForm ||
       !searchInput
     ) {
-      setTimeout(
-        setupSearch,
-        100
-      );
-
       return;
     }
 
-    const bound =
-      bindSearch(
-        searchForm,
-        searchInput
-      );
 
-    if (bound) {
-      searchInitialized = true;
-    }
-
-  }
+    searchInitialized = true;
 
 
-  /* =====================================================
-     INITIALIZE
-     ===================================================== */
-
-  if (
-    document.readyState === "loading"
-  ) {
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      setupSearch,
-      { once: true }
+    createSuggestionBox(
+      searchForm
     );
 
-  } else {
 
-    setupSearch();
+    // ===================================================
+    // LIVE SEARCH WHILE TYPING
+    // ===================================================
+
+    searchInput.addEventListener(
+      "input",
+      function () {
+
+        showSuggestions(
+          searchInput.value
+        );
+
+      }
+    );
+
+
+    // ===================================================
+    // SHOW AGAIN WHEN INPUT GETS FOCUS
+    // ===================================================
+
+    searchInput.addEventListener(
+      "focus",
+      function () {
+
+        if (
+          searchInput.value.trim()
+        ) {
+
+          showSuggestions(
+            searchInput.value
+          );
+
+        }
+
+      }
+    );
+
+
+    // ===================================================
+    // SEARCH FORM
+    // ===================================================
+
+    searchForm.addEventListener(
+      "submit",
+      function (event) {
+
+        event.preventDefault();
+
+        performSearch(
+          searchInput
+        );
+
+      }
+    );
+
+
+    // ===================================================
+    // SUGGESTION CLICK
+    // ===================================================
+
+    suggestionBox.addEventListener(
+      "click",
+      function (event) {
+
+        const viewAllButton =
+          event.target.closest(
+            ".search-view-all"
+          );
+
+
+        if (viewAllButton) {
+
+          event.preventDefault();
+
+
+          const query =
+            decodeURIComponent(
+              viewAllButton.dataset
+                .searchQuery || ""
+            );
+
+
+          if (query) {
+
+            window.location.href =
+              `products.html?search=${encodeURIComponent(
+                query
+              )}`;
+
+          }
+
+          return;
+        }
+
+
+        const suggestion =
+          event.target.closest(
+            ".search-suggestion"
+          );
+
+
+        if (suggestion) {
+          hideSuggestions();
+        }
+
+      }
+    );
+
+
+    // ===================================================
+    // CLICK OUTSIDE
+    // ===================================================
+
+    document.addEventListener(
+      "click",
+      function (event) {
+
+        if (
+          !searchForm.contains(
+            event.target
+          )
+        ) {
+
+          hideSuggestions();
+
+        }
+
+      }
+    );
+
+
+    // ===================================================
+    // ESCAPE
+    // ===================================================
+
+    searchInput.addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          hideSuggestions();
+
+          searchInput.blur();
+
+        }
+
+      }
+    );
 
   }
 
 
-  /* =====================================================
-     PUBLIC API
-     ===================================================== */
+  // =====================================================
+  // PUBLIC API
+  // =====================================================
 
   window.ZynexCartSearch = {
+
     setupSearch,
+
     searchProducts,
-    hideSuggestions,
-    showSuggestions
+
+    hideSuggestions
+
   };
 
 })();
