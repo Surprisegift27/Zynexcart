@@ -310,10 +310,19 @@
        JAVASCRIPT
        ================================================= -->
 
+  <!-- Existing application system -->
   <script src="js/app.js"></script>
 
+  <!-- Product data + product controls -->
   <script src="js/products.js"></script>
 
+  <!-- Professional search functionality -->
+  <script src="js/search/search.js"></script>
+
+
+  <!-- =================================================
+       PRODUCTS PAGE LOGIC
+       ================================================= -->
 
   <script>
 
@@ -368,7 +377,10 @@
 
         function displayProducts(list) {
 
-          if (!Array.isArray(list) || list.length === 0) {
+          if (
+            !Array.isArray(list) ||
+            list.length === 0
+          ) {
 
             productsGrid.innerHTML = "";
 
@@ -531,8 +543,6 @@
                     : 0;
 
 
-                /* NOT IN CART */
-
                 if (quantity <= 0) {
 
                   button.classList.remove(
@@ -546,8 +556,6 @@
 
                 }
 
-
-                /* IN CART */
 
                 button.classList.add(
                   "added"
@@ -578,12 +586,8 @@
               }
 
 
-              /* INITIAL STATE */
-
               updateButton();
 
-
-              /* BUTTON CLICK */
 
               button.addEventListener(
                 "click",
@@ -593,8 +597,6 @@
 
                   event.stopPropagation();
 
-
-                  /* PLUS */
 
                   if (
                     event.target.classList.contains(
@@ -614,8 +616,6 @@
                   }
 
 
-                  /* MINUS */
-
                   if (
                     event.target.classList.contains(
                       "qty-minus"
@@ -633,8 +633,6 @@
 
                   }
 
-
-                  /* ADD */
 
                   addToCart(
                     product
@@ -661,8 +659,7 @@
         ) {
 
           if (
-            category ===
-            "all"
+            category === "all"
           ) {
 
             displayProducts(
@@ -691,7 +688,7 @@
 
 
         /* =================================================
-           PROFESSIONAL SEARCH
+           SEARCH RESULTS
            ================================================= */
 
         function getSearchResults(
@@ -704,7 +701,10 @@
             )
               .toLowerCase()
               .trim()
-              .replace(/\s+/g, " ");
+              .replace(
+                /\s+/g,
+                " "
+              );
 
 
           if (!query) {
@@ -713,9 +713,9 @@
 
 
           /*
-           * Use the professional
-           * search system from search.js
-           * whenever available.
+           * Use the same professional
+           * search engine used by
+           * the header suggestions.
            */
 
           if (
@@ -734,7 +734,7 @@
 
 
           /*
-           * Safe fallback.
+           * Fallback search.
            */
 
           return products.filter(
@@ -780,21 +780,6 @@
           resultCount
         ) {
 
-          if (
-            !searchTerm
-          ) {
-
-            searchResultInfo.hidden =
-              true;
-
-            searchResultText.textContent =
-              "";
-
-            return;
-
-          }
-
-
           searchResultInfo.hidden =
             false;
 
@@ -803,13 +788,8 @@
             `Showing results for "${searchTerm}"`;
 
 
-
-          /*
-           * Search page heading
-           */
-
           pageTitle.textContent =
-            `Search Results`;
+            "Search Results";
 
 
           pageDescription.textContent =
@@ -846,7 +826,7 @@
 
 
         /* =================================================
-           SEARCH FROM URL
+           APPLY SEARCH
            ================================================= */
 
         function applySearch(
@@ -856,8 +836,7 @@
           const cleanSearch =
             String(
               searchTerm || ""
-            )
-              .trim();
+            ).trim();
 
 
           if (!cleanSearch) {
@@ -887,6 +866,11 @@
             );
 
 
+          /*
+           * Search mode removes
+           * active category state.
+           */
+
           filterButtons.forEach(
             button => {
 
@@ -913,7 +897,7 @@
 
 
         /* =================================================
-           CATEGORY FROM URL
+           APPLY CATEGORY
            ================================================= */
 
         function applyCategory(
@@ -991,7 +975,7 @@
 
                 /*
                  * Remove search query
-                 * when category is selected.
+                 * when category changes.
                  */
 
                 const url =
@@ -999,9 +983,11 @@
                     window.location.href
                   );
 
+
                 url.searchParams.delete(
                   "search"
                 );
+
 
                 if (
                   category ===
