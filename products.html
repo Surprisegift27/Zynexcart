@@ -143,11 +143,11 @@
 
     <section class="page-heading">
 
-      <h1>
+      <h1 id="productsPageTitle">
         All Products 🛍️
       </h1>
 
-      <p>
+      <p id="productsPageDescription">
         Shop your daily essentials at ZynexCart.
       </p>
 
@@ -230,6 +230,22 @@
 
 
     <!-- =================================================
+         SEARCH RESULT INFORMATION
+         ================================================= -->
+
+    <div
+      id="searchResultInfo"
+      class="search-result-info"
+      hidden
+    >
+
+      <strong id="searchResultText"></strong>
+
+    </div>
+
+
+
+    <!-- =================================================
          PRODUCTS
          ================================================= -->
 
@@ -301,429 +317,793 @@
 
   <script>
 
-    document.addEventListener("DOMContentLoaded", () => {
-
-      const productsGrid =
-        document.getElementById("productsGrid");
-
-      const noProducts =
-        document.getElementById("noProducts");
-
-      const filterButtons =
-        document.querySelectorAll(".category-filter");
-
-
-      /* =================================================
-         DISPLAY PRODUCTS
-         ================================================= */
-
-      function displayProducts(list) {
-
-        if (list.length === 0) {
-
-          productsGrid.innerHTML = "";
-
-          noProducts.style.display = "block";
-
-          return;
-
-        }
-
-        noProducts.style.display = "none";
-
-        productsGrid.innerHTML = list.map(product => `
-
-          <article
-            class="product-card"
-            data-product-id="${product.id}"
-          >
-
-            <a
-              href="product.html?id=${product.id}"
-              class="product-card-link"
-            >
-
-              <div class="product-image">
-
-                <img
-                  src="${product.image}"
-                  alt="${product.name}"
-                  loading="lazy"
-                >
-
-              </div>
-
-
-              <div class="product-info">
-
-                <span class="product-category">
-                  ${formatCategory(product.category)}
-                </span>
-
-                <h3>
-                  ${product.name}
-                </h3>
-
-                <p class="product-unit">
-                  ${product.unit}
-                </p>
-
-
-                <div class="product-price">
-
-                  <strong>
-                    ${formatPrice(product.price)}
-                  </strong>
-
-                  <span class="product-mrp">
-                    ${formatPrice(product.mrp)}
-                  </span>
-
-                  <span class="product-discount">
-                    ${product.discount}% OFF
-                  </span>
-
-                </div>
-
-              </div>
-
-            </a>
-
-
-            <!-- ADD / QUANTITY BUTTON -->
-
-            <button
-              class="add-btn"
-              data-product-id="${product.id}"
-              type="button"
-            >
-              ADD
-            </button>
-
-          </article>
-
-        `).join("");
-
-        setupProductButtons();
-
-      }
-
-
-
-      /* =================================================
-         ADD / QUANTITY BUTTONS
-         ================================================= */
-
-      function setupProductButtons() {
-
-        const addButtons =
-          document.querySelectorAll(".add-btn");
-
-
-        addButtons.forEach(button => {
-
-          const productId =
-            Number(button.dataset.productId);
-
-          const product =
-            products.find(
-              item => item.id === productId
-            );
-
-          if (!product) return;
-
-
-          /* UPDATE BUTTON */
-
-          function updateButton() {
-
-            const cart = getCart();
-
-            const cartItem =
-              cart.find(
-                item => item.id === productId
-              );
-
-            const quantity =
-              cartItem
-                ? cartItem.quantity
-                : 0;
-
-
-            /* NOT IN CART */
-
-            if (quantity <= 0) {
-
-              button.classList.remove("added");
-
-              button.innerHTML = "ADD";
-
-              return;
-
-            }
-
-
-            /* IN CART */
-
-            button.classList.add("added");
-
-            button.innerHTML = `
-
-              <span class="qty-minus">
-                −
-              </span>
-
-              <span class="qty-number">
-                ${quantity}
-              </span>
-
-              <span class="qty-plus">
-                +
-              </span>
-
-            `;
-
-          }
-
-
-          /* INITIAL STATE */
-
-          updateButton();
-
-
-          /* BUTTON CLICK */
-
-          button.addEventListener(
-            "click",
-            event => {
-
-              event.preventDefault();
-
-              event.stopPropagation();
-
-
-              /* PLUS */
-
-              if (
-                event.target.classList.contains(
-                  "qty-plus"
-                )
-              ) {
-
-                changeCartQuantity(
-                  productId,
-                  1
-                );
-
-                updateButton();
-
-                return;
-
-              }
-
-
-              /* MINUS */
-
-              if (
-                event.target.classList.contains(
-                  "qty-minus"
-                )
-              ) {
-
-                changeCartQuantity(
-                  productId,
-                  -1
-                );
-
-                updateButton();
-
-                return;
-
-              }
-
-
-              /* ADD */
-
-              addToCart(product);
-
-              updateButton();
-
-            }
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        const productsGrid =
+          document.getElementById(
+            "productsGrid"
           );
 
-        });
-
-      }
-
-
-
-      /* =================================================
-         CATEGORY FILTER
-         ================================================= */
-
-      function filterProducts(category) {
-
-        if (category === "all") {
-
-          displayProducts(products);
-
-          return;
-
-        }
-
-
-        const filtered =
-          products.filter(
-            product =>
-              product.category === category
+        const noProducts =
+          document.getElementById(
+            "noProducts"
           );
 
-
-        displayProducts(filtered);
-
-      }
-
-
-
-      /* =================================================
-         CATEGORY BUTTON CLICK
-         ================================================= */
-
-      filterButtons.forEach(button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            filterButtons.forEach(btn => {
-              btn.classList.remove("active");
-            });
-
-
-            button.classList.add("active");
-
-
-            const category =
-              button.dataset.category;
-
-
-            filterProducts(category);
-
-          }
-        );
-
-      });
-
-
-
-      /* =================================================
-         URL PARAMETERS
-         ================================================= */
-
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-
-      const search =
-        params.get("search");
-
-
-      const category =
-        params.get("category");
-
-
-
-      /* =================================================
-         SEARCH
-         ================================================= */
-
-      if (search) {
+        const filterButtons =
+          document.querySelectorAll(
+            ".category-filter"
+          );
 
         const searchInput =
           document.getElementById(
             "searchInput"
           );
 
+        const pageTitle =
+          document.getElementById(
+            "productsPageTitle"
+          );
 
-        searchInput.value = search;
+        const pageDescription =
+          document.getElementById(
+            "productsPageDescription"
+          );
 
+        const searchResultInfo =
+          document.getElementById(
+            "searchResultInfo"
+          );
 
-        const searchTerm =
-          search
-            .toLowerCase()
-            .trim();
-
-
-        const filtered =
-          products.filter(product =>
-
-            product.name
-              .toLowerCase()
-              .includes(searchTerm)
-
-            ||
-
-            product.category
-              .toLowerCase()
-              .includes(searchTerm)
-
+        const searchResultText =
+          document.getElementById(
+            "searchResultText"
           );
 
 
-        filterButtons.forEach(btn => {
-          btn.classList.remove("active");
-        });
+        /* =================================================
+           DISPLAY PRODUCTS
+           ================================================= */
+
+        function displayProducts(list) {
+
+          if (!Array.isArray(list) || list.length === 0) {
+
+            productsGrid.innerHTML = "";
+
+            noProducts.style.display =
+              "block";
+
+            return;
+
+          }
 
 
-        displayProducts(filtered);
-
-      }
-
+          noProducts.style.display =
+            "none";
 
 
-      /* =================================================
-         CATEGORY FROM URL
-         ================================================= */
+          productsGrid.innerHTML =
+            list.map(
+              product => `
 
-      else if (category) {
+                <article
+                  class="product-card"
+                  data-product-id="${product.id}"
+                >
 
-        const categoryButton =
-          document.querySelector(
-            `[data-category="${category}"]`
-          );
+                  <a
+                    href="product.html?id=${product.id}"
+                    class="product-card-link"
+                  >
+
+                    <div class="product-image">
+
+                      <img
+                        src="${product.image}"
+                        alt="${product.name}"
+                        loading="lazy"
+                        onerror="this.style.display='none'"
+                      >
+
+                    </div>
 
 
-        if (categoryButton) {
+                    <div class="product-info">
 
-          filterButtons.forEach(btn => {
-            btn.classList.remove("active");
-          });
+                      <span class="product-category">
+                        ${formatCategory(
+                          product.category
+                        )}
+                      </span>
+
+                      <h3>
+                        ${product.name}
+                      </h3>
+
+                      <p class="product-unit">
+                        ${product.unit}
+                      </p>
 
 
-          categoryButton.classList.add("active");
+                      <div class="product-price">
+
+                        <strong>
+                          ${formatPrice(
+                            product.price
+                          )}
+                        </strong>
+
+                        <span class="product-mrp">
+                          ${formatPrice(
+                            product.mrp
+                          )}
+                        </span>
+
+                        <span class="product-discount">
+                          ${product.discount}% OFF
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </a>
+
+
+                  <!-- ADD / QUANTITY BUTTON -->
+
+                  <button
+                    class="add-btn"
+                    data-product-id="${product.id}"
+                    type="button"
+                  >
+                    ADD
+                  </button>
+
+                </article>
+
+              `
+            ).join("");
+
+
+          setupProductButtons();
 
         }
 
 
-        filterProducts(category);
+
+        /* =================================================
+           ADD / QUANTITY BUTTONS
+           ================================================= */
+
+        function setupProductButtons() {
+
+          const addButtons =
+            document.querySelectorAll(
+              ".add-btn"
+            );
+
+
+          addButtons.forEach(
+            button => {
+
+              const productId =
+                Number(
+                  button.dataset.productId
+                );
+
+              const product =
+                products.find(
+                  item =>
+                    Number(item.id) ===
+                    productId
+                );
+
+              if (!product) {
+                return;
+              }
+
+
+              function updateButton() {
+
+                const cart =
+                  typeof getCart ===
+                  "function"
+                    ? getCart()
+                    : [];
+
+                const cartItem =
+                  Array.isArray(cart)
+                    ? cart.find(
+                        item =>
+                          Number(item.id) ===
+                          productId
+                      )
+                    : null;
+
+                const quantity =
+                  cartItem
+                    ? Number(
+                        cartItem.quantity || 0
+                      )
+                    : 0;
+
+
+                /* NOT IN CART */
+
+                if (quantity <= 0) {
+
+                  button.classList.remove(
+                    "added"
+                  );
+
+                  button.innerHTML =
+                    "ADD";
+
+                  return;
+
+                }
+
+
+                /* IN CART */
+
+                button.classList.add(
+                  "added"
+                );
+
+                button.innerHTML = `
+
+                  <span
+                    class="qty-minus"
+                  >
+                    −
+                  </span>
+
+                  <span
+                    class="qty-number"
+                  >
+                    ${quantity}
+                  </span>
+
+                  <span
+                    class="qty-plus"
+                  >
+                    +
+                  </span>
+
+                `;
+
+              }
+
+
+              /* INITIAL STATE */
+
+              updateButton();
+
+
+              /* BUTTON CLICK */
+
+              button.addEventListener(
+                "click",
+                event => {
+
+                  event.preventDefault();
+
+                  event.stopPropagation();
+
+
+                  /* PLUS */
+
+                  if (
+                    event.target.classList.contains(
+                      "qty-plus"
+                    )
+                  ) {
+
+                    changeCartQuantity(
+                      productId,
+                      1
+                    );
+
+                    updateButton();
+
+                    return;
+
+                  }
+
+
+                  /* MINUS */
+
+                  if (
+                    event.target.classList.contains(
+                      "qty-minus"
+                    )
+                  ) {
+
+                    changeCartQuantity(
+                      productId,
+                      -1
+                    );
+
+                    updateButton();
+
+                    return;
+
+                  }
+
+
+                  /* ADD */
+
+                  addToCart(
+                    product
+                  );
+
+                  updateButton();
+
+                }
+              );
+
+            }
+          );
+
+        }
+
+
+
+        /* =================================================
+           CATEGORY FILTER
+           ================================================= */
+
+        function filterProducts(
+          category
+        ) {
+
+          if (
+            category ===
+            "all"
+          ) {
+
+            displayProducts(
+              products
+            );
+
+            return;
+
+          }
+
+
+          const filtered =
+            products.filter(
+              product =>
+                product.category ===
+                category
+            );
+
+
+          displayProducts(
+            filtered
+          );
+
+        }
+
+
+
+        /* =================================================
+           PROFESSIONAL SEARCH
+           ================================================= */
+
+        function getSearchResults(
+          searchTerm
+        ) {
+
+          const query =
+            String(
+              searchTerm || ""
+            )
+              .toLowerCase()
+              .trim()
+              .replace(/\s+/g, " ");
+
+
+          if (!query) {
+            return [];
+          }
+
+
+          /*
+           * Use the professional
+           * search system from search.js
+           * whenever available.
+           */
+
+          if (
+            window.ZynexCartSearch &&
+            typeof
+              window.ZynexCartSearch.searchProducts ===
+              "function"
+          ) {
+
+            return window.ZynexCartSearch
+              .searchProducts(
+                query
+              );
+
+          }
+
+
+          /*
+           * Safe fallback.
+           */
+
+          return products.filter(
+            product => {
+
+              const name =
+                String(
+                  product.name || ""
+                )
+                  .toLowerCase();
+
+              const category =
+                String(
+                  product.category || ""
+                )
+                  .toLowerCase();
+
+              const unit =
+                String(
+                  product.unit || ""
+                )
+                  .toLowerCase();
+
+              return (
+                name.includes(query) ||
+                category.includes(query) ||
+                unit.includes(query)
+              );
+
+            }
+          );
+
+        }
+
+
+
+        /* =================================================
+           SHOW SEARCH RESULT INFO
+           ================================================= */
+
+        function showSearchResultInfo(
+          searchTerm,
+          resultCount
+        ) {
+
+          if (
+            !searchTerm
+          ) {
+
+            searchResultInfo.hidden =
+              true;
+
+            searchResultText.textContent =
+              "";
+
+            return;
+
+          }
+
+
+          searchResultInfo.hidden =
+            false;
+
+
+          searchResultText.textContent =
+            `Showing results for "${searchTerm}"`;
+
+
+
+          /*
+           * Search page heading
+           */
+
+          pageTitle.textContent =
+            `Search Results`;
+
+
+          pageDescription.textContent =
+            `${resultCount} ${
+              resultCount === 1
+                ? "product"
+                : "products"
+            } found`;
+
+        }
+
+
+
+        /* =================================================
+           CLEAR SEARCH RESULT INFO
+           ================================================= */
+
+        function clearSearchResultInfo() {
+
+          searchResultInfo.hidden =
+            true;
+
+          searchResultText.textContent =
+            "";
+
+          pageTitle.textContent =
+            "All Products 🛍️";
+
+          pageDescription.textContent =
+            "Shop your daily essentials at ZynexCart.";
+
+        }
+
+
+
+        /* =================================================
+           SEARCH FROM URL
+           ================================================= */
+
+        function applySearch(
+          searchTerm
+        ) {
+
+          const cleanSearch =
+            String(
+              searchTerm || ""
+            )
+              .trim();
+
+
+          if (!cleanSearch) {
+
+            clearSearchResultInfo();
+
+            displayProducts(
+              products
+            );
+
+            return;
+
+          }
+
+
+          if (searchInput) {
+
+            searchInput.value =
+              cleanSearch;
+
+          }
+
+
+          const results =
+            getSearchResults(
+              cleanSearch
+            );
+
+
+          filterButtons.forEach(
+            button => {
+
+              button.classList.remove(
+                "active"
+              );
+
+            }
+          );
+
+
+          showSearchResultInfo(
+            cleanSearch,
+            results.length
+          );
+
+
+          displayProducts(
+            results
+          );
+
+        }
+
+
+
+        /* =================================================
+           CATEGORY FROM URL
+           ================================================= */
+
+        function applyCategory(
+          category
+        ) {
+
+          const categoryButton =
+            document.querySelector(
+              `[data-category="${category}"]`
+            );
+
+
+          if (
+            categoryButton
+          ) {
+
+            filterButtons.forEach(
+              button => {
+
+                button.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+            categoryButton.classList.add(
+              "active"
+            );
+
+          }
+
+
+          clearSearchResultInfo();
+
+          filterProducts(
+            category
+          );
+
+        }
+
+
+
+        /* =================================================
+           CATEGORY BUTTON CLICK
+           ================================================= */
+
+        filterButtons.forEach(
+          button => {
+
+            button.addEventListener(
+              "click",
+              () => {
+
+                filterButtons.forEach(
+                  btn => {
+
+                    btn.classList.remove(
+                      "active"
+                    );
+
+                  }
+                );
+
+
+                button.classList.add(
+                  "active"
+                );
+
+
+                const category =
+                  button.dataset.category;
+
+
+                /*
+                 * Remove search query
+                 * when category is selected.
+                 */
+
+                const url =
+                  new URL(
+                    window.location.href
+                  );
+
+                url.searchParams.delete(
+                  "search"
+                );
+
+                if (
+                  category ===
+                  "all"
+                ) {
+
+                  url.searchParams.delete(
+                    "category"
+                  );
+
+                } else {
+
+                  url.searchParams.set(
+                    "category",
+                    category
+                  );
+
+                }
+
+
+                window.history.replaceState(
+                  {},
+                  "",
+                  url
+                );
+
+
+                if (
+                  searchInput
+                ) {
+
+                  searchInput.value =
+                    "";
+
+                }
+
+
+                clearSearchResultInfo();
+
+                filterProducts(
+                  category
+                );
+
+              }
+            );
+
+          }
+        );
+
+
+
+        /* =================================================
+           URL PARAMETERS
+           ================================================= */
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        const search =
+          params.get(
+            "search"
+          );
+
+
+        const category =
+          params.get(
+            "category"
+          );
+
+
+
+        /* =================================================
+           INITIAL PAGE STATE
+           ================================================= */
+
+        if (search) {
+
+          applySearch(
+            search
+          );
+
+        } else if (category) {
+
+          applyCategory(
+            category
+          );
+
+        } else {
+
+          clearSearchResultInfo();
+
+          displayProducts(
+            products
+          );
+
+        }
 
       }
-
-
-
-      /* =================================================
-         DEFAULT
-         ================================================= */
-
-      else {
-
-        displayProducts(products);
-
-      }
-
-    });
+    );
 
   </script>
 
