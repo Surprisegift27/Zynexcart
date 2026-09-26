@@ -91,10 +91,30 @@
 
 
 /* =====================================================
+   CATEGORY SECTION
+   ===================================================== */
+
+.categories-section {
+  width: 100%;
+}
+
+.categories-container {
+  width: min(1400px, calc(100% - 40px));
+
+  margin-inline: auto;
+}
+
+
+/* =====================================================
    CATEGORY GRID
    ===================================================== */
 
-.category-grid {
+/*
+   Large desktop
+   21 categories = 7 × 3 rows
+*/
+
+.categories-grid {
   width: 100%;
 
   display: grid;
@@ -102,7 +122,9 @@
   grid-template-columns:
     repeat(7, minmax(0, 1fr));
 
-  gap: 20px 16px;
+  gap: 28px 16px;
+
+  align-items: start;
 }
 
 
@@ -112,6 +134,7 @@
 
 .category-card {
   width: 100%;
+
   min-width: 0;
 
   padding: 0;
@@ -132,7 +155,10 @@
 
   text-decoration: none;
 
-  transition: transform 0.2s ease;
+  color: inherit;
+
+  transition:
+    transform 0.2s ease;
 }
 
 .category-card:hover {
@@ -141,11 +167,12 @@
 
 
 /* =====================================================
-   CATEGORY IMAGE BOX
+   CATEGORY IMAGE
    ===================================================== */
 
-.category-card .category-icon {
+.category-image {
   width: 100%;
+
   aspect-ratio: 1 / 1;
 
   margin-bottom: 10px;
@@ -166,22 +193,19 @@
 
   box-shadow: var(--shadow-sm);
 
-  font-size: 28px;
-  line-height: 1;
-
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
     transform 0.2s ease;
 }
 
-.category-card:hover .category-icon {
+.category-card:hover .category-image {
   border-color: #ffd0b2;
 
   box-shadow: var(--shadow);
 }
 
-.category-card .category-icon img {
+.category-image img {
   width: 100%;
   height: 100%;
 
@@ -208,6 +232,9 @@
   line-height: 1.3;
 
   text-align: center;
+
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 
@@ -217,4 +244,105 @@
 
 .category-card p {
   display: none;
+}
+
+
+/* =====================================================
+   LAPTOP
+   6 CATEGORIES PER ROW
+   ===================================================== */
+
+@media (max-width: 1200px) {
+
+  .categories-grid {
+    grid-template-columns:
+      repeat(6, minmax(0, 1fr));
+
+    gap: 26px 14px;
+  }
+
+}
+
+
+/* =====================================================
+   TABLET
+   4 CATEGORIES PER ROW
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+  .categories-container {
+    width: min(100% - 32px, 760px);
+  }
+
+  .categories-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    gap: 24px 12px;
+  }
+
+  .category-card h3 {
+    font-size: 13px;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   3 CATEGORIES PER ROW
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+  .categories-container {
+    width: calc(100% - 24px);
+  }
+
+  .categories-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 20px 10px;
+  }
+
+  .category-image {
+    margin-bottom: 8px;
+
+    border-radius: 14px;
+  }
+
+  .category-card h3 {
+    font-size: 12px;
+
+    line-height: 1.25;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+   Keep 3 COLUMNS
+   ===================================================== */
+
+@media (max-width: 380px) {
+
+  .categories-container {
+    width: calc(100% - 20px);
+  }
+
+  .categories-grid {
+    gap: 18px 8px;
+  }
+
+  .category-image {
+    border-radius: 12px;
+  }
+
+  .category-card h3 {
+    font-size: 11px;
+  }
+
 }
