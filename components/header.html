@@ -48,13 +48,17 @@
     </button>
 
 
-    <!-- SEARCH -->
+    <!-- =================================================
+         SEARCH
+         ================================================= -->
+
     <form
       class="search-box"
       id="searchForm"
       role="search"
     >
 
+      <!-- SEARCH ICON -->
       <span
         class="search-icon"
         aria-hidden="true"
@@ -62,6 +66,7 @@
         🔍
       </span>
 
+      <!-- SEARCH INPUT -->
       <input
         type="search"
         id="searchInput"
@@ -69,6 +74,15 @@
         autocomplete="off"
         aria-label="Search products"
       />
+
+      <!-- SEARCH BUTTON -->
+      <button
+        type="submit"
+        class="search-button"
+        aria-label="Search"
+      >
+        🔍
+      </button>
 
     </form>
 
@@ -126,6 +140,7 @@
           cartItemsText is kept for the existing UI.
           cartCount is the modular cart quantity value.
         -->
+
         <span id="cartItemsText">
           <span id="cartCount">0</span> items
         </span>
