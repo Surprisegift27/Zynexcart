@@ -77,6 +77,7 @@
       <form
         class="search-box"
         id="searchForm"
+        role="search"
       >
 
         <input
@@ -85,6 +86,7 @@
           placeholder="Search products..."
           autocomplete="off"
           aria-label="Search products"
+          spellcheck="false"
         >
 
         <button
@@ -99,7 +101,10 @@
 
       <!-- HEADER ACTIONS -->
 
-      <nav class="header-actions">
+      <nav
+        class="header-actions"
+        aria-label="Account and cart"
+      >
 
         <a
           href="login.html"
@@ -157,7 +162,10 @@
          CATEGORY FILTERS
          ================================================= -->
 
-    <div class="category-filters">
+    <div
+      class="category-filters"
+      aria-label="Product categories"
+    >
 
 
       <button
@@ -247,13 +255,15 @@
          PRODUCTS
          ================================================= -->
 
-    <section>
+    <section
+      aria-label="Products"
+    >
 
       <div
         class="product-grid"
         id="productsGrid"
       >
-        <!-- Products load here -->
+        <!-- Products are rendered by JavaScript -->
       </div>
 
 
@@ -306,16 +316,61 @@
 
   <!-- =================================================
        JAVASCRIPT
+       
+       IMPORTANT:
+       Dependency order must remain unchanged.
        ================================================= -->
 
-  <!-- Product data -->
-  <script src="js/products.js"></script>
 
-  <!-- Professional search engine -->
+  <!-- =========================
+       CORE
+       ========================== -->
+
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/utils.js"></script>
+  <script src="js/core/events.js"></script>
+
+
+  <!-- =========================
+       CART
+       ========================== -->
+
+  <script src="js/cart/cart.js"></script>
+  <script src="js/cart/cart-actions.js"></script>
+  <script src="js/cart/cart-ui.js"></script>
+
+
+  <!-- =========================
+       SEARCH
+       ========================== -->
+
   <script src="js/search/search.js"></script>
 
-  <!-- Application system -->
+
+  <!-- =========================
+       LOCATION
+       ========================== -->
+
+  <script src="js/location/location.js"></script>
+  <script src="js/location/location-ui.js"></script>
+  <script src="js/location/location-search.js"></script>
+  <script src="js/location/location-map.js"></script>
+  <script src="js/location/location-address.js"></script>
+  <script src="js/location/saved-addresses.js"></script>
+
+
+  <!-- =========================
+       APPLICATION
+       ========================== -->
+
   <script src="js/app.js"></script>
+
+
+  <!-- =========================
+       PRODUCTS
+       ========================== -->
+
+  <script src="js/products.js"></script>
 
 
 
@@ -325,9 +380,30 @@
 
   <script>
 
-    document.addEventListener(
-      "DOMContentLoaded",
-      function () {
+    (function () {
+
+      "use strict";
+
+
+      /*
+       * Prevent duplicate page initialization.
+       */
+
+      if (
+        window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__
+      ) {
+
+        return;
+
+      }
+
+
+      window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__ =
+        true;
+
+
+      function initializeProductsPage() {
+
 
         /* =================================================
            ELEMENTS
@@ -338,40 +414,42 @@
             "productsGrid"
           );
 
+
         const noProducts =
           document.getElementById(
             "noProducts"
           );
+
 
         const filterButtons =
           document.querySelectorAll(
             ".category-filter"
           );
 
+
         const searchInput =
           document.getElementById(
             "searchInput"
           );
 
-        const searchForm =
-          document.getElementById(
-            "searchForm"
-          );
 
         const pageTitle =
           document.getElementById(
             "productsPageTitle"
           );
 
+
         const pageDescription =
           document.getElementById(
             "productsPageDescription"
           );
 
+
         const searchResultInfo =
           document.getElementById(
             "searchResultInfo"
           );
+
 
         const searchResultText =
           document.getElementById(
@@ -379,22 +457,38 @@
           );
 
 
-        /* =================================================
-           INITIALIZE SEARCH
-           
-           Search must work independently from app.js.
-           This prevents the search system from depending
-           on other application modules.
-           ================================================= */
-
         if (
-          window.ZynexCartSearch &&
-          typeof
-            window.ZynexCartSearch.setupSearch ===
-              "function"
+          !productsGrid ||
+          !noProducts
         ) {
 
-          window.ZynexCartSearch.setupSearch();
+          console.error(
+            "ZynexCart: Products page elements not found."
+          );
+
+          return;
+
+        }
+
+
+
+        /* =================================================
+           HELPER — NORMALIZE SEARCH
+           ================================================= */
+
+        function normalizeSearch(
+          value
+        ) {
+
+          return String(
+            value || ""
+          )
+            .toLowerCase()
+            .trim()
+            .replace(
+              /\s+/g,
+              " "
+            );
 
         }
 
@@ -404,14 +498,17 @@
            DISPLAY PRODUCTS
            ================================================= */
 
-        function displayProducts(list) {
+        function displayProducts(
+          list
+        ) {
 
           if (
             !Array.isArray(list) ||
             list.length === 0
           ) {
 
-            productsGrid.innerHTML = "";
+            productsGrid.innerHTML =
+              "";
 
             noProducts.style.display =
               "block";
@@ -428,87 +525,110 @@
           productsGrid.innerHTML =
             list
               .map(
-                product => `
+                function (product) {
 
-                  <article
-                    class="product-card"
-                    data-product-id="${product.id}"
-                  >
+                  return `
 
-                    <a
-                      href="product.html?id=${encodeURIComponent(
-                        product.id
-                      )}"
-                      class="product-card-link"
+                    <article
+                      class="product-card"
+                      data-product-id="${product.id}"
                     >
 
-                      <div class="product-image">
+                      <a
+                        href="product.html?id=${encodeURIComponent(
+                          product.id
+                        )}"
+                        class="product-card-link"
+                        aria-label="View ${product.name}"
+                      >
 
-                        <img
-                          src="${product.image}"
-                          alt="${product.name}"
-                          loading="lazy"
-                          onerror="this.style.display='none'"
+                        <div
+                          class="product-image"
                         >
 
-                      </div>
-
-
-                      <div class="product-info">
-
-                        <span class="product-category">
-                          ${formatCategory(
-                            product.category
-                          )}
-                        </span>
-
-                        <h3>
-                          ${product.name}
-                        </h3>
-
-                        <p class="product-unit">
-                          ${product.unit}
-                        </p>
-
-
-                        <div class="product-price">
-
-                          <strong>
-                            ${formatPrice(
-                              product.price
-                            )}
-                          </strong>
-
-                          <span class="product-mrp">
-                            ${formatPrice(
-                              product.mrp
-                            )}
-                          </span>
-
-                          <span class="product-discount">
-                            ${product.discount}% OFF
-                          </span>
+                          <img
+                            src="${product.image}"
+                            alt="${product.name}"
+                            loading="lazy"
+                            onerror="this.style.display='none'"
+                          >
 
                         </div>
 
-                      </div>
 
-                    </a>
+                        <div
+                          class="product-info"
+                        >
+
+                          <span
+                            class="product-category"
+                          >
+                            ${formatCategory(
+                              product.category
+                            )}
+                          </span>
 
 
-                    <!-- ADD / QUANTITY -->
+                          <h3>
+                            ${product.name}
+                          </h3>
 
-                    <button
-                      class="add-btn"
-                      data-product-id="${product.id}"
-                      type="button"
-                    >
-                      ADD
-                    </button>
 
-                  </article>
+                          <p
+                            class="product-unit"
+                          >
+                            ${product.unit}
+                          </p>
 
-                `
+
+                          <div
+                            class="product-price"
+                          >
+
+                            <strong>
+                              ${formatPrice(
+                                product.price
+                              )}
+                            </strong>
+
+
+                            <span
+                              class="product-mrp"
+                            >
+                              ${formatPrice(
+                                product.mrp
+                              )}
+                            </span>
+
+
+                            <span
+                              class="product-discount"
+                            >
+                              ${product.discount}% OFF
+                            </span>
+
+                          </div>
+
+                        </div>
+
+                      </a>
+
+
+                      <!-- ADD / QUANTITY -->
+
+                      <button
+                        class="add-btn"
+                        data-product-id="${product.id}"
+                        type="button"
+                      >
+                        ADD
+                      </button>
+
+                    </article>
+
+                  `;
+
+                }
               )
               .join("");
 
@@ -526,19 +646,22 @@
         function setupProductButtons() {
 
           const addButtons =
-            document.querySelectorAll(
-              ".add-btn"
+            productsGrid.querySelectorAll(
+              ".add-btn[data-product-id]"
             );
 
 
           addButtons.forEach(
-            button => {
+            function (button) {
+
 
               if (
                 button.dataset.bound ===
                 "true"
               ) {
+
                 return;
+
               }
 
 
@@ -554,46 +677,78 @@
 
               const product =
                 products.find(
-                  item =>
-                    Number(item.id) ===
-                    productId
+                  function (item) {
+
+                    return (
+                      Number(item.id) ===
+                      productId
+                    );
+
+                  }
                 );
 
 
               if (!product) {
+
                 return;
+
+              }
+
+
+
+              function getQuantity() {
+
+                if (
+                  typeof getCart !==
+                  "function"
+                ) {
+
+                  return 0;
+
+                }
+
+
+                const cart =
+                  getCart();
+
+
+                if (
+                  !Array.isArray(cart)
+                ) {
+
+                  return 0;
+
+                }
+
+
+                const cartItem =
+                  cart.find(
+                    function (item) {
+
+                      return (
+                        Number(item.id) ===
+                        productId
+                      );
+
+                    }
+                  );
+
+
+                return cartItem
+                  ? Number(
+                      cartItem.quantity || 0
+                    )
+                  : 0;
+
               }
 
 
 
               function updateButton() {
 
-                const cart =
-                  typeof getCart ===
-                  "function"
-                    ? getCart()
-                    : [];
-
-
-                const cartItem =
-                  Array.isArray(cart)
-                    ? cart.find(
-                        item =>
-                          Number(item.id) ===
-                          productId
-                      )
-                    : null;
-
-
                 const quantity =
-                  cartItem
-                    ? Number(
-                        cartItem.quantity || 0
-                      )
-                    : 0;
+                  getQuantity();
 
-
-                /* NOT IN CART */
 
                 if (
                   quantity <= 0
@@ -603,19 +758,20 @@
                     "added"
                   );
 
+
                   button.innerHTML =
                     "ADD";
+
 
                   return;
 
                 }
 
 
-                /* IN CART */
-
                 button.classList.add(
                   "added"
                 );
+
 
                 button.innerHTML = `
 
@@ -625,11 +781,14 @@
                     −
                   </span>
 
+
                   <span
                     class="qty-number"
+                    aria-live="polite"
                   >
                     ${quantity}
                   </span>
+
 
                   <span
                     class="qty-plus"
@@ -642,13 +801,10 @@
               }
 
 
-              /* INITIAL STATE */
 
               updateButton();
 
 
-
-              /* BUTTON CLICK */
 
               button.addEventListener(
                 "click",
@@ -659,10 +815,14 @@
                   event.stopPropagation();
 
 
+                  const clickedElement =
+                    event.target;
+
+
                   /* PLUS */
 
                   if (
-                    event.target.classList.contains(
+                    clickedElement.classList.contains(
                       "qty-plus"
                     )
                   ) {
@@ -679,6 +839,7 @@
 
                     }
 
+
                     updateButton();
 
                     return;
@@ -689,7 +850,7 @@
                   /* MINUS */
 
                   if (
-                    event.target.classList.contains(
+                    clickedElement.classList.contains(
                       "qty-minus"
                     )
                   ) {
@@ -705,6 +866,7 @@
                       );
 
                     }
+
 
                     updateButton();
 
@@ -725,6 +887,7 @@
                     );
 
                   }
+
 
                   updateButton();
 
@@ -762,9 +925,14 @@
 
           const filtered =
             products.filter(
-              product =>
-                product.category ===
-                category
+              function (product) {
+
+                return (
+                  product.category ===
+                  category
+                );
+
+              }
             );
 
 
@@ -777,7 +945,7 @@
 
 
         /* =================================================
-           PROFESSIONAL SEARCH
+           SEARCH RESULTS
            ================================================= */
 
         function getSearchResults(
@@ -785,23 +953,23 @@
         ) {
 
           const query =
-            String(
-              searchTerm || ""
-            )
-              .toLowerCase()
-              .trim()
-              .replace(
-                /\s+/g,
-                " "
-              );
+            normalizeSearch(
+              searchTerm
+            );
 
 
           if (!query) {
+
             return [];
+
           }
 
 
-          /* PRIMARY SEARCH ENGINE */
+          /*
+           * Use the exact same
+           * professional search engine
+           * used by the header.
+           */
 
           if (
             window.ZynexCartSearch &&
@@ -818,30 +986,29 @@
           }
 
 
-          /* SAFE FALLBACK */
+          /*
+           * Safe fallback.
+           */
 
           return products.filter(
-            product => {
+            function (product) {
 
               const name =
-                String(
-                  product.name || ""
-                )
-                  .toLowerCase();
+                normalizeSearch(
+                  product.name
+                );
 
 
               const category =
-                String(
-                  product.category || ""
-                )
-                  .toLowerCase();
+                normalizeSearch(
+                  product.category
+                );
 
 
               const unit =
-                String(
-                  product.unit || ""
-                )
-                  .toLowerCase();
+                normalizeSearch(
+                  product.unit
+                );
 
 
               return (
@@ -858,7 +1025,7 @@
 
 
         /* =================================================
-           SHOW SEARCH RESULT INFORMATION
+           SEARCH RESULT INFORMATION
            ================================================= */
 
         function showSearchResultInfo(
@@ -866,24 +1033,48 @@
           resultCount
         ) {
 
-          searchResultInfo.hidden =
-            false;
+          if (
+            searchResultInfo
+          ) {
+
+            searchResultInfo.hidden =
+              false;
+
+          }
 
 
-          searchResultText.textContent =
-            `Showing results for "${searchTerm}"`;
+          if (
+            searchResultText
+          ) {
+
+            searchResultText.textContent =
+              `Showing results for "${searchTerm}"`;
+
+          }
 
 
-          pageTitle.textContent =
-            "Search Results";
+          if (
+            pageTitle
+          ) {
+
+            pageTitle.textContent =
+              "Search Results";
+
+          }
 
 
-          pageDescription.textContent =
-            `${resultCount} ${
-              resultCount === 1
-                ? "product"
-                : "products"
-            } found`;
+          if (
+            pageDescription
+          ) {
+
+            pageDescription.textContent =
+              `${resultCount} ${
+                resultCount === 1
+                  ? "product"
+                  : "products"
+              } found`;
+
+          }
 
         }
 
@@ -895,64 +1086,44 @@
 
         function clearSearchResultInfo() {
 
-          searchResultInfo.hidden =
-            true;
+          if (
+            searchResultInfo
+          ) {
 
-
-          searchResultText.textContent =
-            "";
-
-
-          pageTitle.textContent =
-            "All Products 🛍️";
-
-
-          pageDescription.textContent =
-            "Shop your daily essentials at ZynexCart.";
-
-        }
-
-
-
-        /* =================================================
-           UPDATE SEARCH URL
-           ================================================= */
-
-        function updateSearchURL(
-          searchTerm
-        ) {
-
-          const url =
-            new URL(
-              window.location.href
-            );
-
-
-          if (searchTerm) {
-
-            url.searchParams.set(
-              "search",
-              searchTerm
-            );
-
-            url.searchParams.delete(
-              "category"
-            );
-
-          } else {
-
-            url.searchParams.delete(
-              "search"
-            );
+            searchResultInfo.hidden =
+              true;
 
           }
 
 
-          window.history.replaceState(
-            {},
-            "",
-            url
-          );
+          if (
+            searchResultText
+          ) {
+
+            searchResultText.textContent =
+              "";
+
+          }
+
+
+          if (
+            pageTitle
+          ) {
+
+            pageTitle.textContent =
+              "All Products 🛍️";
+
+          }
+
+
+          if (
+            pageDescription
+          ) {
+
+            pageDescription.textContent =
+              "Shop your daily essentials at ZynexCart.";
+
+          }
 
         }
 
@@ -981,18 +1152,25 @@
 
             clearSearchResultInfo();
 
+
             displayProducts(
               products
             );
+
 
             return;
 
           }
 
 
-          /* Keep query in search box */
+          /*
+           * Keep query visible
+           * inside header search.
+           */
 
-          if (searchInput) {
+          if (
+            searchInput
+          ) {
 
             searchInput.value =
               cleanSearch;
@@ -1000,10 +1178,12 @@
           }
 
 
-          /* Remove active category */
+          /*
+           * Remove active category.
+           */
 
           filterButtons.forEach(
-            button => {
+            function (button) {
 
               button.classList.remove(
                 "active"
@@ -1013,7 +1193,10 @@
           );
 
 
-          /* Get matching products */
+          /*
+           * Get professional
+           * search results.
+           */
 
           const results =
             getSearchResults(
@@ -1021,7 +1204,9 @@
             );
 
 
-          /* Show result information */
+          /*
+           * Show search information.
+           */
 
           showSearchResultInfo(
             cleanSearch,
@@ -1029,7 +1214,10 @@
           );
 
 
-          /* Show ONLY matching products */
+          /*
+           * Display ONLY
+           * matching products.
+           */
 
           displayProducts(
             results
@@ -1058,7 +1246,7 @@
           ) {
 
             filterButtons.forEach(
-              button => {
+              function (button) {
 
                 button.classList.remove(
                   "active"
@@ -1077,6 +1265,7 @@
 
           clearSearchResultInfo();
 
+
           filterProducts(
             category
           );
@@ -1086,18 +1275,19 @@
 
 
         /* =================================================
-           CATEGORY BUTTON CLICK
+           CATEGORY BUTTONS
            ================================================= */
 
         filterButtons.forEach(
-          button => {
+          function (button) {
 
             button.addEventListener(
               "click",
               function () {
 
+
                 filterButtons.forEach(
-                  btn => {
+                  function (btn) {
 
                     btn.classList.remove(
                       "active"
@@ -1116,7 +1306,9 @@
                   button.dataset.category;
 
 
-                /* Update URL */
+                /*
+                 * Update URL without reload.
+                 */
 
                 const url =
                   new URL(
@@ -1155,7 +1347,9 @@
                 );
 
 
-                /* Clear search input */
+                /*
+                 * Clear search.
+                 */
 
                 if (
                   searchInput
@@ -1167,7 +1361,10 @@
                 }
 
 
-                /* Close suggestions */
+                /*
+                 * Close search
+                 * suggestions.
+                 */
 
                 if (
                   window.ZynexCartSearch &&
@@ -1182,12 +1379,8 @@
                 }
 
 
-                /* Reset search information */
-
                 clearSearchResultInfo();
 
-
-                /* Display category */
 
                 filterProducts(
                   category
@@ -1202,73 +1395,137 @@
 
 
         /* =================================================
-           SEARCH FORM — PAGE LEVEL SAFETY
+           CART UPDATE SYNC
            
-           This does NOT change the search button design.
-           It only guarantees form submission works.
+           When cart changes from another part
+           of the website, update visible buttons.
            ================================================= */
 
-        if (
-          searchForm &&
-          searchForm.dataset.productsSearchBound !==
-            "true"
-        ) {
+        document.addEventListener(
+          "zynexcart:cartUpdated",
+          function () {
 
-          searchForm.dataset.productsSearchBound =
-            "true";
-
-
-          searchForm.addEventListener(
-            "submit",
-            function (event) {
-
-              event.preventDefault();
+            const visibleButtons =
+              productsGrid.querySelectorAll(
+                ".add-btn[data-product-id]"
+              );
 
 
-              const value =
-                searchInput
-                  ? searchInput.value
-                      .trim()
-                  : "";
+            visibleButtons.forEach(
+              function (button) {
+
+                /*
+                 * Re-render the current
+                 * visible product list.
+                 */
+
+                const productId =
+                  Number(
+                    button.dataset.productId
+                  );
 
 
-              if (!value) {
+                const product =
+                  products.find(
+                    function (item) {
 
-                if (searchInput) {
-                  searchInput.focus();
+                      return (
+                        Number(item.id) ===
+                        productId
+                      );
+
+                    }
+                  );
+
+
+                if (!product) {
+
+                  return;
+
                 }
 
-                return;
+
+                const cart =
+                  typeof getCart ===
+                  "function"
+                    ? getCart()
+                    : [];
+
+
+                const cartItem =
+                  Array.isArray(cart)
+                    ? cart.find(
+                        function (item) {
+
+                          return (
+                            Number(item.id) ===
+                            productId
+                          );
+
+                        }
+                      )
+                    : null;
+
+
+                const quantity =
+                  cartItem
+                    ? Number(
+                        cartItem.quantity || 0
+                      )
+                    : 0;
+
+
+                if (
+                  quantity <= 0
+                ) {
+
+                  button.classList.remove(
+                    "added"
+                  );
+
+
+                  button.innerHTML =
+                    "ADD";
+
+
+                  return;
+
+                }
+
+
+                button.classList.add(
+                  "added"
+                );
+
+
+                button.innerHTML = `
+
+                  <span
+                    class="qty-minus"
+                  >
+                    −
+                  </span>
+
+                  <span
+                    class="qty-number"
+                    aria-live="polite"
+                  >
+                    ${quantity}
+                  </span>
+
+                  <span
+                    class="qty-plus"
+                  >
+                    +
+                  </span>
+
+                `;
 
               }
+            );
 
-
-              updateSearchURL(
-                value
-              );
-
-
-              applySearch(
-                value
-              );
-
-
-              if (
-                window.ZynexCartSearch &&
-                typeof
-                  window.ZynexCartSearch.hideSuggestions ===
-                    "function"
-              ) {
-
-                window.ZynexCartSearch
-                  .hideSuggestions();
-
-              }
-
-            }
-          );
-
-        }
+          }
+        );
 
 
 
@@ -1321,6 +1578,7 @@
 
           clearSearchResultInfo();
 
+
           displayProducts(
             products
           );
@@ -1328,7 +1586,33 @@
         }
 
       }
-    );
+
+
+
+      /* =================================================
+         START
+         ================================================= */
+
+      if (
+        document.readyState ===
+        "loading"
+      ) {
+
+        document.addEventListener(
+          "DOMContentLoaded",
+          initializeProductsPage,
+          {
+            once: true
+          }
+        );
+
+      } else {
+
+        initializeProductsPage();
+
+      }
+
+    })();
 
   </script>
 
