@@ -68,9 +68,7 @@
         href="products.html"
         class="location-btn"
       >
-
         📍 Shop Products
-
       </a>
 
 
@@ -310,14 +308,15 @@
        JAVASCRIPT
        ================================================= -->
 
-  <!-- Existing application system -->
-  <script src="js/app.js"></script>
-
-  <!-- Product data + product controls -->
+  <!-- Product data -->
   <script src="js/products.js"></script>
 
-  <!-- Professional search functionality -->
+  <!-- Professional search -->
   <script src="js/search/search.js"></script>
+
+  <!-- Application system -->
+  <script src="js/app.js"></script>
+
 
 
   <!-- =================================================
@@ -328,7 +327,7 @@
 
     document.addEventListener(
       "DOMContentLoaded",
-      () => {
+      function () {
 
         const productsGrid =
           document.getElementById(
@@ -526,6 +525,7 @@
                     ? getCart()
                     : [];
 
+
                 const cartItem =
                   Array.isArray(cart)
                     ? cart.find(
@@ -535,6 +535,7 @@
                       )
                     : null;
 
+
                 const quantity =
                   cartItem
                     ? Number(
@@ -543,7 +544,11 @@
                     : 0;
 
 
-                if (quantity <= 0) {
+                /* NOT IN CART */
+
+                if (
+                  quantity <= 0
+                ) {
 
                   button.classList.remove(
                     "added"
@@ -556,6 +561,8 @@
 
                 }
 
+
+                /* IN CART */
 
                 button.classList.add(
                   "added"
@@ -586,17 +593,23 @@
               }
 
 
+              /* INITIAL STATE */
+
               updateButton();
 
 
+              /* BUTTON CLICK */
+
               button.addEventListener(
                 "click",
-                event => {
+                function (event) {
 
                   event.preventDefault();
 
                   event.stopPropagation();
 
+
+                  /* PLUS */
 
                   if (
                     event.target.classList.contains(
@@ -616,6 +629,8 @@
                   }
 
 
+                  /* MINUS */
+
                   if (
                     event.target.classList.contains(
                       "qty-minus"
@@ -633,6 +648,8 @@
 
                   }
 
+
+                  /* ADD */
 
                   addToCart(
                     product
@@ -713,9 +730,9 @@
 
 
           /*
-           * Use the same professional
-           * search engine used by
-           * the header suggestions.
+           * Always use the same
+           * professional search engine
+           * as the header search.
            */
 
           if (
@@ -746,17 +763,20 @@
                 )
                   .toLowerCase();
 
+
               const category =
                 String(
                   product.category || ""
                 )
                   .toLowerCase();
 
+
               const unit =
                 String(
                   product.unit || ""
                 )
                   .toLowerCase();
+
 
               return (
                 name.includes(query) ||
@@ -836,7 +856,8 @@
           const cleanSearch =
             String(
               searchTerm || ""
-            ).trim();
+            )
+              .trim();
 
 
           if (!cleanSearch) {
@@ -852,6 +873,8 @@
           }
 
 
+          /* Keep search text in header */
+
           if (searchInput) {
 
             searchInput.value =
@@ -860,6 +883,10 @@
           }
 
 
+          /*
+           * Get ONLY matching products.
+           */
+
           const results =
             getSearchResults(
               cleanSearch
@@ -867,8 +894,7 @@
 
 
           /*
-           * Search mode removes
-           * active category state.
+           * Remove active category.
            */
 
           filterButtons.forEach(
@@ -882,11 +908,20 @@
           );
 
 
+          /*
+           * Show search information.
+           */
+
           showSearchResultInfo(
             cleanSearch,
             results.length
           );
 
+
+          /*
+           * IMPORTANT:
+           * Display only search results.
+           */
 
           displayProducts(
             results
@@ -951,7 +986,7 @@
 
             button.addEventListener(
               "click",
-              () => {
+              function () {
 
                 filterButtons.forEach(
                   btn => {
@@ -975,7 +1010,7 @@
 
                 /*
                  * Remove search query
-                 * when category changes.
+                 * from URL.
                  */
 
                 const url =
@@ -990,8 +1025,7 @@
 
 
                 if (
-                  category ===
-                  "all"
+                  category === "all"
                 ) {
 
                   url.searchParams.delete(
@@ -1015,12 +1049,33 @@
                 );
 
 
+                /*
+                 * Clear search box.
+                 */
+
                 if (
                   searchInput
                 ) {
 
                   searchInput.value =
                     "";
+
+                }
+
+
+                /*
+                 * Hide search suggestions.
+                 */
+
+                if (
+                  window.ZynexCartSearch &&
+                  typeof
+                    window.ZynexCartSearch.hideSuggestions ===
+                    "function"
+                ) {
+
+                  window.ZynexCartSearch
+                    .hideSuggestions();
 
                 }
 
