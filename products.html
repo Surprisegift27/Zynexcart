@@ -311,7 +311,7 @@
   <!-- Product data -->
   <script src="js/products.js"></script>
 
-  <!-- Professional search -->
+  <!-- Professional search engine -->
   <script src="js/search/search.js"></script>
 
   <!-- Application system -->
@@ -328,6 +328,10 @@
     document.addEventListener(
       "DOMContentLoaded",
       function () {
+
+        /* =================================================
+           ELEMENTS
+           ================================================= */
 
         const productsGrid =
           document.getElementById(
@@ -349,6 +353,11 @@
             "searchInput"
           );
 
+        const searchForm =
+          document.getElementById(
+            "searchForm"
+          );
+
         const pageTitle =
           document.getElementById(
             "productsPageTitle"
@@ -368,6 +377,27 @@
           document.getElementById(
             "searchResultText"
           );
+
+
+        /* =================================================
+           INITIALIZE SEARCH
+           
+           Search must work independently from app.js.
+           This prevents the search system from depending
+           on other application modules.
+           ================================================= */
+
+        if (
+          window.ZynexCartSearch &&
+          typeof
+            window.ZynexCartSearch.setupSearch ===
+              "function"
+        ) {
+
+          window.ZynexCartSearch.setupSearch();
+
+        }
+
 
 
         /* =================================================
@@ -396,87 +426,91 @@
 
 
           productsGrid.innerHTML =
-            list.map(
-              product => `
+            list
+              .map(
+                product => `
 
-                <article
-                  class="product-card"
-                  data-product-id="${product.id}"
-                >
-
-                  <a
-                    href="product.html?id=${product.id}"
-                    class="product-card-link"
+                  <article
+                    class="product-card"
+                    data-product-id="${product.id}"
                   >
 
-                    <div class="product-image">
+                    <a
+                      href="product.html?id=${encodeURIComponent(
+                        product.id
+                      )}"
+                      class="product-card-link"
+                    >
 
-                      <img
-                        src="${product.image}"
-                        alt="${product.name}"
-                        loading="lazy"
-                        onerror="this.style.display='none'"
-                      >
+                      <div class="product-image">
 
-                    </div>
-
-
-                    <div class="product-info">
-
-                      <span class="product-category">
-                        ${formatCategory(
-                          product.category
-                        )}
-                      </span>
-
-                      <h3>
-                        ${product.name}
-                      </h3>
-
-                      <p class="product-unit">
-                        ${product.unit}
-                      </p>
-
-
-                      <div class="product-price">
-
-                        <strong>
-                          ${formatPrice(
-                            product.price
-                          )}
-                        </strong>
-
-                        <span class="product-mrp">
-                          ${formatPrice(
-                            product.mrp
-                          )}
-                        </span>
-
-                        <span class="product-discount">
-                          ${product.discount}% OFF
-                        </span>
+                        <img
+                          src="${product.image}"
+                          alt="${product.name}"
+                          loading="lazy"
+                          onerror="this.style.display='none'"
+                        >
 
                       </div>
 
-                    </div>
 
-                  </a>
+                      <div class="product-info">
+
+                        <span class="product-category">
+                          ${formatCategory(
+                            product.category
+                          )}
+                        </span>
+
+                        <h3>
+                          ${product.name}
+                        </h3>
+
+                        <p class="product-unit">
+                          ${product.unit}
+                        </p>
 
 
-                  <!-- ADD / QUANTITY BUTTON -->
+                        <div class="product-price">
 
-                  <button
-                    class="add-btn"
-                    data-product-id="${product.id}"
-                    type="button"
-                  >
-                    ADD
-                  </button>
+                          <strong>
+                            ${formatPrice(
+                              product.price
+                            )}
+                          </strong>
 
-                </article>
+                          <span class="product-mrp">
+                            ${formatPrice(
+                              product.mrp
+                            )}
+                          </span>
 
-              `
-            ).join("");
+                          <span class="product-discount">
+                            ${product.discount}% OFF
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                    </a>
+
+
+                    <!-- ADD / QUANTITY -->
+
+                    <button
+                      class="add-btn"
+                      data-product-id="${product.id}"
+                      type="button"
+                    >
+                      ADD
+                    </button>
+
+                  </article>
+
+                `
+              )
+              .join("");
 
 
           setupProductButtons();
@@ -500,10 +534,23 @@
           addButtons.forEach(
             button => {
 
+              if (
+                button.dataset.bound ===
+                "true"
+              ) {
+                return;
+              }
+
+
+              button.dataset.bound =
+                "true";
+
+
               const productId =
                 Number(
                   button.dataset.productId
                 );
+
 
               const product =
                 products.find(
@@ -512,9 +559,11 @@
                     productId
                 );
 
+
               if (!product) {
                 return;
               }
+
 
 
               function updateButton() {
@@ -598,6 +647,7 @@
               updateButton();
 
 
+
               /* BUTTON CLICK */
 
               button.addEventListener(
@@ -617,10 +667,17 @@
                     )
                   ) {
 
-                    changeCartQuantity(
-                      productId,
-                      1
-                    );
+                    if (
+                      typeof changeCartQuantity ===
+                      "function"
+                    ) {
+
+                      changeCartQuantity(
+                        productId,
+                        1
+                      );
+
+                    }
 
                     updateButton();
 
@@ -637,10 +694,17 @@
                     )
                   ) {
 
-                    changeCartQuantity(
-                      productId,
-                      -1
-                    );
+                    if (
+                      typeof changeCartQuantity ===
+                      "function"
+                    ) {
+
+                      changeCartQuantity(
+                        productId,
+                        -1
+                      );
+
+                    }
 
                     updateButton();
 
@@ -651,9 +715,16 @@
 
                   /* ADD */
 
-                  addToCart(
-                    product
-                  );
+                  if (
+                    typeof addToCart ===
+                    "function"
+                  ) {
+
+                    addToCart(
+                      product
+                    );
+
+                  }
 
                   updateButton();
 
@@ -676,7 +747,8 @@
         ) {
 
           if (
-            category === "all"
+            category ===
+            "all"
           ) {
 
             displayProducts(
@@ -705,7 +777,7 @@
 
 
         /* =================================================
-           SEARCH RESULTS
+           PROFESSIONAL SEARCH
            ================================================= */
 
         function getSearchResults(
@@ -729,17 +801,13 @@
           }
 
 
-          /*
-           * Always use the same
-           * professional search engine
-           * as the header search.
-           */
+          /* PRIMARY SEARCH ENGINE */
 
           if (
             window.ZynexCartSearch &&
             typeof
               window.ZynexCartSearch.searchProducts ===
-              "function"
+                "function"
           ) {
 
             return window.ZynexCartSearch
@@ -750,9 +818,7 @@
           }
 
 
-          /*
-           * Fallback search.
-           */
+          /* SAFE FALLBACK */
 
           return products.filter(
             product => {
@@ -792,7 +858,7 @@
 
 
         /* =================================================
-           SHOW SEARCH RESULT INFO
+           SHOW SEARCH RESULT INFORMATION
            ================================================= */
 
         function showSearchResultInfo(
@@ -824,7 +890,7 @@
 
 
         /* =================================================
-           CLEAR SEARCH RESULT INFO
+           CLEAR SEARCH RESULT INFORMATION
            ================================================= */
 
         function clearSearchResultInfo() {
@@ -832,14 +898,61 @@
           searchResultInfo.hidden =
             true;
 
+
           searchResultText.textContent =
             "";
+
 
           pageTitle.textContent =
             "All Products 🛍️";
 
+
           pageDescription.textContent =
             "Shop your daily essentials at ZynexCart.";
+
+        }
+
+
+
+        /* =================================================
+           UPDATE SEARCH URL
+           ================================================= */
+
+        function updateSearchURL(
+          searchTerm
+        ) {
+
+          const url =
+            new URL(
+              window.location.href
+            );
+
+
+          if (searchTerm) {
+
+            url.searchParams.set(
+              "search",
+              searchTerm
+            );
+
+            url.searchParams.delete(
+              "category"
+            );
+
+          } else {
+
+            url.searchParams.delete(
+              "search"
+            );
+
+          }
+
+
+          window.history.replaceState(
+            {},
+            "",
+            url
+          );
 
         }
 
@@ -857,7 +970,11 @@
             String(
               searchTerm || ""
             )
-              .trim();
+              .trim()
+              .replace(
+                /\s+/g,
+                " "
+              );
 
 
           if (!cleanSearch) {
@@ -873,7 +990,7 @@
           }
 
 
-          /* Keep search text in header */
+          /* Keep query in search box */
 
           if (searchInput) {
 
@@ -883,19 +1000,7 @@
           }
 
 
-          /*
-           * Get ONLY matching products.
-           */
-
-          const results =
-            getSearchResults(
-              cleanSearch
-            );
-
-
-          /*
-           * Remove active category.
-           */
+          /* Remove active category */
 
           filterButtons.forEach(
             button => {
@@ -908,9 +1013,15 @@
           );
 
 
-          /*
-           * Show search information.
-           */
+          /* Get matching products */
+
+          const results =
+            getSearchResults(
+              cleanSearch
+            );
+
+
+          /* Show result information */
 
           showSearchResultInfo(
             cleanSearch,
@@ -918,10 +1029,7 @@
           );
 
 
-          /*
-           * IMPORTANT:
-           * Display only search results.
-           */
+          /* Show ONLY matching products */
 
           displayProducts(
             results
@@ -1008,10 +1116,7 @@
                   button.dataset.category;
 
 
-                /*
-                 * Remove search query
-                 * from URL.
-                 */
+                /* Update URL */
 
                 const url =
                   new URL(
@@ -1025,7 +1130,8 @@
 
 
                 if (
-                  category === "all"
+                  category ===
+                  "all"
                 ) {
 
                   url.searchParams.delete(
@@ -1049,9 +1155,7 @@
                 );
 
 
-                /*
-                 * Clear search box.
-                 */
+                /* Clear search input */
 
                 if (
                   searchInput
@@ -1063,15 +1167,13 @@
                 }
 
 
-                /*
-                 * Hide search suggestions.
-                 */
+                /* Close suggestions */
 
                 if (
                   window.ZynexCartSearch &&
                   typeof
                     window.ZynexCartSearch.hideSuggestions ===
-                    "function"
+                      "function"
                 ) {
 
                   window.ZynexCartSearch
@@ -1080,7 +1182,12 @@
                 }
 
 
+                /* Reset search information */
+
                 clearSearchResultInfo();
+
+
+                /* Display category */
 
                 filterProducts(
                   category
@@ -1091,6 +1198,77 @@
 
           }
         );
+
+
+
+        /* =================================================
+           SEARCH FORM — PAGE LEVEL SAFETY
+           
+           This does NOT change the search button design.
+           It only guarantees form submission works.
+           ================================================= */
+
+        if (
+          searchForm &&
+          searchForm.dataset.productsSearchBound !==
+            "true"
+        ) {
+
+          searchForm.dataset.productsSearchBound =
+            "true";
+
+
+          searchForm.addEventListener(
+            "submit",
+            function (event) {
+
+              event.preventDefault();
+
+
+              const value =
+                searchInput
+                  ? searchInput.value
+                      .trim()
+                  : "";
+
+
+              if (!value) {
+
+                if (searchInput) {
+                  searchInput.focus();
+                }
+
+                return;
+
+              }
+
+
+              updateSearchURL(
+                value
+              );
+
+
+              applySearch(
+                value
+              );
+
+
+              if (
+                window.ZynexCartSearch &&
+                typeof
+                  window.ZynexCartSearch.hideSuggestions ===
+                    "function"
+              ) {
+
+                window.ZynexCartSearch
+                  .hideSuggestions();
+
+              }
+
+            }
+          );
+
+        }
 
 
 
@@ -1121,13 +1299,19 @@
            INITIAL PAGE STATE
            ================================================= */
 
-        if (search) {
+        if (
+          search &&
+          search.trim()
+        ) {
 
           applySearch(
             search
           );
 
-        } else if (category) {
+        } else if (
+          category &&
+          category.trim()
+        ) {
 
           applyCategory(
             category
