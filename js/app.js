@@ -326,6 +326,18 @@
 
 
     /* -------------------------
+       CATEGORIES
+    ------------------------- */
+
+    if (
+      window.ZynexCartCategoryUI &&
+      typeof window.ZynexCartCategoryUI.renderCategories === "function"
+    ) {
+      window.ZynexCartCategoryUI.renderCategories();
+    }
+
+
+    /* -------------------------
        CART EVENT SYNC
     ------------------------- */
 
