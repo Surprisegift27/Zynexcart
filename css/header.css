@@ -2609,7 +2609,7 @@
    SEARCH BUTTON — PRESERVE EXISTING DESIGN
    ===================================================== */
 
-.search-box > button {
+.search-box button {
   width: 46px;
   height: 100%;
 
@@ -2617,31 +2617,11 @@
   align-items: center;
   justify-content: center;
 
-  flex: 0 0 46px;
-
-  padding: 0;
-
   border: 0;
-
-  outline: 0;
 
   background: transparent;
 
-  color: inherit;
-
-  font-family: inherit;
-
   cursor: pointer;
-}
-
-.search-box > button:hover {
-  background: rgba(0, 0, 0, 0.03);
-}
-
-.search-box > button:focus-visible {
-  outline: 2px solid rgba(255, 107, 0, 0.25);
-
-  outline-offset: -2px;
 }
 /* =====================================================
    END OF HEADER.CSS
