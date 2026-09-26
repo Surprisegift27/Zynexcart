@@ -196,17 +196,245 @@
 
 
 /* =====================================================
-   PROFESSIONAL SEARCH SUGGESTIONS
+   SEARCH BOX — PROFESSIONAL
    ===================================================== */
 
 .search-box {
+  grid-area: search;
+
   position: relative;
 
-  overflow: visible;
+  width: 100%;
+
+  min-width: 0;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  margin: 0;
+
+  border: 1px solid #e4e7eb;
+
+  border-radius: 14px;
+
+  background: #f5f6f8;
+
+  overflow: hidden;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 
-/* ---------- SEARCH DROPDOWN ---------- */
+/* =====================================================
+   SEARCH BOX — HOVER
+   ===================================================== */
+
+.search-box:hover {
+  border-color: #d9dde2;
+
+  background: #f3f4f6;
+}
+
+
+/* =====================================================
+   SEARCH BOX — ACTIVE / FOCUS
+   ===================================================== */
+
+.search-box:focus-within {
+  background: var(--white);
+
+  border: 2px solid var(--primary);
+
+  box-shadow:
+    0 0 0 3px rgba(255, 107, 0, 0.10),
+    0 5px 18px rgba(255, 107, 0, 0.08);
+}
+
+
+/* =====================================================
+   SEARCH ICON / SEARCH BUTTON
+   ===================================================== */
+
+/*
+   Existing HTML button is kept.
+   It becomes the left-side search icon,
+   without looking like a separate button.
+*/
+
+.search-box > button,
+.search-box .search-btn {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #737b87;
+
+  font-family: inherit;
+
+  font-size: 22px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  z-index: 2;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+/* Search icon hover */
+
+.search-box > button:hover,
+.search-box .search-btn:hover {
+  background: transparent;
+
+  color: var(--primary);
+
+  transform: none;
+}
+
+
+/* Search icon when input is active */
+
+.search-box:focus-within > button,
+.search-box:focus-within .search-btn {
+  color: var(--primary);
+}
+
+
+/* =====================================================
+   SEARCH INPUT
+   ===================================================== */
+
+.search-box input {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+
+  margin: 0;
+
+  padding:
+    0
+    48px
+    0
+    58px;
+
+  border: 0;
+
+  outline: 0;
+
+  background: transparent;
+
+  color: var(--navy);
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  line-height: 1.2;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.search-box input::placeholder {
+  color: #8b929d;
+
+  opacity: 1;
+}
+
+.search-box input:focus {
+  outline: 0;
+
+  background: transparent;
+}
+
+
+/* =====================================================
+   SEARCH INPUT — NATIVE CLEAR BUTTON
+   ===================================================== */
+
+/*
+   <input type="search"> ka native × button.
+   Isko browser ke according clean rakha gaya hai.
+*/
+
+.search-box input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+
+  appearance: none;
+
+  width: 18px;
+  height: 18px;
+
+  margin-right: 14px;
+
+  cursor: pointer;
+
+  opacity: 0.75;
+
+  background:
+    linear-gradient(
+      45deg,
+      transparent 43%,
+      #6d7784 43%,
+      #6d7784 57%,
+      transparent 57%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 43%,
+      #6d7784 43%,
+      #6d7784 57%,
+      transparent 57%
+    );
+
+  transition:
+    opacity 0.2s ease;
+}
+
+.search-box input::-webkit-search-cancel-button:hover {
+  opacity: 1;
+}
+
+
+/* Firefox */
+
+.search-box input[type="search"] {
+  -moz-appearance: textfield;
+}
+
+
+/* =====================================================
+   SEARCH SUGGESTIONS
+   ===================================================== */
 
 .search-suggestions {
   position: absolute;
@@ -239,7 +467,9 @@
 }
 
 
-/* ---------- DROPDOWN HEADER ---------- */
+/* =====================================================
+   DROPDOWN HEADER
+   ===================================================== */
 
 .search-suggestions-header {
   min-height: 38px;
@@ -265,7 +495,9 @@
 }
 
 
-/* ---------- SUGGESTION ITEM ---------- */
+/* =====================================================
+   SUGGESTION ITEM
+   ===================================================== */
 
 .search-suggestion {
   min-height: 68px;
@@ -299,7 +531,9 @@
 }
 
 
-/* ---------- PRODUCT IMAGE ---------- */
+/* =====================================================
+   SUGGESTION IMAGE
+   ===================================================== */
 
 .search-suggestion-image {
   width: 48px;
@@ -330,7 +564,9 @@
 }
 
 
-/* ---------- PRODUCT TEXT ---------- */
+/* =====================================================
+   SUGGESTION TEXT
+   ===================================================== */
 
 .search-suggestion-content {
   min-width: 0;
@@ -379,7 +615,9 @@
 }
 
 
-/* ---------- ARROW ---------- */
+/* =====================================================
+   SUGGESTION ARROW
+   ===================================================== */
 
 .search-suggestion-arrow {
   flex: 0 0 auto;
@@ -403,7 +641,9 @@
 }
 
 
-/* ---------- VIEW ALL ---------- */
+/* =====================================================
+   VIEW ALL
+   ===================================================== */
 
 .search-view-all {
   width: 100%;
@@ -441,7 +681,9 @@
 }
 
 
-/* ---------- NO RESULTS ---------- */
+/* =====================================================
+   NO RESULTS
+   ===================================================== */
 
 .search-no-results {
   min-height: 82px;
@@ -455,7 +697,6 @@
 
   background: var(--white);
 }
-
 
 .search-no-results-icon {
   width: 42px;
@@ -476,7 +717,6 @@
   font-size: 18px;
 }
 
-
 .search-no-results-content {
   min-width: 0;
 
@@ -486,7 +726,6 @@
   gap: 4px;
 }
 
-
 .search-no-results-content strong {
   color: var(--navy);
 
@@ -494,7 +733,6 @@
 
   font-weight: 900;
 }
-
 
 .search-no-results-content small {
   color: var(--muted);
@@ -507,142 +745,21 @@
 }
 
 
-/* ---------- ANIMATION ---------- */
+/* =====================================================
+   SEARCH ANIMATION
+   ===================================================== */
 
 @keyframes searchSuggestionsIn {
   from {
     opacity: 0;
 
-    transform:
-      translateY(-4px);
+    transform: translateY(-4px);
   }
 
   to {
     opacity: 1;
 
-    transform:
-      translateY(0);
-  }
-}
-
-
-/* =====================================================
-   SEARCH SUGGESTIONS — MOBILE
-   ===================================================== */
-
-@media screen and (max-width: 768px) {
-
-  .search-suggestions {
-    position: absolute;
-
-    top: calc(100% + 8px);
-
-    left: 50%;
-    right: auto;
-
-    width: calc(100% - 24px);
-    max-width: 620px;
-
-    transform: translateX(-50%);
-
-    border: 1px solid #e1e5ea;
-
-    border-radius: 15px;
-
-    overflow: hidden;
-
-    background: var(--white);
-
-    box-shadow:
-      0 14px 35px rgba(7, 27, 58, 0.16);
-
-    z-index: 3000;
-  }
-
-  .search-suggestion {
-    min-height: 66px;
-
-    padding: 9px 14px;
-
-    gap: 10px;
-  }
-
-  .search-suggestion-image {
-    width: 46px;
-    height: 46px;
-
-    flex: 0 0 46px;
-  }
-
-  .search-suggestion-name {
-    font-size: 13px;
-  }
-
-  .search-suggestion-meta {
-    font-size: 10px;
-  }
-
-  .search-no-results {
-    min-height: 78px;
-
-    padding: 13px 14px;
-  }
-}
-
-/* =====================================================
-   SEARCH SUGGESTIONS — SMALL PHONES
-   ===================================================== */
-
-@media screen and (max-width: 390px) {
-
-  .search-suggestions {
-    border-radius: 12px;
-  }
-
-  .search-suggestion {
-    min-height: 62px;
-
-    padding: 8px 10px;
-  }
-
-  .search-suggestion-image {
-    width: 42px;
-    height: 42px;
-
-    flex-basis: 42px;
-  }
-
-  .search-suggestion-name {
-    font-size: 12px;
-  }
-
-  .search-suggestion-meta {
-    font-size: 9px;
-  }
-
-  .search-no-results {
-    min-height: 74px;
-
-    gap: 9px;
-
-    padding: 11px 12px;
-  }
-
-  .search-no-results-icon {
-    width: 36px;
-    height: 36px;
-
-    flex-basis: 36px;
-
-    font-size: 16px;
-  }
-
-  .search-no-results-content strong {
-    font-size: 12px;
-  }
-
-  .search-no-results-content small {
-    font-size: 9px;
+    transform: translateY(0);
   }
 }
 
@@ -883,6 +1000,7 @@
 .location-modal[hidden] {
   display: none !important;
 }
+
 
 /* =====================================================
    LOCATION BACKDROP
@@ -1851,7 +1969,7 @@
 
 
 /* =====================================================
-   SEARCH RESULTS
+   SEARCH RESULTS — LOCATION
    ===================================================== */
 
 .location-search-results {
@@ -2047,7 +2165,8 @@
 .location-close-btn:focus-visible,
 .map-current-location-btn:focus-visible,
 .saved-address-card:focus-visible,
-.address-type-option span:focus-visible {
+.address-type-option span:focus-visible,
+.search-box > button:focus-visible {
   outline: 3px solid rgba(255, 107, 0, 0.22);
 
   outline-offset: 2px;
@@ -2299,16 +2418,85 @@
     border-radius: 15px;
   }
 
-  .search-icon {
-    width: 48px;
+  .search-box > button,
+  .search-box .search-btn {
+    width: 52px;
 
-    flex-basis: 48px;
-
-    font-size: 19px;
+    font-size: 22px;
   }
 
   .search-box input {
+    padding-left: 60px;
+
+    padding-right: 48px;
+
     font-size: 16px;
+  }
+
+  .search-box input::-webkit-search-cancel-button {
+    width: 18px;
+    height: 18px;
+
+    margin-right: 14px;
+  }
+
+
+  /* ---------- MOBILE SUGGESTIONS ---------- */
+
+  .search-suggestions {
+    position: absolute;
+
+    top: calc(100% + 8px);
+
+    left: 50%;
+    right: auto;
+
+    width: calc(100% - 24px);
+    max-width: 620px;
+
+    transform: translateX(-50%);
+
+    border: 1px solid #e1e5ea;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    background: var(--white);
+
+    box-shadow:
+      0 14px 35px rgba(7, 27, 58, 0.16);
+
+    z-index: 3000;
+  }
+
+  .search-suggestion {
+    min-height: 66px;
+
+    padding: 9px 14px;
+
+    gap: 10px;
+  }
+
+  .search-suggestion-image {
+    width: 46px;
+    height: 46px;
+
+    flex: 0 0 46px;
+  }
+
+  .search-suggestion-name {
+    font-size: 13px;
+  }
+
+  .search-suggestion-meta {
+    font-size: 10px;
+  }
+
+  .search-no-results {
+    min-height: 78px;
+
+    padding: 13px 14px;
   }
 
 
@@ -2471,6 +2659,19 @@
 
     border-radius: 14px;
   }
+
+  .search-box > button,
+  .search-box .search-btn {
+    width: 48px;
+
+    font-size: 20px;
+  }
+
+  .search-box input {
+    padding-left: 56px;
+
+    padding-right: 44px;
+  }
 }
 
 
@@ -2531,6 +2732,23 @@
 
   .search-box {
     height: 52px;
+
+    border-radius: 13px;
+  }
+
+  .search-box > button,
+  .search-box .search-btn {
+    width: 45px;
+
+    font-size: 19px;
+  }
+
+  .search-box input {
+    padding-left: 52px;
+
+    padding-right: 42px;
+
+    font-size: 15px;
   }
 }
 
@@ -2592,18 +2810,26 @@
 
   .search-box {
     height: 50px;
+
+    border-radius: 12px;
   }
 
-  .search-icon {
-    width: 44px;
+  .search-box > button,
+  .search-box .search-btn {
+    width: 43px;
 
-    flex-basis: 44px;
+    font-size: 18px;
   }
 
   .search-box input {
+    padding-left: 49px;
+
+    padding-right: 40px;
+
     font-size: 15px;
   }
 }
+
 
 /* =====================================================
    END OF HEADER.CSS
