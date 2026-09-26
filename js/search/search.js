@@ -4,6 +4,7 @@
 
   let searchInitialized = false;
   let suggestionBox = null;
+  let retryTimer = null;
 
   const MAX_SUGGESTIONS = 6;
 
@@ -35,7 +36,7 @@
 
 
   /* =====================================================
-     NORMALIZE
+     NORMALIZE SEARCH TEXT
   ===================================================== */
 
   function normalize(value) {
@@ -47,7 +48,7 @@
 
 
   /* =====================================================
-     CATEGORY FORMAT
+     FORMAT CATEGORY
   ===================================================== */
 
   function formatCategory(category) {
@@ -58,7 +59,7 @@
 
 
   /* =====================================================
-     SEARCH KEYWORDS
+     PRODUCT KEYWORDS
   ===================================================== */
 
   function getProductKeywords(product) {
@@ -68,6 +69,7 @@
         "fresh milk",
         "dairy",
         "dairy products",
+        "milk products",
         "1 litre",
         "1 liter",
         "1 l"
@@ -77,7 +79,8 @@
         "bread",
         "brown bread",
         "bakery",
-        "bakery products"
+        "bakery products",
+        "baked"
       ],
 
       3: [
@@ -85,19 +88,22 @@
         "potato chips",
         "potato",
         "snacks",
+        "snack",
         "namkeen"
       ],
 
       4: [
         "soap",
         "bath soap",
-        "personal care"
+        "personal care",
+        "body soap"
       ],
 
       5: [
         "shampoo",
         "hair care",
-        "personal care"
+        "personal care",
+        "hair"
       ],
 
       6: [
@@ -105,6 +111,7 @@
         "orange juice",
         "orange",
         "drink",
+        "drinks",
         "beverage",
         "beverages"
       ],
@@ -120,6 +127,7 @@
       8: [
         "dishwash",
         "dish wash",
+        "dishwashing",
         "cleaning",
         "household",
         "cleaning essentials"
@@ -131,13 +139,13 @@
 
 
   /* =====================================================
-     PRODUCT SCORE
+     SCORE PRODUCT
   ===================================================== */
 
   function scoreProduct(product, query) {
     const searchQuery = normalize(query);
 
-    if (!searchQuery) {
+    if (!searchQuery || !product) {
       return 0;
     }
 
@@ -151,43 +159,62 @@
 
     let score = 0;
 
-    /* Exact product name */
+
+    /* ---------- EXACT PRODUCT NAME ---------- */
+
     if (name === searchQuery) {
-      score += 100;
+      score += 1000;
     }
 
-    /* Product name starts with query */
+
+    /* ---------- PRODUCT NAME STARTS WITH QUERY ---------- */
+
     if (name.startsWith(searchQuery)) {
-      score += 70;
+      score += 500;
     }
 
-    /* Product name contains query */
+
+    /* ---------- PRODUCT NAME CONTAINS QUERY ---------- */
+
     if (name.includes(searchQuery)) {
-      score += 50;
+      score += 300;
     }
 
-    /* Category */
+
+    /* ---------- CATEGORY ---------- */
+
     if (category === searchQuery) {
-      score += 35;
+      score += 200;
     }
 
     if (category.includes(searchQuery)) {
-      score += 25;
+      score += 120;
     }
 
-    /* Unit */
+
+    /* ---------- UNIT ---------- */
+
+    if (unit === searchQuery) {
+      score += 80;
+    }
+
     if (unit.includes(searchQuery)) {
-      score += 10;
+      score += 40;
     }
 
-    /* Keywords */
+
+    /* ---------- KEYWORDS ---------- */
+
     keywords.forEach(keyword => {
       if (keyword === searchQuery) {
-        score += 30;
+        score += 180;
+      } else if (keyword.startsWith(searchQuery)) {
+        score += 100;
       } else if (keyword.includes(searchQuery)) {
-        score += 15;
+        score += 70;
       }
     });
+
 
     return score;
   }
@@ -204,10 +231,19 @@
       return [];
     }
 
-    return getProducts()
+    const productList = getProducts();
+
+    if (!productList.length) {
+      return [];
+    }
+
+    return productList
       .map(product => ({
         product,
-        score: scoreProduct(product, searchQuery)
+        score: scoreProduct(
+          product,
+          searchQuery
+        )
       }))
       .filter(result => result.score > 0)
       .sort((a, b) => {
@@ -215,8 +251,12 @@
           return b.score - a.score;
         }
 
-        return String(a.product.name).localeCompare(
-          String(b.product.name)
+        return String(
+          a.product.name || ""
+        ).localeCompare(
+          String(
+            b.product.name || ""
+          )
         );
       })
       .map(result => result.product);
@@ -224,7 +264,7 @@
 
 
   /* =====================================================
-     CREATE SUGGESTION BOX
+     CREATE / GET SUGGESTION BOX
   ===================================================== */
 
   function createSuggestionBox(searchForm) {
@@ -233,7 +273,9 @@
     }
 
     const existing =
-      searchForm.querySelector("#searchSuggestions");
+      searchForm.querySelector(
+        "#searchSuggestions"
+      );
 
     if (existing) {
       suggestionBox = existing;
@@ -254,6 +296,11 @@
       "listbox"
     );
 
+    suggestionBox.setAttribute(
+      "aria-label",
+      "Search suggestions"
+    );
+
     suggestionBox.hidden = true;
 
     searchForm.appendChild(
@@ -265,21 +312,47 @@
 
 
   /* =====================================================
-     CREATE SUGGESTION
+     CREATE PRODUCT SUGGESTION
   ===================================================== */
 
   function createSuggestion(product) {
+    const productId =
+      encodeURIComponent(
+        product.id
+      );
+
+    const productName =
+      String(
+        product.name || ""
+      );
+
+    const productCategory =
+      formatCategory(
+        product.category
+      );
+
+    const productUnit =
+      String(
+        product.unit || ""
+      );
+
+    const productImage =
+      String(
+        product.image || ""
+      );
+
     return `
       <a
-        href="product.html?id=${encodeURIComponent(product.id)}"
+        href="product.html?id=${productId}"
         class="search-suggestion"
         role="option"
+        aria-label="View ${productName}"
         data-product-id="${product.id}"
       >
 
         <span class="search-suggestion-image">
           <img
-            src="${product.image}"
+            src="${productImage}"
             alt=""
             loading="lazy"
             onerror="this.style.display='none'"
@@ -289,13 +362,13 @@
         <span class="search-suggestion-content">
 
           <strong class="search-suggestion-name">
-            ${product.name}
+            ${productName}
           </strong>
 
           <span class="search-suggestion-meta">
-            ${formatCategory(product.category)}
+            ${productCategory}
             <span aria-hidden="true">•</span>
-            ${product.unit}
+            ${productUnit}
           </span>
 
         </span>
@@ -313,70 +386,21 @@
 
 
   /* =====================================================
-     SHOW SUGGESTIONS
+     NO RESULTS UI
   ===================================================== */
 
-  function showSuggestions(query) {
-    if (!suggestionBox) {
-      return;
-    }
+  function createNoResults() {
+    return `
+      <div
+        class="search-no-results"
+        role="status"
+        aria-live="polite"
+      >
 
-    const searchQuery =
-      normalize(query);
-
-    if (!searchQuery) {
-      hideSuggestions();
-      return;
-    }
-
-    const results =
-      searchProducts(searchQuery);
-
-
-    /* ---------- PRODUCTS FOUND ---------- */
-
-    if (results.length > 0) {
-
-      suggestionBox.innerHTML = `
-        <div class="search-suggestions-header">
-          <span>Products</span>
-        </div>
-
-        ${results
-          .slice(0, MAX_SUGGESTIONS)
-          .map(createSuggestion)
-          .join("")}
-
-        ${
-          results.length > MAX_SUGGESTIONS
-            ? `
-              <button
-                type="button"
-                class="search-view-all"
-                data-search-query="${encodeURIComponent(
-                  searchQuery
-                )}"
-              >
-                <span>View all results</span>
-                <span aria-hidden="true">→</span>
-              </button>
-            `
-            : ""
-        }
-      `;
-
-      suggestionBox.hidden = false;
-
-      return;
-    }
-
-
-    /* ---------- NO RESULTS ---------- */
-
-    suggestionBox.innerHTML = `
-      <div class="search-no-results">
-
-        <div class="search-no-results-icon">
+        <div
+          class="search-no-results-icon"
+          aria-hidden="true"
+        >
           🔍
         </div>
 
@@ -394,6 +418,91 @@
 
       </div>
     `;
+  }
+
+
+  /* =====================================================
+     SHOW PRODUCT SUGGESTIONS
+  ===================================================== */
+
+  function showSuggestions(query) {
+    if (!suggestionBox) {
+      return;
+    }
+
+    const searchQuery =
+      normalize(query);
+
+    /*
+     * EMPTY SEARCH
+     */
+    if (!searchQuery) {
+      hideSuggestions();
+      return;
+    }
+
+    const results =
+      searchProducts(
+        searchQuery
+      );
+
+
+    /* =================================================
+       PRODUCTS FOUND
+    ================================================= */
+
+    if (results.length > 0) {
+
+      const visibleResults =
+        results.slice(
+          0,
+          MAX_SUGGESTIONS
+        );
+
+      suggestionBox.innerHTML = `
+        <div class="search-suggestions-header">
+          <span>Products</span>
+        </div>
+
+        ${visibleResults
+          .map(createSuggestion)
+          .join("")}
+
+        ${
+          results.length > MAX_SUGGESTIONS
+            ? `
+              <button
+                type="button"
+                class="search-view-all"
+                data-search-query="${encodeURIComponent(
+                  searchQuery
+                )}"
+              >
+                <span>
+                  View all results
+                </span>
+
+                <span aria-hidden="true">
+                  →
+                </span>
+              </button>
+            `
+            : ""
+        }
+      `;
+
+      suggestionBox.hidden = false;
+
+      return;
+    }
+
+
+    /* =================================================
+       NO PRODUCTS FOUND
+    ================================================= */
+
+    suggestionBox.innerHTML =
+      createNoResults();
 
     suggestionBox.hidden = false;
   }
@@ -413,7 +522,7 @@
 
 
   /* =====================================================
-     PERFORM SEARCH
+     PERFORM FULL SEARCH
   ===================================================== */
 
   function performSearch(searchInput) {
@@ -440,11 +549,36 @@
 
 
   /* =====================================================
+     CLEAR SEARCH
+  ===================================================== */
+
+  function clearSearch(searchInput) {
+    if (!searchInput) {
+      return;
+    }
+
+    searchInput.value = "";
+
+    hideSuggestions();
+
+    searchInput.focus();
+
+    searchInput.dispatchEvent(
+      new Event("input", {
+        bubbles: true
+      })
+    );
+  }
+
+
+  /* =====================================================
      BIND SEARCH
   ===================================================== */
 
-  function bindSearch(searchForm, searchInput) {
-
+  function bindSearch(
+    searchForm,
+    searchInput
+  ) {
     if (
       !searchForm ||
       !searchInput
@@ -452,21 +586,39 @@
       return false;
     }
 
-    /* Prevent duplicate initialization */
+
+    /* ---------- PREVENT DUPLICATE BINDING ---------- */
+
     if (
-      searchForm.dataset.searchBound === "true"
+      searchForm.dataset.searchBound ===
+      "true"
     ) {
+      createSuggestionBox(
+        searchForm
+      );
+
       return true;
     }
 
-    searchForm.dataset.searchBound = "true";
+    searchForm.dataset.searchBound =
+      "true";
+
+
+    /* ---------- CREATE DROPDOWN ---------- */
 
     createSuggestionBox(
       searchForm
     );
 
 
-    /* ---------- INPUT ---------- */
+    if (!suggestionBox) {
+      return false;
+    }
+
+
+    /* =================================================
+       INPUT
+    ================================================= */
 
     searchInput.addEventListener(
       "input",
@@ -478,7 +630,9 @@
     );
 
 
-    /* ---------- FOCUS ---------- */
+    /* =================================================
+       FOCUS
+    ================================================= */
 
     searchInput.addEventListener(
       "focus",
@@ -488,14 +642,18 @@
           searchInput.value.trim();
 
         if (value) {
-          showSuggestions(value);
+          showSuggestions(
+            value
+          );
         }
 
       }
     );
 
 
-    /* ---------- FORM SUBMIT ---------- */
+    /* =================================================
+       FORM SUBMIT
+    ================================================= */
 
     searchForm.addEventListener(
       "submit",
@@ -511,7 +669,9 @@
     );
 
 
-    /* ---------- BUTTON CLICK ---------- */
+    /* =================================================
+       SEARCH BUTTON
+    ================================================= */
 
     const searchButton =
       searchForm.querySelector(
@@ -536,11 +696,15 @@
     }
 
 
-    /* ---------- SUGGESTION CLICK ---------- */
+    /* =================================================
+       SUGGESTION DROPDOWN CLICK
+    ================================================= */
 
     suggestionBox.addEventListener(
       "click",
       function (event) {
+
+        /* ---------- VIEW ALL ---------- */
 
         const viewAllButton =
           event.target.closest(
@@ -559,6 +723,8 @@
 
           if (query) {
 
+            hideSuggestions();
+
             window.location.href =
               `products.html?search=${encodeURIComponent(
                 query
@@ -570,20 +736,31 @@
         }
 
 
+        /* ---------- PRODUCT ---------- */
+
         const suggestion =
           event.target.closest(
             ".search-suggestion"
           );
 
         if (suggestion) {
+
           hideSuggestions();
+
+          /*
+           * Allow normal <a> navigation.
+           * No preventDefault here.
+           */
+
         }
 
       }
     );
 
 
-    /* ---------- OUTSIDE CLICK ---------- */
+    /* =================================================
+       CLICK OUTSIDE
+    ================================================= */
 
     document.addEventListener(
       "click",
@@ -601,7 +778,9 @@
     );
 
 
-    /* ---------- ESCAPE ---------- */
+    /* =================================================
+       ESCAPE
+    ================================================= */
 
     searchInput.addEventListener(
       "keydown",
@@ -621,19 +800,38 @@
     );
 
 
+    /* =================================================
+       CLEAR BUTTON SUPPORT
+    ================================================= */
+
+    searchInput.addEventListener(
+      "search",
+      function () {
+
+        if (
+          !searchInput.value.trim()
+        ) {
+          hideSuggestions();
+        }
+
+      }
+    );
+
+
     return true;
   }
 
 
   /* =====================================================
      SETUP SEARCH
-     ===================================================== */
+  ===================================================== */
 
   function setupSearch() {
 
     if (searchInitialized) {
       return;
     }
+
 
     const searchForm =
       document.getElementById(
@@ -647,9 +845,8 @@
 
 
     /*
-     * Header may load dynamically.
-     * So don't permanently fail if it
-     * isn't available on first attempt.
+     * Header can load dynamically.
+     * Retry until search elements exist.
      */
 
     if (
@@ -657,10 +854,21 @@
       !searchInput
     ) {
 
-      setTimeout(
-        setupSearch,
-        100
-      );
+      if (!retryTimer) {
+
+        retryTimer =
+          setTimeout(
+            function retrySearchSetup() {
+
+              retryTimer = null;
+
+              setupSearch();
+
+            },
+            100
+          );
+
+      }
 
       return;
     }
@@ -684,13 +892,16 @@
   ===================================================== */
 
   if (
-    document.readyState === "loading"
+    document.readyState ===
+    "loading"
   ) {
 
     document.addEventListener(
       "DOMContentLoaded",
       setupSearch,
-      { once: true }
+      {
+        once: true
+      }
     );
 
   } else {
@@ -708,7 +919,9 @@
     setupSearch,
     searchProducts,
     hideSuggestions,
-    showSuggestions
+    showSuggestions,
+    performSearch,
+    clearSearch
   };
 
 })();
