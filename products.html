@@ -167,7 +167,6 @@
       aria-label="Product categories"
     >
 
-
       <button
         class="category-filter active"
         data-category="all"
@@ -175,7 +174,6 @@
       >
         All
       </button>
-
 
       <button
         class="category-filter"
@@ -185,7 +183,6 @@
         Grocery
       </button>
 
-
       <button
         class="category-filter"
         data-category="snacks"
@@ -193,7 +190,6 @@
       >
         Snacks
       </button>
-
 
       <button
         class="category-filter"
@@ -203,7 +199,6 @@
         Personal Care
       </button>
 
-
       <button
         class="category-filter"
         data-category="beverages"
@@ -211,7 +206,6 @@
       >
         Beverages
       </button>
-
 
       <button
         class="category-filter"
@@ -221,7 +215,6 @@
         Beauty
       </button>
 
-
       <button
         class="category-filter"
         data-category="household"
@@ -229,7 +222,6 @@
       >
         Household
       </button>
-
 
     </div>
 
@@ -267,21 +259,36 @@
       </div>
 
 
-      <!-- NO PRODUCTS -->
+      <!-- =================================================
+           NO PRODUCTS
+           ================================================= -->
 
       <div
         id="noProducts"
-        class="empty-cart"
+        class="products-empty-state"
         style="display: none;"
+        role="status"
+        aria-live="polite"
       >
 
-        <h2>
-          No products found 😕
-        </h2>
+        <div
+          class="products-empty-icon"
+          aria-hidden="true"
+        >
+          🔍
+        </div>
 
-        <p>
-          Try another search or category.
-        </p>
+        <div class="products-empty-content">
+
+          <h2>
+            No products found
+          </h2>
+
+          <p>
+            Try another search or category.
+          </p>
+
+        </div>
 
       </div>
 
@@ -316,40 +323,17 @@
 
   <!-- =================================================
        JAVASCRIPT
-       
-       IMPORTANT:
-       Dependency order must remain unchanged.
        ================================================= -->
-
-
-  <!-- =========================
-       CORE
-       ========================== -->
 
   <script src="js/core/storage.js"></script>
   <script src="js/core/utils.js"></script>
   <script src="js/core/events.js"></script>
 
-
-  <!-- =========================
-       CART
-       ========================== -->
-
   <script src="js/cart/cart.js"></script>
   <script src="js/cart/cart-actions.js"></script>
   <script src="js/cart/cart-ui.js"></script>
 
-
-  <!-- =========================
-       SEARCH
-       ========================== -->
-
   <script src="js/search/search.js"></script>
-
-
-  <!-- =========================
-       LOCATION
-       ========================== -->
 
   <script src="js/location/location.js"></script>
   <script src="js/location/location-ui.js"></script>
@@ -358,17 +342,7 @@
   <script src="js/location/location-address.js"></script>
   <script src="js/location/saved-addresses.js"></script>
 
-
-  <!-- =========================
-       APPLICATION
-       ========================== -->
-
   <script src="js/app.js"></script>
-
-
-  <!-- =========================
-       PRODUCTS
-       ========================== -->
 
   <script src="js/products.js"></script>
 
@@ -385,16 +359,10 @@
       "use strict";
 
 
-      /*
-       * Prevent duplicate page initialization.
-       */
-
       if (
         window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__
       ) {
-
         return;
-
       }
 
 
@@ -404,52 +372,40 @@
 
       function initializeProductsPage() {
 
-
-        /* =================================================
-           ELEMENTS
-           ================================================= */
-
         const productsGrid =
           document.getElementById(
             "productsGrid"
           );
-
 
         const noProducts =
           document.getElementById(
             "noProducts"
           );
 
-
         const filterButtons =
           document.querySelectorAll(
             ".category-filter"
           );
-
 
         const searchInput =
           document.getElementById(
             "searchInput"
           );
 
-
         const pageTitle =
           document.getElementById(
             "productsPageTitle"
           );
-
 
         const pageDescription =
           document.getElementById(
             "productsPageDescription"
           );
 
-
         const searchResultInfo =
           document.getElementById(
             "searchResultInfo"
           );
-
 
         const searchResultText =
           document.getElementById(
@@ -471,14 +427,7 @@
         }
 
 
-
-        /* =================================================
-           HELPER — NORMALIZE SEARCH
-           ================================================= */
-
-        function normalizeSearch(
-          value
-        ) {
+        function normalizeSearch(value) {
 
           return String(
             value || ""
@@ -493,14 +442,7 @@
         }
 
 
-
-        /* =================================================
-           DISPLAY PRODUCTS
-           ================================================= */
-
-        function displayProducts(
-          list
-        ) {
+        function displayProducts(list) {
 
           if (
             !Array.isArray(list) ||
@@ -511,7 +453,7 @@
               "";
 
             noProducts.style.display =
-              "block";
+              "flex";
 
             return;
 
@@ -614,8 +556,6 @@
                       </a>
 
 
-                      <!-- ADD / QUANTITY -->
-
                       <button
                         class="add-btn"
                         data-product-id="${product.id}"
@@ -638,11 +578,6 @@
         }
 
 
-
-        /* =================================================
-           ADD / QUANTITY BUTTONS
-           ================================================= */
-
         function setupProductButtons() {
 
           const addButtons =
@@ -654,14 +589,11 @@
           addButtons.forEach(
             function (button) {
 
-
               if (
                 button.dataset.bound ===
                 "true"
               ) {
-
                 return;
-
               }
 
 
@@ -689,11 +621,8 @@
 
 
               if (!product) {
-
                 return;
-
               }
-
 
 
               function getQuantity() {
@@ -702,9 +631,7 @@
                   typeof getCart !==
                   "function"
                 ) {
-
                   return 0;
-
                 }
 
 
@@ -715,9 +642,7 @@
                 if (
                   !Array.isArray(cart)
                 ) {
-
                   return 0;
-
                 }
 
 
@@ -743,7 +668,6 @@
               }
 
 
-
               function updateButton() {
 
                 const quantity =
@@ -758,10 +682,8 @@
                     "added"
                   );
 
-
                   button.innerHTML =
                     "ADD";
-
 
                   return;
 
@@ -781,14 +703,12 @@
                     −
                   </span>
 
-
                   <span
                     class="qty-number"
                     aria-live="polite"
                   >
                     ${quantity}
                   </span>
-
 
                   <span
                     class="qty-plus"
@@ -801,9 +721,7 @@
               }
 
 
-
               updateButton();
-
 
 
               button.addEventListener(
@@ -811,15 +729,12 @@
                 function (event) {
 
                   event.preventDefault();
-
                   event.stopPropagation();
 
 
                   const clickedElement =
                     event.target;
 
-
-                  /* PLUS */
 
                   if (
                     clickedElement.classList.contains(
@@ -847,8 +762,6 @@
                   }
 
 
-                  /* MINUS */
-
                   if (
                     clickedElement.classList.contains(
                       "qty-minus"
@@ -875,8 +788,6 @@
                   }
 
 
-                  /* ADD */
-
                   if (
                     typeof addToCart ===
                     "function"
@@ -900,14 +811,7 @@
         }
 
 
-
-        /* =================================================
-           CATEGORY FILTER
-           ================================================= */
-
-        function filterProducts(
-          category
-        ) {
+        function filterProducts(category) {
 
           if (
             category ===
@@ -943,14 +847,7 @@
         }
 
 
-
-        /* =================================================
-           SEARCH RESULTS
-           ================================================= */
-
-        function getSearchResults(
-          searchTerm
-        ) {
+        function getSearchResults(searchTerm) {
 
           const query =
             normalizeSearch(
@@ -959,17 +856,9 @@
 
 
           if (!query) {
-
             return [];
-
           }
 
-
-          /*
-           * Use the exact same
-           * professional search engine
-           * used by the header.
-           */
 
           if (
             window.ZynexCartSearch &&
@@ -986,10 +875,6 @@
           }
 
 
-          /*
-           * Safe fallback.
-           */
-
           return products.filter(
             function (product) {
 
@@ -998,12 +883,10 @@
                   product.name
                 );
 
-
               const category =
                 normalizeSearch(
                   product.category
                 );
-
 
               const unit =
                 normalizeSearch(
@@ -1022,11 +905,6 @@
 
         }
 
-
-
-        /* =================================================
-           SEARCH RESULT INFORMATION
-           ================================================= */
 
         function showSearchResultInfo(
           searchTerm,
@@ -1079,11 +957,6 @@
         }
 
 
-
-        /* =================================================
-           CLEAR SEARCH RESULT INFORMATION
-           ================================================= */
-
         function clearSearchResultInfo() {
 
           if (
@@ -1128,14 +1001,7 @@
         }
 
 
-
-        /* =================================================
-           APPLY SEARCH
-           ================================================= */
-
-        function applySearch(
-          searchTerm
-        ) {
+        function applySearch(searchTerm) {
 
           const cleanSearch =
             String(
@@ -1152,21 +1018,14 @@
 
             clearSearchResultInfo();
 
-
             displayProducts(
               products
             );
-
 
             return;
 
           }
 
-
-          /*
-           * Keep query visible
-           * inside header search.
-           */
 
           if (
             searchInput
@@ -1177,10 +1036,6 @@
 
           }
 
-
-          /*
-           * Remove active category.
-           */
 
           filterButtons.forEach(
             function (button) {
@@ -1193,31 +1048,17 @@
           );
 
 
-          /*
-           * Get professional
-           * search results.
-           */
-
           const results =
             getSearchResults(
               cleanSearch
             );
 
 
-          /*
-           * Show search information.
-           */
-
           showSearchResultInfo(
             cleanSearch,
             results.length
           );
 
-
-          /*
-           * Display ONLY
-           * matching products.
-           */
 
           displayProducts(
             results
@@ -1226,14 +1067,7 @@
         }
 
 
-
-        /* =================================================
-           APPLY CATEGORY
-           ================================================= */
-
-        function applyCategory(
-          category
-        ) {
+        function applyCategory(category) {
 
           const categoryButton =
             document.querySelector(
@@ -1265,7 +1099,6 @@
 
           clearSearchResultInfo();
 
-
           filterProducts(
             category
           );
@@ -1273,18 +1106,12 @@
         }
 
 
-
-        /* =================================================
-           CATEGORY BUTTONS
-           ================================================= */
-
         filterButtons.forEach(
           function (button) {
 
             button.addEventListener(
               "click",
               function () {
-
 
                 filterButtons.forEach(
                   function (btn) {
@@ -1305,10 +1132,6 @@
                 const category =
                   button.dataset.category;
 
-
-                /*
-                 * Update URL without reload.
-                 */
 
                 const url =
                   new URL(
@@ -1347,10 +1170,6 @@
                 );
 
 
-                /*
-                 * Clear search.
-                 */
-
                 if (
                   searchInput
                 ) {
@@ -1360,11 +1179,6 @@
 
                 }
 
-
-                /*
-                 * Close search
-                 * suggestions.
-                 */
 
                 if (
                   window.ZynexCartSearch &&
@@ -1381,7 +1195,6 @@
 
                 clearSearchResultInfo();
 
-
                 filterProducts(
                   category
                 );
@@ -1392,14 +1205,6 @@
           }
         );
 
-
-
-        /* =================================================
-           CART UPDATE SYNC
-           
-           When cart changes from another part
-           of the website, update visible buttons.
-           ================================================= */
 
         document.addEventListener(
           "zynexcart:cartUpdated",
@@ -1413,11 +1218,6 @@
 
             visibleButtons.forEach(
               function (button) {
-
-                /*
-                 * Re-render the current
-                 * visible product list.
-                 */
 
                 const productId =
                   Number(
@@ -1439,9 +1239,7 @@
 
 
                 if (!product) {
-
                   return;
-
                 }
 
 
@@ -1483,10 +1281,8 @@
                     "added"
                   );
 
-
                   button.innerHTML =
                     "ADD";
-
 
                   return;
 
@@ -1528,11 +1324,6 @@
         );
 
 
-
-        /* =================================================
-           URL PARAMETERS
-           ================================================= */
-
         const params =
           new URLSearchParams(
             window.location.search
@@ -1550,11 +1341,6 @@
             "category"
           );
 
-
-
-        /* =================================================
-           INITIAL PAGE STATE
-           ================================================= */
 
         if (
           search &&
@@ -1578,7 +1364,6 @@
 
           clearSearchResultInfo();
 
-
           displayProducts(
             products
           );
@@ -1587,11 +1372,6 @@
 
       }
 
-
-
-      /* =================================================
-         START
-         ================================================= */
 
       if (
         document.readyState ===
