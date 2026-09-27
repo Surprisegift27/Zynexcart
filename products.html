@@ -329,12 +329,18 @@
   <script src="js/core/utils.js"></script>
   <script src="js/core/events.js"></script>
 
+  <!-- CATEGORY DATA -->
+  <script src="js/categories.js"></script>
+
+  <!-- CART -->
   <script src="js/cart/cart.js"></script>
   <script src="js/cart/cart-actions.js"></script>
   <script src="js/cart/cart-ui.js"></script>
 
+  <!-- SEARCH -->
   <script src="js/search/search.js"></script>
 
+  <!-- LOCATION -->
   <script src="js/location/location.js"></script>
   <script src="js/location/location-ui.js"></script>
   <script src="js/location/location-search.js"></script>
@@ -342,8 +348,10 @@
   <script src="js/location/location-address.js"></script>
   <script src="js/location/saved-addresses.js"></script>
 
+  <!-- APPLICATION -->
   <script src="js/app.js"></script>
 
+  <!-- PRODUCTS -->
   <script src="js/products.js"></script>
 
 
@@ -427,6 +435,10 @@
         }
 
 
+        /* =========================================
+           NORMALIZE SEARCH
+        ========================================= */
+
         function normalizeSearch(value) {
 
           return String(
@@ -442,7 +454,102 @@
         }
 
 
-        function displayProducts(list) {
+        /* =========================================
+           GET CATEGORY BY ID
+        ========================================= */
+
+        function getCategoryById(
+          categoryId
+        ) {
+
+          const categories =
+            Array.isArray(
+              window.ZynexCartCategories
+            )
+              ? window.ZynexCartCategories
+              : [];
+
+
+          return categories.find(
+            function (category) {
+
+              return (
+                String(category.id) ===
+                String(categoryId)
+              );
+
+            }
+          ) || null;
+
+        }
+
+
+        /* =========================================
+           GET PRODUCTS BY CATEGORY ID
+        ========================================= */
+
+        function getProductsByCategoryId(
+          categoryId
+        ) {
+
+          if (!categoryId) {
+            return [];
+          }
+
+
+          return products.filter(
+            function (product) {
+
+              return (
+                String(
+                  product.categoryId || ""
+                ) ===
+                String(categoryId)
+              );
+
+            }
+          );
+
+        }
+
+
+        /* =========================================
+           GET PRODUCTS BY OLD CATEGORY
+           BACKWARD COMPATIBILITY
+        ========================================= */
+
+        function getProductsByLegacyCategory(
+          category
+        ) {
+
+          if (!category) {
+            return [];
+          }
+
+
+          return products.filter(
+            function (product) {
+
+              return (
+                String(
+                  product.category || ""
+                ) ===
+                String(category)
+              );
+
+            }
+          );
+
+        }
+
+
+        /* =========================================
+           DISPLAY PRODUCTS
+        ========================================= */
+
+        function displayProducts(
+          list
+        ) {
 
           if (
             !Array.isArray(list) ||
@@ -577,6 +684,10 @@
 
         }
 
+
+        /* =========================================
+           PRODUCT BUTTONS
+        ========================================= */
 
         function setupProductButtons() {
 
@@ -811,7 +922,13 @@
         }
 
 
-        function filterProducts(category) {
+        /* =========================================
+           FILTER BY CATEGORY
+        ========================================= */
+
+        function filterProducts(
+          category
+        ) {
 
           if (
             category ===
@@ -827,27 +944,63 @@
           }
 
 
-          const filtered =
-            products.filter(
-              function (product) {
+          /*
+             New category system:
 
-                return (
-                  product.category ===
-                  category
-                );
+             dairy-bread-eggs
+             snacks-munchies
+             personal-care
+             etc.
+          */
 
-              }
+          const categoryIdResults =
+            getProductsByCategoryId(
+              category
+            );
+
+
+          if (
+            categoryIdResults.length > 0
+          ) {
+
+            displayProducts(
+              categoryIdResults
+            );
+
+            return;
+
+          }
+
+
+          /*
+             Backward compatibility:
+
+             grocery
+             snacks
+             beverages
+             etc.
+          */
+
+          const legacyResults =
+            getProductsByLegacyCategory(
+              category
             );
 
 
           displayProducts(
-            filtered
+            legacyResults
           );
 
         }
 
 
-        function getSearchResults(searchTerm) {
+        /* =========================================
+           SEARCH RESULTS
+        ========================================= */
+
+        function getSearchResults(
+          searchTerm
+        ) {
 
           const query =
             normalizeSearch(
@@ -860,6 +1013,13 @@
           }
 
 
+          /*
+             Direct product matches
+          */
+
+          let matchingProducts = [];
+
+
           if (
             window.ZynexCartSearch &&
             typeof
@@ -867,44 +1027,225 @@
                 "function"
           ) {
 
-            return window.ZynexCartSearch
-              .searchProducts(
-                query
+            matchingProducts =
+              window.ZynexCartSearch
+                .searchProducts(
+                  query
+                );
+
+          } else {
+
+            matchingProducts =
+              products.filter(
+                function (product) {
+
+                  const name =
+                    normalizeSearch(
+                      product.name
+                    );
+
+                  const category =
+                    normalizeSearch(
+                      product.category
+                    );
+
+                  const categoryId =
+                    normalizeSearch(
+                      product.categoryId
+                    );
+
+                  const unit =
+                    normalizeSearch(
+                      product.unit
+                    );
+
+
+                  return (
+                    name.includes(query) ||
+                    category.includes(query) ||
+                    categoryId.includes(query) ||
+                    unit.includes(query)
+                  );
+
+                }
               );
 
           }
 
 
-          return products.filter(
+          /*
+             Category matches
+          */
+
+          let matchingCategories = [];
+
+
+          if (
+            window.ZynexCartSearch &&
+            typeof
+              window.ZynexCartSearch.searchCategories ===
+                "function"
+          ) {
+
+            matchingCategories =
+              window.ZynexCartSearch
+                .searchCategories(
+                  query
+                );
+
+          }
+
+
+          /*
+             Final result collection.
+
+             Matching product +
+             all products belonging
+             to that product's category.
+          */
+
+          const finalProducts = [];
+
+          const addedProductIds =
+            new Set();
+
+
+          function addProduct(
+            product
+          ) {
+
+            if (!product) {
+              return;
+            }
+
+
+            const productId =
+              Number(product.id);
+
+
+            if (
+              addedProductIds.has(
+                productId
+              )
+            ) {
+              return;
+            }
+
+
+            addedProductIds.add(
+              productId
+            );
+
+
+            finalProducts.push(
+              product
+            );
+
+          }
+
+
+          /*
+             First:
+
+             Add directly matching products.
+          */
+
+          matchingProducts.forEach(
             function (product) {
 
-              const name =
-                normalizeSearch(
-                  product.name
-                );
-
-              const category =
-                normalizeSearch(
-                  product.category
-                );
-
-              const unit =
-                normalizeSearch(
-                  product.unit
-                );
-
-
-              return (
-                name.includes(query) ||
-                category.includes(query) ||
-                unit.includes(query)
+              addProduct(
+                product
               );
 
             }
           );
 
+
+          /*
+             Then:
+
+             Add ALL products from the
+             matching products' categories.
+          */
+
+          matchingProducts.forEach(
+            function (product) {
+
+              if (
+                product.categoryId
+              ) {
+
+                const categoryProducts =
+                  getProductsByCategoryId(
+                    product.categoryId
+                  );
+
+
+                categoryProducts.forEach(
+                  function (
+                    categoryProduct
+                  ) {
+
+                    addProduct(
+                      categoryProduct
+                    );
+
+                  }
+                );
+
+              }
+
+            }
+          );
+
+
+          /*
+             Direct category search.
+
+             Example:
+
+             "dairy"
+
+             →
+             Dairy, Bread & Eggs
+             →
+             all products
+             in that category.
+          */
+
+          matchingCategories.forEach(
+            function (category) {
+
+              const categoryProducts =
+                getProductsByCategoryId(
+                  category.id
+                );
+
+
+              categoryProducts.forEach(
+                function (
+                  categoryProduct
+                ) {
+
+                  addProduct(
+                    categoryProduct
+                  );
+
+                }
+              );
+
+            }
+          );
+
+
+          return finalProducts;
+
         }
 
+
+        /* =========================================
+           SEARCH RESULT INFORMATION
+        ========================================= */
 
         function showSearchResultInfo(
           searchTerm,
@@ -957,6 +1298,64 @@
         }
 
 
+        /* =========================================
+           CATEGORY PAGE INFORMATION
+        ========================================= */
+
+        function showCategoryInfo(
+          categoryId,
+          resultCount
+        ) {
+
+          const category =
+            getCategoryById(
+              categoryId
+            );
+
+
+          if (
+            searchResultInfo
+          ) {
+
+            searchResultInfo.hidden =
+              true;
+
+          }
+
+
+          if (
+            pageTitle
+          ) {
+
+            pageTitle.textContent =
+              category
+                ? category.name
+                : "Products";
+
+          }
+
+
+          if (
+            pageDescription
+          ) {
+
+            pageDescription.textContent =
+              category
+                ? (
+                    category.description ||
+                    `${resultCount} products available`
+                  )
+                : `${resultCount} products available`;
+
+          }
+
+        }
+
+
+        /* =========================================
+           CLEAR SEARCH INFORMATION
+        ========================================= */
+
         function clearSearchResultInfo() {
 
           if (
@@ -1001,7 +1400,13 @@
         }
 
 
-        function applySearch(searchTerm) {
+        /* =========================================
+           APPLY SEARCH
+        ========================================= */
+
+        function applySearch(
+          searchTerm
+        ) {
 
           const cleanSearch =
             String(
@@ -1067,35 +1472,98 @@
         }
 
 
-        function applyCategory(category) {
+        /* =========================================
+           APPLY CATEGORY
+        ========================================= */
 
-          const categoryButton =
+        function applyCategory(
+          category
+        ) {
+
+          filterButtons.forEach(
+            function (button) {
+
+              button.classList.remove(
+                "active"
+              );
+
+            }
+          );
+
+
+          const matchingFilter =
             document.querySelector(
               `[data-category="${category}"]`
             );
 
 
           if (
-            categoryButton
+            matchingFilter
           ) {
 
-            filterButtons.forEach(
-              function (button) {
-
-                button.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-
-            categoryButton.classList.add(
+            matchingFilter.classList.add(
               "active"
             );
 
           }
 
+
+          if (
+            searchInput
+          ) {
+
+            searchInput.value =
+              "";
+
+          }
+
+
+          if (
+            window.ZynexCartSearch &&
+            typeof
+              window.ZynexCartSearch.hideSuggestions ===
+                "function"
+          ) {
+
+            window.ZynexCartSearch
+              .hideSuggestions();
+
+          }
+
+
+          const categoryProducts =
+            getProductsByCategoryId(
+              category
+            );
+
+
+          /*
+             If categoryId is found,
+             use new category system.
+          */
+
+          if (
+            categoryProducts.length > 0
+          ) {
+
+            showCategoryInfo(
+              category,
+              categoryProducts.length
+            );
+
+            displayProducts(
+              categoryProducts
+            );
+
+            return;
+
+          }
+
+
+          /*
+             Otherwise support
+             old category URLs.
+          */
 
           clearSearchResultInfo();
 
@@ -1105,6 +1573,10 @@
 
         }
 
+
+        /* =========================================
+           CATEGORY BUTTONS
+        ========================================= */
 
         filterButtons.forEach(
           function (button) {
@@ -1205,6 +1677,10 @@
           }
         );
 
+
+        /* =========================================
+           CART UPDATE
+        ========================================= */
 
         document.addEventListener(
           "zynexcart:cartUpdated",
@@ -1324,6 +1800,10 @@
         );
 
 
+        /* =========================================
+           READ URL PARAMETERS
+        ========================================= */
+
         const params =
           new URLSearchParams(
             window.location.search
@@ -1342,6 +1822,10 @@
           );
 
 
+        /* =========================================
+           INITIAL PAGE STATE
+        ========================================= */
+
         if (
           search &&
           search.trim()
@@ -1351,7 +1835,9 @@
             search
           );
 
-        } else if (
+        }
+
+        else if (
           category &&
           category.trim()
         ) {
@@ -1360,7 +1846,9 @@
             category
           );
 
-        } else {
+        }
+
+        else {
 
           clearSearchResultInfo();
 
@@ -1372,6 +1860,10 @@
 
       }
 
+
+      /* =========================================
+         INITIALIZE
+      ========================================= */
 
       if (
         document.readyState ===
@@ -1386,7 +1878,9 @@
           }
         );
 
-      } else {
+      }
+
+      else {
 
         initializeProductsPage();
 
