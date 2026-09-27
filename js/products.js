@@ -6,11 +6,84 @@
 
 /* =========================================
    PRODUCT DATA
+
+   21 Categories
+   5 Products Per Category
+   Total: 105 Products
+
+   categoryId connects every product
+   with categories.js
 ========================================= */
 
 const products = [
+
+  /* =========================================
+     1. PAAN CORNER
+  ========================================= */
+
   {
     id: 1,
+    name: "Fresh Paan",
+    category: "paan",
+    categoryId: "paan",
+    unit: "1 pc",
+    price: 25,
+    mrp: 30,
+    discount: 17,
+    image: "assets/products/fresh-paan.jpg"
+  },
+  {
+    id: 2,
+    name: "Meetha Paan",
+    category: "paan",
+    categoryId: "paan",
+    unit: "1 pc",
+    price: 30,
+    mrp: 35,
+    discount: 14,
+    image: "assets/products/meetha-paan.jpg"
+  },
+  {
+    id: 3,
+    name: "Mint Mouth Freshener",
+    category: "paan",
+    categoryId: "paan",
+    unit: "50 g",
+    price: 45,
+    mrp: 50,
+    discount: 10,
+    image: "assets/products/mint-mouth-freshener.jpg"
+  },
+  {
+    id: 4,
+    name: "Elaichi Mouth Freshener",
+    category: "paan",
+    categoryId: "paan",
+    unit: "50 g",
+    price: 55,
+    mrp: 60,
+    discount: 8,
+    image: "assets/products/elaichi-mouth-freshener.jpg"
+  },
+  {
+    id: 5,
+    name: "Paan Masala",
+    category: "paan",
+    categoryId: "paan",
+    unit: "100 g",
+    price: 85,
+    mrp: 95,
+    discount: 11,
+    image: "assets/products/paan-masala.jpg"
+  },
+
+
+  /* =========================================
+     2. DAIRY, BREAD & EGGS
+  ========================================= */
+
+  {
+    id: 6,
     name: "Fresh Milk",
     category: "grocery",
     categoryId: "dairy-bread-eggs",
@@ -21,7 +94,7 @@ const products = [
     image: "assets/products/milk.jpg"
   },
   {
-    id: 2,
+    id: 7,
     name: "Brown Bread",
     category: "grocery",
     categoryId: "dairy-bread-eggs",
@@ -32,40 +105,107 @@ const products = [
     image: "assets/products/bread.jpg"
   },
   {
-    id: 3,
-    name: "Potato Chips",
-    category: "snacks",
-    categoryId: "snacks-munchies",
-    unit: "100 g",
-    price: 35,
-    mrp: 40,
-    discount: 13,
-    image: "assets/products/chips.jpg"
+    id: 8,
+    name: "Toned Milk",
+    category: "grocery",
+    categoryId: "dairy-bread-eggs",
+    unit: "1 L",
+    price: 64,
+    mrp: 70,
+    discount: 9,
+    image: "assets/products/toned-milk.jpg"
   },
   {
-    id: 4,
-    name: "Bath Soap",
-    category: "personal-care",
-    categoryId: "personal-care",
-    unit: "100 g",
+    id: 9,
+    name: "Fresh Curd",
+    category: "grocery",
+    categoryId: "dairy-bread-eggs",
+    unit: "400 g",
+    price: 48,
+    mrp: 55,
+    discount: 13,
+    image: "assets/products/curd.jpg"
+  },
+  {
+    id: 10,
+    name: "Farm Fresh Eggs",
+    category: "grocery",
+    categoryId: "dairy-bread-eggs",
+    unit: "6 pcs",
+    price: 48,
+    mrp: 54,
+    discount: 11,
+    image: "assets/products/eggs.jpg"
+  },
+
+
+  /* =========================================
+     3. FRUITS & VEGETABLES
+  ========================================= */
+
+  {
+    id: 11,
+    name: "Fresh Bananas",
+    category: "fruits-vegetables",
+    categoryId: "fruits-vegetables",
+    unit: "1 kg",
+    price: 55,
+    mrp: 65,
+    discount: 15,
+    image: "assets/products/bananas.jpg"
+  },
+  {
+    id: 12,
+    name: "Fresh Apples",
+    category: "fruits-vegetables",
+    categoryId: "fruits-vegetables",
+    unit: "1 kg",
+    price: 140,
+    mrp: 160,
+    discount: 13,
+    image: "assets/products/apples.jpg"
+  },
+  {
+    id: 13,
+    name: "Fresh Potatoes",
+    category: "fruits-vegetables",
+    categoryId: "fruits-vegetables",
+    unit: "1 kg",
+    price: 35,
+    mrp: 42,
+    discount: 17,
+    image: "assets/products/potatoes.jpg"
+  },
+  {
+    id: 14,
+    name: "Fresh Tomatoes",
+    category: "fruits-vegetables",
+    categoryId: "fruits-vegetables",
+    unit: "1 kg",
+    price: 45,
+    mrp: 55,
+    discount: 18,
+    image: "assets/products/tomatoes.jpg"
+  },
+  {
+    id: 15,
+    name: "Fresh Onions",
+    category: "fruits-vegetables",
+    categoryId: "fruits-vegetables",
+    unit: "1 kg",
     price: 42,
     mrp: 50,
     discount: 16,
-    image: "assets/products/soap.jpg"
+    image: "assets/products/onions.jpg"
   },
+
+
+  /* =========================================
+     4. COLD DRINKS & JUICES
+  ========================================= */
+
   {
-    id: 5,
-    name: "Shampoo",
-    category: "personal-care",
-    categoryId: "personal-care",
-    unit: "180 ml",
-    price: 149,
-    mrp: 175,
-    discount: 15,
-    image: "assets/products/shampoo.jpg"
-  },
-  {
-    id: 6,
+    id: 16,
     name: "Orange Juice",
     category: "beverages",
     categoryId: "cold-drinks-juices",
@@ -76,18 +216,789 @@ const products = [
     image: "assets/products/juice.jpg"
   },
   {
-    id: 7,
-    name: "Face Wash",
-    category: "beauty",
-    categoryId: "personal-care",
-    unit: "100 ml",
-    price: 129,
-    mrp: 150,
-    discount: 14,
-    image: "assets/products/face-wash.jpg"
+    id: 17,
+    name: "Mango Juice",
+    category: "beverages",
+    categoryId: "cold-drinks-juices",
+    unit: "1 L",
+    price: 105,
+    mrp: 120,
+    discount: 13,
+    image: "assets/products/mango-juice.jpg"
   },
   {
-    id: 8,
+    id: 18,
+    name: "Lemon Soft Drink",
+    category: "beverages",
+    categoryId: "cold-drinks-juices",
+    unit: "750 ml",
+    price: 45,
+    mrp: 50,
+    discount: 10,
+    image: "assets/products/lemon-soft-drink.jpg"
+  },
+  {
+    id: 19,
+    name: "Cola Soft Drink",
+    category: "beverages",
+    categoryId: "cold-drinks-juices",
+    unit: "750 ml",
+    price: 45,
+    mrp: 50,
+    discount: 10,
+    image: "assets/products/cola-soft-drink.jpg"
+  },
+  {
+    id: 20,
+    name: "Mixed Fruit Juice",
+    category: "beverages",
+    categoryId: "cold-drinks-juices",
+    unit: "1 L",
+    price: 115,
+    mrp: 130,
+    discount: 12,
+    image: "assets/products/mixed-fruit-juice.jpg"
+  },
+
+
+  /* =========================================
+     5. SNACKS & MUNCHIES
+  ========================================= */
+
+  {
+    id: 21,
+    name: "Potato Chips",
+    category: "snacks",
+    categoryId: "snacks-munchies",
+    unit: "100 g",
+    price: 35,
+    mrp: 40,
+    discount: 13,
+    image: "assets/products/chips.jpg"
+  },
+  {
+    id: 22,
+    name: "Salted Peanuts",
+    category: "snacks",
+    categoryId: "snacks-munchies",
+    unit: "200 g",
+    price: 55,
+    mrp: 65,
+    discount: 15,
+    image: "assets/products/salted-peanuts.jpg"
+  },
+  {
+    id: 23,
+    name: "Bhujia",
+    category: "snacks",
+    categoryId: "snacks-munchies",
+    unit: "200 g",
+    price: 65,
+    mrp: 75,
+    discount: 13,
+    image: "assets/products/bhujia.jpg"
+  },
+  {
+    id: 24,
+    name: "Aloo Bhujia",
+    category: "snacks",
+    categoryId: "snacks-munchies",
+    unit: "200 g",
+    price: 60,
+    mrp: 70,
+    discount: 14,
+    image: "assets/products/aloo-bhujia.jpg"
+  },
+  {
+    id: 25,
+    name: "Namkeen Mix",
+    category: "snacks",
+    categoryId: "snacks-munchies",
+    unit: "200 g",
+    price: 70,
+    mrp: 80,
+    discount: 13,
+    image: "assets/products/namkeen-mix.jpg"
+  },
+
+
+  /* =========================================
+     6. BREAKFAST & INSTANT FOOD
+  ========================================= */
+
+  {
+    id: 26,
+    name: "Instant Noodles",
+    category: "breakfast-instant-food",
+    categoryId: "breakfast-instant-food",
+    unit: "70 g",
+    price: 15,
+    mrp: 18,
+    discount: 17,
+    image: "assets/products/instant-noodles.jpg"
+  },
+  {
+    id: 27,
+    name: "Oats",
+    category: "breakfast-instant-food",
+    categoryId: "breakfast-instant-food",
+    unit: "500 g",
+    price: 95,
+    mrp: 110,
+    discount: 14,
+    image: "assets/products/oats.jpg"
+  },
+  {
+    id: 28,
+    name: "Poha",
+    category: "breakfast-instant-food",
+    categoryId: "breakfast-instant-food",
+    unit: "500 g",
+    price: 55,
+    mrp: 65,
+    discount: 15,
+    image: "assets/products/poha.jpg"
+  },
+  {
+    id: 29,
+    name: "Upma Mix",
+    category: "breakfast-instant-food",
+    categoryId: "breakfast-instant-food",
+    unit: "500 g",
+    price: 65,
+    mrp: 75,
+    discount: 13,
+    image: "assets/products/upma-mix.jpg"
+  },
+  {
+    id: 30,
+    name: "Corn Flakes",
+    category: "breakfast-instant-food",
+    categoryId: "breakfast-instant-food",
+    unit: "500 g",
+    price: 165,
+    mrp: 190,
+    discount: 13,
+    image: "assets/products/corn-flakes.jpg"
+  },
+
+
+  /* =========================================
+     7. SWEET TOOTH
+  ========================================= */
+
+  {
+    id: 31,
+    name: "Milk Chocolate",
+    category: "sweet-tooth",
+    categoryId: "sweet-tooth",
+    unit: "40 g",
+    price: 40,
+    mrp: 45,
+    discount: 11,
+    image: "assets/products/milk-chocolate.jpg"
+  },
+  {
+    id: 32,
+    name: "Chocolate Bar",
+    category: "sweet-tooth",
+    categoryId: "sweet-tooth",
+    unit: "50 g",
+    price: 50,
+    mrp: 55,
+    discount: 9,
+    image: "assets/products/chocolate-bar.jpg"
+  },
+  {
+    id: 33,
+    name: "Gulab Jamun",
+    category: "sweet-tooth",
+    categoryId: "sweet-tooth",
+    unit: "500 g",
+    price: 180,
+    mrp: 210,
+    discount: 14,
+    image: "assets/products/gulab-jamun.jpg"
+  },
+  {
+    id: 34,
+    name: "Rasgulla",
+    category: "sweet-tooth",
+    categoryId: "sweet-tooth",
+    unit: "500 g",
+    price: 170,
+    mrp: 200,
+    discount: 15,
+    image: "assets/products/rasgulla.jpg"
+  },
+  {
+    id: 35,
+    name: "Cookies",
+    category: "sweet-tooth",
+    categoryId: "sweet-tooth",
+    unit: "200 g",
+    price: 65,
+    mrp: 75,
+    discount: 13,
+    image: "assets/products/cookies.jpg"
+  },
+
+
+  /* =========================================
+     8. BAKERY & BISCUITS
+  ========================================= */
+
+  {
+    id: 36,
+    name: "Glucose Biscuits",
+    category: "bakery-biscuits",
+    categoryId: "bakery-biscuits",
+    unit: "250 g",
+    price: 30,
+    mrp: 35,
+    discount: 14,
+    image: "assets/products/glucose-biscuits.jpg"
+  },
+  {
+    id: 37,
+    name: "Cream Biscuits",
+    category: "bakery-biscuits",
+    categoryId: "bakery-biscuits",
+    unit: "150 g",
+    price: 35,
+    mrp: 40,
+    discount: 13,
+    image: "assets/products/cream-biscuits.jpg"
+  },
+  {
+    id: 38,
+    name: "Rusk",
+    category: "bakery-biscuits",
+    categoryId: "bakery-biscuits",
+    unit: "300 g",
+    price: 65,
+    mrp: 75,
+    discount: 13,
+    image: "assets/products/rusk.jpg"
+  },
+  {
+    id: 39,
+    name: "Fruit Cake",
+    category: "bakery-biscuits",
+    categoryId: "bakery-biscuits",
+    unit: "250 g",
+    price: 95,
+    mrp: 110,
+    discount: 14,
+    image: "assets/products/fruit-cake.jpg"
+  },
+  {
+    id: 40,
+    name: "Chocolate Cake",
+    category: "bakery-biscuits",
+    categoryId: "bakery-biscuits",
+    unit: "250 g",
+    price: 120,
+    mrp: 140,
+    discount: 14,
+    image: "assets/products/chocolate-cake.jpg"
+  },
+
+
+  /* =========================================
+     9. TEA, COFFEE & MILK DRINKS
+  ========================================= */
+
+  {
+    id: 41,
+    name: "Tea",
+    category: "tea-coffee-milk",
+    categoryId: "tea-coffee-milk",
+    unit: "250 g",
+    price: 120,
+    mrp: 140,
+    discount: 14,
+    image: "assets/products/tea.jpg"
+  },
+  {
+    id: 42,
+    name: "Instant Coffee",
+    category: "tea-coffee-milk",
+    categoryId: "tea-coffee-milk",
+    unit: "100 g",
+    price: 180,
+    mrp: 210,
+    discount: 14,
+    image: "assets/products/instant-coffee.jpg"
+  },
+  {
+    id: 43,
+    name: "Hot Chocolate",
+    category: "tea-coffee-milk",
+    categoryId: "tea-coffee-milk",
+    unit: "200 g",
+    price: 160,
+    mrp: 185,
+    discount: 14,
+    image: "assets/products/hot-chocolate.jpg"
+  },
+  {
+    id: 44,
+    name: "Malt Milk Drink",
+    category: "tea-coffee-milk",
+    categoryId: "tea-coffee-milk",
+    unit: "500 g",
+    price: 240,
+    mrp: 275,
+    discount: 13,
+    image: "assets/products/malt-milk-drink.jpg"
+  },
+  {
+    id: 45,
+    name: "Green Tea",
+    category: "tea-coffee-milk",
+    categoryId: "tea-coffee-milk",
+    unit: "25 tea bags",
+    price: 135,
+    mrp: 155,
+    discount: 13,
+    image: "assets/products/green-tea.jpg"
+  },
+
+
+  /* =========================================
+     10. ATTA, RICE & DAL
+  ========================================= */
+
+  {
+    id: 46,
+    name: "Wheat Atta",
+    category: "atta-rice-dal",
+    categoryId: "atta-rice-dal",
+    unit: "5 kg",
+    price: 260,
+    mrp: 290,
+    discount: 10,
+    image: "assets/products/wheat-atta.jpg"
+  },
+  {
+    id: 47,
+    name: "Basmati Rice",
+    category: "atta-rice-dal",
+    categoryId: "atta-rice-dal",
+    unit: "5 kg",
+    price: 420,
+    mrp: 480,
+    discount: 13,
+    image: "assets/products/basmati-rice.jpg"
+  },
+  {
+    id: 48,
+    name: "Toor Dal",
+    category: "atta-rice-dal",
+    categoryId: "atta-rice-dal",
+    unit: "1 kg",
+    price: 150,
+    mrp: 175,
+    discount: 14,
+    image: "assets/products/toor-dal.jpg"
+  },
+  {
+    id: 49,
+    name: "Moong Dal",
+    category: "atta-rice-dal",
+    categoryId: "atta-rice-dal",
+    unit: "1 kg",
+    price: 125,
+    mrp: 145,
+    discount: 14,
+    image: "assets/products/moong-dal.jpg"
+  },
+  {
+    id: 50,
+    name: "Chana Dal",
+    category: "atta-rice-dal",
+    categoryId: "atta-rice-dal",
+    unit: "1 kg",
+    price: 90,
+    mrp: 105,
+    discount: 14,
+    image: "assets/products/chana-dal.jpg"
+  },
+
+
+  /* =========================================
+     11. MASALA, OIL & MORE
+  ========================================= */
+
+  {
+    id: 51,
+    name: "Turmeric Powder",
+    category: "masala-oil",
+    categoryId: "masala-oil",
+    unit: "100 g",
+    price: 35,
+    mrp: 40,
+    discount: 13,
+    image: "assets/products/turmeric-powder.jpg"
+  },
+  {
+    id: 52,
+    name: "Red Chilli Powder",
+    category: "masala-oil",
+    categoryId: "masala-oil",
+    unit: "100 g",
+    price: 40,
+    mrp: 45,
+    discount: 11,
+    image: "assets/products/red-chilli-powder.jpg"
+  },
+  {
+    id: 53,
+    name: "Garam Masala",
+    category: "masala-oil",
+    categoryId: "masala-oil",
+    unit: "100 g",
+    price: 55,
+    mrp: 65,
+    discount: 15,
+    image: "assets/products/garam-masala.jpg"
+  },
+  {
+    id: 54,
+    name: "Cooking Oil",
+    category: "masala-oil",
+    categoryId: "masala-oil",
+    unit: "1 L",
+    price: 145,
+    mrp: 165,
+    discount: 12,
+    image: "assets/products/cooking-oil.jpg"
+  },
+  {
+    id: 55,
+    name: "Mustard Oil",
+    category: "masala-oil",
+    categoryId: "masala-oil",
+    unit: "1 L",
+    price: 155,
+    mrp: 175,
+    discount: 11,
+    image: "assets/products/mustard-oil.jpg"
+  },
+
+
+  /* =========================================
+     12. SAUCES & SPREADS
+  ========================================= */
+
+  {
+    id: 56,
+    name: "Tomato Ketchup",
+    category: "sauces-spreads",
+    categoryId: "sauces-spreads",
+    unit: "500 g",
+    price: 95,
+    mrp: 110,
+    discount: 14,
+    image: "assets/products/tomato-ketchup.jpg"
+  },
+  {
+    id: 57,
+    name: "Green Chilli Sauce",
+    category: "sauces-spreads",
+    categoryId: "sauces-spreads",
+    unit: "200 g",
+    price: 60,
+    mrp: 70,
+    discount: 14,
+    image: "assets/products/green-chilli-sauce.jpg"
+  },
+  {
+    id: 58,
+    name: "Red Chilli Sauce",
+    category: "sauces-spreads",
+    categoryId: "sauces-spreads",
+    unit: "200 g",
+    price: 60,
+    mrp: 70,
+    discount: 14,
+    image: "assets/products/red-chilli-sauce.jpg"
+  },
+  {
+    id: 59,
+    name: "Mayonnaise",
+    category: "sauces-spreads",
+    categoryId: "sauces-spreads",
+    unit: "250 g",
+    price: 95,
+    mrp: 110,
+    discount: 14,
+    image: "assets/products/mayonnaise.jpg"
+  },
+  {
+    id: 60,
+    name: "Chocolate Spread",
+    category: "sauces-spreads",
+    categoryId: "sauces-spreads",
+    unit: "350 g",
+    price: 220,
+    mrp: 250,
+    discount: 12,
+    image: "assets/products/chocolate-spread.jpg"
+  },
+
+
+  /* =========================================
+     13. CHICKEN, MEAT & FISH
+  ========================================= */
+
+  {
+    id: 61,
+    name: "Fresh Chicken Curry Cut",
+    category: "chicken-meat-fish",
+    categoryId: "chicken-meat-fish",
+    unit: "500 g",
+    price: 180,
+    mrp: 210,
+    discount: 14,
+    image: "assets/products/chicken-curry-cut.jpg"
+  },
+  {
+    id: 62,
+    name: "Chicken Breast",
+    category: "chicken-meat-fish",
+    categoryId: "chicken-meat-fish",
+    unit: "500 g",
+    price: 220,
+    mrp: 250,
+    discount: 12,
+    image: "assets/products/chicken-breast.jpg"
+  },
+  {
+    id: 63,
+    name: "Chicken Wings",
+    category: "chicken-meat-fish",
+    categoryId: "chicken-meat-fish",
+    unit: "500 g",
+    price: 190,
+    mrp: 220,
+    discount: 14,
+    image: "assets/products/chicken-wings.jpg"
+  },
+  {
+    id: 64,
+    name: "Fresh Fish",
+    category: "chicken-meat-fish",
+    categoryId: "chicken-meat-fish",
+    unit: "500 g",
+    price: 240,
+    mrp: 275,
+    discount: 13,
+    image: "assets/products/fresh-fish.jpg"
+  },
+  {
+    id: 65,
+    name: "Fish Fillet",
+    category: "chicken-meat-fish",
+    categoryId: "chicken-meat-fish",
+    unit: "500 g",
+    price: 280,
+    mrp: 320,
+    discount: 13,
+    image: "assets/products/fish-fillet.jpg"
+  },
+
+
+  /* =========================================
+     14. ORGANIC & HEALTHY LIVING
+  ========================================= */
+
+  {
+    id: 66,
+    name: "Organic Honey",
+    category: "organic-healthy",
+    categoryId: "organic-healthy",
+    unit: "250 g",
+    price: 180,
+    mrp: 210,
+    discount: 14,
+    image: "assets/products/organic-honey.jpg"
+  },
+  {
+    id: 67,
+    name: "Organic Jaggery",
+    category: "organic-healthy",
+    categoryId: "organic-healthy",
+    unit: "500 g",
+    price: 95,
+    mrp: 110,
+    discount: 14,
+    image: "assets/products/organic-jaggery.jpg"
+  },
+  {
+    id: 68,
+    name: "Chia Seeds",
+    category: "organic-healthy",
+    categoryId: "organic-healthy",
+    unit: "200 g",
+    price: 140,
+    mrp: 165,
+    discount: 15,
+    image: "assets/products/chia-seeds.jpg"
+  },
+  {
+    id: 69,
+    name: "Almonds",
+    category: "organic-healthy",
+    categoryId: "organic-healthy",
+    unit: "250 g",
+    price: 260,
+    mrp: 300,
+    discount: 13,
+    image: "assets/products/almonds.jpg"
+  },
+  {
+    id: 70,
+    name: "Green Tea Healthy Blend",
+    category: "organic-healthy",
+    categoryId: "organic-healthy",
+    unit: "25 tea bags",
+    price: 150,
+    mrp: 175,
+    discount: 14,
+    image: "assets/products/healthy-green-tea.jpg"
+  },
+
+
+  /* =========================================
+     15. BABY CARE
+  ========================================= */
+
+  {
+    id: 71,
+    name: "Baby Diapers",
+    category: "baby-care",
+    categoryId: "baby-care",
+    unit: "Small Pack",
+    price: 299,
+    mrp: 340,
+    discount: 12,
+    image: "assets/products/baby-diapers.jpg"
+  },
+  {
+    id: 72,
+    name: "Baby Wipes",
+    category: "baby-care",
+    categoryId: "baby-care",
+    unit: "72 pcs",
+    price: 110,
+    mrp: 130,
+    discount: 15,
+    image: "assets/products/baby-wipes.jpg"
+  },
+  {
+    id: 73,
+    name: "Baby Shampoo",
+    category: "baby-care",
+    categoryId: "baby-care",
+    unit: "200 ml",
+    price: 145,
+    mrp: 165,
+    discount: 12,
+    image: "assets/products/baby-shampoo.jpg"
+  },
+  {
+    id: 74,
+    name: "Baby Soap",
+    category: "baby-care",
+    categoryId: "baby-care",
+    unit: "75 g",
+    price: 55,
+    mrp: 65,
+    discount: 15,
+    image: "assets/products/baby-soap.jpg"
+  },
+  {
+    id: 75,
+    name: "Baby Lotion",
+    category: "baby-care",
+    categoryId: "baby-care",
+    unit: "200 ml",
+    price: 150,
+    mrp: 175,
+    discount: 14,
+    image: "assets/products/baby-lotion.jpg"
+  },
+
+
+  /* =========================================
+     16. PHARMA & WELLNESS
+  ========================================= */
+
+  {
+    id: 76,
+    name: "Digital Thermometer",
+    category: "pharma-wellness",
+    categoryId: "pharma-wellness",
+    unit: "1 pc",
+    price: 150,
+    mrp: 180,
+    discount: 17,
+    image: "assets/products/digital-thermometer.jpg"
+  },
+  {
+    id: 77,
+    name: "First Aid Kit",
+    category: "pharma-wellness",
+    categoryId: "pharma-wellness",
+    unit: "1 kit",
+    price: 199,
+    mrp: 230,
+    discount: 13,
+    image: "assets/products/first-aid-kit.jpg"
+  },
+  {
+    id: 78,
+    name: "Adhesive Bandages",
+    category: "pharma-wellness",
+    categoryId: "pharma-wellness",
+    unit: "20 pcs",
+    price: 45,
+    mrp: 55,
+    discount: 18,
+    image: "assets/products/adhesive-bandages.jpg"
+  },
+  {
+    id: 79,
+    name: "Hand Sanitizer",
+    category: "pharma-wellness",
+    categoryId: "pharma-wellness",
+    unit: "100 ml",
+    price: 55,
+    mrp: 65,
+    discount: 15,
+    image: "assets/products/hand-sanitizer.jpg"
+  },
+  {
+    id: 80,
+    name: "Cotton Roll",
+    category: "pharma-wellness",
+    categoryId: "pharma-wellness",
+    unit: "100 g",
+    price: 45,
+    mrp: 55,
+    discount: 18,
+    image: "assets/products/cotton-roll.jpg"
+  },
+
+
+  /* =========================================
+     17. CLEANING ESSENTIALS
+  ========================================= */
+
+  {
+    id: 81,
     name: "Dishwash Liquid",
     category: "household",
     categoryId: "cleaning-essentials",
@@ -96,7 +1007,296 @@ const products = [
     mrp: 115,
     discount: 14,
     image: "assets/products/dishwash.jpg"
+  },
+  {
+    id: 82,
+    name: "Laundry Detergent",
+    category: "household",
+    categoryId: "cleaning-essentials",
+    unit: "1 kg",
+    price: 110,
+    mrp: 130,
+    discount: 15,
+    image: "assets/products/laundry-detergent.jpg"
+  },
+  {
+    id: 83,
+    name: "Floor Cleaner",
+    category: "household",
+    categoryId: "cleaning-essentials",
+    unit: "1 L",
+    price: 120,
+    mrp: 140,
+    discount: 14,
+    image: "assets/products/floor-cleaner.jpg"
+  },
+  {
+    id: 84,
+    name: "Toilet Cleaner",
+    category: "household",
+    categoryId: "cleaning-essentials",
+    unit: "500 ml",
+    price: 95,
+    mrp: 110,
+    discount: 14,
+    image: "assets/products/toilet-cleaner.jpg"
+  },
+  {
+    id: 85,
+    name: "Cleaning Sponge",
+    category: "household",
+    categoryId: "cleaning-essentials",
+    unit: "3 pcs",
+    price: 40,
+    mrp: 50,
+    discount: 20,
+    image: "assets/products/cleaning-sponge.jpg"
+  },
+
+
+  /* =========================================
+     18. HOME & OFFICE
+  ========================================= */
+
+  {
+    id: 86,
+    name: "Notebook",
+    category: "home-office",
+    categoryId: "home-office",
+    unit: "1 pc",
+    price: 45,
+    mrp: 55,
+    discount: 18,
+    image: "assets/products/notebook.jpg"
+  },
+  {
+    id: 87,
+    name: "Ball Pen Pack",
+    category: "home-office",
+    categoryId: "home-office",
+    unit: "5 pcs",
+    price: 35,
+    mrp: 45,
+    discount: 22,
+    image: "assets/products/ball-pens.jpg"
+  },
+  {
+    id: 88,
+    name: "Sticky Notes",
+    category: "home-office",
+    categoryId: "home-office",
+    unit: "1 pack",
+    price: 55,
+    mrp: 65,
+    discount: 15,
+    image: "assets/products/sticky-notes.jpg"
+  },
+  {
+    id: 89,
+    name: "Kitchen Storage Box",
+    category: "home-office",
+    categoryId: "home-office",
+    unit: "1 pc",
+    price: 120,
+    mrp: 145,
+    discount: 17,
+    image: "assets/products/kitchen-storage-box.jpg"
+  },
+  {
+    id: 90,
+    name: "LED Bulb",
+    category: "home-office",
+    categoryId: "home-office",
+    unit: "1 pc",
+    price: 110,
+    mrp: 130,
+    discount: 15,
+    image: "assets/products/led-bulb.jpg"
+  },
+
+
+  /* =========================================
+     19. PERSONAL CARE
+  ========================================= */
+
+  {
+    id: 91,
+    name: "Bath Soap",
+    category: "personal-care",
+    categoryId: "personal-care",
+    unit: "100 g",
+    price: 42,
+    mrp: 50,
+    discount: 16,
+    image: "assets/products/soap.jpg"
+  },
+  {
+    id: 92,
+    name: "Shampoo",
+    category: "personal-care",
+    categoryId: "personal-care",
+    unit: "180 ml",
+    price: 149,
+    mrp: 175,
+    discount: 15,
+    image: "assets/products/shampoo.jpg"
+  },
+  {
+    id: 93,
+    name: "Face Wash",
+    category: "personal-care",
+    categoryId: "personal-care",
+    unit: "100 ml",
+    price: 129,
+    mrp: 150,
+    discount: 14,
+    image: "assets/products/face-wash.jpg"
+  },
+  {
+    id: 94,
+    name: "Toothpaste",
+    category: "personal-care",
+    categoryId: "personal-care",
+    unit: "150 g",
+    price: 95,
+    mrp: 110,
+    discount: 14,
+    image: "assets/products/toothpaste.jpg"
+  },
+  {
+    id: 95,
+    name: "Toothbrush",
+    category: "personal-care",
+    categoryId: "personal-care",
+    unit: "1 pc",
+    price: 45,
+    mrp: 55,
+    discount: 18,
+    image: "assets/products/toothbrush.jpg"
+  },
+
+
+  /* =========================================
+     20. PET CARE
+  ========================================= */
+
+  {
+    id: 96,
+    name: "Dog Food",
+    category: "pet-care",
+    categoryId: "pet-care",
+    unit: "1 kg",
+    price: 260,
+    mrp: 300,
+    discount: 13,
+    image: "assets/products/dog-food.jpg"
+  },
+  {
+    id: 97,
+    name: "Cat Food",
+    category: "pet-care",
+    categoryId: "pet-care",
+    unit: "1 kg",
+    price: 280,
+    mrp: 320,
+    discount: 13,
+    image: "assets/products/cat-food.jpg"
+  },
+  {
+    id: 98,
+    name: "Pet Treats",
+    category: "pet-care",
+    categoryId: "pet-care",
+    unit: "100 g",
+    price: 90,
+    mrp: 110,
+    discount: 18,
+    image: "assets/products/pet-treats.jpg"
+  },
+  {
+    id: 99,
+    name: "Pet Shampoo",
+    category: "pet-care",
+    categoryId: "pet-care",
+    unit: "200 ml",
+    price: 150,
+    mrp: 180,
+    discount: 17,
+    image: "assets/products/pet-shampoo.jpg"
+  },
+  {
+    id: 100,
+    name: "Pet Bowl",
+    category: "pet-care",
+    categoryId: "pet-care",
+    unit: "1 pc",
+    price: 120,
+    mrp: 150,
+    discount: 20,
+    image: "assets/products/pet-bowl.jpg"
+  },
+
+
+  /* =========================================
+     21. OFFERS & DEALS
+  ========================================= */
+
+  {
+    id: 101,
+    name: "Daily Essentials Combo",
+    category: "offers",
+    categoryId: "offers",
+    unit: "1 combo",
+    price: 299,
+    mrp: 350,
+    discount: 15,
+    image: "assets/products/daily-essentials-combo.jpg"
+  },
+  {
+    id: 102,
+    name: "Breakfast Combo",
+    category: "offers",
+    categoryId: "offers",
+    unit: "1 combo",
+    price: 249,
+    mrp: 300,
+    discount: 17,
+    image: "assets/products/breakfast-combo.jpg"
+  },
+  {
+    id: 103,
+    name: "Snacks Combo",
+    category: "offers",
+    categoryId: "offers",
+    unit: "1 combo",
+    price: 199,
+    mrp: 240,
+    discount: 17,
+    image: "assets/products/snacks-combo.jpg"
+  },
+  {
+    id: 104,
+    name: "Personal Care Combo",
+    category: "offers",
+    categoryId: "offers",
+    unit: "1 combo",
+    price: 349,
+    mrp: 410,
+    discount: 15,
+    image: "assets/products/personal-care-combo.jpg"
+  },
+  {
+    id: 105,
+    name: "Home Cleaning Combo",
+    category: "offers",
+    categoryId: "offers",
+    unit: "1 combo",
+    price: 299,
+    mrp: 350,
+    discount: 15,
+    image: "assets/products/home-cleaning-combo.jpg"
   }
+
 ];
 
 
@@ -167,10 +1367,6 @@ function createProductButton(product) {
     getProductQuantity(product.id);
 
 
-  /* -----------------------------------------
-     ADD STATE
-  ----------------------------------------- */
-
   if (quantity <= 0) {
 
     return `
@@ -185,10 +1381,6 @@ function createProductButton(product) {
 
   }
 
-
-  /* -----------------------------------------
-     QUANTITY STATE
-  ----------------------------------------- */
 
   return `
     <div
@@ -395,11 +1587,6 @@ function refreshProductButton(productId) {
 
   controls.forEach(control => {
 
-
-    /* -------------------------------------
-       CART EMPTY → ADD BUTTON
-    ------------------------------------- */
-
     if (quantity <= 0) {
 
       if (
@@ -431,10 +1618,6 @@ function refreshProductButton(productId) {
     }
 
 
-    /* -------------------------------------
-       ALREADY QUANTITY CONTROL
-    ------------------------------------- */
-
     if (
       control.classList.contains("added")
     ) {
@@ -451,10 +1634,6 @@ function refreshProductButton(productId) {
       return;
     }
 
-
-    /* -------------------------------------
-       ADD → QUANTITY CONTROL
-    ------------------------------------- */
 
     const quantityControl =
       createQuantityControl(
@@ -493,10 +1672,6 @@ function setupSingleProductControl(
   control.dataset.bound = "true";
 
 
-  /* =======================================
-     ADD BUTTON
-  ======================================= */
-
   if (
     control.tagName === "BUTTON" &&
     !control.classList.contains("added")
@@ -532,10 +1707,6 @@ function setupSingleProductControl(
     return;
   }
 
-
-  /* =======================================
-     QUANTITY CONTROL
-  ======================================= */
 
   if (
     !control.classList.contains("added")
@@ -577,10 +1748,6 @@ function setupSingleProductControl(
       }
 
 
-      /* =====================================
-         PLUS
-      ===================================== */
-
       if (
         actionButton.classList.contains(
           "qty-plus"
@@ -598,10 +1765,6 @@ function setupSingleProductControl(
         return;
       }
 
-
-      /* =====================================
-         MINUS
-      ===================================== */
 
       if (
         actionButton.classList.contains(
@@ -694,25 +1857,6 @@ function syncProductButtons() {
 /* =========================================
    CART UPDATE LISTENER
 ========================================= */
-
-/*
-   Cart page par jab:
-
-   +  → quantity increase
-   −  → quantity decrease
-   Remove → product remove
-
-   hota hai, app.js se:
-
-   zynexcart:cartUpdated
-
-   event dispatch hona chahiye.
-
-   Ye listener us event ko receive karke
-   product page ko immediately sync karta hai.
-
-   Refresh ki zarurat nahi hogi.
-*/
 
 document.addEventListener(
   "zynexcart:cartUpdated",
