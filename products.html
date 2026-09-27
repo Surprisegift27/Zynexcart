@@ -54,11 +54,11 @@
 
 
   <!-- =====================================================
-       HEADER
        SAME HEADER AS HOME PAGE
   ====================================================== -->
 
   <div id="header-component"></div>
+
 
 
   <!-- =====================================================
@@ -67,80 +67,77 @@
 
   <main class="products-page">
 
+    <div class="products-container">
 
-    <!-- ===================================================
-         BREADCRUMB + CATEGORY HEADER
-    ==================================================== -->
 
-    <section class="products-hero">
+      <!-- =================================================
+           BREADCRUMB
+      ================================================== -->
 
-      <div class="products-container">
+      <nav
+        class="products-breadcrumb"
+        aria-label="Breadcrumb"
+      >
 
-        <nav
-          class="products-breadcrumb"
-          aria-label="Breadcrumb"
-        >
+        <a href="index.html">
+          Home
+        </a>
 
-          <a href="index.html">
-            Home
-          </a>
+        <span aria-hidden="true">
+          ›
+        </span>
 
-          <span aria-hidden="true">
-            ›
+        <span id="breadcrumbCategory">
+          All Products
+        </span>
+
+      </nav>
+
+
+
+      <!-- =================================================
+           PAGE HEADING
+      ================================================== -->
+
+      <header class="products-heading">
+
+        <div class="products-heading-content">
+
+          <span class="products-eyebrow">
+            SHOP BY CATEGORY
           </span>
 
-          <strong id="breadcrumbCategory">
+          <h1 id="productsPageTitle">
             All Products
-          </strong>
+          </h1>
 
-        </nav>
-
-
-        <div class="products-heading-row">
-
-          <div class="products-heading">
-
-            <span class="products-eyebrow">
-              SHOP BY CATEGORY
-            </span>
-
-            <h1 id="productsPageTitle">
-              All Products
-            </h1>
-
-            <p id="productsPageDescription">
-              Shop your daily essentials at ZynexCart.
-            </p>
-
-          </div>
-
-
-          <div
-            class="products-count"
-            id="productsCount"
-          >
-            0 products
-          </div>
+          <p id="productsPageDescription">
+            Shop your daily essentials at ZynexCart.
+          </p>
 
         </div>
 
-      </div>
 
-    </section>
+        <div
+          class="products-result-count"
+          id="productsCount"
+        >
+          0 products
+        </div>
+
+      </header>
 
 
 
-    <!-- ===================================================
-         PRODUCTS CONTENT
-    ==================================================== -->
+      <!-- =================================================
+           MAIN PRODUCT LAYOUT
+      ================================================== -->
 
-    <section class="products-content">
-
-      <div class="products-container products-layout">
+      <div class="products-layout">
 
 
         <!-- =================================================
-             LEFT CATEGORY NAVIGATION
+             LEFT SIDEBAR
         ================================================== -->
 
         <aside
@@ -148,9 +145,10 @@
           aria-label="Category navigation"
         >
 
-          <div class="products-sidebar-card">
+          <div class="products-sidebar-inner">
 
-            <div class="products-sidebar-title">
+
+            <div class="sidebar-title">
               Shop
             </div>
 
@@ -158,11 +156,11 @@
             <nav
               class="subcategory-nav"
               id="subcategoryNav"
+              aria-label="Subcategories"
             >
 
               <!--
-                Subcategories are rendered
-                by JavaScript.
+                Subcategories rendered by JavaScript
               -->
 
             </nav>
@@ -174,37 +172,40 @@
 
 
         <!-- =================================================
-             RIGHT PRODUCTS AREA
+             RIGHT PRODUCT AREA
         ================================================== -->
 
-        <div class="products-main">
+        <section
+          class="products-main"
+          aria-label="Products"
+        >
 
 
           <!-- ===============================================
-               PRODUCTS TOOLBAR
+               TOOLBAR
           ================================================ -->
 
           <div class="products-toolbar">
 
-            <div>
+            <div class="products-toolbar-left">
 
               <h2 id="productsSectionTitle">
                 All Products
               </h2>
 
-              <p id="productsSectionDescription">
+              <span id="productsSectionDescription">
                 Everything you need, delivered fast.
-              </p>
+              </span>
 
             </div>
 
 
-            <div
-              class="products-toolbar-count"
+            <span
               id="productsToolbarCount"
+              class="products-toolbar-left"
             >
               0 products
-            </div>
+            </span>
 
           </div>
 
@@ -230,63 +231,55 @@
                PRODUCT GRID
           ================================================ -->
 
-          <section
-            aria-label="Products"
+          <div
+            class="product-grid"
+            id="productsGrid"
+          >
+            <!-- Products rendered by JavaScript -->
+          </div>
+
+
+
+          <!-- ===============================================
+               EMPTY STATE
+          ================================================ -->
+
+          <div
+            id="noProducts"
+            class="products-empty-state"
+            style="display: none;"
+            role="status"
+            aria-live="polite"
           >
 
             <div
-              class="product-grid"
-              id="productsGrid"
+              class="products-empty-icon"
+              aria-hidden="true"
             >
-
-              <!-- Products rendered by JavaScript -->
-
+              🛒
             </div>
 
 
+            <div class="products-empty-content">
 
-            <!-- =============================================
-                 NO PRODUCTS
-            ============================================== -->
+              <h2>
+                No products found
+              </h2>
 
-            <div
-              id="noProducts"
-              class="products-empty-state"
-              style="display: none;"
-              role="status"
-              aria-live="polite"
-            >
-
-              <div
-                class="products-empty-icon"
-                aria-hidden="true"
-              >
-                🛒
-              </div>
-
-              <div class="products-empty-content">
-
-                <h2>
-                  No products found
-                </h2>
-
-                <p id="noProductsMessage">
-                  No products are currently available in this category.
-                </p>
-
-              </div>
+              <p id="noProductsMessage">
+                No products are currently available in this section.
+              </p>
 
             </div>
 
-          </section>
+          </div>
 
 
-        </div>
+        </section>
 
       </div>
 
-    </section>
-
+    </div>
 
   </main>
 
@@ -301,7 +294,7 @@
 
 
   <!-- =====================================================
-       ZYNEXCART — COMPONENT + SCRIPT LOADER
+       ZYNEXCART — PAGE INITIALIZATION
   ====================================================== -->
 
   <script>
@@ -324,7 +317,7 @@
 
 
       /* ===================================================
-         LOAD HTML COMPONENT
+         COMPONENT LOADER
       ==================================================== */
 
       async function loadComponent(
@@ -369,12 +362,8 @@
           }
 
 
-          const html =
-            await response.text();
-
-
           element.innerHTML =
-            html;
+            await response.text();
 
 
           return true;
@@ -397,7 +386,7 @@
 
 
       /* ===================================================
-         LOAD JAVASCRIPT
+         SCRIPT LOADER
       ==================================================== */
 
       function loadScript(
@@ -431,10 +420,8 @@
             script.src =
               src;
 
-
             script.async =
               false;
-
 
             script.dataset.zynexcartScript =
               src;
@@ -493,37 +480,21 @@
 
       /* ===================================================
          JAVASCRIPT MODULES
-         
-         SAME DEPENDENCY ORDER AS HOME PAGE
       ==================================================== */
 
       const scripts = [
-
-        /* CORE */
 
         "js/core/storage.js",
         "js/core/utils.js",
         "js/core/events.js",
 
-
-        /* CATEGORY */
-
         "js/categories.js",
-
-
-        /* CART */
 
         "js/cart/cart.js",
         "js/cart/cart-actions.js",
         "js/cart/cart-ui.js",
 
-
-        /* SEARCH */
-
         "js/search/search.js",
-
-
-        /* LOCATION */
 
         "js/location/location.js",
         "js/location/location-ui.js",
@@ -532,13 +503,7 @@
         "js/location/location-address.js",
         "js/location/saved-addresses.js",
 
-
-        /* APPLICATION */
-
         "js/app.js",
-
-
-        /* PRODUCTS */
 
         "js/products.js"
 
@@ -547,10 +512,10 @@
 
 
       /* ===================================================
-         GET SELECTED CATEGORY
+         URL PARAMETERS
       ==================================================== */
 
-      function getSelectedCategory() {
+      function getUrlParams() {
 
         const params =
           new URLSearchParams(
@@ -558,16 +523,109 @@
           );
 
 
-        return (
-          params.get("category") || ""
-        ).trim();
+        return {
+
+          category:
+            (
+              params.get("category") ||
+              ""
+            ).trim(),
+
+          subcategory:
+            (
+              params.get("subcategory") ||
+              ""
+            ).trim(),
+
+          search:
+            (
+              params.get("search") ||
+              ""
+            ).trim()
+
+        };
 
       }
 
 
 
       /* ===================================================
-         RENDER SUBCATEGORY NAVIGATION
+         CATEGORY DATA
+      ==================================================== */
+
+      function getCategory(
+        categoryId
+      ) {
+
+        const categories =
+          Array.isArray(
+            window.ZynexCartCategories
+          )
+            ? window.ZynexCartCategories
+            : [];
+
+
+        return categories.find(
+          function (category) {
+
+            return (
+              String(category.id) ===
+              String(categoryId)
+            );
+
+          }
+        ) || null;
+
+      }
+
+
+
+      /* ===================================================
+         GET PRODUCTS
+      ==================================================== */
+
+      function getCategoryProducts(
+        categoryId
+      ) {
+
+        if (!categoryId) {
+
+          return Array.isArray(
+            window.products
+          )
+            ? window.products
+            : [];
+
+        }
+
+
+        const list =
+          Array.isArray(
+            window.products
+          )
+            ? window.products
+            : [];
+
+
+        return list.filter(
+          function (product) {
+
+            return (
+              String(
+                product.categoryId || ""
+              ) ===
+              String(categoryId)
+            );
+
+          }
+        );
+
+      }
+
+
+
+      /* ===================================================
+         SUBCATEGORY NAVIGATION
       ==================================================== */
 
       function renderSubcategoryNavigation() {
@@ -583,28 +641,16 @@
         }
 
 
-        const categoryId =
-          getSelectedCategory();
+        const {
+          category,
+          subcategory
+        } =
+          getUrlParams();
 
 
-        const categories =
-          Array.isArray(
-            window.ZynexCartCategories
-          )
-            ? window.ZynexCartCategories
-            : [];
-
-
-        const category =
-          categories.find(
-            function (item) {
-
-              return (
-                String(item.id) ===
-                String(categoryId)
-              );
-
-            }
+        const selectedCategory =
+          getCategory(
+            category
           );
 
 
@@ -612,9 +658,9 @@
           "";
 
 
-        /* ===============================================
+        /* -----------------------------------------------
            ALL PRODUCTS
-        ================================================ */
+        ------------------------------------------------ */
 
         const allLink =
           document.createElement(
@@ -623,22 +669,28 @@
 
 
         allLink.href =
-          categoryId
+          category
             ? `products.html?category=${encodeURIComponent(
-                categoryId
+                category
               )}`
             : "products.html";
 
 
         allLink.className =
-          "subcategory-item active";
+          "subcategory-item";
 
 
-        allLink.dataset.subcategory =
-          "";
+        if (!subcategory) {
+
+          allLink.classList.add(
+            "active"
+          );
+
+        }
 
 
         allLink.innerHTML = `
+
           <span>
             All Products
           </span>
@@ -649,6 +701,7 @@
           >
             ›
           </span>
+
         `;
 
 
@@ -657,14 +710,10 @@
         );
 
 
-        /* ===============================================
-           CATEGORY SUBCATEGORIES
-        ================================================ */
-
         if (
-          !category ||
+          !selectedCategory ||
           !Array.isArray(
-            category.subcategories
+            selectedCategory.subcategories
           )
         ) {
 
@@ -673,8 +722,8 @@
         }
 
 
-        category.subcategories.forEach(
-          function (subcategory) {
+        selectedCategory.subcategories.forEach(
+          function (item) {
 
             const link =
               document.createElement(
@@ -682,44 +731,34 @@
               );
 
 
-            const url =
-              new URL(
-                "products.html",
-                window.location.href
-              );
+            link.className =
+              "subcategory-item";
 
 
-            if (categoryId) {
+            if (
+              String(item.id) ===
+              String(subcategory)
+            ) {
 
-              url.searchParams.set(
-                "category",
-                categoryId
+              link.classList.add(
+                "active"
               );
 
             }
 
 
-            url.searchParams.set(
-              "subcategory",
-              subcategory.id
-            );
-
-
             link.href =
-              url.toString();
-
-
-            link.className =
-              "subcategory-item";
-
-
-            link.dataset.subcategory =
-              subcategory.id;
+              `products.html?category=${encodeURIComponent(
+                category
+              )}&subcategory=${encodeURIComponent(
+                item.id
+              )}`;
 
 
             link.innerHTML = `
+
               <span>
-                ${subcategory.name}
+                ${item.name}
               </span>
 
               <span
@@ -728,6 +767,7 @@
               >
                 ›
               </span>
+
             `;
 
 
@@ -738,91 +778,26 @@
           }
         );
 
-
-
-        /* ===============================================
-           ACTIVE SUBCATEGORY
-        ================================================ */
-
-        const params =
-          new URLSearchParams(
-            window.location.search
-          );
-
-
-        const selectedSubcategory =
-          params.get(
-            "subcategory"
-          );
-
-
-        if (
-          selectedSubcategory
-        ) {
-
-          const activeItem =
-            nav.querySelector(
-              `[data-subcategory="${CSS.escape(
-                selectedSubcategory
-              )}"]`
-            );
-
-
-          if (activeItem) {
-
-            nav.querySelectorAll(
-              ".subcategory-item"
-            ).forEach(
-              function (item) {
-
-                item.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-
-            activeItem.classList.add(
-              "active"
-            );
-
-          }
-
-        }
-
       }
 
 
 
       /* ===================================================
-         UPDATE CATEGORY INFORMATION
+         PAGE INFORMATION
       ==================================================== */
 
-      function updateCategoryInformation() {
+      function updatePageInformation() {
 
-        const categoryId =
-          getSelectedCategory();
-
-
-        const categories =
-          Array.isArray(
-            window.ZynexCartCategories
-          )
-            ? window.ZynexCartCategories
-            : [];
+        const {
+          category,
+          subcategory
+        } =
+          getUrlParams();
 
 
-        const category =
-          categories.find(
-            function (item) {
-
-              return (
-                String(item.id) ===
-                String(categoryId)
-              );
-
-            }
+        const selectedCategory =
+          getCategory(
+            category
           );
 
 
@@ -844,30 +819,38 @@
           );
 
 
-        if (category) {
+        const sectionTitle =
+          document.getElementById(
+            "productsSectionTitle"
+          );
+
+
+        const sectionDescription =
+          document.getElementById(
+            "productsSectionDescription"
+          );
+
+
+        if (!selectedCategory) {
 
           if (title) {
-
             title.textContent =
-              category.name;
-
+              "All Products";
           }
-
 
           if (description) {
-
             description.textContent =
-              category.description ||
-              "Shop everyday essentials at ZynexCart.";
-
+              "Shop your daily essentials at ZynexCart.";
           }
 
-
           if (breadcrumb) {
-
             breadcrumb.textContent =
-              category.name;
+              "All Products";
+          }
 
+          if (sectionTitle) {
+            sectionTitle.textContent =
+              "All Products";
           }
 
           return;
@@ -875,10 +858,44 @@
         }
 
 
+        let displayName =
+          selectedCategory.name;
+
+
+        if (
+          subcategory &&
+          Array.isArray(
+            selectedCategory.subcategories
+          )
+        ) {
+
+          const selectedSubcategory =
+            selectedCategory.subcategories.find(
+              function (item) {
+
+                return (
+                  String(item.id) ===
+                  String(subcategory)
+                );
+
+              }
+            );
+
+
+          if (selectedSubcategory) {
+
+            displayName =
+              selectedSubcategory.name;
+
+          }
+
+        }
+
+
         if (title) {
 
           title.textContent =
-            "All Products";
+            displayName;
 
         }
 
@@ -886,7 +903,8 @@
         if (description) {
 
           description.textContent =
-            "Shop your daily essentials at ZynexCart.";
+            selectedCategory.description ||
+            "Shop everyday essentials at ZynexCart.";
 
         }
 
@@ -894,7 +912,23 @@
         if (breadcrumb) {
 
           breadcrumb.textContent =
-            "All Products";
+            displayName;
+
+        }
+
+
+        if (sectionTitle) {
+
+          sectionTitle.textContent =
+            displayName;
+
+        }
+
+
+        if (sectionDescription) {
+
+          sectionDescription.textContent =
+            "Everything you need, delivered fast.";
 
         }
 
@@ -929,7 +963,7 @@
           cards.length;
 
 
-        const countText =
+        const text =
           `${count} ${
             count === 1
               ? "product"
@@ -952,7 +986,7 @@
         if (topCount) {
 
           topCount.textContent =
-            countText;
+            text;
 
         }
 
@@ -960,7 +994,7 @@
         if (toolbarCount) {
 
           toolbarCount.textContent =
-            countText;
+            text;
 
         }
 
@@ -969,7 +1003,95 @@
 
 
       /* ===================================================
-         INITIALIZE PRODUCTS PAGE
+         APPLY SUBCATEGORY FILTER
+      ==================================================== */
+
+      function filterSubcategory() {
+
+        const {
+          category,
+          subcategory
+        } =
+          getUrlParams();
+
+
+        if (
+          !category ||
+          !subcategory ||
+          !Array.isArray(
+            window.products
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        const filteredProducts =
+          window.products.filter(
+            function (product) {
+
+              return (
+                String(
+                  product.categoryId || ""
+                ) ===
+                String(category)
+              ) &&
+                String(
+                  product.subcategoryId || ""
+                ) ===
+                String(subcategory);
+
+            }
+          );
+
+
+        const grid =
+          document.getElementById(
+            "productsGrid"
+          );
+
+
+        const empty =
+          document.getElementById(
+            "noProducts"
+          );
+
+
+        if (!grid) {
+          return;
+        }
+
+
+        /*
+         * Subcategory filtering will use the
+         * existing product renderer once
+         * product data contains subcategoryId.
+         *
+         * Do not create fake products here.
+         */
+
+        if (
+          filteredProducts.length === 0
+        ) {
+
+          /*
+           * Keep the existing category products
+           * visible until subcategory mapping
+           * is available.
+           */
+
+          return;
+
+        }
+
+      }
+
+
+
+      /* ===================================================
+         INITIALIZE
       ==================================================== */
 
       async function initializeProductsPage() {
@@ -978,8 +1100,8 @@
 
 
           /* -----------------------------------------------
-             STEP 1
-          ----------------------------------------------- */
+             1. LOAD HEADER + FOOTER
+          ------------------------------------------------ */
 
           await Promise.all(
 
@@ -998,9 +1120,8 @@
 
 
           /* -----------------------------------------------
-             STEP 2
-             LOAD JS MODULES
-          ----------------------------------------------- */
+             2. LOAD JS MODULES
+          ------------------------------------------------ */
 
           for (
             const scriptPath of scripts
@@ -1014,34 +1135,33 @@
 
 
           /* -----------------------------------------------
-             STEP 3
-             CATEGORY UI
-          ----------------------------------------------- */
+             3. PAGE UI
+          ------------------------------------------------ */
 
-          updateCategoryInformation();
+          updatePageInformation();
 
           renderSubcategoryNavigation();
 
 
           /* -----------------------------------------------
-             STEP 4
-             WAIT FOR PRODUCTS RENDER
-          ----------------------------------------------- */
+             4. WAIT FOR PRODUCT RENDER
+          ------------------------------------------------ */
 
           setTimeout(
             function () {
 
+              filterSubcategory();
+
               updateProductCount();
 
             },
-            0
+            50
           );
 
 
           /* -----------------------------------------------
-             STEP 5
-             CART UPDATES
-          ----------------------------------------------- */
+             5. CART UPDATE
+          ------------------------------------------------ */
 
           document.addEventListener(
             "zynexcart:cartUpdated",
@@ -1054,55 +1174,45 @@
 
 
           /* -----------------------------------------------
-             STEP 6
-             CATEGORY / SUBCATEGORY NAVIGATION
-          ----------------------------------------------- */
+             6. SEARCH RESULT
+          ------------------------------------------------ */
 
-          const subcategoryNav =
-            document.getElementById(
-              "subcategoryNav"
-            );
-
-
-          if (subcategoryNav) {
-
-            subcategoryNav.addEventListener(
-              "click",
-              function (event) {
-
-                const link =
-                  event.target.closest(
-                    ".subcategory-item"
-                  );
+          const {
+            search
+          } =
+            getUrlParams();
 
 
-                if (!link) {
-                  return;
-                }
+          if (
+            search
+          ) {
+
+            const info =
+              document.getElementById(
+                "searchResultInfo"
+              );
 
 
-                const url =
-                  new URL(
-                    link.href
-                  );
+            const text =
+              document.getElementById(
+                "searchResultText"
+              );
 
 
-                /*
-                 * Normal browser navigation is
-                 * intentionally preserved.
-                 */
+            if (info) {
 
-                if (
-                  url.href !==
-                  window.location.href
-                ) {
+              info.hidden =
+                false;
 
-                  return;
+            }
 
-                }
 
-              }
-            );
+            if (text) {
+
+              text.textContent =
+                `Showing results for "${search}"`;
+
+            }
 
           }
 
