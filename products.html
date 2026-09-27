@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
@@ -9,122 +12,159 @@
 
   <meta
     name="description"
-    content="Shop groceries, daily essentials and more with ZynexCart."
+    content="Shop groceries and everyday essentials on ZynexCart."
   >
 
-  <title>ZynexCart — Products</title>
+  <meta
+    name="theme-color"
+    content="#071b3a"
+  >
 
-  <!-- =========================================
-       CORE CSS
-  ========================================== -->
+  <title>Products — ZynexCart</title>
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/header.css">
-  <link rel="stylesheet" href="css/products.css">
-  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- =====================================================
+       ZYNEXCART — CSS
+  ====================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="css/base.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/header.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/products.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/responsive.css"
+  >
+
 </head>
+
 
 <body>
 
-  <!-- =========================================
+
+  <!-- =====================================================
        HEADER
-  ========================================== -->
+       SAME HEADER AS HOME PAGE
+  ====================================================== -->
 
-  <div id="headerContainer"></div>
+  <div id="header-component"></div>
 
 
-  <!-- =========================================
+  <!-- =====================================================
        PRODUCTS PAGE
-  ========================================== -->
+  ====================================================== -->
 
   <main class="products-page">
 
-    <div class="products-container">
 
-      <!-- =====================================
-           BREADCRUMB
-      ====================================== -->
+    <!-- ===================================================
+         BREADCRUMB + CATEGORY HEADER
+    ==================================================== -->
 
-      <nav
-        class="products-breadcrumb"
-        aria-label="Breadcrumb"
-      >
-        <a href="index.html">Home</a>
+    <section class="products-hero">
 
-        <span aria-hidden="true">›</span>
+      <div class="products-container">
 
-        <span
-          id="breadcrumbCategory"
+        <nav
+          class="products-breadcrumb"
+          aria-label="Breadcrumb"
         >
-          Products
-        </span>
-      </nav>
 
+          <a href="index.html">
+            Home
+          </a>
 
-      <!-- =====================================
-           PAGE HEADER
-      ====================================== -->
-
-      <section class="products-heading">
-
-        <div class="products-heading-content">
-
-          <span
-            class="products-eyebrow"
-            id="productsEyebrow"
-          >
-            ZynexCart
+          <span aria-hidden="true">
+            ›
           </span>
 
-          <h1 id="productsTitle">
-            Products
-          </h1>
+          <strong id="breadcrumbCategory">
+            All Products
+          </strong>
 
-          <p id="productsDescription">
-            Shop your everyday essentials with fast local delivery.
-          </p>
+        </nav>
+
+
+        <div class="products-heading-row">
+
+          <div class="products-heading">
+
+            <span class="products-eyebrow">
+              SHOP BY CATEGORY
+            </span>
+
+            <h1 id="productsPageTitle">
+              All Products
+            </h1>
+
+            <p id="productsPageDescription">
+              Shop your daily essentials at ZynexCart.
+            </p>
+
+          </div>
+
+
+          <div
+            class="products-count"
+            id="productsCount"
+          >
+            0 products
+          </div>
 
         </div>
 
+      </div>
 
-        <div
-          class="products-result-count"
-          id="productsResultCount"
-          aria-live="polite"
-        >
-          0 products
-        </div>
-
-      </section>
+    </section>
 
 
-      <!-- =====================================
-           PRODUCT CONTENT
-      ====================================== -->
 
-      <section class="products-layout">
+    <!-- ===================================================
+         PRODUCTS CONTENT
+    ==================================================== -->
 
-        <!-- ===================================
+    <section class="products-content">
+
+      <div class="products-container products-layout">
+
+
+        <!-- =================================================
              LEFT CATEGORY NAVIGATION
-        ==================================== -->
+        ================================================== -->
 
         <aside
           class="products-sidebar"
           aria-label="Category navigation"
         >
 
-          <div class="products-sidebar-inner">
+          <div class="products-sidebar-card">
 
-            <div class="sidebar-title">
-              <span>Shop</span>
+            <div class="products-sidebar-title">
+              Shop
             </div>
+
 
             <nav
               class="subcategory-nav"
               id="subcategoryNav"
             >
-              <!-- Rendered by JavaScript -->
+
+              <!--
+                Subcategories are rendered
+                by JavaScript.
+              -->
+
             </nav>
 
           </div>
@@ -132,736 +172,962 @@
         </aside>
 
 
-        <!-- ===================================
-             RIGHT PRODUCT AREA
-        ==================================== -->
 
-        <section class="products-main">
+        <!-- =================================================
+             RIGHT PRODUCTS AREA
+        ================================================== -->
 
-          <!-- Search / filter information -->
+        <div class="products-main">
 
-          <div
-            class="products-toolbar"
-            id="productsToolbar"
-          >
 
-            <div class="products-toolbar-left">
+          <!-- ===============================================
+               PRODUCTS TOOLBAR
+          ================================================ -->
+
+          <div class="products-toolbar">
+
+            <div>
 
               <h2 id="productsSectionTitle">
                 All Products
               </h2>
 
-              <span
-                id="productsSearchText"
-              ></span>
-
-            </div>
-
-          </div>
-
-
-          <!-- Product grid -->
-
-          <div
-            class="product-grid"
-            id="productsGrid"
-          ></div>
-
-
-          <!-- Empty state -->
-
-          <div
-            class="products-empty-state"
-            id="productsEmptyState"
-            hidden
-          >
-
-            <div
-              class="products-empty-icon"
-              aria-hidden="true"
-            >
-              🛒
-            </div>
-
-            <div class="products-empty-content">
-
-              <h2>
-                No products found
-              </h2>
-
-              <p id="productsEmptyMessage">
-                Try another category or search.
+              <p id="productsSectionDescription">
+                Everything you need, delivered fast.
               </p>
 
             </div>
 
+
+            <div
+              class="products-toolbar-count"
+              id="productsToolbarCount"
+            >
+              0 products
+            </div>
+
           </div>
 
-        </section>
 
-      </section>
 
-    </div>
+          <!-- ===============================================
+               SEARCH RESULT
+          ================================================ -->
+
+          <div
+            id="searchResultInfo"
+            class="search-result-info"
+            hidden
+          >
+
+            <strong id="searchResultText"></strong>
+
+          </div>
+
+
+
+          <!-- ===============================================
+               PRODUCT GRID
+          ================================================ -->
+
+          <section
+            aria-label="Products"
+          >
+
+            <div
+              class="product-grid"
+              id="productsGrid"
+            >
+
+              <!-- Products rendered by JavaScript -->
+
+            </div>
+
+
+
+            <!-- =============================================
+                 NO PRODUCTS
+            ============================================== -->
+
+            <div
+              id="noProducts"
+              class="products-empty-state"
+              style="display: none;"
+              role="status"
+              aria-live="polite"
+            >
+
+              <div
+                class="products-empty-icon"
+                aria-hidden="true"
+              >
+                🛒
+              </div>
+
+              <div class="products-empty-content">
+
+                <h2>
+                  No products found
+                </h2>
+
+                <p id="noProductsMessage">
+                  No products are currently available in this category.
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
 
   </main>
 
 
-  <!-- =========================================
+
+  <!-- =====================================================
        FOOTER
-  ========================================== -->
+  ====================================================== -->
 
-  <div id="footerContainer"></div>
-
-
-  <!-- =========================================
-       CORE JAVASCRIPT
-  ========================================== -->
-
-  <script src="js/core/storage.js"></script>
-  <script src="js/core/utils.js"></script>
-  <script src="js/core/events.js"></script>
-
-  <script src="js/categories.js"></script>
-
-  <!-- Cart -->
-
-  <script src="js/cart/cart.js"></script>
-  <script src="js/cart/cart-actions.js"></script>
-  <script src="js/cart/cart-ui.js"></script>
-
-  <!-- Search -->
-
-  <script src="js/search/search.js"></script>
-
-  <!-- Location -->
-
-  <script src="js/location/location.js"></script>
-  <script src="js/location/location-ui.js"></script>
-  <script src="js/location/location-search.js"></script>
-  <script src="js/location/location-map.js"></script>
-  <script src="js/location/location-address.js"></script>
-  <script src="js/location/saved-addresses.js"></script>
-
-  <!-- App -->
-
-  <script src="js/app.js"></script>
-
-  <!-- Products -->
-
-  <script src="js/products.js"></script>
+  <div id="footer-component"></div>
 
 
-  <!-- =========================================
-       PRODUCTS PAGE LOGIC
-  ========================================== -->
+
+  <!-- =====================================================
+       ZYNEXCART — COMPONENT + SCRIPT LOADER
+  ====================================================== -->
 
   <script>
+
     (function () {
 
       "use strict";
 
 
-      /* =======================================
-         ELEMENTS
-      ======================================= */
-
-      const grid =
-        document.getElementById(
-          "productsGrid"
-        );
-
-      const emptyState =
-        document.getElementById(
-          "productsEmptyState"
-        );
-
-      const emptyMessage =
-        document.getElementById(
-          "productsEmptyMessage"
-        );
-
-      const resultCount =
-        document.getElementById(
-          "productsResultCount"
-        );
-
-      const title =
-        document.getElementById(
-          "productsTitle"
-        );
-
-      const description =
-        document.getElementById(
-          "productsDescription"
-        );
-
-      const breadcrumb =
-        document.getElementById(
-          "breadcrumbCategory"
-        );
-
-      const eyebrow =
-        document.getElementById(
-          "productsEyebrow"
-        );
-
-      const sectionTitle =
-        document.getElementById(
-          "productsSectionTitle"
-        );
-
-      const searchText =
-        document.getElementById(
-          "productsSearchText"
-        );
-
-      const sidebar =
-        document.getElementById(
-          "subcategoryNav"
-        );
-
-
-      /* =======================================
-         URL PARAMETERS
-      ======================================= */
-
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-      const selectedCategory =
-        params.get("category");
-
-      const selectedSubcategory =
-        params.get("subcategory");
-
-      const searchQuery =
-        (
-          params.get("search") || ""
-        ).trim();
-
-
-      /* =======================================
-         CATEGORY DATA
-      ======================================= */
-
-      const categoryManager =
-        window.ZynexCartCategories || [];
-
-      function getCategory() {
-
-        if (!selectedCategory) {
-          return null;
-        }
-
-        return categoryManager.find(
-          function (category) {
-            return (
-              category.id ===
-              selectedCategory
-            );
-          }
-        ) || null;
-
+      if (
+        window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__
+      ) {
+        return;
       }
 
 
-      const currentCategory =
-        getCategory();
+      window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__ =
+        true;
 
 
-      /* =======================================
-         CATEGORY NAME
-      ======================================= */
 
-      function getCategoryName() {
+      /* ===================================================
+         LOAD HTML COMPONENT
+      ==================================================== */
 
-        if (currentCategory) {
-          return currentCategory.name;
+      async function loadComponent(
+        elementId,
+        filePath
+      ) {
+
+        const element =
+          document.getElementById(
+            elementId
+          );
+
+
+        if (!element) {
+
+          console.warn(
+            `ZynexCart: Element #${elementId} not found.`
+          );
+
+          return false;
+
         }
 
-        if (selectedCategory) {
 
-          return String(
-            selectedCategory
-          )
-            .replace(/-/g, " ")
-            .replace(
-              /\b\w/g,
-              function (letter) {
-                return letter.toUpperCase();
+        try {
+
+          const response =
+            await fetch(
+              filePath,
+              {
+                cache: "no-cache"
               }
             );
 
-        }
 
-        return "Products";
+          if (!response.ok) {
 
-      }
+            throw new Error(
+              `Unable to load ${filePath}`
+            );
 
-
-      /* =======================================
-         PAGE INFORMATION
-      ======================================= */
-
-      function updatePageInformation() {
-
-        const categoryName =
-          getCategoryName();
+          }
 
 
-        if (currentCategory) {
-
-          title.textContent =
-            categoryName;
-
-          breadcrumb.textContent =
-            categoryName;
-
-          eyebrow.textContent =
-            "Shop by Category";
-
-          description.textContent =
-            currentCategory.description ||
-            "Shop everyday essentials with fast local delivery.";
-
-        } else {
-
-          title.textContent =
-            searchQuery
-              ? "Search Results"
-              : "Products";
-
-          breadcrumb.textContent =
-            searchQuery
-              ? "Search"
-              : "Products";
-
-          eyebrow.textContent =
-            "ZynexCart";
-
-          description.textContent =
-            searchQuery
-              ? `Showing products matching "${searchQuery}".`
-              : "Shop your everyday essentials with fast local delivery.";
-
-        }
+          const html =
+            await response.text();
 
 
-        sectionTitle.textContent =
-          selectedSubcategory
-            ? getSubcategoryName(
-                selectedSubcategory
-              )
-            : (
-                searchQuery
-                  ? "Search Results"
-                  : "All Products"
-              );
+          element.innerHTML =
+            html;
 
 
-        if (searchQuery) {
-
-          searchText.textContent =
-            `for "${searchQuery}"`;
-
-        } else {
-
-          searchText.textContent =
-            "";
-
-        }
-
-      }
+          return true;
 
 
-      /* =======================================
-         SUBCATEGORY HELPERS
-      ======================================= */
+        } catch (error) {
 
-      function getSubcategories() {
-
-        if (
-          !currentCategory ||
-          !Array.isArray(
-            currentCategory.subcategories
-          )
-        ) {
-          return [];
-        }
-
-        return currentCategory.subcategories;
-
-      }
-
-
-      function getSubcategoryName(
-        subcategoryId
-      ) {
-
-        const subcategories =
-          getSubcategories();
-
-        const item =
-          subcategories.find(
-            function (subcategory) {
-              return (
-                subcategory.id ===
-                subcategoryId
-              );
-            }
+          console.error(
+            "ZynexCart component error:",
+            error
           );
 
-        return item
-          ? item.name
-          : "All Products";
+
+          return false;
+
+        }
 
       }
 
 
-      /* =======================================
-         SIDEBAR
-      ======================================= */
 
-      function renderSidebar() {
+      /* ===================================================
+         LOAD JAVASCRIPT
+      ==================================================== */
 
-        if (!sidebar) {
+      function loadScript(
+        src
+      ) {
+
+        return new Promise(
+          function (resolve, reject) {
+
+            const existingScript =
+              document.querySelector(
+                `script[data-zynexcart-script="${src}"]`
+              );
+
+
+            if (existingScript) {
+
+              resolve();
+
+              return;
+
+            }
+
+
+            const script =
+              document.createElement(
+                "script"
+              );
+
+
+            script.src =
+              src;
+
+
+            script.async =
+              false;
+
+
+            script.dataset.zynexcartScript =
+              src;
+
+
+            script.onload =
+              function () {
+
+                resolve();
+
+              };
+
+
+            script.onerror =
+              function () {
+
+                reject(
+                  new Error(
+                    `Unable to load script: ${src}`
+                  )
+                );
+
+              };
+
+
+            document.body.appendChild(
+              script
+            );
+
+          }
+        );
+
+      }
+
+
+
+      /* ===================================================
+         COMPONENTS
+      ==================================================== */
+
+      const components = [
+
+        [
+          "header-component",
+          "components/header.html"
+        ],
+
+        [
+          "footer-component",
+          "components/footer.html"
+        ]
+
+      ];
+
+
+
+      /* ===================================================
+         JAVASCRIPT MODULES
+         
+         SAME DEPENDENCY ORDER AS HOME PAGE
+      ==================================================== */
+
+      const scripts = [
+
+        /* CORE */
+
+        "js/core/storage.js",
+        "js/core/utils.js",
+        "js/core/events.js",
+
+
+        /* CATEGORY */
+
+        "js/categories.js",
+
+
+        /* CART */
+
+        "js/cart/cart.js",
+        "js/cart/cart-actions.js",
+        "js/cart/cart-ui.js",
+
+
+        /* SEARCH */
+
+        "js/search/search.js",
+
+
+        /* LOCATION */
+
+        "js/location/location.js",
+        "js/location/location-ui.js",
+        "js/location/location-search.js",
+        "js/location/location-map.js",
+        "js/location/location-address.js",
+        "js/location/saved-addresses.js",
+
+
+        /* APPLICATION */
+
+        "js/app.js",
+
+
+        /* PRODUCTS */
+
+        "js/products.js"
+
+      ];
+
+
+
+      /* ===================================================
+         GET SELECTED CATEGORY
+      ==================================================== */
+
+      function getSelectedCategory() {
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        return (
+          params.get("category") || ""
+        ).trim();
+
+      }
+
+
+
+      /* ===================================================
+         RENDER SUBCATEGORY NAVIGATION
+      ==================================================== */
+
+      function renderSubcategoryNavigation() {
+
+        const nav =
+          document.getElementById(
+            "subcategoryNav"
+          );
+
+
+        if (!nav) {
           return;
         }
 
 
-        const subcategories =
-          getSubcategories();
+        const categoryId =
+          getSelectedCategory();
 
 
-        let items = `
+        const categories =
+          Array.isArray(
+            window.ZynexCartCategories
+          )
+            ? window.ZynexCartCategories
+            : [];
 
-          <a
-            href="products.html?category=${encodeURIComponent(
-              selectedCategory || ""
-            )}"
-            class="subcategory-item ${
-              !selectedSubcategory
-                ? "active"
-                : ""
-            }"
-            data-subcategory=""
+
+        const category =
+          categories.find(
+            function (item) {
+
+              return (
+                String(item.id) ===
+                String(categoryId)
+              );
+
+            }
+          );
+
+
+        nav.innerHTML =
+          "";
+
+
+        /* ===============================================
+           ALL PRODUCTS
+        ================================================ */
+
+        const allLink =
+          document.createElement(
+            "a"
+          );
+
+
+        allLink.href =
+          categoryId
+            ? `products.html?category=${encodeURIComponent(
+                categoryId
+              )}`
+            : "products.html";
+
+
+        allLink.className =
+          "subcategory-item active";
+
+
+        allLink.dataset.subcategory =
+          "";
+
+
+        allLink.innerHTML = `
+          <span>
+            All Products
+          </span>
+
+          <span
+            class="subcategory-arrow"
+            aria-hidden="true"
           >
-            <span>
-              All Products
-            </span>
-
-            <span
-              class="subcategory-arrow"
-              aria-hidden="true"
-            >
-              ›
-            </span>
-          </a>
-
+            ›
+          </span>
         `;
 
 
-        if (subcategories.length) {
-
-          items +=
-            subcategories
-              .map(
-                function (subcategory) {
-
-                  const active =
-                    selectedSubcategory ===
-                    subcategory.id;
-
-                  return `
-
-                    <a
-                      href="products.html?category=${encodeURIComponent(
-                        selectedCategory
-                      )}&subcategory=${encodeURIComponent(
-                        subcategory.id
-                      )}"
-                      class="subcategory-item ${
-                        active
-                          ? "active"
-                          : ""
-                      }"
-                      data-subcategory="${
-                        subcategory.id
-                      }"
-                    >
-
-                      <span>
-                        ${subcategory.name}
-                      </span>
-
-                      <span
-                        class="subcategory-arrow"
-                        aria-hidden="true"
-                      >
-                        ›
-                      </span>
-
-                    </a>
-
-                  `;
-
-                }
-              )
-              .join("");
-
-        }
+        nav.appendChild(
+          allLink
+        );
 
 
-        sidebar.innerHTML =
-          items;
-
-      }
-
-
-      /* =======================================
-         PRODUCT FILTER
-      ======================================= */
-
-      function getFilteredProducts() {
+        /* ===============================================
+           CATEGORY SUBCATEGORIES
+        ================================================ */
 
         if (
+          !category ||
           !Array.isArray(
-            window.products
+            category.subcategories
           )
         ) {
-          return [];
+
+          return;
+
         }
 
 
-        let result =
-          window.products.slice();
+        category.subcategories.forEach(
+          function (subcategory) {
+
+            const link =
+              document.createElement(
+                "a"
+              );
 
 
-        /* Category */
+            const url =
+              new URL(
+                "products.html",
+                window.location.href
+              );
 
-        if (selectedCategory) {
 
-          result =
-            result.filter(
-              function (product) {
+            if (categoryId) {
 
-                return (
-                  product.categoryId ===
-                  selectedCategory
+              url.searchParams.set(
+                "category",
+                categoryId
+              );
+
+            }
+
+
+            url.searchParams.set(
+              "subcategory",
+              subcategory.id
+            );
+
+
+            link.href =
+              url.toString();
+
+
+            link.className =
+              "subcategory-item";
+
+
+            link.dataset.subcategory =
+              subcategory.id;
+
+
+            link.innerHTML = `
+              <span>
+                ${subcategory.name}
+              </span>
+
+              <span
+                class="subcategory-arrow"
+                aria-hidden="true"
+              >
+                ›
+              </span>
+            `;
+
+
+            nav.appendChild(
+              link
+            );
+
+          }
+        );
+
+
+
+        /* ===============================================
+           ACTIVE SUBCATEGORY
+        ================================================ */
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        const selectedSubcategory =
+          params.get(
+            "subcategory"
+          );
+
+
+        if (
+          selectedSubcategory
+        ) {
+
+          const activeItem =
+            nav.querySelector(
+              `[data-subcategory="${CSS.escape(
+                selectedSubcategory
+              )}"]`
+            );
+
+
+          if (activeItem) {
+
+            nav.querySelectorAll(
+              ".subcategory-item"
+            ).forEach(
+              function (item) {
+
+                item.classList.remove(
+                  "active"
                 );
 
               }
             );
 
-        }
 
-
-        /* Search */
-
-        if (searchQuery) {
-
-          const query =
-            searchQuery.toLowerCase();
-
-
-          result =
-            result.filter(
-              function (product) {
-
-                const searchable =
-                  [
-                    product.name,
-                    product.category,
-                    product.categoryId,
-                    product.unit
-                  ]
-                    .join(" ")
-                    .toLowerCase();
-
-
-                return searchable.includes(
-                  query
-                );
-
-              }
+            activeItem.classList.add(
+              "active"
             );
 
-        }
-
-
-        /* Subcategory */
-
-        if (selectedSubcategory) {
-
-          result =
-            result.filter(
-              function (product) {
-
-                return (
-                  product.subcategoryId ===
-                  selectedSubcategory
-                );
-
-              }
-            );
+          }
 
         }
-
-
-        return result;
 
       }
 
 
-      /* =======================================
-         PRODUCT RENDER
-      ======================================= */
 
-      function renderProducts() {
+      /* ===================================================
+         UPDATE CATEGORY INFORMATION
+      ==================================================== */
+
+      function updateCategoryInformation() {
+
+        const categoryId =
+          getSelectedCategory();
+
+
+        const categories =
+          Array.isArray(
+            window.ZynexCartCategories
+          )
+            ? window.ZynexCartCategories
+            : [];
+
+
+        const category =
+          categories.find(
+            function (item) {
+
+              return (
+                String(item.id) ===
+                String(categoryId)
+              );
+
+            }
+          );
+
+
+        const title =
+          document.getElementById(
+            "productsPageTitle"
+          );
+
+
+        const description =
+          document.getElementById(
+            "productsPageDescription"
+          );
+
+
+        const breadcrumb =
+          document.getElementById(
+            "breadcrumbCategory"
+          );
+
+
+        if (category) {
+
+          if (title) {
+
+            title.textContent =
+              category.name;
+
+          }
+
+
+          if (description) {
+
+            description.textContent =
+              category.description ||
+              "Shop everyday essentials at ZynexCart.";
+
+          }
+
+
+          if (breadcrumb) {
+
+            breadcrumb.textContent =
+              category.name;
+
+          }
+
+          return;
+
+        }
+
+
+        if (title) {
+
+          title.textContent =
+            "All Products";
+
+        }
+
+
+        if (description) {
+
+          description.textContent =
+            "Shop your daily essentials at ZynexCart.";
+
+        }
+
+
+        if (breadcrumb) {
+
+          breadcrumb.textContent =
+            "All Products";
+
+        }
+
+      }
+
+
+
+      /* ===================================================
+         UPDATE PRODUCT COUNT
+      ==================================================== */
+
+      function updateProductCount() {
+
+        const grid =
+          document.getElementById(
+            "productsGrid"
+          );
+
 
         if (!grid) {
           return;
         }
 
 
-        const filteredProducts =
-          getFilteredProducts();
+        const cards =
+          grid.querySelectorAll(
+            ".product-card"
+          );
 
 
-        if (!filteredProducts.length) {
-
-          grid.innerHTML = "";
-
-          emptyState.hidden =
-            false;
+        const count =
+          cards.length;
 
 
-          if (selectedSubcategory) {
-
-            emptyMessage.textContent =
-              "No products are currently available in this section.";
-
-          } else if (searchQuery) {
-
-            emptyMessage.textContent =
-              "Try a different search or browse another category.";
-
-          } else {
-
-            emptyMessage.textContent =
-              "No products are currently available in this category.";
-
-          }
-
-
-          updateResultCount(0);
-
-          return;
-
-        }
-
-
-        emptyState.hidden =
-          true;
-
-
-        grid.innerHTML =
-          filteredProducts
-            .map(
-              function (product) {
-
-                if (
-                  typeof createProductCard ===
-                  "function"
-                ) {
-
-                  return createProductCard(
-                    product
-                  );
-
-                }
-
-                return "";
-
-              }
-            )
-            .join("");
-
-
-        updateResultCount(
-          filteredProducts.length
-        );
-
-
-        if (
-          typeof setupProductControls ===
-          "function"
-        ) {
-
-          setupProductControls();
-
-        }
-
-      }
-
-
-      /* =======================================
-         RESULT COUNT
-      ======================================= */
-
-      function updateResultCount(
-        count
-      ) {
-
-        resultCount.textContent =
+        const countText =
           `${count} ${
             count === 1
               ? "product"
               : "products"
           }`;
 
+
+        const topCount =
+          document.getElementById(
+            "productsCount"
+          );
+
+
+        const toolbarCount =
+          document.getElementById(
+            "productsToolbarCount"
+          );
+
+
+        if (topCount) {
+
+          topCount.textContent =
+            countText;
+
+        }
+
+
+        if (toolbarCount) {
+
+          toolbarCount.textContent =
+            countText;
+
+        }
+
       }
 
 
-      /* =======================================
-         CART SYNC
-      ======================================= */
 
-      document.addEventListener(
-        "zynexcart:cartUpdated",
-        function () {
+      /* ===================================================
+         INITIALIZE PRODUCTS PAGE
+      ==================================================== */
 
-          if (
-            typeof syncProductButtons ===
-            "function"
+      async function initializeProductsPage() {
+
+        try {
+
+
+          /* -----------------------------------------------
+             STEP 1
+          ----------------------------------------------- */
+
+          await Promise.all(
+
+            components.map(
+              function (component) {
+
+                return loadComponent(
+                  component[0],
+                  component[1]
+                );
+
+              }
+            )
+
+          );
+
+
+          /* -----------------------------------------------
+             STEP 2
+             LOAD JS MODULES
+          ----------------------------------------------- */
+
+          for (
+            const scriptPath of scripts
           ) {
 
-            syncProductButtons();
+            await loadScript(
+              scriptPath
+            );
 
           }
 
+
+          /* -----------------------------------------------
+             STEP 3
+             CATEGORY UI
+          ----------------------------------------------- */
+
+          updateCategoryInformation();
+
+          renderSubcategoryNavigation();
+
+
+          /* -----------------------------------------------
+             STEP 4
+             WAIT FOR PRODUCTS RENDER
+          ----------------------------------------------- */
+
+          setTimeout(
+            function () {
+
+              updateProductCount();
+
+            },
+            0
+          );
+
+
+          /* -----------------------------------------------
+             STEP 5
+             CART UPDATES
+          ----------------------------------------------- */
+
+          document.addEventListener(
+            "zynexcart:cartUpdated",
+            function () {
+
+              updateProductCount();
+
+            }
+          );
+
+
+          /* -----------------------------------------------
+             STEP 6
+             CATEGORY / SUBCATEGORY NAVIGATION
+          ----------------------------------------------- */
+
+          const subcategoryNav =
+            document.getElementById(
+              "subcategoryNav"
+            );
+
+
+          if (subcategoryNav) {
+
+            subcategoryNav.addEventListener(
+              "click",
+              function (event) {
+
+                const link =
+                  event.target.closest(
+                    ".subcategory-item"
+                  );
+
+
+                if (!link) {
+                  return;
+                }
+
+
+                const url =
+                  new URL(
+                    link.href
+                  );
+
+
+                /*
+                 * Normal browser navigation is
+                 * intentionally preserved.
+                 */
+
+                if (
+                  url.href !==
+                  window.location.href
+                ) {
+
+                  return;
+
+                }
+
+              }
+            );
+
+          }
+
+
+          console.log(
+            "ZynexCart: Products page loaded successfully."
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "ZynexCart: Products page initialization failed.",
+            error
+          );
+
         }
-      );
-
-
-      /* =======================================
-         INITIALIZE
-      ======================================= */
-
-      function initializeProductsPage() {
-
-        updatePageInformation();
-
-        renderSidebar();
-
-        renderProducts();
-
-        updateCartCount();
 
       }
 
+
+
+      /* ===================================================
+         START
+      ==================================================== */
 
       if (
         document.readyState ===
@@ -870,7 +1136,10 @@
 
         document.addEventListener(
           "DOMContentLoaded",
-          initializeProductsPage
+          initializeProductsPage,
+          {
+            once: true
+          }
         );
 
       } else {
@@ -880,7 +1149,9 @@
       }
 
     })();
+
   </script>
 
 </body>
+
 </html>
