@@ -1,18 +1,21 @@
 /* =========================================
    ZYNEXCART — PRODUCTS
    Professional Product + Quantity Controls
+   With Main Category + Subcategory Support
 ========================================= */
 
 
 /* =========================================
    PRODUCT DATA
 
-   21 Categories
-   5 Products Per Category
-   Total: 105 Products
+   21 Main Categories
+   105 Products
+   Every product has:
+   - categoryId
+   - subcategoryId
 
-   categoryId connects every product
-   with categories.js
+   subcategoryId will be used by the
+   professional Products Page navigation.
 ========================================= */
 
 const products = [
@@ -26,6 +29,7 @@ const products = [
     name: "Fresh Paan",
     category: "paan",
     categoryId: "paan",
+    subcategoryId: "paan",
     unit: "1 pc",
     price: 25,
     mrp: 30,
@@ -37,6 +41,7 @@ const products = [
     name: "Meetha Paan",
     category: "paan",
     categoryId: "paan",
+    subcategoryId: "paan",
     unit: "1 pc",
     price: 30,
     mrp: 35,
@@ -48,6 +53,7 @@ const products = [
     name: "Mint Mouth Freshener",
     category: "paan",
     categoryId: "paan",
+    subcategoryId: "mouth-fresheners",
     unit: "50 g",
     price: 45,
     mrp: 50,
@@ -59,6 +65,7 @@ const products = [
     name: "Elaichi Mouth Freshener",
     category: "paan",
     categoryId: "paan",
+    subcategoryId: "mouth-fresheners",
     unit: "50 g",
     price: 55,
     mrp: 60,
@@ -70,6 +77,7 @@ const products = [
     name: "Paan Masala",
     category: "paan",
     categoryId: "paan",
+    subcategoryId: "paan-masala",
     unit: "100 g",
     price: 85,
     mrp: 95,
@@ -87,6 +95,7 @@ const products = [
     name: "Fresh Milk",
     category: "grocery",
     categoryId: "dairy-bread-eggs",
+    subcategoryId: "milk",
     unit: "1 L",
     price: 68,
     mrp: 75,
@@ -98,6 +107,7 @@ const products = [
     name: "Brown Bread",
     category: "grocery",
     categoryId: "dairy-bread-eggs",
+    subcategoryId: "bread",
     unit: "400 g",
     price: 45,
     mrp: 50,
@@ -109,6 +119,7 @@ const products = [
     name: "Toned Milk",
     category: "grocery",
     categoryId: "dairy-bread-eggs",
+    subcategoryId: "milk",
     unit: "1 L",
     price: 64,
     mrp: 70,
@@ -120,6 +131,7 @@ const products = [
     name: "Fresh Curd",
     category: "grocery",
     categoryId: "dairy-bread-eggs",
+    subcategoryId: "dairy",
     unit: "400 g",
     price: 48,
     mrp: 55,
@@ -131,6 +143,7 @@ const products = [
     name: "Farm Fresh Eggs",
     category: "grocery",
     categoryId: "dairy-bread-eggs",
+    subcategoryId: "eggs",
     unit: "6 pcs",
     price: 48,
     mrp: 54,
@@ -148,6 +161,7 @@ const products = [
     name: "Fresh Bananas",
     category: "fruits-vegetables",
     categoryId: "fruits-vegetables",
+    subcategoryId: "fresh-fruits",
     unit: "1 kg",
     price: 55,
     mrp: 65,
@@ -159,6 +173,7 @@ const products = [
     name: "Fresh Apples",
     category: "fruits-vegetables",
     categoryId: "fruits-vegetables",
+    subcategoryId: "fresh-fruits",
     unit: "1 kg",
     price: 140,
     mrp: 160,
@@ -170,6 +185,7 @@ const products = [
     name: "Fresh Potatoes",
     category: "fruits-vegetables",
     categoryId: "fruits-vegetables",
+    subcategoryId: "vegetables",
     unit: "1 kg",
     price: 35,
     mrp: 42,
@@ -181,6 +197,7 @@ const products = [
     name: "Fresh Tomatoes",
     category: "fruits-vegetables",
     categoryId: "fruits-vegetables",
+    subcategoryId: "vegetables",
     unit: "1 kg",
     price: 45,
     mrp: 55,
@@ -192,6 +209,7 @@ const products = [
     name: "Fresh Onions",
     category: "fruits-vegetables",
     categoryId: "fruits-vegetables",
+    subcategoryId: "vegetables",
     unit: "1 kg",
     price: 42,
     mrp: 50,
@@ -209,6 +227,7 @@ const products = [
     name: "Orange Juice",
     category: "beverages",
     categoryId: "cold-drinks-juices",
+    subcategoryId: "fruit-juices",
     unit: "1 L",
     price: 110,
     mrp: 125,
@@ -220,6 +239,7 @@ const products = [
     name: "Mango Juice",
     category: "beverages",
     categoryId: "cold-drinks-juices",
+    subcategoryId: "fruit-juices",
     unit: "1 L",
     price: 105,
     mrp: 120,
@@ -231,6 +251,7 @@ const products = [
     name: "Lemon Soft Drink",
     category: "beverages",
     categoryId: "cold-drinks-juices",
+    subcategoryId: "soft-drinks",
     unit: "750 ml",
     price: 45,
     mrp: 50,
@@ -242,6 +263,7 @@ const products = [
     name: "Cola Soft Drink",
     category: "beverages",
     categoryId: "cold-drinks-juices",
+    subcategoryId: "soft-drinks",
     unit: "750 ml",
     price: 45,
     mrp: 50,
@@ -253,6 +275,7 @@ const products = [
     name: "Mixed Fruit Juice",
     category: "beverages",
     categoryId: "cold-drinks-juices",
+    subcategoryId: "fruit-juices",
     unit: "1 L",
     price: 115,
     mrp: 130,
@@ -270,6 +293,7 @@ const products = [
     name: "Potato Chips",
     category: "snacks",
     categoryId: "snacks-munchies",
+    subcategoryId: "chips",
     unit: "100 g",
     price: 35,
     mrp: 40,
@@ -281,6 +305,7 @@ const products = [
     name: "Salted Peanuts",
     category: "snacks",
     categoryId: "snacks-munchies",
+    subcategoryId: "nuts",
     unit: "200 g",
     price: 55,
     mrp: 65,
@@ -292,6 +317,7 @@ const products = [
     name: "Bhujia",
     category: "snacks",
     categoryId: "snacks-munchies",
+    subcategoryId: "namkeen",
     unit: "200 g",
     price: 65,
     mrp: 75,
@@ -303,6 +329,7 @@ const products = [
     name: "Aloo Bhujia",
     category: "snacks",
     categoryId: "snacks-munchies",
+    subcategoryId: "namkeen",
     unit: "200 g",
     price: 60,
     mrp: 70,
@@ -314,6 +341,7 @@ const products = [
     name: "Namkeen Mix",
     category: "snacks",
     categoryId: "snacks-munchies",
+    subcategoryId: "namkeen",
     unit: "200 g",
     price: 70,
     mrp: 80,
@@ -331,6 +359,7 @@ const products = [
     name: "Instant Noodles",
     category: "breakfast-instant-food",
     categoryId: "breakfast-instant-food",
+    subcategoryId: "instant-food",
     unit: "70 g",
     price: 15,
     mrp: 18,
@@ -342,6 +371,7 @@ const products = [
     name: "Oats",
     category: "breakfast-instant-food",
     categoryId: "breakfast-instant-food",
+    subcategoryId: "healthy-breakfast",
     unit: "500 g",
     price: 95,
     mrp: 110,
@@ -353,6 +383,7 @@ const products = [
     name: "Poha",
     category: "breakfast-instant-food",
     categoryId: "breakfast-instant-food",
+    subcategoryId: "breakfast-staples",
     unit: "500 g",
     price: 55,
     mrp: 65,
@@ -364,6 +395,7 @@ const products = [
     name: "Upma Mix",
     category: "breakfast-instant-food",
     categoryId: "breakfast-instant-food",
+    subcategoryId: "instant-food",
     unit: "500 g",
     price: 65,
     mrp: 75,
@@ -375,6 +407,7 @@ const products = [
     name: "Corn Flakes",
     category: "breakfast-instant-food",
     categoryId: "breakfast-instant-food",
+    subcategoryId: "breakfast-cereals",
     unit: "500 g",
     price: 165,
     mrp: 190,
@@ -392,6 +425,7 @@ const products = [
     name: "Milk Chocolate",
     category: "sweet-tooth",
     categoryId: "sweet-tooth",
+    subcategoryId: "chocolates",
     unit: "40 g",
     price: 40,
     mrp: 45,
@@ -403,6 +437,7 @@ const products = [
     name: "Chocolate Bar",
     category: "sweet-tooth",
     categoryId: "sweet-tooth",
+    subcategoryId: "chocolates",
     unit: "50 g",
     price: 50,
     mrp: 55,
@@ -414,6 +449,7 @@ const products = [
     name: "Gulab Jamun",
     category: "sweet-tooth",
     categoryId: "sweet-tooth",
+    subcategoryId: "indian-sweets",
     unit: "500 g",
     price: 180,
     mrp: 210,
@@ -425,6 +461,7 @@ const products = [
     name: "Rasgulla",
     category: "sweet-tooth",
     categoryId: "sweet-tooth",
+    subcategoryId: "indian-sweets",
     unit: "500 g",
     price: 170,
     mrp: 200,
@@ -436,6 +473,7 @@ const products = [
     name: "Cookies",
     category: "sweet-tooth",
     categoryId: "sweet-tooth",
+    subcategoryId: "cookies",
     unit: "200 g",
     price: 65,
     mrp: 75,
@@ -453,6 +491,7 @@ const products = [
     name: "Glucose Biscuits",
     category: "bakery-biscuits",
     categoryId: "bakery-biscuits",
+    subcategoryId: "biscuits",
     unit: "250 g",
     price: 30,
     mrp: 35,
@@ -464,6 +503,7 @@ const products = [
     name: "Cream Biscuits",
     category: "bakery-biscuits",
     categoryId: "bakery-biscuits",
+    subcategoryId: "biscuits",
     unit: "150 g",
     price: 35,
     mrp: 40,
@@ -475,6 +515,7 @@ const products = [
     name: "Rusk",
     category: "bakery-biscuits",
     categoryId: "bakery-biscuits",
+    subcategoryId: "rusk",
     unit: "300 g",
     price: 65,
     mrp: 75,
@@ -486,6 +527,7 @@ const products = [
     name: "Fruit Cake",
     category: "bakery-biscuits",
     categoryId: "bakery-biscuits",
+    subcategoryId: "cakes",
     unit: "250 g",
     price: 95,
     mrp: 110,
@@ -497,6 +539,7 @@ const products = [
     name: "Chocolate Cake",
     category: "bakery-biscuits",
     categoryId: "bakery-biscuits",
+    subcategoryId: "cakes",
     unit: "250 g",
     price: 120,
     mrp: 140,
@@ -514,6 +557,7 @@ const products = [
     name: "Tea",
     category: "tea-coffee-milk",
     categoryId: "tea-coffee-milk",
+    subcategoryId: "tea",
     unit: "250 g",
     price: 120,
     mrp: 140,
@@ -525,6 +569,7 @@ const products = [
     name: "Instant Coffee",
     category: "tea-coffee-milk",
     categoryId: "tea-coffee-milk",
+    subcategoryId: "coffee",
     unit: "100 g",
     price: 180,
     mrp: 210,
@@ -536,6 +581,7 @@ const products = [
     name: "Hot Chocolate",
     category: "tea-coffee-milk",
     categoryId: "tea-coffee-milk",
+    subcategoryId: "milk-drinks",
     unit: "200 g",
     price: 160,
     mrp: 185,
@@ -547,6 +593,7 @@ const products = [
     name: "Malt Milk Drink",
     category: "tea-coffee-milk",
     categoryId: "tea-coffee-milk",
+    subcategoryId: "milk-drinks",
     unit: "500 g",
     price: 240,
     mrp: 275,
@@ -558,6 +605,7 @@ const products = [
     name: "Green Tea",
     category: "tea-coffee-milk",
     categoryId: "tea-coffee-milk",
+    subcategoryId: "tea",
     unit: "25 tea bags",
     price: 135,
     mrp: 155,
@@ -575,6 +623,7 @@ const products = [
     name: "Wheat Atta",
     category: "atta-rice-dal",
     categoryId: "atta-rice-dal",
+    subcategoryId: "atta",
     unit: "5 kg",
     price: 260,
     mrp: 290,
@@ -586,6 +635,7 @@ const products = [
     name: "Basmati Rice",
     category: "atta-rice-dal",
     categoryId: "atta-rice-dal",
+    subcategoryId: "rice",
     unit: "5 kg",
     price: 420,
     mrp: 480,
@@ -597,6 +647,7 @@ const products = [
     name: "Toor Dal",
     category: "atta-rice-dal",
     categoryId: "atta-rice-dal",
+    subcategoryId: "dal",
     unit: "1 kg",
     price: 150,
     mrp: 175,
@@ -608,6 +659,7 @@ const products = [
     name: "Moong Dal",
     category: "atta-rice-dal",
     categoryId: "atta-rice-dal",
+    subcategoryId: "dal",
     unit: "1 kg",
     price: 125,
     mrp: 145,
@@ -619,6 +671,7 @@ const products = [
     name: "Chana Dal",
     category: "atta-rice-dal",
     categoryId: "atta-rice-dal",
+    subcategoryId: "dal",
     unit: "1 kg",
     price: 90,
     mrp: 105,
@@ -636,6 +689,7 @@ const products = [
     name: "Turmeric Powder",
     category: "masala-oil",
     categoryId: "masala-oil",
+    subcategoryId: "spices",
     unit: "100 g",
     price: 35,
     mrp: 40,
@@ -647,6 +701,7 @@ const products = [
     name: "Red Chilli Powder",
     category: "masala-oil",
     categoryId: "masala-oil",
+    subcategoryId: "spices",
     unit: "100 g",
     price: 40,
     mrp: 45,
@@ -658,6 +713,7 @@ const products = [
     name: "Garam Masala",
     category: "masala-oil",
     categoryId: "masala-oil",
+    subcategoryId: "spices",
     unit: "100 g",
     price: 55,
     mrp: 65,
@@ -669,6 +725,7 @@ const products = [
     name: "Cooking Oil",
     category: "masala-oil",
     categoryId: "masala-oil",
+    subcategoryId: "cooking-oil",
     unit: "1 L",
     price: 145,
     mrp: 165,
@@ -680,6 +737,7 @@ const products = [
     name: "Mustard Oil",
     category: "masala-oil",
     categoryId: "masala-oil",
+    subcategoryId: "cooking-oil",
     unit: "1 L",
     price: 155,
     mrp: 175,
@@ -697,6 +755,7 @@ const products = [
     name: "Tomato Ketchup",
     category: "sauces-spreads",
     categoryId: "sauces-spreads",
+    subcategoryId: "sauces",
     unit: "500 g",
     price: 95,
     mrp: 110,
@@ -708,6 +767,7 @@ const products = [
     name: "Green Chilli Sauce",
     category: "sauces-spreads",
     categoryId: "sauces-spreads",
+    subcategoryId: "sauces",
     unit: "200 g",
     price: 60,
     mrp: 70,
@@ -719,6 +779,7 @@ const products = [
     name: "Red Chilli Sauce",
     category: "sauces-spreads",
     categoryId: "sauces-spreads",
+    subcategoryId: "sauces",
     unit: "200 g",
     price: 60,
     mrp: 70,
@@ -730,6 +791,7 @@ const products = [
     name: "Mayonnaise",
     category: "sauces-spreads",
     categoryId: "sauces-spreads",
+    subcategoryId: "mayonnaise",
     unit: "250 g",
     price: 95,
     mrp: 110,
@@ -741,6 +803,7 @@ const products = [
     name: "Chocolate Spread",
     category: "sauces-spreads",
     categoryId: "sauces-spreads",
+    subcategoryId: "spreads",
     unit: "350 g",
     price: 220,
     mrp: 250,
@@ -758,6 +821,7 @@ const products = [
     name: "Fresh Chicken Curry Cut",
     category: "chicken-meat-fish",
     categoryId: "chicken-meat-fish",
+    subcategoryId: "chicken",
     unit: "500 g",
     price: 180,
     mrp: 210,
@@ -769,6 +833,7 @@ const products = [
     name: "Chicken Breast",
     category: "chicken-meat-fish",
     categoryId: "chicken-meat-fish",
+    subcategoryId: "chicken",
     unit: "500 g",
     price: 220,
     mrp: 250,
@@ -780,6 +845,7 @@ const products = [
     name: "Chicken Wings",
     category: "chicken-meat-fish",
     categoryId: "chicken-meat-fish",
+    subcategoryId: "chicken",
     unit: "500 g",
     price: 190,
     mrp: 220,
@@ -791,6 +857,7 @@ const products = [
     name: "Fresh Fish",
     category: "chicken-meat-fish",
     categoryId: "chicken-meat-fish",
+    subcategoryId: "fish",
     unit: "500 g",
     price: 240,
     mrp: 275,
@@ -802,6 +869,7 @@ const products = [
     name: "Fish Fillet",
     category: "chicken-meat-fish",
     categoryId: "chicken-meat-fish",
+    subcategoryId: "fish",
     unit: "500 g",
     price: 280,
     mrp: 320,
@@ -819,6 +887,7 @@ const products = [
     name: "Organic Honey",
     category: "organic-healthy",
     categoryId: "organic-healthy",
+    subcategoryId: "organic-foods",
     unit: "250 g",
     price: 180,
     mrp: 210,
@@ -830,6 +899,7 @@ const products = [
     name: "Organic Jaggery",
     category: "organic-healthy",
     categoryId: "organic-healthy",
+    subcategoryId: "organic-foods",
     unit: "500 g",
     price: 95,
     mrp: 110,
@@ -841,6 +911,7 @@ const products = [
     name: "Chia Seeds",
     category: "organic-healthy",
     categoryId: "organic-healthy",
+    subcategoryId: "seeds-nuts",
     unit: "200 g",
     price: 140,
     mrp: 165,
@@ -852,6 +923,7 @@ const products = [
     name: "Almonds",
     category: "organic-healthy",
     categoryId: "organic-healthy",
+    subcategoryId: "seeds-nuts",
     unit: "250 g",
     price: 260,
     mrp: 300,
@@ -863,6 +935,7 @@ const products = [
     name: "Green Tea Healthy Blend",
     category: "organic-healthy",
     categoryId: "organic-healthy",
+    subcategoryId: "healthy-drinks",
     unit: "25 tea bags",
     price: 150,
     mrp: 175,
@@ -880,6 +953,7 @@ const products = [
     name: "Baby Diapers",
     category: "baby-care",
     categoryId: "baby-care",
+    subcategoryId: "diapers-wipes",
     unit: "Small Pack",
     price: 299,
     mrp: 340,
@@ -891,6 +965,7 @@ const products = [
     name: "Baby Wipes",
     category: "baby-care",
     categoryId: "baby-care",
+    subcategoryId: "diapers-wipes",
     unit: "72 pcs",
     price: 110,
     mrp: 130,
@@ -902,6 +977,7 @@ const products = [
     name: "Baby Shampoo",
     category: "baby-care",
     categoryId: "baby-care",
+    subcategoryId: "baby-bath",
     unit: "200 ml",
     price: 145,
     mrp: 165,
@@ -913,6 +989,7 @@ const products = [
     name: "Baby Soap",
     category: "baby-care",
     categoryId: "baby-care",
+    subcategoryId: "baby-bath",
     unit: "75 g",
     price: 55,
     mrp: 65,
@@ -924,6 +1001,7 @@ const products = [
     name: "Baby Lotion",
     category: "baby-care",
     categoryId: "baby-care",
+    subcategoryId: "baby-skin-care",
     unit: "200 ml",
     price: 150,
     mrp: 175,
@@ -941,6 +1019,7 @@ const products = [
     name: "Digital Thermometer",
     category: "pharma-wellness",
     categoryId: "pharma-wellness",
+    subcategoryId: "health-devices",
     unit: "1 pc",
     price: 150,
     mrp: 180,
@@ -952,6 +1031,7 @@ const products = [
     name: "First Aid Kit",
     category: "pharma-wellness",
     categoryId: "pharma-wellness",
+    subcategoryId: "first-aid",
     unit: "1 kit",
     price: 199,
     mrp: 230,
@@ -963,6 +1043,7 @@ const products = [
     name: "Adhesive Bandages",
     category: "pharma-wellness",
     categoryId: "pharma-wellness",
+    subcategoryId: "first-aid",
     unit: "20 pcs",
     price: 45,
     mrp: 55,
@@ -974,6 +1055,7 @@ const products = [
     name: "Hand Sanitizer",
     category: "pharma-wellness",
     categoryId: "pharma-wellness",
+    subcategoryId: "hygiene-care",
     unit: "100 ml",
     price: 55,
     mrp: 65,
@@ -985,6 +1067,7 @@ const products = [
     name: "Cotton Roll",
     category: "pharma-wellness",
     categoryId: "pharma-wellness",
+    subcategoryId: "first-aid",
     unit: "100 g",
     price: 45,
     mrp: 55,
@@ -1002,6 +1085,7 @@ const products = [
     name: "Dishwash Liquid",
     category: "household",
     categoryId: "cleaning-essentials",
+    subcategoryId: "dishwashing",
     unit: "500 ml",
     price: 99,
     mrp: 115,
@@ -1013,6 +1097,7 @@ const products = [
     name: "Laundry Detergent",
     category: "household",
     categoryId: "cleaning-essentials",
+    subcategoryId: "laundry",
     unit: "1 kg",
     price: 110,
     mrp: 130,
@@ -1024,6 +1109,7 @@ const products = [
     name: "Floor Cleaner",
     category: "household",
     categoryId: "cleaning-essentials",
+    subcategoryId: "floor-toilet-care",
     unit: "1 L",
     price: 120,
     mrp: 140,
@@ -1035,6 +1121,7 @@ const products = [
     name: "Toilet Cleaner",
     category: "household",
     categoryId: "cleaning-essentials",
+    subcategoryId: "floor-toilet-care",
     unit: "500 ml",
     price: 95,
     mrp: 110,
@@ -1046,6 +1133,7 @@ const products = [
     name: "Cleaning Sponge",
     category: "household",
     categoryId: "cleaning-essentials",
+    subcategoryId: "cleaning-tools",
     unit: "3 pcs",
     price: 40,
     mrp: 50,
@@ -1063,6 +1151,7 @@ const products = [
     name: "Notebook",
     category: "home-office",
     categoryId: "home-office",
+    subcategoryId: "stationery",
     unit: "1 pc",
     price: 45,
     mrp: 55,
@@ -1074,6 +1163,7 @@ const products = [
     name: "Ball Pen Pack",
     category: "home-office",
     categoryId: "home-office",
+    subcategoryId: "stationery",
     unit: "5 pcs",
     price: 35,
     mrp: 45,
@@ -1085,6 +1175,7 @@ const products = [
     name: "Sticky Notes",
     category: "home-office",
     categoryId: "home-office",
+    subcategoryId: "stationery",
     unit: "1 pack",
     price: 55,
     mrp: 65,
@@ -1096,6 +1187,7 @@ const products = [
     name: "Kitchen Storage Box",
     category: "home-office",
     categoryId: "home-office",
+    subcategoryId: "storage",
     unit: "1 pc",
     price: 120,
     mrp: 145,
@@ -1107,6 +1199,7 @@ const products = [
     name: "LED Bulb",
     category: "home-office",
     categoryId: "home-office",
+    subcategoryId: "lighting",
     unit: "1 pc",
     price: 110,
     mrp: 130,
@@ -1124,6 +1217,7 @@ const products = [
     name: "Bath Soap",
     category: "personal-care",
     categoryId: "personal-care",
+    subcategoryId: "bath-body",
     unit: "100 g",
     price: 42,
     mrp: 50,
@@ -1135,6 +1229,7 @@ const products = [
     name: "Shampoo",
     category: "personal-care",
     categoryId: "personal-care",
+    subcategoryId: "hair-care",
     unit: "180 ml",
     price: 149,
     mrp: 175,
@@ -1146,6 +1241,7 @@ const products = [
     name: "Face Wash",
     category: "personal-care",
     categoryId: "personal-care",
+    subcategoryId: "face-care",
     unit: "100 ml",
     price: 129,
     mrp: 150,
@@ -1157,6 +1253,7 @@ const products = [
     name: "Toothpaste",
     category: "personal-care",
     categoryId: "personal-care",
+    subcategoryId: "oral-care",
     unit: "150 g",
     price: 95,
     mrp: 110,
@@ -1168,6 +1265,7 @@ const products = [
     name: "Toothbrush",
     category: "personal-care",
     categoryId: "personal-care",
+    subcategoryId: "oral-care",
     unit: "1 pc",
     price: 45,
     mrp: 55,
@@ -1185,6 +1283,7 @@ const products = [
     name: "Dog Food",
     category: "pet-care",
     categoryId: "pet-care",
+    subcategoryId: "dog-food",
     unit: "1 kg",
     price: 260,
     mrp: 300,
@@ -1196,6 +1295,7 @@ const products = [
     name: "Cat Food",
     category: "pet-care",
     categoryId: "pet-care",
+    subcategoryId: "cat-food",
     unit: "1 kg",
     price: 280,
     mrp: 320,
@@ -1207,6 +1307,7 @@ const products = [
     name: "Pet Treats",
     category: "pet-care",
     categoryId: "pet-care",
+    subcategoryId: "pet-treats",
     unit: "100 g",
     price: 90,
     mrp: 110,
@@ -1218,6 +1319,7 @@ const products = [
     name: "Pet Shampoo",
     category: "pet-care",
     categoryId: "pet-care",
+    subcategoryId: "pet-care",
     unit: "200 ml",
     price: 150,
     mrp: 180,
@@ -1229,6 +1331,7 @@ const products = [
     name: "Pet Bowl",
     category: "pet-care",
     categoryId: "pet-care",
+    subcategoryId: "pet-care",
     unit: "1 pc",
     price: 120,
     mrp: 150,
@@ -1246,6 +1349,7 @@ const products = [
     name: "Daily Essentials Combo",
     category: "offers",
     categoryId: "offers",
+    subcategoryId: "essential-combos",
     unit: "1 combo",
     price: 299,
     mrp: 350,
@@ -1257,6 +1361,7 @@ const products = [
     name: "Breakfast Combo",
     category: "offers",
     categoryId: "offers",
+    subcategoryId: "food-combos",
     unit: "1 combo",
     price: 249,
     mrp: 300,
@@ -1268,6 +1373,7 @@ const products = [
     name: "Snacks Combo",
     category: "offers",
     categoryId: "offers",
+    subcategoryId: "food-combos",
     unit: "1 combo",
     price: 199,
     mrp: 240,
@@ -1279,6 +1385,7 @@ const products = [
     name: "Personal Care Combo",
     category: "offers",
     categoryId: "offers",
+    subcategoryId: "personal-care-combos",
     unit: "1 combo",
     price: 349,
     mrp: 410,
@@ -1290,6 +1397,7 @@ const products = [
     name: "Home Cleaning Combo",
     category: "offers",
     categoryId: "offers",
+    subcategoryId: "home-cleaning-combos",
     unit: "1 combo",
     price: 299,
     mrp: 350,
@@ -1324,6 +1432,49 @@ function getProductById(productId) {
   return products.find(
     product =>
       Number(product.id) === Number(productId)
+  );
+
+}
+
+
+/* =========================================
+   GET PRODUCTS BY CATEGORY
+========================================= */
+
+function getProductsByCategory(categoryId) {
+
+  if (!categoryId) {
+    return [];
+  }
+
+  return products.filter(
+    product =>
+      String(product.categoryId) ===
+      String(categoryId)
+  );
+
+}
+
+
+/* =========================================
+   GET PRODUCTS BY SUBCATEGORY
+========================================= */
+
+function getProductsBySubcategory(
+  categoryId,
+  subcategoryId
+) {
+
+  if (!categoryId || !subcategoryId) {
+    return [];
+  }
+
+  return products.filter(
+    product =>
+      String(product.categoryId) ===
+        String(categoryId) &&
+      String(product.subcategoryId) ===
+        String(subcategoryId)
   );
 
 }
@@ -1884,7 +2035,24 @@ function initProducts() {
 
 
 /* =========================================
+   PUBLIC PRODUCT API
+========================================= */
+
+window.ZynexCartProducts = {
+  products,
+  getProductById,
+  getProductsByCategory,
+  getProductsBySubcategory,
+  formatCategory,
+  createProductCard,
+  refreshProductButton,
+  syncProductButtons
+};
+
+
+/* =========================================
    SUPPORT BOTH:
+
    1. NORMAL PAGE LOADING
    2. DYNAMICALLY LOADED COMPONENTS
 ========================================= */
