@@ -10,7 +10,7 @@
 
 .products-page {
   width: 100%;
-  padding: 0 0 60px;
+  padding: var(--zynexcart-header-height, 0px) 0 60px;
 }
 
 .products-container {
@@ -46,13 +46,6 @@
   display: flex;
   align-items: center;
 }
-
-/*
-   Main category name
-
-   Example:
-   Dairy, Bread & Eggs
-*/
 
 .products-category-bar h1,
 .products-category-title,
@@ -118,15 +111,9 @@
   box-shadow: var(--shadow-sm);
 }
 
-
-/* Hide old Shop heading */
-
 .sidebar-title {
   display: none;
 }
-
-
-/* Category list */
 
 .subcategory-nav {
   width: 100%;
@@ -140,9 +127,6 @@
 
   scrollbar-width: thin;
 }
-
-
-/* Individual category */
 
 .subcategory-item {
   width: 100%;
@@ -189,9 +173,6 @@
   font-weight: 900;
 }
 
-
-/* Category image */
-
 .subcategory-image {
   width: 52px;
   height: 52px;
@@ -219,9 +200,6 @@
   object-fit: contain;
 }
 
-
-/* Category name */
-
 .subcategory-name {
   width: 100%;
 
@@ -237,9 +215,6 @@
   overflow-wrap: normal;
   word-break: normal;
 }
-
-
-/* Arrow not required in image-style navigation */
 
 .subcategory-arrow {
   display: none;
@@ -258,12 +233,6 @@
 /* =========================================
    PRODUCT TOOLBAR
 ========================================= */
-
-/*
-   Product count intentionally hidden.
-   Category page should not show:
-   "5 products"
-*/
 
 .products-toolbar {
   display: none;
@@ -742,6 +711,7 @@
 @media screen and (max-width: 650px) {
 
   .products-page {
+    padding-top: var(--zynexcart-header-height, 0px);
     padding-bottom: 40px;
   }
 
@@ -754,14 +724,14 @@
      STICKY CATEGORY TITLE
   ----------------------------------------- */
 
- .products-category-bar {
-  min-height: 54px;
+  .products-category-bar {
+    min-height: 54px;
 
-  position: sticky;
-  top: var(--zynexcart-header-height, 0px);
+    position: sticky;
+    top: var(--zynexcart-header-height, 0px);
 
-  z-index: 800;
-}
+    z-index: 800;
+  }
 
   .products-category-bar-inner {
     width: calc(100% - 24px);
