@@ -55,6 +55,7 @@
 
   <!-- =====================================================
        SAME HEADER AS HOME PAGE
+       Do not modify the header component.
   ====================================================== -->
 
   <div id="header-component"></div>
@@ -63,7 +64,8 @@
 
   <!-- =====================================================
        CATEGORY TITLE BAR
-       Fixed directly below the actual header
+       Position is controlled by products.css.
+       It must remain directly below the actual header.
   ====================================================== -->
 
   <div
@@ -100,7 +102,7 @@
 
 
         <!-- =================================================
-             LEFT SIDEBAR
+             LEFT CATEGORY NAVIGATION
         ================================================== -->
 
         <aside
@@ -122,7 +124,8 @@
             >
 
               <!--
-                Category navigation rendered by JavaScript
+                Category navigation is rendered
+                by JavaScript.
               -->
 
             </nav>
@@ -144,7 +147,7 @@
 
 
           <!-- ===============================================
-               SEARCH RESULT
+               SEARCH RESULT INFORMATION
           ================================================ -->
 
           <div
@@ -167,7 +170,7 @@
             class="product-grid"
             id="productsGrid"
           >
-            <!-- Products rendered by JavaScript -->
+            <!-- Products rendered by js/products.js -->
           </div>
 
 
@@ -239,7 +242,9 @@
       if (
         window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__
       ) {
+
         return;
+
       }
 
 
@@ -525,7 +530,9 @@
 
 
         if (!title) {
+
           return;
+
         }
 
 
@@ -555,6 +562,13 @@
         let displayName =
           selectedCategory.name;
 
+
+        /*
+         * If subcategory information exists
+         * in categories.js, use its name.
+         *
+         * Otherwise keep the main category name.
+         */
 
         if (
           subcategory &&
@@ -606,7 +620,9 @@
 
 
         if (!nav) {
+
           return;
+
         }
 
 
@@ -680,11 +696,8 @@
 
 
         /*
-         * Current categories.js may not contain
-         * subcategories yet.
-         *
-         * In that case All Products remains visible
-         * without breaking the page.
+         * If categories.js does not contain
+         * subcategories yet, keep All Products.
          */
 
         if (
@@ -760,7 +773,7 @@
 
 
       /* ===================================================
-         FIXED CATEGORY BAR POSITION
+         CATEGORY BAR POSITION
       ==================================================== */
 
       function setupCategoryBar() {
@@ -773,8 +786,13 @@
 
         /*
          * IMPORTANT:
-         * The actual .site-header is fixed.
-         * #header-component is only its wrapper.
+         *
+         * #header-component is only a wrapper.
+         *
+         * The real header inside it is:
+         * #header-component .site-header
+         *
+         * The existing main header remains untouched.
          */
 
         const header =
@@ -832,7 +850,9 @@
 
 
         if (!grid) {
+
           return;
+
         }
 
 
@@ -847,144 +867,8 @@
 
 
         if (count === 0) {
-          return;
-        }
-
-      }
-
-
-
-      /* ===================================================
-         SUBCATEGORY FILTER
-      ==================================================== */
-
-      function filterSubcategory() {
-
-        const {
-          category,
-          subcategory
-        } =
-          getUrlParams();
-
-
-        if (
-          !category ||
-          !subcategory ||
-          !window.ZynexCartProducts
-        ) {
 
           return;
-
-        }
-
-
-        const getProductsBySubcategory =
-          window.ZynexCartProducts
-            .getProductsBySubcategory;
-
-
-        if (
-          typeof getProductsBySubcategory !==
-          "function"
-        ) {
-
-          return;
-
-        }
-
-
-        const products =
-          getProductsBySubcategory(
-            category,
-            subcategory
-          );
-
-
-        const grid =
-          document.getElementById(
-            "productsGrid"
-          );
-
-
-        const empty =
-          document.getElementById(
-            "noProducts"
-          );
-
-
-        if (!grid) {
-          return;
-        }
-
-
-        if (
-          !Array.isArray(products)
-        ) {
-
-          return;
-
-        }
-
-
-        if (
-          products.length === 0
-        ) {
-
-          if (empty) {
-
-            empty.style.display =
-              "flex";
-
-          }
-
-          return;
-
-        }
-
-
-        grid.innerHTML =
-          products.map(
-            function (product) {
-
-              if (
-                window.ZynexCartProducts &&
-                typeof
-                  window.ZynexCartProducts
-                    .createProductCard ===
-                  "function"
-              ) {
-
-                return window.ZynexCartProducts
-                  .createProductCard(
-                    product
-                  );
-
-              }
-
-              return "";
-
-            }
-          ).join("");
-
-
-        if (empty) {
-
-          empty.style.display =
-            "none";
-
-        }
-
-
-        if (
-          window.ZynexCartProducts &&
-          typeof
-            window.ZynexCartProducts
-              .setupProductControls ===
-            "function"
-        ) {
-
-          window.ZynexCartProducts
-            .setupProductControls();
 
         }
 
@@ -1005,7 +889,9 @@
 
 
         if (!grid) {
+
           return;
+
         }
 
 
@@ -1037,6 +923,7 @@
           productAPI.products.slice();
 
 
+
         /* -----------------------------------------------
            CATEGORY FILTER
         ------------------------------------------------ */
@@ -1060,6 +947,7 @@
         }
 
 
+
         /* -----------------------------------------------
            SUBCATEGORY FILTER
         ------------------------------------------------ */
@@ -1081,6 +969,7 @@
             );
 
         }
+
 
 
         /* -----------------------------------------------
@@ -1127,6 +1016,7 @@
         }
 
 
+
         /* -----------------------------------------------
            EMPTY STATE
         ------------------------------------------------ */
@@ -1166,6 +1056,7 @@
         }
 
 
+
         /* -----------------------------------------------
            PRODUCT CARDS
         ------------------------------------------------ */
@@ -1195,8 +1086,9 @@
 
 
         /*
-         * Reconnect quantity/add-to-cart controls
-         * after rendering the cards.
+         * Reconnect existing product/cart controls.
+         *
+         * This does not replace cart functionality.
          */
 
         if (
@@ -1238,9 +1130,7 @@
           );
 
 
-        if (
-          !search
-        ) {
+        if (!search) {
 
           if (info) {
 
@@ -1367,6 +1257,7 @@
                   .syncProductButtons();
 
               }
+
 
               updateProductCount();
 
