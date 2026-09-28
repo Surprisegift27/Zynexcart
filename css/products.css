@@ -1,6 +1,6 @@
 /* =========================================
    ZYNEXCART — PRODUCTS PAGE
-   Professional Quick-Commerce Layout
+   Professional Quick-Commerce Category Layout
 ========================================= */
 
 
@@ -10,7 +10,7 @@
 
 .products-page {
   width: 100%;
-  padding: 0 0 60px;
+  padding: var(--zynexcart-header-height, 0px) 0 60px;
 }
 
 .products-container {
@@ -21,11 +21,12 @@
 
 /* =========================================
    STICKY CATEGORY TITLE
+   Always below the main fixed header
 ========================================= */
 
 .products-category-bar {
   position: sticky;
-  top: var(--zynexcart-header-height, 72px);
+  top: var(--zynexcart-header-height, 0px);
   z-index: 800;
 
   width: 100%;
@@ -47,18 +48,20 @@
 
   display: flex;
   align-items: center;
+  min-width: 0;
 }
 
 .products-category-bar h1,
 .products-category-title,
 #productsPageTitle {
   width: 100%;
+  min-width: 0;
 
   margin: 0;
 
   color: var(--navy);
 
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
 
   line-height: 1.3;
@@ -89,7 +92,7 @@
   display: grid;
 
   grid-template-columns:
-    180px minmax(0, 1fr);
+    190px minmax(0, 1fr);
 
   align-items: start;
 
@@ -109,10 +112,10 @@
   position: sticky;
 
   top: calc(
-    var(--zynexcart-header-height, 72px) + 68px
+    var(--zynexcart-header-height, 0px) + 66px
   );
 
-  max-height: calc(100vh - 100px);
+  max-height: calc(100vh - 105px);
 
   overflow: hidden;
 
@@ -124,9 +127,15 @@
   box-shadow: var(--shadow-sm);
 }
 
+
+/* Hide old Shop heading */
+
 .sidebar-title {
   display: none;
 }
+
+
+/* Category list */
 
 .subcategory-nav {
   width: 100%;
@@ -141,13 +150,15 @@
   scrollbar-width: thin;
 }
 
+
+/* Individual category */
+
 .subcategory-item {
   width: 100%;
-  min-height: 76px;
+  min-height: 78px;
 
   display: flex;
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
 
@@ -163,7 +174,6 @@
 
   font-size: 12px;
   font-weight: 700;
-
   line-height: 1.25;
 
   text-align: center;
@@ -188,6 +198,9 @@
   font-weight: 900;
 }
 
+
+/* Category image */
+
 .subcategory-image {
   width: 52px;
   height: 52px;
@@ -203,7 +216,6 @@
   border-radius: 12px;
 
   background: #f7f8fa;
-
   border: 1px solid #edf0f3;
 }
 
@@ -215,6 +227,9 @@
 
   object-fit: contain;
 }
+
+
+/* Category name */
 
 .subcategory-name {
   width: 100%;
@@ -231,6 +246,9 @@
   overflow-wrap: normal;
   word-break: normal;
 }
+
+
+/* Arrow not required */
 
 .subcategory-arrow {
   display: none;
@@ -250,9 +268,18 @@
    PRODUCT TOOLBAR
 ========================================= */
 
-.products-toolbar,
-.products-toolbar-left,
-.products-toolbar h2,
+.products-toolbar {
+  display: none;
+}
+
+.products-toolbar-left {
+  display: none;
+}
+
+.products-toolbar h2 {
+  display: none;
+}
+
 .products-toolbar-left span {
   display: none;
 }
@@ -274,7 +301,7 @@
 
 /* =========================================
    PRODUCT GRID
-   DESKTOP / TABLET = 5 PRODUCTS
+   Desktop / Laptop = 5 products
 ========================================= */
 
 .product-grid {
@@ -285,7 +312,7 @@
   grid-template-columns:
     repeat(5, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 16px;
 }
 
 
@@ -327,15 +354,12 @@
 
 /* =========================================
    PRODUCT IMAGE
-   RESPONSIVE / PROPORTIONAL
 ========================================= */
 
 .product-image {
   position: relative;
 
-  width: 100%;
-
-  aspect-ratio: 1 / 1;
+  height: 215px;
 
   display: flex;
   align-items: center;
@@ -359,7 +383,7 @@
 
   display: block;
 
-  padding: 12px;
+  padding: 18px;
 
   object-fit: contain;
 
@@ -368,6 +392,19 @@
 
 .product-card:hover .product-image img {
   transform: scale(1.045);
+}
+
+
+/* =========================================
+   HIDE PRODUCT CATEGORY LABEL
+   Example:
+   GROCERY
+   PAAN
+   SWEET TOOTH
+========================================= */
+
+.product-category {
+  display: none !important;
 }
 
 
@@ -381,43 +418,28 @@
   display: flex;
   flex-direction: column;
 
-  padding: 11px 11px 10px;
-}
-
-.product-category {
-  display: inline-block;
-
-  margin-bottom: 4px;
-
-  color: #7b8492;
-
-  font-size: 8px;
-  font-weight: 900;
-
-  letter-spacing: 0.6px;
-
-  text-transform: uppercase;
+  padding: 14px 13px 12px;
 }
 
 .product-info h3 {
-  min-height: 39px;
+  min-height: 21px;
 
-  margin: 0 0 3px;
+  margin: 0 0 7px;
 
   color: var(--navy);
 
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
 
   line-height: 1.3;
 }
 
 .product-unit {
-  margin: 0 0 7px;
+  margin: 0 0 9px;
 
   color: var(--muted);
 
-  font-size: 11px;
+  font-size: 12px;
 }
 
 
@@ -426,29 +448,28 @@
 ========================================= */
 
 .product-price-row {
-  min-height: 25px;
+  min-height: 27px;
 
   display: flex;
   align-items: center;
-
   flex-wrap: wrap;
 
-  gap: 5px;
+  gap: 6px;
 
-  margin-bottom: 9px;
+  margin-bottom: 10px;
 }
 
 .product-price {
   color: var(--navy);
 
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 900;
 }
 
 .product-mrp {
   color: #9aa0a9;
 
-  font-size: 10px;
+  font-size: 11px;
 
   text-decoration: line-through;
 }
@@ -461,7 +482,7 @@
   background: var(--success-light);
   color: var(--success);
 
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 900;
 }
 
@@ -472,7 +493,7 @@
 
 .product-card .add-btn {
   width: 100%;
-  min-height: 38px;
+  min-height: 40px;
 
   display: flex;
   align-items: center;
@@ -480,7 +501,7 @@
 
   margin-top: auto;
 
-  padding: 0 9px;
+  padding: 0 10px;
 
   border: 1.5px solid #ffb27d;
   border-radius: 9px;
@@ -488,7 +509,7 @@
   background: var(--white);
   color: var(--primary);
 
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 900;
 
   cursor: pointer;
@@ -518,7 +539,7 @@
 .product-card .add-btn.added {
   justify-content: space-between;
 
-  min-height: 38px;
+  min-height: 40px;
 
   padding: 3px 5px;
 
@@ -539,10 +560,10 @@
 
 .product-card .qty-minus,
 .product-card .qty-plus {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
 
-  flex: 0 0 30px;
+  flex: 0 0 32px;
 
   display: flex;
   align-items: center;
@@ -556,7 +577,7 @@
   background: transparent;
   color: var(--white);
 
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
 
   line-height: 1;
@@ -570,13 +591,13 @@
 }
 
 .product-card .qty-number {
-  min-width: 26px;
+  min-width: 28px;
 
   text-align: center;
 
   color: var(--white);
 
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
 }
 
@@ -651,20 +672,38 @@
 
 
 /* =========================================
-   LARGE DESKTOP
+   TABLET / SMALL LAPTOP
 ========================================= */
 
-@media screen and (min-width: 1400px) {
+@media screen and (max-width: 1100px) {
+
+  .products-layout {
+    grid-template-columns:
+      165px minmax(0, 1fr);
+
+    gap: 18px;
+  }
 
   .product-grid {
-    gap: 16px;
+    grid-template-columns:
+      repeat(5, minmax(0, 1fr));
+
+    gap: 12px;
+  }
+
+  .product-image {
+    height: 190px;
   }
 
   .product-info {
-    padding: 12px;
+    padding: 12px 10px 10px;
   }
 
   .product-info h3 {
+    font-size: 14px;
+  }
+
+  .product-price {
     font-size: 15px;
   }
 
@@ -672,77 +711,73 @@
 
 
 /* =========================================
-   TABLET / LAPTOP
-   STILL 5 PRODUCTS
+   SMALL TABLET
 ========================================= */
 
-@media screen and (min-width: 651px) and (max-width: 1100px) {
-
-  .products-container,
-  .products-content,
-  .products-category-bar-inner {
-    width: calc(100% - 28px);
-  }
+@media screen and (max-width: 850px) {
 
   .products-layout {
     grid-template-columns:
       150px minmax(0, 1fr);
 
-    gap: 14px;
+    gap: 15px;
   }
+
+  /*
+     Still 5 products on desktop/tablet
+     until mobile breakpoint.
+  */
 
   .product-grid {
     grid-template-columns:
       repeat(5, minmax(0, 1fr));
 
-    gap: 8px;
+    gap: 10px;
   }
 
-  .subcategory-item {
-    min-height: 70px;
-  }
-
-  .subcategory-image {
-    width: 46px;
-    height: 46px;
-
-    flex-basis: 46px;
+  .product-image {
+    height: 170px;
   }
 
   .product-info {
-    padding: 8px 7px;
-  }
-
-  .product-category {
-    font-size: 7px;
+    padding: 10px 8px 9px;
   }
 
   .product-info h3 {
-    min-height: 34px;
-
-    font-size: 11px;
-  }
-
-  .product-unit {
-    font-size: 9px;
-  }
-
-  .product-price {
     font-size: 13px;
   }
 
+  .product-unit {
+    font-size: 11px;
+  }
+
+  .product-price {
+    font-size: 14px;
+  }
+
   .product-mrp {
-    font-size: 8px;
+    font-size: 9px;
   }
 
   .product-discount {
-    font-size: 7px;
+    font-size: 8px;
+    padding: 2px 4px;
   }
 
   .product-card .add-btn {
-    min-height: 34px;
+    min-height: 36px;
+    font-size: 11px;
+  }
 
-    font-size: 10px;
+  .subcategory-item {
+    min-height: 74px;
+  }
+
+  .subcategory-image {
+    width: 48px;
+    height: 48px;
+
+    flex-basis: 48px;
   }
 
 }
@@ -750,12 +785,13 @@
 
 /* =========================================
    MOBILE
-   ALWAYS 2 PRODUCTS
+   Exactly 2 products per row
 ========================================= */
 
 @media screen and (max-width: 650px) {
 
   .products-page {
+    width: 100%;
     padding-bottom: 40px;
   }
 
@@ -769,6 +805,7 @@
   ----------------------------------------- */
 
   .products-category-bar {
+    width: 100%;
     min-height: 54px;
 
     position: sticky;
@@ -780,15 +817,23 @@
 
   .products-category-bar-inner {
     width: calc(100% - 24px);
+
+    min-width: 0;
+
+    margin-inline: auto;
   }
 
   .products-category-bar h1,
   .products-category-title,
   #productsPageTitle {
-    font-size: 18px;
+    width: 100%;
+
+    font-size: 17px;
     font-weight: 800;
 
     line-height: 1.25;
+
+    text-align: left;
   }
 
 
@@ -820,7 +865,7 @@
 
 
   /* -----------------------------------------
-     MOBILE SIDEBAR
+     LEFT CATEGORY SIDEBAR
   ----------------------------------------- */
 
   .products-sidebar {
@@ -831,10 +876,10 @@
     position: sticky;
 
     top: calc(
-      var(--zynexcart-header-height, 0px) + 62px
+      var(--zynexcart-header-height, 0px) + 64px
     );
 
-    max-height: calc(100vh - 76px);
+    max-height: calc(100vh - 80px);
 
     overflow: hidden;
 
@@ -854,7 +899,7 @@
 
     padding: 0;
 
-    max-height: calc(100vh - 76px);
+    max-height: calc(100vh - 80px);
 
     overflow-y: auto;
 
@@ -867,7 +912,6 @@
 
   .subcategory-item {
     width: 100%;
-
     min-height: 78px;
 
     flex: 0 0 auto;
@@ -917,9 +961,13 @@
 
 
   /* -----------------------------------------
-     MOBILE PRODUCT GRID
-     ALWAYS 2 COLUMNS
+     PRODUCTS
+     Exactly 2 cards on mobile
   ----------------------------------------- */
+
+  .products-main {
+    min-width: 0;
+  }
 
   .product-grid {
     width: 100%;
@@ -935,43 +983,66 @@
      MOBILE PRODUCT CARD
   ----------------------------------------- */
 
+  .product-card {
+    width: 100%;
+    min-width: 0;
+
+    border-radius: 14px;
+  }
+
   .product-image {
     width: 100%;
-
-    aspect-ratio: 1 / 1;
-
-    height: auto;
+    height: 155px;
   }
 
   .product-image img {
-    padding: 10px;
+    width: 100%;
+    height: 100%;
+
+    padding: 12px;
   }
 
   .product-info {
-    padding: 10px 9px 9px;
+    width: 100%;
+
+    padding: 11px 9px 9px;
+
+    box-sizing: border-box;
   }
+
+
+  /* Category label remains hidden */
 
   .product-category {
-    font-size: 7px;
-
-    margin-bottom: 4px;
+    display: none !important;
   }
 
-  .product-info h3 {
-    min-height: 34px;
 
-    font-size: 12px;
+  /* Product name */
+
+  .product-info h3 {
+    min-height: 0;
+
+    margin: 0 0 8px;
+
+    font-size: 13px;
+    font-weight: 800;
 
     line-height: 1.3;
   }
 
   .product-unit {
-    font-size: 10px;
+    margin: 0 0 8px;
 
-    margin-bottom: 7px;
+    font-size: 10px;
   }
 
+
+  /* Price */
+
   .product-price-row {
+    min-height: 24px;
+
     gap: 4px;
 
     margin-bottom: 8px;
@@ -986,15 +1057,30 @@
   }
 
   .product-discount {
-    font-size: 7px;
-
     padding: 2px 4px;
+
+    font-size: 7px;
   }
 
+
+  /* Add */
+
   .product-card .add-btn {
+    width: 100%;
+
     min-height: 36px;
 
+    padding: 0 8px;
+
+    border-radius: 9px;
+
     font-size: 11px;
+  }
+
+  .product-card .add-btn.added {
+    min-height: 36px;
+
+    padding: 3px 4px;
   }
 
   .product-card .qty-minus,
@@ -1018,7 +1104,6 @@
 
 /* =========================================
    VERY SMALL MOBILE
-   STILL 2 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 380px) {
@@ -1050,20 +1135,27 @@
   }
 
   .product-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
     gap: 8px;
   }
 
+  .product-image {
+    height: 140px;
+  }
+
   .product-info {
-    padding: 8px 7px;
+    padding: 9px 7px 8px;
   }
 
   .product-info h3 {
-    min-height: 32px;
-
     font-size: 11px;
+  }
+
+  .product-unit {
+    font-size: 9px;
+  }
+
+  .product-price {
+    font-size: 13px;
   }
 
   .product-card .add-btn {
