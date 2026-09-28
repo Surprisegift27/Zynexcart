@@ -13,8 +13,8 @@
 
   /*
     Main header is fixed.
-    Product page starts below the fixed header
-    and the fixed category title bar.
+    Category title is fixed directly below it.
+    Content starts below both.
   */
   padding:
     calc(
@@ -33,7 +33,6 @@
 /* =========================================
    FIXED CATEGORY TITLE
    Always directly below main header
-   Does NOT move with page scroll
 ========================================= */
 
 .products-category-bar {
@@ -62,12 +61,12 @@
 .products-category-bar-inner {
   width: min(1400px, calc(100% - 40px));
 
+  min-width: 0;
+
   margin-inline: auto;
 
   display: flex;
   align-items: center;
-
-  min-width: 0;
 }
 
 .products-category-bar h1,
@@ -110,6 +109,8 @@
 ========================================= */
 
 .products-layout {
+  width: 100%;
+
   display: grid;
 
   grid-template-columns:
@@ -127,6 +128,7 @@
 
 .products-sidebar {
   min-width: 0;
+  width: 100%;
 }
 
 .products-sidebar-inner {
@@ -315,9 +317,8 @@
 ========================================= */
 
 .products-main {
-  min-width: 0;
-
   width: 100%;
+  min-width: 0;
 }
 
 
@@ -359,7 +360,7 @@
 
 /* =========================================
    PRODUCT GRID
-   Desktop / Laptop / Tablet = 5 products
+   Desktop / Laptop / Tablet = EXACTLY 5
 ========================================= */
 
 .product-grid {
@@ -388,7 +389,6 @@
   min-width: 0;
 
   display: flex;
-
   flex-direction: column;
 
   overflow: hidden;
@@ -423,6 +423,7 @@
 .product-image {
   position: relative;
 
+  width: 100%;
   height: 215px;
 
   display: flex;
@@ -461,8 +462,9 @@
 
 
 /* =========================================
-   HIDE PRODUCT CATEGORY LABEL
-   GROCERY / PAAN / SWEET TOOTH etc.
+   PRODUCT CATEGORY LABEL
+   COMPLETELY HIDDEN
+   GROCERY / PAAN / SWEET TOOTH ETC.
 ========================================= */
 
 .product-category {
@@ -478,7 +480,6 @@
   flex: 1;
 
   display: flex;
-
   flex-direction: column;
 
   padding: 14px 13px 12px;
@@ -765,7 +766,7 @@
 
 /* =========================================
    TABLET / SMALL LAPTOP
-   Still 5 products
+   EXACTLY 5 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 1100px) {
@@ -805,7 +806,7 @@
 
 /* =========================================
    SMALL TABLET
-   Still 5 products
+   EXACTLY 5 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 850px) {
@@ -876,7 +877,7 @@
 
 /* =========================================
    MOBILE
-   Exactly 2 products per row
+   EXACTLY 2 PRODUCTS PER ROW
 ========================================= */
 
 @media screen and (max-width: 650px) {
@@ -885,13 +886,13 @@
     width: 100%;
 
     /*
-      Header + fixed category title.
-      No unnecessary gap.
+      Fixed header
+      +
+      Fixed category title
     */
     padding:
       calc(
-        var(--zynexcart-header-height, 0px)
-        + 54px
+        var(--zynexcart-header-height, 0px) + 54px
       )
       0
       40px;
@@ -963,12 +964,13 @@
   ======================================= */
 
   .products-layout {
+    width: 100%;
+
     display: grid;
 
     /*
-      Slightly wider navigation column
-      prevents products from feeling
-      cramped against the sidebar.
+      Left = category navigation
+      Right = products
     */
     grid-template-columns:
       86px minmax(0, 1fr);
@@ -976,8 +978,6 @@
     gap: 12px;
 
     align-items: start;
-
-    width: 100%;
   }
 
 
@@ -986,9 +986,8 @@
   ======================================= */
 
   .products-sidebar {
-    min-width: 0;
-
     width: 100%;
+    min-width: 0;
   }
 
   .products-sidebar-inner {
@@ -1096,35 +1095,42 @@
     line-height: 1.2;
 
     text-align: center;
+
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
 
   /* =======================================
-     PRODUCTS
-     Exactly 2 cards
+     PRODUCTS MAIN
   ======================================= */
 
   .products-main {
+    width: 100%;
     min-width: 0;
 
-    width: 100%;
-
     margin: 0;
-
     padding: 0;
   }
+
+
+  /* =======================================
+     PRODUCT GRID
+     EXACTLY 2 COLUMNS
+  ======================================= */
 
   .product-grid {
     width: 100%;
 
-    margin: 0;
-
-    padding: 0;
+    display: grid;
 
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
 
     gap: 10px;
+
+    margin: 0;
+    padding: 0;
   }
 
 
@@ -1179,6 +1185,8 @@
     min-height: 0;
 
     margin: 0 0 8px;
+
+    color: var(--navy);
 
     font-size: 13px;
 
@@ -1271,8 +1279,7 @@
   .products-page {
     padding:
       calc(
-        var(--zynexcart-header-height, 0px)
-        + 54px
+        var(--zynexcart-header-height, 0px) + 54px
       )
       0
       40px;
