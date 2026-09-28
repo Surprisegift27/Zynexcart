@@ -30,14 +30,16 @@
   z-index: 800;
 
   width: 100%;
-  min-height: 62px;
+  min-height: 54px;
 
   display: flex;
   align-items: center;
 
   background: var(--white);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(7, 27, 58, 0.06);
+
+  box-shadow:
+    0 2px 8px rgba(7, 27, 58, 0.06);
 }
 
 .products-category-bar-inner {
@@ -48,13 +50,28 @@
   align-items: center;
 }
 
-.products-category-title {
+/*
+   Main category name
+
+   Example:
+   Dairy, Bread & Eggs
+*/
+
+.products-category-bar h1,
+.products-category-title,
+#productsPageTitle {
   margin: 0;
 
   color: var(--navy);
-  font-size: 25px;
-  font-weight: 900;
-  line-height: 1.2;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  line-height: 1.3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
@@ -100,6 +117,7 @@
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 14px;
+
   box-shadow: var(--shadow-sm);
 }
 
@@ -122,6 +140,7 @@
   padding: 8px;
 
   overflow-y: auto;
+
   scrollbar-width: thin;
 }
 
@@ -243,40 +262,36 @@
    PRODUCT TOOLBAR
 ========================================= */
 
+/*
+   Product count intentionally hidden.
+   Category page should not show:
+   "5 products"
+*/
+
 .products-toolbar {
-  min-height: 42px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 15px;
-
-  margin-bottom: 14px;
+  display: none;
 }
 
 .products-toolbar-left {
-  min-width: 0;
-
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-
-  gap: 8px;
+  display: none;
 }
 
 .products-toolbar h2 {
-  margin: 0;
-
-  color: var(--navy);
-
-  font-size: 21px;
-  font-weight: 900;
-
-  line-height: 1.25;
+  display: none;
 }
 
 .products-toolbar-left span {
+  display: none;
+}
+
+
+/* =========================================
+   SEARCH RESULT
+========================================= */
+
+.search-result-info {
+  margin: 0 0 14px;
+
   color: var(--muted);
 
   font-size: 13px;
@@ -691,10 +706,6 @@
 
 @media screen and (max-width: 850px) {
 
-  .products-category-title {
-    font-size: 22px;
-  }
-
   .products-layout {
     grid-template-columns:
       150px minmax(0, 1fr);
@@ -759,9 +770,13 @@
     width: calc(100% - 24px);
   }
 
-  .products-category-title {
-    font-size: 20px;
-    line-height: 1.2;
+  .products-category-bar h1,
+  .products-category-title,
+  #productsPageTitle {
+    font-size: 14px;
+    font-weight: 800;
+
+    line-height: 1.25;
   }
 
 
@@ -810,7 +825,6 @@
     overflow: hidden;
 
     border: 0;
-
     border-radius: 0;
 
     background: transparent;
@@ -891,30 +905,6 @@
   /* -----------------------------------------
      PRODUCTS AREA
   ----------------------------------------- */
-
-  .products-toolbar {
-    min-height: 34px;
-
-    margin-bottom: 10px;
-
-    align-items: flex-start;
-  }
-
-  .products-toolbar-left {
-    display: block;
-  }
-
-  .products-toolbar h2 {
-    font-size: 17px;
-  }
-
-  .products-toolbar-left span {
-    display: block;
-
-    margin-top: 3px;
-
-    font-size: 10px;
-  }
 
   .product-grid {
     grid-template-columns:
@@ -1001,10 +991,6 @@
 ========================================= */
 
 @media screen and (max-width: 380px) {
-
-  .products-category-title {
-    font-size: 18px;
-  }
 
   .products-content {
     width: calc(100% - 18px);
