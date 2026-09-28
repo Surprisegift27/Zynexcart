@@ -1,1339 +1,1267 @@
-/* =========================================
-   ZYNEXCART — PRODUCTS PAGE
-   Professional Quick-Commerce Category Layout
-========================================= */
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
 
-/* =========================================
-   PAGE
-========================================= */
+  <meta charset="UTF-8">
 
-.products-page {
-  width: 100%;
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  /*
-    Main header is fixed.
-    Product page starts below the fixed header
-    and the fixed category title bar.
-  */
-  padding:
-    calc(
-      var(--zynexcart-header-height, 0px) + 54px
-    )
-    0
-    60px;
-}
+  <meta
+    name="description"
+    content="Shop groceries and everyday essentials on ZynexCart."
+  >
 
-.products-container {
-  width: min(1400px, calc(100% - 40px));
-  margin-inline: auto;
-}
+  <meta
+    name="theme-color"
+    content="#071b3a"
+  >
 
+  <title>Products — ZynexCart</title>
 
-/* =========================================
-   FIXED CATEGORY TITLE
-   Always directly below main header
-   Does NOT move with page scroll
-========================================= */
 
-.products-category-bar {
-  position: fixed;
+  <!-- =====================================================
+       ZYNEXCART — CSS
+  ====================================================== -->
 
-  top: var(--zynexcart-header-height, 0px);
-  left: 0;
-  right: 0;
+  <link
+    rel="stylesheet"
+    href="css/base.css"
+  >
 
-  z-index: 950;
+  <link
+    rel="stylesheet"
+    href="css/header.css"
+  >
 
-  width: 100%;
-  min-height: 54px;
+  <link
+    rel="stylesheet"
+    href="css/products.css"
+  >
 
-  display: flex;
-  align-items: center;
+  <link
+    rel="stylesheet"
+    href="css/responsive.css"
+  >
 
-  background: var(--white);
+</head>
 
-  border-bottom: 1px solid var(--border);
 
-  box-shadow:
-    0 2px 8px rgba(7, 27, 58, 0.06);
-}
+<body>
 
-.products-category-bar-inner {
-  width: min(1400px, calc(100% - 40px));
 
-  margin-inline: auto;
+  <!-- =====================================================
+       SAME HEADER AS HOME PAGE
+  ====================================================== -->
 
-  display: flex;
-  align-items: center;
+  <div id="header-component"></div>
 
-  min-width: 0;
-}
 
-.products-category-bar h1,
-.products-category-title,
-#productsPageTitle {
-  width: 100%;
-  min-width: 0;
 
-  margin: 0;
+  <!-- =====================================================
+       PRODUCTS PAGE
+  ====================================================== -->
 
-  color: var(--navy);
+  <main class="products-page">
 
-  font-size: 18px;
-  font-weight: 800;
+    <div class="products-container">
 
-  line-height: 1.3;
 
-  white-space: nowrap;
+      <!-- =================================================
+           BREADCRUMB
+      ================================================== -->
 
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+      <nav
+        class="products-breadcrumb"
+        aria-label="Breadcrumb"
+      >
 
+        <a href="index.html">
+          Home
+        </a>
 
-/* =========================================
-   MAIN CONTENT
-========================================= */
+        <span aria-hidden="true">
+          ›
+        </span>
 
-.products-content {
-  width: min(1400px, calc(100% - 40px));
+        <span id="breadcrumbCategory">
+          All Products
+        </span>
 
-  margin-inline: auto;
+      </nav>
 
-  padding-top: 22px;
-}
 
 
-/* =========================================
-   MAIN LAYOUT
-========================================= */
+      <!-- =================================================
+           PAGE HEADING
+      ================================================== -->
 
-.products-layout {
-  display: grid;
+      <header class="products-heading">
 
-  grid-template-columns:
-    190px minmax(0, 1fr);
+        <div class="products-heading-content">
 
-  align-items: start;
+          <span class="products-eyebrow">
+            SHOP BY CATEGORY
+          </span>
 
-  gap: 22px;
-}
+          <h1 id="productsPageTitle">
+            All Products
+          </h1>
 
+          <p id="productsPageDescription">
+            Shop your daily essentials at ZynexCart.
+          </p>
 
-/* =========================================
-   LEFT CATEGORY NAVIGATION
-========================================= */
+        </div>
 
-.products-sidebar {
-  min-width: 0;
-}
 
-.products-sidebar-inner {
-  position: sticky;
+        <div
+          class="products-result-count"
+          id="productsCount"
+        >
+          0 products
+        </div>
 
-  top:
-    calc(
-      var(--zynexcart-header-height, 0px)
-      + 76px
-    );
+      </header>
 
-  max-height:
-    calc(
-      100vh
-      - var(--zynexcart-header-height, 0px)
-      - 90px
-    );
 
-  overflow: hidden;
 
-  background: var(--white);
+      <!-- =================================================
+           MAIN PRODUCT LAYOUT
+      ================================================== -->
 
-  border: 1px solid var(--border);
+      <div class="products-layout">
 
-  border-radius: 14px;
 
-  box-shadow: var(--shadow-sm);
-}
+        <!-- =================================================
+             LEFT SIDEBAR
+        ================================================== -->
 
+        <aside
+          class="products-sidebar"
+          aria-label="Category navigation"
+        >
 
-/* =========================================
-   HIDE OLD SHOP HEADING
-========================================= */
+          <div class="products-sidebar-inner">
 
-.sidebar-title {
-  display: none;
-}
 
+            <div class="sidebar-title">
+              Shop
+            </div>
 
-/* =========================================
-   CATEGORY LIST
-========================================= */
 
-.subcategory-nav {
-  width: 100%;
+            <nav
+              class="subcategory-nav"
+              id="subcategoryNav"
+              aria-label="Subcategories"
+            >
 
-  display: flex;
-  flex-direction: column;
+              <!--
+                Subcategories rendered by JavaScript
+              -->
 
-  padding: 8px;
+            </nav>
 
-  overflow-y: auto;
+          </div>
 
-  scrollbar-width: thin;
-}
+        </aside>
 
 
-/* =========================================
-   CATEGORY ITEM
-========================================= */
 
-.subcategory-item {
-  width: 100%;
+        <!-- =================================================
+             RIGHT PRODUCT AREA
+        ================================================== -->
 
-  min-height: 78px;
+        <section
+          class="products-main"
+          aria-label="Products"
+        >
 
-  display: flex;
 
-  flex-direction: column;
+          <!-- ===============================================
+               TOOLBAR
+          ================================================ -->
 
-  align-items: center;
-  justify-content: center;
+          <div class="products-toolbar">
 
-  gap: 7px;
+            <div class="products-toolbar-left">
 
-  padding: 8px 6px;
+              <h2 id="productsSectionTitle">
+                All Products
+              </h2>
 
-  color: #5f6875;
+              <span id="productsSectionDescription">
+                Everything you need, delivered fast.
+              </span>
 
-  background: transparent;
+            </div>
 
-  border: 0;
 
-  border-radius: 11px;
+            <span
+              id="productsToolbarCount"
+              class="products-toolbar-left"
+            >
+              0 products
+            </span>
 
-  font-size: 12px;
+          </div>
 
-  font-weight: 700;
 
-  line-height: 1.25;
 
-  text-align: center;
+          <!-- ===============================================
+               SEARCH RESULT
+          ================================================ -->
 
-  text-decoration: none;
+          <div
+            id="searchResultInfo"
+            class="search-result-info"
+            hidden
+          >
 
-  cursor: pointer;
+            <strong id="searchResultText"></strong>
 
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease;
-}
+          </div>
 
-.subcategory-item:hover {
-  color: var(--primary);
 
-  background: var(--primary-light);
-}
 
-.subcategory-item.active {
-  color: var(--primary);
+          <!-- ===============================================
+               PRODUCT GRID
+          ================================================ -->
 
-  background: var(--primary-light);
+          <div
+            class="product-grid"
+            id="productsGrid"
+          >
+            <!-- Products rendered by JavaScript -->
+          </div>
 
-  font-weight: 900;
-}
 
 
-/* =========================================
-   CATEGORY IMAGE
-========================================= */
+          <!-- ===============================================
+               EMPTY STATE
+          ================================================ -->
 
-.subcategory-image {
-  width: 52px;
-  height: 52px;
+          <div
+            id="noProducts"
+            class="products-empty-state"
+            style="display: none;"
+            role="status"
+            aria-live="polite"
+          >
 
-  flex: 0 0 52px;
+            <div
+              class="products-empty-icon"
+              aria-hidden="true"
+            >
+              🛒
+            </div>
 
-  display: flex;
 
-  align-items: center;
-  justify-content: center;
+            <div class="products-empty-content">
 
-  overflow: hidden;
+              <h2>
+                No products found
+              </h2>
 
-  border-radius: 12px;
+              <p id="noProductsMessage">
+                No products are currently available in this section.
+              </p>
 
-  background: #f7f8fa;
+            </div>
 
-  border: 1px solid #edf0f3;
-}
+          </div>
 
-.subcategory-image img {
-  width: 100%;
-  height: 100%;
 
-  display: block;
+        </section>
 
-  object-fit: contain;
-}
+      </div>
 
+    </div>
 
-/* =========================================
-   CATEGORY NAME
-========================================= */
+  </main>
 
-.subcategory-name {
-  width: 100%;
 
-  color: inherit;
 
-  font-size: 12px;
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
 
-  font-weight: inherit;
+  <div id="footer-component"></div>
 
-  line-height: 1.25;
 
-  text-align: center;
 
-  overflow-wrap: normal;
-  word-break: normal;
-}
+  <!-- =====================================================
+       ZYNEXCART — PAGE INITIALIZATION
+  ====================================================== -->
 
+  <script>
 
-/* =========================================
-   CATEGORY ARROW
-========================================= */
+    (function () {
 
-.subcategory-arrow {
-  display: none;
-}
+      "use strict";
 
 
-/* =========================================
-   PRODUCTS MAIN
-========================================= */
+      if (
+        window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__
+      ) {
+        return;
+      }
 
-.products-main {
-  min-width: 0;
 
-  width: 100%;
-}
+      window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__ =
+        true;
 
 
-/* =========================================
-   PRODUCT TOOLBAR
-========================================= */
 
-.products-toolbar {
-  display: none;
-}
+      /* ===================================================
+         COMPONENT LOADER
+      ==================================================== */
 
-.products-toolbar-left {
-  display: none;
-}
+      async function loadComponent(
+        elementId,
+        filePath
+      ) {
 
-.products-toolbar h2 {
-  display: none;
-}
+        const element =
+          document.getElementById(
+            elementId
+          );
 
-.products-toolbar-left span {
-  display: none;
-}
 
+        if (!element) {
 
-/* =========================================
-   SEARCH RESULT
-========================================= */
+          console.warn(
+            `ZynexCart: Element #${elementId} not found.`
+          );
 
-.search-result-info {
-  margin: 0 0 14px;
+          return false;
 
-  color: var(--muted);
+        }
 
-  font-size: 13px;
 
-  font-weight: 600;
-}
+        try {
 
+          const response =
+            await fetch(
+              filePath,
+              {
+                cache: "no-cache"
+              }
+            );
 
-/* =========================================
-   PRODUCT GRID
-   Desktop / Laptop / Tablet = 5 products
-========================================= */
 
-.product-grid {
-  width: 100%;
+          if (!response.ok) {
 
-  display: grid;
+            throw new Error(
+              `Unable to load ${filePath}`
+            );
 
-  grid-template-columns:
-    repeat(5, minmax(0, 1fr));
+          }
 
-  gap: 16px;
 
-  margin: 0;
+          element.innerHTML =
+            await response.text();
 
-  padding: 0;
-}
 
+          return true;
 
-/* =========================================
-   PRODUCT CARD
-========================================= */
 
-.product-card {
-  position: relative;
+        } catch (error) {
 
-  min-width: 0;
+          console.error(
+            "ZynexCart component error:",
+            error
+          );
 
-  display: flex;
 
-  flex-direction: column;
+          return false;
 
-  overflow: hidden;
+        }
 
-  background: var(--white);
+      }
 
-  border: 1px solid var(--border);
 
-  border-radius: 14px;
 
-  box-shadow: var(--shadow-sm);
+      /* ===================================================
+         SCRIPT LOADER
+      ==================================================== */
 
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
-}
+      function loadScript(
+        src
+      ) {
 
-.product-card:hover {
-  transform: translateY(-3px);
+        return new Promise(
+          function (resolve, reject) {
 
-  border-color: #e0e3e8;
+            const existingScript =
+              document.querySelector(
+                `script[data-zynexcart-script="${src}"]`
+              );
 
-  box-shadow: var(--shadow-lg);
-}
 
+            if (existingScript) {
 
-/* =========================================
-   PRODUCT IMAGE
-========================================= */
+              resolve();
 
-.product-image {
-  position: relative;
+              return;
 
-  height: 215px;
+            }
 
-  display: flex;
 
-  align-items: center;
-  justify-content: center;
+            const script =
+              document.createElement(
+                "script"
+              );
 
-  overflow: hidden;
 
-  background:
-    linear-gradient(
-      180deg,
-      #fafbfc 0%,
-      #f5f6f8 100%
-    );
+            script.src =
+              src;
 
-  text-decoration: none;
-}
+            script.async =
+              false;
 
-.product-image img {
-  width: 100%;
-  height: 100%;
+            script.dataset.zynexcartScript =
+              src;
 
-  display: block;
 
-  padding: 18px;
+            script.onload =
+              function () {
 
-  object-fit: contain;
+                resolve();
 
-  transition: transform 0.3s ease;
-}
+              };
 
-.product-card:hover .product-image img {
-  transform: scale(1.045);
-}
 
+            script.onerror =
+              function () {
 
-/* =========================================
-   HIDE PRODUCT CATEGORY LABEL
-   GROCERY / PAAN / SWEET TOOTH etc.
-========================================= */
+                reject(
+                  new Error(
+                    `Unable to load script: ${src}`
+                  )
+                );
 
-.product-category {
-  display: none !important;
-}
+              };
 
 
-/* =========================================
-   PRODUCT INFO
-========================================= */
+            document.body.appendChild(
+              script
+            );
 
-.product-info {
-  flex: 1;
+          }
+        );
 
-  display: flex;
+      }
 
-  flex-direction: column;
 
-  padding: 14px 13px 12px;
-}
 
-.product-info h3 {
-  min-height: 21px;
+      /* ===================================================
+         COMPONENTS
+      ==================================================== */
 
-  margin: 0 0 7px;
+      const components = [
 
-  color: var(--navy);
+        [
+          "header-component",
+          "components/header.html"
+        ],
 
-  font-size: 15px;
+        [
+          "footer-component",
+          "components/footer.html"
+        ]
 
-  font-weight: 800;
+      ];
 
-  line-height: 1.3;
-}
 
-.product-unit {
-  margin: 0 0 9px;
 
-  color: var(--muted);
+      /* ===================================================
+         JAVASCRIPT MODULES
+      ==================================================== */
 
-  font-size: 12px;
-}
+      const scripts = [
 
+        "js/core/storage.js",
+        "js/core/utils.js",
+        "js/core/events.js",
 
-/* =========================================
-   PRICE
-========================================= */
+        "js/categories.js",
 
-.product-price-row {
-  min-height: 27px;
+        "js/cart/cart.js",
+        "js/cart/cart-actions.js",
+        "js/cart/cart-ui.js",
 
-  display: flex;
+        "js/search/search.js",
 
-  align-items: center;
+        "js/location/location.js",
+        "js/location/location-ui.js",
+        "js/location/location-search.js",
+        "js/location/location-map.js",
+        "js/location/location-address.js",
+        "js/location/saved-addresses.js",
 
-  flex-wrap: wrap;
+        "js/app.js",
 
-  gap: 6px;
+        "js/products.js"
 
-  margin-bottom: 10px;
-}
+      ];
 
-.product-price {
-  color: var(--navy);
 
-  font-size: 16px;
 
-  font-weight: 900;
-}
+      /* ===================================================
+         URL PARAMETERS
+      ==================================================== */
 
-.product-mrp {
-  color: #9aa0a9;
+      function getUrlParams() {
 
-  font-size: 11px;
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
 
-  text-decoration: line-through;
-}
 
-.product-discount {
-  padding: 3px 5px;
+        return {
 
-  border-radius: 5px;
+          category:
+            (
+              params.get("category") ||
+              ""
+            ).trim(),
 
-  background: var(--success-light);
+          subcategory:
+            (
+              params.get("subcategory") ||
+              ""
+            ).trim(),
 
-  color: var(--success);
+          search:
+            (
+              params.get("search") ||
+              ""
+            ).trim()
 
-  font-size: 9px;
+        };
 
-  font-weight: 900;
-}
+      }
 
 
-/* =========================================
-   ADD BUTTON
-========================================= */
 
-.product-card .add-btn {
-  width: 100%;
+      /* ===================================================
+         CATEGORY DATA
+      ==================================================== */
 
-  min-height: 40px;
+      function getCategory(
+        categoryId
+      ) {
 
-  display: flex;
+        const categories =
+          Array.isArray(
+            window.ZynexCartCategories
+          )
+            ? window.ZynexCartCategories
+            : [];
 
-  align-items: center;
-  justify-content: center;
 
-  margin-top: auto;
+        return categories.find(
+          function (category) {
 
-  padding: 0 10px;
+            return (
+              String(category.id) ===
+              String(categoryId)
+            );
 
-  border:
-    1.5px solid
-    #ffb27d;
+          }
+        ) || null;
 
-  border-radius: 9px;
+      }
 
-  background: var(--white);
 
-  color: var(--primary);
 
-  font-size: 13px;
+      /* ===================================================
+         GET PRODUCTS
+      ==================================================== */
 
-  font-weight: 900;
+      function getCategoryProducts(
+        categoryId
+      ) {
 
-  cursor: pointer;
+        if (!categoryId) {
 
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.15s ease,
-    box-shadow 0.2s ease;
-}
+          return Array.isArray(
+            window.products
+          )
+            ? window.products
+            : [];
 
-.product-card .add-btn:hover {
-  background: var(--primary-light);
+        }
 
-  border-color: var(--primary);
-}
 
-.product-card .add-btn:active {
-  transform: scale(0.98);
-}
+        const list =
+          Array.isArray(
+            window.products
+          )
+            ? window.products
+            : [];
 
 
-/* =========================================
-   QUANTITY CONTROL
-========================================= */
+        return list.filter(
+          function (product) {
 
-.product-card .add-btn.added {
-  justify-content: space-between;
+            return (
+              String(
+                product.categoryId || ""
+              ) ===
+              String(categoryId)
+            );
 
-  min-height: 40px;
+          }
+        );
 
-  padding: 3px 5px;
+      }
 
-  background: var(--success);
 
-  border-color: var(--success);
 
-  color: var(--white);
+      /* ===================================================
+         SUBCATEGORY NAVIGATION
+      ==================================================== */
 
-  box-shadow:
-    0 4px 10px
-    rgba(22, 131, 75, 0.16);
-}
+      function renderSubcategoryNavigation() {
 
-.product-card .add-btn.added:hover {
-  background: var(--success-dark);
+        const nav =
+          document.getElementById(
+            "subcategoryNav"
+          );
 
-  border-color: var(--success-dark);
-}
 
-.product-card .qty-minus,
-.product-card .qty-plus {
-  width: 32px;
-  height: 32px;
+        if (!nav) {
+          return;
+        }
 
-  flex: 0 0 32px;
 
-  display: flex;
+        const {
+          category,
+          subcategory
+        } =
+          getUrlParams();
 
-  align-items: center;
-  justify-content: center;
 
-  padding: 0;
+        const selectedCategory =
+          getCategory(
+            category
+          );
 
-  border: 0;
 
-  border-radius: 7px;
+        nav.innerHTML =
+          "";
 
-  background: transparent;
 
-  color: var(--white);
+        /* -----------------------------------------------
+           ALL PRODUCTS
+        ------------------------------------------------ */
 
-  font-size: 20px;
+        const allLink =
+          document.createElement(
+            "a"
+          );
 
-  font-weight: 700;
 
-  line-height: 1;
+        allLink.href =
+          category
+            ? `products.html?category=${encodeURIComponent(
+                category
+              )}`
+            : "products.html";
 
-  cursor: pointer;
-}
 
-.product-card .qty-minus:hover,
-.product-card .qty-plus:hover {
-  background:
-    rgba(255, 255, 255, 0.14);
-}
+        allLink.className =
+          "subcategory-item";
 
-.product-card .qty-number {
-  min-width: 28px;
 
-  text-align: center;
+        if (!subcategory) {
 
-  color: var(--white);
+          allLink.classList.add(
+            "active"
+          );
 
-  font-size: 14px;
+        }
 
-  font-weight: 900;
-}
 
+        allLink.innerHTML = `
 
-/* =========================================
-   EMPTY STATE
-========================================= */
+          <span>
+            All Products
+          </span>
 
-.products-empty-state {
-  width: 100%;
+          <span
+            class="subcategory-arrow"
+            aria-hidden="true"
+          >
+            ›
+          </span>
 
-  min-height: 170px;
+        `;
 
-  display: flex;
 
-  align-items: center;
-  justify-content: center;
+        nav.appendChild(
+          allLink
+        );
 
-  gap: 14px;
 
-  margin-top: 24px;
+        if (
+          !selectedCategory ||
+          !Array.isArray(
+            selectedCategory.subcategories
+          )
+        ) {
 
-  padding: 28px 22px;
+          return;
 
-  box-sizing: border-box;
+        }
 
-  border: 1px solid var(--border);
 
-  border-radius: 16px;
+        selectedCategory.subcategories.forEach(
+          function (item) {
 
-  background: var(--white);
+            const link =
+              document.createElement(
+                "a"
+              );
 
-  box-shadow: var(--shadow-sm);
-}
 
-.products-empty-icon {
-  width: 50px;
-  height: 50px;
+            link.className =
+              "subcategory-item";
 
-  flex: 0 0 50px;
 
-  display: flex;
+            if (
+              String(item.id) ===
+              String(subcategory)
+            ) {
 
-  align-items: center;
-  justify-content: center;
+              link.classList.add(
+                "active"
+              );
 
-  border-radius: 13px;
+            }
 
-  background: var(--primary-light);
 
-  color: var(--primary);
+            link.href =
+              `products.html?category=${encodeURIComponent(
+                category
+              )}&subcategory=${encodeURIComponent(
+                item.id
+              )}`;
 
-  font-size: 22px;
-}
 
-.products-empty-content {
-  min-width: 0;
-}
+            link.innerHTML = `
 
-.products-empty-content h2 {
-  margin: 0 0 5px;
+              <span>
+                ${item.name}
+              </span>
 
-  color: var(--navy);
+              <span
+                class="subcategory-arrow"
+                aria-hidden="true"
+              >
+                ›
+              </span>
 
-  font-size: 18px;
+            `;
 
-  font-weight: 900;
-}
 
-.products-empty-content p {
-  margin: 0;
+            nav.appendChild(
+              link
+            );
 
-  color: var(--muted);
+          }
+        );
 
-  font-size: 13px;
+      }
 
-  line-height: 1.45;
-}
 
 
-/* =========================================
-   TABLET / SMALL LAPTOP
-   Still 5 products
-========================================= */
+      /* ===================================================
+         PAGE INFORMATION
+      ==================================================== */
 
-@media screen and (max-width: 1100px) {
+      function updatePageInformation() {
 
-  .products-layout {
-    grid-template-columns:
-      165px minmax(0, 1fr);
+        const {
+          category,
+          subcategory
+        } =
+          getUrlParams();
 
-    gap: 18px;
-  }
 
-  .product-grid {
-    grid-template-columns:
-      repeat(5, minmax(0, 1fr));
+        const selectedCategory =
+          getCategory(
+            category
+          );
 
-    gap: 12px;
-  }
 
-  .product-image {
-    height: 190px;
-  }
+        const title =
+          document.getElementById(
+            "productsPageTitle"
+          );
 
-  .product-info {
-    padding: 12px 10px 10px;
-  }
 
-  .product-info h3 {
-    font-size: 14px;
-  }
+        const description =
+          document.getElementById(
+            "productsPageDescription"
+          );
 
-  .product-price {
-    font-size: 15px;
-  }
 
-}
+        const breadcrumb =
+          document.getElementById(
+            "breadcrumbCategory"
+          );
 
 
-/* =========================================
-   SMALL TABLET
-   Still 5 products
-========================================= */
+        const sectionTitle =
+          document.getElementById(
+            "productsSectionTitle"
+          );
 
-@media screen and (max-width: 850px) {
 
-  .products-layout {
-    grid-template-columns:
-      150px minmax(0, 1fr);
+        const sectionDescription =
+          document.getElementById(
+            "productsSectionDescription"
+          );
 
-    gap: 15px;
-  }
 
-  .product-grid {
-    grid-template-columns:
-      repeat(5, minmax(0, 1fr));
+        if (!selectedCategory) {
 
-    gap: 10px;
-  }
+          if (title) {
+            title.textContent =
+              "All Products";
+          }
 
-  .product-image {
-    height: 170px;
-  }
+          if (description) {
+            description.textContent =
+              "Shop your daily essentials at ZynexCart.";
+          }
 
-  .product-info {
-    padding: 10px 8px 9px;
-  }
+          if (breadcrumb) {
+            breadcrumb.textContent =
+              "All Products";
+          }
 
-  .product-info h3 {
-    font-size: 13px;
-  }
+          if (sectionTitle) {
+            sectionTitle.textContent =
+              "All Products";
+          }
 
-  .product-unit {
-    font-size: 11px;
-  }
+          return;
 
-  .product-price {
-    font-size: 14px;
-  }
+        }
 
-  .product-mrp {
-    font-size: 9px;
-  }
 
-  .product-discount {
-    font-size: 8px;
+        let displayName =
+          selectedCategory.name;
 
-    padding: 2px 4px;
-  }
 
-  .product-card .add-btn {
-    min-height: 36px;
+        if (
+          subcategory &&
+          Array.isArray(
+            selectedCategory.subcategories
+          )
+        ) {
 
-    font-size: 11px;
-  }
+          const selectedSubcategory =
+            selectedCategory.subcategories.find(
+              function (item) {
 
-  .subcategory-item {
-    min-height: 74px;
-  }
+                return (
+                  String(item.id) ===
+                  String(subcategory)
+                );
 
-  .subcategory-image {
-    width: 48px;
-    height: 48px;
+              }
+            );
 
-    flex-basis: 48px;
-  }
 
-}
+          if (selectedSubcategory) {
 
+            displayName =
+              selectedSubcategory.name;
 
-/* =========================================
-   MOBILE
-   Exactly 2 products per row
-========================================= */
+          }
 
-@media screen and (max-width: 650px) {
+        }
 
-  .products-page {
-    width: 100%;
 
-    /*
-      Header + fixed category title.
-      No unnecessary gap.
-    */
-    padding:
-      calc(
-        var(--zynexcart-header-height, 0px)
-        + 54px
-      )
-      0
-      40px;
-  }
+        if (title) {
 
-  .products-container {
-    width: 100%;
-  }
+          title.textContent =
+            displayName;
 
+        }
 
-  /* =======================================
-     FIXED CATEGORY TITLE
-  ======================================= */
 
-  .products-category-bar {
-    position: fixed;
+        if (description) {
 
-    top:
-      var(--zynexcart-header-height, 0px);
+          description.textContent =
+            selectedCategory.description ||
+            "Shop everyday essentials at ZynexCart.";
 
-    left: 0;
-    right: 0;
+        }
 
-    width: 100%;
 
-    min-height: 54px;
+        if (breadcrumb) {
 
-    z-index: 950;
-  }
+          breadcrumb.textContent =
+            displayName;
 
-  .products-category-bar-inner {
-    width: calc(100% - 24px);
+        }
 
-    min-width: 0;
 
-    margin-inline: auto;
-  }
+        if (sectionTitle) {
 
-  .products-category-bar h1,
-  .products-category-title,
-  #productsPageTitle {
-    width: 100%;
+          sectionTitle.textContent =
+            displayName;
 
-    font-size: 17px;
+        }
 
-    font-weight: 800;
 
-    line-height: 1.25;
+        if (sectionDescription) {
 
-    text-align: left;
-  }
+          sectionDescription.textContent =
+            "Everything you need, delivered fast.";
 
+        }
 
-  /* =======================================
-     CONTENT
-  ======================================= */
+      }
 
-  .products-content {
-    width: calc(100% - 24px);
 
-    margin-inline: auto;
 
-    padding-top: 14px;
-  }
+      /* ===================================================
+         UPDATE PRODUCT COUNT
+      ==================================================== */
 
+      function updateProductCount() {
 
-  /* =======================================
-     MOBILE LAYOUT
-  ======================================= */
+        const grid =
+          document.getElementById(
+            "productsGrid"
+          );
 
-  .products-layout {
-    display: grid;
 
-    /*
-      Slightly wider navigation column
-      prevents products from feeling
-      cramped against the sidebar.
-    */
-    grid-template-columns:
-      86px minmax(0, 1fr);
+        if (!grid) {
+          return;
+        }
 
-    gap: 12px;
 
-    align-items: start;
+        const cards =
+          grid.querySelectorAll(
+            ".product-card"
+          );
 
-    width: 100%;
-  }
 
+        const count =
+          cards.length;
 
-  /* =======================================
-     LEFT CATEGORY SIDEBAR
-  ======================================= */
 
-  .products-sidebar {
-    min-width: 0;
+        const text =
+          `${count} ${
+            count === 1
+              ? "product"
+              : "products"
+          }`;
 
-    width: 100%;
-  }
 
-  .products-sidebar-inner {
-    position: sticky;
+        const topCount =
+          document.getElementById(
+            "productsCount"
+          );
 
-    top:
-      calc(
-        var(--zynexcart-header-height, 0px)
-        + 66px
-      );
 
-    max-height:
-      calc(
-        100vh
-        - var(--zynexcart-header-height, 0px)
-        - 80px
-      );
+        const toolbarCount =
+          document.getElementById(
+            "productsToolbarCount"
+          );
 
-    overflow: hidden;
 
-    border: 0;
+        if (topCount) {
 
-    border-radius: 0;
+          topCount.textContent =
+            text;
 
-    background: transparent;
+        }
 
-    box-shadow: none;
-  }
 
-  .subcategory-nav {
-    width: 100%;
+        if (toolbarCount) {
 
-    display: flex;
+          toolbarCount.textContent =
+            text;
 
-    flex-direction: column;
+        }
 
-    gap: 8px;
+      }
 
-    padding: 0;
 
-    max-height:
-      calc(
-        100vh
-        - var(--zynexcart-header-height, 0px)
-        - 80px
-      );
 
-    overflow-y: auto;
+      /* ===================================================
+         APPLY SUBCATEGORY FILTER
+      ==================================================== */
 
-    scrollbar-width: none;
-  }
+      function filterSubcategory() {
 
-  .subcategory-nav::-webkit-scrollbar {
-    display: none;
-  }
+        const {
+          category,
+          subcategory
+        } =
+          getUrlParams();
 
-  .subcategory-item {
-    width: 100%;
 
-    min-height: 78px;
+        if (
+          !category ||
+          !subcategory ||
+          !Array.isArray(
+            window.products
+          )
+        ) {
 
-    flex: 0 0 auto;
+          return;
 
-    gap: 5px;
+        }
 
-    padding: 4px 2px;
 
-    border: 0;
+        const filteredProducts =
+          window.products.filter(
+            function (product) {
 
-    border-radius: 10px;
+              return (
+                String(
+                  product.categoryId || ""
+                ) ===
+                String(category)
+              ) &&
+                String(
+                  product.subcategoryId || ""
+                ) ===
+                String(subcategory);
 
-    background: transparent;
+            }
+          );
 
-    font-size: 10px;
-  }
 
-  .subcategory-item.active {
-    background: transparent;
+        const grid =
+          document.getElementById(
+            "productsGrid"
+          );
 
-    color: var(--primary);
-  }
 
-  .subcategory-item.active .subcategory-image {
-    border-color: var(--primary);
+        const empty =
+          document.getElementById(
+            "noProducts"
+          );
 
-    box-shadow:
-      0 0 0 2px
-      var(--primary-light);
-  }
 
-  .subcategory-image {
-    width: 54px;
-    height: 54px;
+        if (!grid) {
+          return;
+        }
 
-    flex-basis: 54px;
 
-    border-radius: 11px;
+        /*
+         * Subcategory filtering will use the
+         * existing product renderer once
+         * product data contains subcategoryId.
+         *
+         * Do not create fake products here.
+         */
 
-    background: #f7f8fa;
-  }
+        if (
+          filteredProducts.length === 0
+        ) {
 
-  .subcategory-name {
-    font-size: 10px;
+          /*
+           * Keep the existing category products
+           * visible until subcategory mapping
+           * is available.
+           */
 
-    line-height: 1.2;
+          return;
 
-    text-align: center;
-  }
+        }
 
+      }
 
-  /* =======================================
-     PRODUCTS
-     Exactly 2 cards
-  ======================================= */
 
-  .products-main {
-    min-width: 0;
 
-    width: 100%;
+      /* ===================================================
+         INITIALIZE
+      ==================================================== */
 
-    margin: 0;
+      async function initializeProductsPage() {
 
-    padding: 0;
-  }
+        try {
 
-  .product-grid {
-    width: 100%;
 
-    margin: 0;
+          /* -----------------------------------------------
+             1. LOAD HEADER + FOOTER
+          ------------------------------------------------ */
 
-    padding: 0;
+          await Promise.all(
 
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+            components.map(
+              function (component) {
 
-    gap: 10px;
-  }
+                return loadComponent(
+                  component[0],
+                  component[1]
+                );
 
+              }
+            )
 
-  /* =======================================
-     MOBILE PRODUCT CARD
-  ======================================= */
+          );
 
-  .product-card {
-    width: 100%;
 
-    min-width: 0;
+          /* -----------------------------------------------
+             2. LOAD JS MODULES
+          ------------------------------------------------ */
 
-    border-radius: 14px;
-  }
+          for (
+            const scriptPath of scripts
+          ) {
 
-  .product-image {
-    width: 100%;
+            await loadScript(
+              scriptPath
+            );
 
-    height: 155px;
-  }
+          }
 
-  .product-image img {
-    width: 100%;
-    height: 100%;
 
-    padding: 12px;
-  }
+          /* -----------------------------------------------
+             3. PAGE UI
+          ------------------------------------------------ */
 
-  .product-info {
-    width: 100%;
+          updatePageInformation();
 
-    padding: 11px 9px 9px;
+          renderSubcategoryNavigation();
 
-    box-sizing: border-box;
-  }
 
+          /* -----------------------------------------------
+             4. WAIT FOR PRODUCT RENDER
+          ------------------------------------------------ */
 
-  /* =======================================
-     CATEGORY LABEL HIDDEN
-  ======================================= */
+          setTimeout(
+            function () {
 
-  .product-category {
-    display: none !important;
-  }
+              filterSubcategory();
 
+              updateProductCount();
 
-  /* =======================================
-     PRODUCT NAME
-  ======================================= */
+            },
+            50
+          );
 
-  .product-info h3 {
-    min-height: 0;
 
-    margin: 0 0 8px;
+          /* -----------------------------------------------
+             5. CART UPDATE
+          ------------------------------------------------ */
 
-    font-size: 13px;
+          document.addEventListener(
+            "zynexcart:cartUpdated",
+            function () {
 
-    font-weight: 800;
+              updateProductCount();
 
-    line-height: 1.3;
-  }
+            }
+          );
 
-  .product-unit {
-    margin: 0 0 8px;
 
-    font-size: 10px;
-  }
+          /* -----------------------------------------------
+             6. SEARCH RESULT
+          ------------------------------------------------ */
 
+          const {
+            search
+          } =
+            getUrlParams();
 
-  /* =======================================
-     PRICE
-  ======================================= */
 
-  .product-price-row {
-    min-height: 24px;
+          if (
+            search
+          ) {
 
-    gap: 4px;
+            const info =
+              document.getElementById(
+                "searchResultInfo"
+              );
 
-    margin-bottom: 8px;
-  }
 
-  .product-price {
-    font-size: 14px;
-  }
+            const text =
+              document.getElementById(
+                "searchResultText"
+              );
 
-  .product-mrp {
-    font-size: 9px;
-  }
 
-  .product-discount {
-    padding: 2px 4px;
+            if (info) {
 
-    font-size: 7px;
-  }
+              info.hidden =
+                false;
 
+            }
 
-  /* =======================================
-     ADD BUTTON
-  ======================================= */
 
-  .product-card .add-btn {
-    width: 100%;
+            if (text) {
 
-    min-height: 36px;
+              text.textContent =
+                `Showing results for "${search}"`;
 
-    padding: 0 8px;
+            }
 
-    border-radius: 9px;
+          }
 
-    font-size: 11px;
-  }
 
-  .product-card .add-btn.added {
-    min-height: 36px;
+          console.log(
+            "ZynexCart: Products page loaded successfully."
+          );
 
-    padding: 3px 4px;
-  }
 
-  .product-card .qty-minus,
-  .product-card .qty-plus {
-    width: 28px;
-    height: 28px;
+        } catch (error) {
 
-    flex-basis: 28px;
+          console.error(
+            "ZynexCart: Products page initialization failed.",
+            error
+          );
 
-    font-size: 17px;
-  }
+        }
 
-  .product-card .qty-number {
-    min-width: 23px;
+      }
 
-    font-size: 12px;
-  }
 
-}
 
+      /* ===================================================
+         START
+      ==================================================== */
 
-/* =========================================
-   VERY SMALL MOBILE
-========================================= */
+      if (
+        document.readyState ===
+        "loading"
+      ) {
 
-@media screen and (max-width: 380px) {
+        document.addEventListener(
+          "DOMContentLoaded",
+          initializeProductsPage,
+          {
+            once: true
+          }
+        );
 
-  .products-page {
-    padding:
-      calc(
-        var(--zynexcart-header-height, 0px)
-        + 54px
-      )
-      0
-      40px;
-  }
+      } else {
 
-  .products-content {
-    width: calc(100% - 18px);
+        initializeProductsPage();
 
-    margin-inline: auto;
-  }
+      }
 
-  .products-layout {
-    grid-template-columns:
-      72px minmax(0, 1fr);
+    })();
 
-    gap: 9px;
-  }
+  </script>
 
-  .subcategory-item {
-    min-height: 72px;
-  }
+</body>
 
-  .subcategory-image {
-    width: 49px;
-    height: 49px;
-
-    flex-basis: 49px;
-  }
-
-  .subcategory-name {
-    font-size: 9px;
-  }
-
-  .product-grid {
-    gap: 8px;
-  }
-
-  .product-image {
-    height: 140px;
-  }
-
-  .product-info {
-    padding: 9px 7px 8px;
-  }
-
-  .product-info h3 {
-    font-size: 11px;
-  }
-
-  .product-unit {
-    font-size: 9px;
-  }
-
-  .product-price {
-    font-size: 13px;
-  }
-
-  .product-card .add-btn {
-    min-height: 34px;
-
-    font-size: 10px;
-  }
-
-}
+</html>
