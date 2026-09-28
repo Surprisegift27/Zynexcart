@@ -1209,9 +1209,10 @@
             header.offsetHeight;
 
 
-          bar.style.top =
-            `${headerHeight}px`;
-
+         document.documentElement.style.setProperty(
+  "--zynexcart-header-height",
+  `${headerHeight}px`
+);
         }
 
 
