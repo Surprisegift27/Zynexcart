@@ -55,10 +55,30 @@
 
   <!-- =====================================================
        SAME HEADER AS HOME PAGE
+       DO NOT CHANGE
   ====================================================== -->
 
   <div id="header-component"></div>
 
+
+  <!-- =====================================================
+       STICKY CATEGORY BAR
+  ====================================================== -->
+
+  <div
+    class="products-category-bar"
+    id="productsCategoryBar"
+  >
+
+    <div class="products-category-bar-inner">
+
+      <h1 id="productsPageTitle">
+        All Products
+      </h1>
+
+    </div>
+
+  </div>
 
 
   <!-- =====================================================
@@ -71,65 +91,6 @@
 
 
       <!-- =================================================
-           BREADCRUMB
-      ================================================== -->
-
-      <nav
-        class="products-breadcrumb"
-        aria-label="Breadcrumb"
-      >
-
-        <a href="index.html">
-          Home
-        </a>
-
-        <span aria-hidden="true">
-          ›
-        </span>
-
-        <span id="breadcrumbCategory">
-          All Products
-        </span>
-
-      </nav>
-
-
-
-      <!-- =================================================
-           PAGE HEADING
-      ================================================== -->
-
-      <header class="products-heading">
-
-        <div class="products-heading-content">
-
-          <span class="products-eyebrow">
-            SHOP BY CATEGORY
-          </span>
-
-          <h1 id="productsPageTitle">
-            All Products
-          </h1>
-
-          <p id="productsPageDescription">
-            Shop your daily essentials at ZynexCart.
-          </p>
-
-        </div>
-
-
-        <div
-          class="products-result-count"
-          id="productsCount"
-        >
-          0 products
-        </div>
-
-      </header>
-
-
-
-      <!-- =================================================
            MAIN PRODUCT LAYOUT
       ================================================== -->
 
@@ -137,7 +98,7 @@
 
 
         <!-- =================================================
-             LEFT SIDEBAR
+             LEFT CATEGORY NAVIGATION
         ================================================== -->
 
         <aside
@@ -149,18 +110,18 @@
 
 
             <div class="sidebar-title">
-              Shop
+              Shop All Products
             </div>
 
 
             <nav
               class="subcategory-nav"
               id="subcategoryNav"
-              aria-label="Subcategories"
+              aria-label="Product categories"
             >
 
               <!--
-                Subcategories rendered by JavaScript
+                Categories rendered by JavaScript
               -->
 
             </nav>
@@ -168,7 +129,6 @@
           </div>
 
         </aside>
-
 
 
         <!-- =================================================
@@ -182,7 +142,7 @@
 
 
           <!-- ===============================================
-               TOOLBAR
+               PRODUCT TOOLBAR
           ================================================ -->
 
           <div class="products-toolbar">
@@ -190,25 +150,16 @@
             <div class="products-toolbar-left">
 
               <h2 id="productsSectionTitle">
-                All Products
+                Products
               </h2>
 
-              <span id="productsSectionDescription">
-                Everything you need, delivered fast.
+              <span id="productsToolbarCount">
+                0 products
               </span>
 
             </div>
 
-
-            <span
-              id="productsToolbarCount"
-              class="products-toolbar-left"
-            >
-              0 products
-            </span>
-
           </div>
-
 
 
           <!-- ===============================================
@@ -226,7 +177,6 @@
           </div>
 
 
-
           <!-- ===============================================
                PRODUCT GRID
           ================================================ -->
@@ -237,7 +187,6 @@
           >
             <!-- Products rendered by JavaScript -->
           </div>
-
 
 
           <!-- ===============================================
@@ -284,13 +233,11 @@
   </main>
 
 
-
   <!-- =====================================================
-       FOOTER
+       SAME FOOTER COMPONENT
   ====================================================== -->
 
   <div id="footer-component"></div>
-
 
 
   <!-- =====================================================
@@ -313,7 +260,6 @@
 
       window.__ZYNEXCART_PRODUCTS_PAGE_INITIALIZED__ =
         true;
-
 
 
       /* ===================================================
@@ -382,7 +328,6 @@
         }
 
       }
-
 
 
       /* ===================================================
@@ -457,7 +402,6 @@
       }
 
 
-
       /* ===================================================
          COMPONENTS
       ==================================================== */
@@ -475,7 +419,6 @@
         ]
 
       ];
-
 
 
       /* ===================================================
@@ -508,7 +451,6 @@
         "js/products.js"
 
       ];
-
 
 
       /* ===================================================
@@ -548,24 +490,37 @@
       }
 
 
-
       /* ===================================================
          CATEGORY DATA
       ==================================================== */
+
+      function getCategories() {
+
+        if (
+          Array.isArray(
+            window.ZynexCartCategories
+          )
+        ) {
+
+          return window.ZynexCartCategories;
+
+        }
+
+        return [];
+
+      }
+
 
       function getCategory(
         categoryId
       ) {
 
-        const categories =
-          Array.isArray(
-            window.ZynexCartCategories
-          )
-            ? window.ZynexCartCategories
-            : [];
+        if (!categoryId) {
+          return null;
+        }
 
 
-        return categories.find(
+        return getCategories().find(
           function (category) {
 
             return (
@@ -579,53 +534,145 @@
       }
 
 
-
       /* ===================================================
-         GET PRODUCTS
+         PRODUCT DATA
       ==================================================== */
 
-      function getCategoryProducts(
-        categoryId
-      ) {
+      function getAllProducts() {
 
-        if (!categoryId) {
-
-          return Array.isArray(
-            window.products
+        if (
+          window.ZynexCartProducts &&
+          Array.isArray(
+            window.ZynexCartProducts.products
           )
-            ? window.products
-            : [];
+        ) {
+
+          return window.ZynexCartProducts.products;
 
         }
 
 
-        const list =
+        if (
           Array.isArray(
             window.products
           )
-            ? window.products
-            : [];
+        ) {
+
+          return window.products;
+
+        }
 
 
-        return list.filter(
-          function (product) {
-
-            return (
-              String(
-                product.categoryId || ""
-              ) ===
-              String(categoryId)
-            );
-
-          }
-        );
+        return [];
 
       }
 
 
+      function getProductsForPage() {
+
+        const {
+          category,
+          subcategory,
+          search
+        } =
+          getUrlParams();
+
+
+        let list =
+          getAllProducts();
+
+
+        /* -----------------------------------------------
+           MAIN CATEGORY
+        ------------------------------------------------ */
+
+        if (category) {
+
+          list =
+            list.filter(
+              function (product) {
+
+                return (
+                  String(
+                    product.categoryId || ""
+                  ) ===
+                  String(category)
+                );
+
+              }
+            );
+
+        }
+
+
+        /* -----------------------------------------------
+           SUBCATEGORY
+        ------------------------------------------------ */
+
+        if (subcategory) {
+
+          list =
+            list.filter(
+              function (product) {
+
+                return (
+                  String(
+                    product.subcategoryId || ""
+                  ) ===
+                  String(subcategory)
+                );
+
+              }
+            );
+
+        }
+
+
+        /* -----------------------------------------------
+           SEARCH
+        ------------------------------------------------ */
+
+        if (search) {
+
+          const query =
+            search.toLowerCase();
+
+
+          list =
+            list.filter(
+              function (product) {
+
+                const searchableText = [
+
+                  product.name,
+                  product.category,
+                  product.categoryId,
+                  product.subcategoryId,
+                  product.unit
+
+                ]
+                  .filter(Boolean)
+                  .join(" ")
+                  .toLowerCase();
+
+
+                return searchableText.includes(
+                  query
+                );
+
+              }
+            );
+
+        }
+
+
+        return list;
+
+      }
+
 
       /* ===================================================
-         SUBCATEGORY NAVIGATION
+         RENDER CATEGORY NAVIGATION
       ==================================================== */
 
       function renderSubcategoryNavigation() {
@@ -710,6 +757,10 @@
         );
 
 
+        /* -----------------------------------------------
+           SELECTED CATEGORY SUBCATEGORIES
+        ------------------------------------------------ */
+
         if (
           !selectedCategory ||
           !Array.isArray(
@@ -781,12 +832,11 @@
       }
 
 
-
       /* ===================================================
-         PAGE INFORMATION
+         PAGE TITLE
       ==================================================== */
 
-      function updatePageInformation() {
+      function getDisplayCategoryName() {
 
         const {
           category,
@@ -801,65 +851,11 @@
           );
 
 
-        const title =
-          document.getElementById(
-            "productsPageTitle"
-          );
-
-
-        const description =
-          document.getElementById(
-            "productsPageDescription"
-          );
-
-
-        const breadcrumb =
-          document.getElementById(
-            "breadcrumbCategory"
-          );
-
-
-        const sectionTitle =
-          document.getElementById(
-            "productsSectionTitle"
-          );
-
-
-        const sectionDescription =
-          document.getElementById(
-            "productsSectionDescription"
-          );
-
-
         if (!selectedCategory) {
 
-          if (title) {
-            title.textContent =
-              "All Products";
-          }
-
-          if (description) {
-            description.textContent =
-              "Shop your daily essentials at ZynexCart.";
-          }
-
-          if (breadcrumb) {
-            breadcrumb.textContent =
-              "All Products";
-          }
-
-          if (sectionTitle) {
-            sectionTitle.textContent =
-              "All Products";
-          }
-
-          return;
+          return "All Products";
 
         }
-
-
-        let displayName =
-          selectedCategory.name;
 
 
         if (
@@ -884,34 +880,43 @@
 
           if (selectedSubcategory) {
 
-            displayName =
-              selectedSubcategory.name;
+            return selectedSubcategory.name;
 
           }
 
         }
 
 
+        return selectedCategory.name;
+
+      }
+
+
+      /* ===================================================
+         UPDATE PAGE TITLE
+      ==================================================== */
+
+      function updatePageInformation() {
+
+        const displayName =
+          getDisplayCategoryName();
+
+
+        const title =
+          document.getElementById(
+            "productsPageTitle"
+          );
+
+
+        const sectionTitle =
+          document.getElementById(
+            "productsSectionTitle"
+          );
+
+
         if (title) {
 
           title.textContent =
-            displayName;
-
-        }
-
-
-        if (description) {
-
-          description.textContent =
-            selectedCategory.description ||
-            "Shop everyday essentials at ZynexCart.";
-
-        }
-
-
-        if (breadcrumb) {
-
-          breadcrumb.textContent =
             displayName;
 
         }
@@ -925,127 +930,17 @@
         }
 
 
-        if (sectionDescription) {
-
-          sectionDescription.textContent =
-            "Everything you need, delivered fast.";
-
-        }
+        document.title =
+          `${displayName} — ZynexCart`;
 
       }
 
 
-
       /* ===================================================
-         UPDATE PRODUCT COUNT
+         RENDER PRODUCTS
       ==================================================== */
 
-      function updateProductCount() {
-
-        const grid =
-          document.getElementById(
-            "productsGrid"
-          );
-
-
-        if (!grid) {
-          return;
-        }
-
-
-        const cards =
-          grid.querySelectorAll(
-            ".product-card"
-          );
-
-
-        const count =
-          cards.length;
-
-
-        const text =
-          `${count} ${
-            count === 1
-              ? "product"
-              : "products"
-          }`;
-
-
-        const topCount =
-          document.getElementById(
-            "productsCount"
-          );
-
-
-        const toolbarCount =
-          document.getElementById(
-            "productsToolbarCount"
-          );
-
-
-        if (topCount) {
-
-          topCount.textContent =
-            text;
-
-        }
-
-
-        if (toolbarCount) {
-
-          toolbarCount.textContent =
-            text;
-
-        }
-
-      }
-
-
-
-      /* ===================================================
-         APPLY SUBCATEGORY FILTER
-      ==================================================== */
-
-      function filterSubcategory() {
-
-        const {
-          category,
-          subcategory
-        } =
-          getUrlParams();
-
-
-        if (
-          !category ||
-          !subcategory ||
-          !Array.isArray(
-            window.products
-          )
-        ) {
-
-          return;
-
-        }
-
-
-        const filteredProducts =
-          window.products.filter(
-            function (product) {
-
-              return (
-                String(
-                  product.categoryId || ""
-                ) ===
-                String(category)
-              ) &&
-                String(
-                  product.subcategoryId || ""
-                ) ===
-                String(subcategory);
-
-            }
-          );
-
+      function renderProducts() {
 
         const grid =
           document.getElementById(
@@ -1059,35 +954,294 @@
           );
 
 
+        const emptyMessage =
+          document.getElementById(
+            "noProductsMessage"
+          );
+
+
         if (!grid) {
           return;
         }
 
 
-        /*
-         * Subcategory filtering will use the
-         * existing product renderer once
-         * product data contains subcategoryId.
-         *
-         * Do not create fake products here.
-         */
+        const list =
+          getProductsForPage();
+
+
+        /* -----------------------------------------------
+           EMPTY
+        ------------------------------------------------ */
 
         if (
-          filteredProducts.length === 0
+          list.length === 0
         ) {
 
-          /*
-           * Keep the existing category products
-           * visible until subcategory mapping
-           * is available.
-           */
+          grid.innerHTML =
+            "";
+
+
+          if (empty) {
+
+            empty.style.display =
+              "flex";
+
+          }
+
+
+          if (emptyMessage) {
+
+            emptyMessage.textContent =
+              "No products are currently available in this section.";
+
+          }
+
+
+          updateProductCount(
+            0
+          );
 
           return;
 
         }
 
+
+        /* -----------------------------------------------
+           PRODUCTS
+        ------------------------------------------------ */
+
+        grid.innerHTML =
+          list
+            .map(
+              function (product) {
+
+                if (
+                  window.ZynexCartProducts &&
+                  typeof
+                    window.ZynexCartProducts.createProductCard ===
+                    "function"
+                ) {
+
+                  return window.ZynexCartProducts.createProductCard(
+                    product
+                  );
+
+                }
+
+
+                return "";
+
+              }
+            )
+            .join("");
+
+
+        if (empty) {
+
+          empty.style.display =
+            "none";
+
+        }
+
+
+        updateProductCount(
+          list.length
+        );
+
+
+        /* -----------------------------------------------
+           RECONNECT PRODUCT CONTROLS
+        ------------------------------------------------ */
+
+        if (
+          typeof setupProductControls ===
+          "function"
+        ) {
+
+          setupProductControls();
+
+        }
+
+
+        if (
+          window.ZynexCartProducts &&
+          typeof
+            window.ZynexCartProducts.syncProductButtons ===
+            "function"
+        ) {
+
+          window.ZynexCartProducts.syncProductButtons();
+
+        }
+
       }
 
+
+      /* ===================================================
+         PRODUCT COUNT
+      ==================================================== */
+
+      function updateProductCount(
+        count
+      ) {
+
+        const safeCount =
+          Number.isFinite(
+            Number(count)
+          )
+            ? Number(count)
+            : 0;
+
+
+        const text =
+          `${safeCount} ${
+            safeCount === 1
+              ? "product"
+              : "products"
+          }`;
+
+
+        const toolbarCount =
+          document.getElementById(
+            "productsToolbarCount"
+          );
+
+
+        if (toolbarCount) {
+
+          toolbarCount.textContent =
+            text;
+
+        }
+
+      }
+
+
+      /* ===================================================
+         SEARCH RESULT
+      ==================================================== */
+
+      function updateSearchResult() {
+
+        const {
+          search
+        } =
+          getUrlParams();
+
+
+        const info =
+          document.getElementById(
+            "searchResultInfo"
+          );
+
+
+        const text =
+          document.getElementById(
+            "searchResultText"
+          );
+
+
+        if (
+          !search
+        ) {
+
+          if (info) {
+
+            info.hidden =
+              true;
+
+          }
+
+          return;
+
+        }
+
+
+        if (info) {
+
+          info.hidden =
+            false;
+
+        }
+
+
+        if (text) {
+
+          text.textContent =
+            `Showing results for "${search}"`;
+
+        }
+
+      }
+
+
+      /* ===================================================
+         STICKY CATEGORY BAR
+      ==================================================== */
+
+      function setupCategoryBar() {
+
+        const bar =
+          document.getElementById(
+            "productsCategoryBar"
+          );
+
+
+        const header =
+          document.getElementById(
+            "header-component"
+          );
+
+
+        if (
+          !bar ||
+          !header
+        ) {
+
+          return;
+
+        }
+
+
+        function updatePosition() {
+
+          const headerHeight =
+            header.offsetHeight;
+
+
+          bar.style.top =
+            `${headerHeight}px`;
+
+        }
+
+
+        updatePosition();
+
+
+        window.addEventListener(
+          "resize",
+          updatePosition
+        );
+
+      }
+
+
+      /* ===================================================
+         CART UPDATE
+      ==================================================== */
+
+      function setupCartListener() {
+
+        document.addEventListener(
+          "zynexcart:cartUpdated",
+          function () {
+
+            renderProducts();
+
+          }
+        );
+
+      }
 
 
       /* ===================================================
@@ -1100,7 +1254,7 @@
 
 
           /* -----------------------------------------------
-             1. LOAD HEADER + FOOTER
+             1. LOAD SAME HEADER + FOOTER
           ------------------------------------------------ */
 
           await Promise.all(
@@ -1135,86 +1289,45 @@
 
 
           /* -----------------------------------------------
-             3. PAGE UI
+             3. PAGE INFORMATION
           ------------------------------------------------ */
 
           updatePageInformation();
+
+
+          /* -----------------------------------------------
+             4. CATEGORY NAVIGATION
+          ------------------------------------------------ */
 
           renderSubcategoryNavigation();
 
 
           /* -----------------------------------------------
-             4. WAIT FOR PRODUCT RENDER
+             5. PRODUCTS
           ------------------------------------------------ */
 
-          setTimeout(
-            function () {
-
-              filterSubcategory();
-
-              updateProductCount();
-
-            },
-            50
-          );
+          renderProducts();
 
 
           /* -----------------------------------------------
-             5. CART UPDATE
+             6. SEARCH
           ------------------------------------------------ */
 
-          document.addEventListener(
-            "zynexcart:cartUpdated",
-            function () {
-
-              updateProductCount();
-
-            }
-          );
+          updateSearchResult();
 
 
           /* -----------------------------------------------
-             6. SEARCH RESULT
+             7. STICKY CATEGORY BAR
           ------------------------------------------------ */
 
-          const {
-            search
-          } =
-            getUrlParams();
+          setupCategoryBar();
 
 
-          if (
-            search
-          ) {
+          /* -----------------------------------------------
+             8. CART
+          ------------------------------------------------ */
 
-            const info =
-              document.getElementById(
-                "searchResultInfo"
-              );
-
-
-            const text =
-              document.getElementById(
-                "searchResultText"
-              );
-
-
-            if (info) {
-
-              info.hidden =
-                false;
-
-            }
-
-
-            if (text) {
-
-              text.textContent =
-                `Showing results for "${search}"`;
-
-            }
-
-          }
+          setupCartListener();
 
 
           console.log(
@@ -1232,7 +1345,6 @@
         }
 
       }
-
 
 
       /* ===================================================
