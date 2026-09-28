@@ -26,11 +26,8 @@
 
 .products-category-bar {
   position: sticky;
-  top: 0;
+  top: var(--zynexcart-header-height, 0px);
   z-index: 800;
-
-  width: 100%;
-  min-height: 54px;
 
   display: flex;
   align-items: center;
@@ -757,14 +754,14 @@
      STICKY CATEGORY TITLE
   ----------------------------------------- */
 
-  .products-category-bar {
-    min-height: 54px;
+ .products-category-bar {
+  min-height: 54px;
 
-    position: sticky;
-    top: 0;
+  position: sticky;
+  top: var(--zynexcart-header-height, 0px);
 
-    z-index: 800;
-  }
+  z-index: 800;
+}
 
   .products-category-bar-inner {
     width: calc(100% - 24px);
