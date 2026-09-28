@@ -1652,12 +1652,307 @@ function displayFeaturedProducts() {
     return;
   }
 
-  container.innerHTML = products
-    .slice(0, 8)
-    .map(createProductCard)
-    .join("");
+  container.innerHTML =
+    products
+      .slice(0, 8)
+      .map(createProductCard)
+      .join("");
 
   setupProductControls();
+
+}
+
+
+/* =========================================
+   GET PRODUCTS PAGE FILTER
+========================================= */
+
+function getProductsPageFilter() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  return {
+    category:
+      (
+        params.get("category") ||
+        ""
+      ).trim(),
+
+    subcategory:
+      (
+        params.get("subcategory") ||
+        ""
+      ).trim(),
+
+    search:
+      (
+        params.get("search") ||
+        ""
+      ).trim()
+      .toLowerCase()
+  };
+
+}
+
+
+/* =========================================
+   GET FILTERED PRODUCTS
+========================================= */
+
+function getFilteredProducts() {
+
+  const {
+    category,
+    subcategory,
+    search
+  } = getProductsPageFilter();
+
+
+  let filtered =
+    products.slice();
+
+
+  /* -----------------------------------------
+     MAIN CATEGORY
+  ----------------------------------------- */
+
+  if (category) {
+
+    filtered =
+      filtered.filter(
+        product =>
+          String(
+            product.categoryId || ""
+          ) ===
+          String(category)
+      );
+
+  }
+
+
+  /* -----------------------------------------
+     SUBCATEGORY
+  ----------------------------------------- */
+
+  if (subcategory) {
+
+    filtered =
+      filtered.filter(
+        product =>
+          String(
+            product.subcategoryId || ""
+          ) ===
+          String(subcategory)
+      );
+
+  }
+
+
+  /* -----------------------------------------
+     SEARCH
+  ----------------------------------------- */
+
+  if (search) {
+
+    filtered =
+      filtered.filter(
+        product => {
+
+          const name =
+            String(
+              product.name || ""
+            ).toLowerCase();
+
+          const categoryName =
+            String(
+              product.category || ""
+            ).toLowerCase();
+
+          const unit =
+            String(
+              product.unit || ""
+            ).toLowerCase();
+
+
+          return (
+            name.includes(search) ||
+            categoryName.includes(search) ||
+            unit.includes(search)
+          );
+
+        }
+      );
+
+  }
+
+
+  return filtered;
+
+}
+
+
+/* =========================================
+   DISPLAY PRODUCTS PAGE
+========================================= */
+
+function displayProductsPage() {
+
+  const container =
+    document.getElementById(
+      "productsGrid"
+    );
+
+
+  if (!container) {
+    return false;
+  }
+
+
+  const filteredProducts =
+    getFilteredProducts();
+
+
+  container.innerHTML =
+    filteredProducts
+      .map(createProductCard)
+      .join("");
+
+
+  updateProductsPageEmptyState(
+    filteredProducts
+  );
+
+
+  setupProductControls();
+
+
+  updateProductsPageCount(
+    filteredProducts.length
+  );
+
+
+  return true;
+
+}
+
+
+/* =========================================
+   PRODUCTS PAGE EMPTY STATE
+========================================= */
+
+function updateProductsPageEmptyState(
+  filteredProducts
+) {
+
+  const emptyState =
+    document.getElementById(
+      "noProducts"
+    );
+
+
+  const message =
+    document.getElementById(
+      "noProductsMessage"
+    );
+
+
+  if (!emptyState) {
+    return;
+  }
+
+
+  if (
+    filteredProducts.length === 0
+  ) {
+
+    emptyState.style.display =
+      "flex";
+
+
+    if (message) {
+
+      const {
+        search,
+        subcategory
+      } =
+        getProductsPageFilter();
+
+
+      if (search) {
+
+        message.textContent =
+          `No products found for "${search}".`;
+
+      } else if (subcategory) {
+
+        message.textContent =
+          "No products are currently available in this subcategory.";
+
+      } else {
+
+        message.textContent =
+          "No products are currently available in this category.";
+
+      }
+
+    }
+
+    return;
+
+  }
+
+
+  emptyState.style.display =
+    "none";
+
+}
+
+
+/* =========================================
+   PRODUCTS PAGE COUNT
+========================================= */
+
+function updateProductsPageCount(
+  count
+) {
+
+  const text =
+    `${count} ${
+      count === 1
+        ? "product"
+        : "products"
+    }`;
+
+
+  const topCount =
+    document.getElementById(
+      "productsCount"
+    );
+
+
+  const toolbarCount =
+    document.getElementById(
+      "productsToolbarCount"
+    );
+
+
+  if (topCount) {
+
+    topCount.textContent =
+      text;
+
+  }
+
+
+  if (toolbarCount) {
+
+    toolbarCount.textContent =
+      text;
+
+  }
 
 }
 
@@ -1672,13 +1967,18 @@ function createQuantityControl(
 ) {
 
   const quantityControl =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   quantityControl.className =
     "add-btn added";
 
+
   quantityControl.dataset.productId =
     product.id;
+
 
   quantityControl.innerHTML = `
 
@@ -1709,6 +2009,7 @@ function createQuantityControl(
 
   `;
 
+
   return quantityControl;
 
 }
@@ -1718,17 +2019,26 @@ function createQuantityControl(
    REFRESH PRODUCT BUTTON
 ========================================= */
 
-function refreshProductButton(productId) {
+function refreshProductButton(
+  productId
+) {
 
   const product =
-    getProductById(productId);
+    getProductById(
+      productId
+    );
+
 
   if (!product) {
     return;
   }
 
+
   const quantity =
-    getProductQuantity(productId);
+    getProductQuantity(
+      productId
+    );
+
 
   const controls =
     document.querySelectorAll(
@@ -1736,71 +2046,99 @@ function refreshProductButton(productId) {
     );
 
 
-  controls.forEach(control => {
+  controls.forEach(
+    control => {
 
-    if (quantity <= 0) {
+      if (quantity <= 0) {
 
-      if (
-        control.tagName === "BUTTON" &&
-        !control.classList.contains("added")
-      ) {
-        return;
-      }
-
-      const addButton =
-        document.createElement("button");
-
-      addButton.type = "button";
-
-      addButton.className = "add-btn";
-
-      addButton.dataset.productId =
-        productId;
-
-      addButton.textContent = "ADD";
-
-      control.replaceWith(addButton);
-
-      setupSingleProductControl(
-        addButton
-      );
-
-      return;
-    }
+        if (
+          control.tagName === "BUTTON" &&
+          !control.classList.contains("added")
+        ) {
+          return;
+        }
 
 
-    if (
-      control.classList.contains("added")
-    ) {
+        const addButton =
+          document.createElement(
+            "button"
+          );
 
-      const number =
-        control.querySelector(
-          ".qty-number"
+
+        addButton.type =
+          "button";
+
+
+        addButton.className =
+          "add-btn";
+
+
+        addButton.dataset.productId =
+          productId;
+
+
+        addButton.textContent =
+          "ADD";
+
+
+        control.replaceWith(
+          addButton
         );
 
-      if (number) {
-        number.textContent = quantity;
+
+        setupSingleProductControl(
+          addButton
+        );
+
+
+        return;
+
       }
 
-      return;
-    }
+
+      if (
+        control.classList.contains(
+          "added"
+        )
+      ) {
+
+        const number =
+          control.querySelector(
+            ".qty-number"
+          );
 
 
-    const quantityControl =
-      createQuantityControl(
-        product,
-        quantity
+        if (number) {
+
+          number.textContent =
+            quantity;
+
+        }
+
+
+        return;
+
+      }
+
+
+      const quantityControl =
+        createQuantityControl(
+          product,
+          quantity
+        );
+
+
+      control.replaceWith(
+        quantityControl
       );
 
-    control.replaceWith(
-      quantityControl
-    );
 
-    setupSingleProductControl(
-      quantityControl
-    );
+      setupSingleProductControl(
+        quantityControl
+      );
 
-  });
+    }
+  );
 
 }
 
@@ -1820,8 +2158,14 @@ function setupSingleProductControl(
     return;
   }
 
-  control.dataset.bound = "true";
 
+  control.dataset.bound =
+    "true";
+
+
+  /* -----------------------------------------
+     ADD BUTTON
+  ----------------------------------------- */
 
   if (
     control.tagName === "BUTTON" &&
@@ -1830,37 +2174,54 @@ function setupSingleProductControl(
 
     control.addEventListener(
       "click",
-      () => {
+      function () {
 
         const productId =
           Number(
             control.dataset.productId
           );
 
+
         const product =
-          getProductById(productId);
+          getProductById(
+            productId
+          );
+
 
         if (!product) {
           return;
         }
 
-        addToCart(product);
+
+        addToCart(
+          product
+        );
+
 
         refreshProductButton(
           productId
         );
+
 
         updateCartCount();
 
       }
     );
 
+
     return;
+
   }
 
 
+  /* -----------------------------------------
+     QUANTITY CONTROL
+  ----------------------------------------- */
+
   if (
-    !control.classList.contains("added")
+    !control.classList.contains(
+      "added"
+    )
   ) {
     return;
   }
@@ -1868,20 +2229,15 @@ function setupSingleProductControl(
 
   control.addEventListener(
     "click",
-    event => {
+    function (event) {
 
       const actionButton =
         event.target.closest(
           "button.qty-minus, button.qty-plus"
         );
 
-      if (!actionButton) {
-        return;
-      }
 
-      if (
-        !control.contains(actionButton)
-      ) {
+      if (!actionButton) {
         return;
       }
 
@@ -1891,13 +2247,19 @@ function setupSingleProductControl(
           control.dataset.productId
         );
 
+
       const product =
-        getProductById(productId);
+        getProductById(
+          productId
+        );
+
 
       if (!product) {
         return;
       }
 
+
+      /* PLUS */
 
       if (
         actionButton.classList.contains(
@@ -1905,17 +2267,25 @@ function setupSingleProductControl(
         )
       ) {
 
-        addToCart(product);
+        addToCart(
+          product
+        );
+
 
         refreshProductButton(
           productId
         );
 
+
         updateCartCount();
 
+
         return;
+
       }
 
+
+      /* MINUS */
 
       if (
         actionButton.classList.contains(
@@ -1928,9 +2298,11 @@ function setupSingleProductControl(
           -1
         );
 
+
         refreshProductButton(
           productId
         );
+
 
         updateCartCount();
 
@@ -1953,13 +2325,16 @@ function setupProductControls() {
       ".add-btn[data-product-id]"
     );
 
-  controls.forEach(control => {
 
-    setupSingleProductControl(
-      control
-    );
+  controls.forEach(
+    control => {
 
-  });
+      setupSingleProductControl(
+        control
+      );
+
+    }
+  );
 
 }
 
@@ -1975,21 +2350,30 @@ function syncProductButtons() {
       ".add-btn[data-product-id]"
     );
 
+
   const productIds =
     new Set();
 
-  controls.forEach(control => {
 
-    const productId =
-      Number(
-        control.dataset.productId
-      );
+  controls.forEach(
+    control => {
 
-    if (productId) {
-      productIds.add(productId);
+      const productId =
+        Number(
+          control.dataset.productId
+        );
+
+
+      if (productId) {
+
+        productIds.add(
+          productId
+        );
+
+      }
+
     }
-
-  });
+  );
 
 
   productIds.forEach(
@@ -2006,12 +2390,34 @@ function syncProductButtons() {
 
 
 /* =========================================
+   UPDATE PRODUCTS PAGE
+========================================= */
+
+function refreshProductsPage() {
+
+  const grid =
+    document.getElementById(
+      "productsGrid"
+    );
+
+
+  if (!grid) {
+    return;
+  }
+
+
+  displayProductsPage();
+
+}
+
+
+/* =========================================
    CART UPDATE LISTENER
 ========================================= */
 
 document.addEventListener(
   "zynexcart:cartUpdated",
-  () => {
+  function () {
 
     syncProductButtons();
 
@@ -2027,8 +2433,21 @@ document.addEventListener(
 
 function initProducts() {
 
+  /*
+   * Home page
+   */
   displayFeaturedProducts();
 
+
+  /*
+   * Products page
+   */
+  displayProductsPage();
+
+
+  /*
+   * Header cart
+   */
   updateCartCount();
 
 }
@@ -2039,31 +2458,58 @@ function initProducts() {
 ========================================= */
 
 window.ZynexCartProducts = {
+
   products,
+
   getProductById,
+
   getProductsByCategory,
+
   getProductsBySubcategory,
+
   formatCategory,
+
   createProductCard,
+
+  getFilteredProducts,
+
+  displayProductsPage,
+
+  refreshProductsPage,
+
   refreshProductButton,
+
   syncProductButtons
+
 };
 
 
 /* =========================================
-   SUPPORT BOTH:
+   GLOBAL PRODUCTS ACCESS
+========================================= */
 
-   1. NORMAL PAGE LOADING
-   2. DYNAMICALLY LOADED COMPONENTS
+window.products =
+  products;
+
+
+/* =========================================
+   SUPPORT:
+
+   1. NORMAL PAGE
+   2. DYNAMIC COMPONENTS
 ========================================= */
 
 if (
-  document.readyState === "loading"
+  document.readyState ===
+  "loading"
 ) {
 
   document.addEventListener(
     "DOMContentLoaded",
-    initProducts
+    initProducts,
+    {
+      once: true
+    }
   );
 
 } else {
