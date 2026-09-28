@@ -1,6 +1,14 @@
 /* =========================================
    ZYNEXCART — PRODUCTS PAGE
    Professional Quick-Commerce Category Layout
+
+   IMPORTANT:
+   - Header is untouched
+   - Categories are untouched
+   - Product data is untouched
+   - Existing cart controls are untouched
+   - Desktop / Laptop / Tablet = 5 products
+   - Mobile = 2 products
 ========================================= */
 
 
@@ -12,9 +20,9 @@
   width: 100%;
 
   /*
-    Main header is fixed.
-    Category title is fixed directly below it.
-    Content starts below both.
+    Fixed main header
+    +
+    Fixed category title bar
   */
   padding:
     calc(
@@ -32,7 +40,7 @@
 
 /* =========================================
    FIXED CATEGORY TITLE
-   Always directly below main header
+   DO NOT CHANGE CATEGORY SYSTEM
 ========================================= */
 
 .products-category-bar {
@@ -124,11 +132,12 @@
 
 /* =========================================
    LEFT CATEGORY NAVIGATION
+   EXISTING CATEGORY SYSTEM PRESERVED
 ========================================= */
 
 .products-sidebar {
-  min-width: 0;
   width: 100%;
+  min-width: 0;
 }
 
 .products-sidebar-inner {
@@ -170,6 +179,7 @@
 
 /* =========================================
    CATEGORY LIST
+   NO CATEGORY DESIGN CHANGE
 ========================================= */
 
 .subcategory-nav {
@@ -326,18 +336,9 @@
    PRODUCT TOOLBAR
 ========================================= */
 
-.products-toolbar {
-  display: none;
-}
-
-.products-toolbar-left {
-  display: none;
-}
-
-.products-toolbar h2 {
-  display: none;
-}
-
+.products-toolbar,
+.products-toolbar-left,
+.products-toolbar h2,
 .products-toolbar-left span {
   display: none;
 }
@@ -360,11 +361,12 @@
 
 /* =========================================
    PRODUCT GRID
-   Desktop / Laptop / Tablet = EXACTLY 5
+   DESKTOP / LAPTOP / TABLET = EXACTLY 5
 ========================================= */
 
 .product-grid {
   width: 100%;
+  min-width: 0;
 
   display: grid;
 
@@ -374,7 +376,6 @@
   gap: 16px;
 
   margin: 0;
-
   padding: 0;
 }
 
@@ -386,6 +387,7 @@
 .product-card {
   position: relative;
 
+  width: 100%;
   min-width: 0;
 
   display: flex;
@@ -464,7 +466,6 @@
 /* =========================================
    PRODUCT CATEGORY LABEL
    COMPLETELY HIDDEN
-   GROCERY / PAAN / SWEET TOOTH ETC.
 ========================================= */
 
 .product-category {
@@ -478,6 +479,7 @@
 
 .product-info {
   flex: 1;
+  min-width: 0;
 
   display: flex;
   flex-direction: column;
@@ -559,6 +561,7 @@
 
 /* =========================================
    ADD BUTTON
+   EXISTING FUNCTIONALITY PRESERVED
 ========================================= */
 
 .product-card .add-btn {
@@ -591,6 +594,11 @@
 
   cursor: pointer;
 
+  pointer-events: auto;
+
+  position: relative;
+  z-index: 2;
+
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
@@ -612,6 +620,7 @@
 
 /* =========================================
    QUANTITY CONTROL
+   EXISTING + / − STRUCTURE PRESERVED
 ========================================= */
 
 .product-card .add-btn.added {
@@ -667,6 +676,11 @@
   line-height: 1;
 
   cursor: pointer;
+
+  pointer-events: auto;
+
+  position: relative;
+  z-index: 3;
 }
 
 .product-card .qty-minus:hover,
@@ -685,6 +699,8 @@
   font-size: 14px;
 
   font-weight: 900;
+
+  pointer-events: none;
 }
 
 
@@ -800,7 +816,6 @@
   .product-price {
     font-size: 15px;
   }
-
 }
 
 
@@ -851,13 +866,11 @@
 
   .product-discount {
     font-size: 8px;
-
     padding: 2px 4px;
   }
 
   .product-card .add-btn {
     min-height: 36px;
-
     font-size: 11px;
   }
 
@@ -868,16 +881,14 @@
   .subcategory-image {
     width: 48px;
     height: 48px;
-
     flex-basis: 48px;
   }
-
 }
 
 
 /* =========================================
    MOBILE
-   EXACTLY 2 PRODUCTS PER ROW
+   LEFT CATEGORY + EXACTLY 2 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 650px) {
@@ -885,11 +896,6 @@
   .products-page {
     width: 100%;
 
-    /*
-      Fixed header
-      +
-      Fixed category title
-    */
     padding:
       calc(
         var(--zynexcart-header-height, 0px) + 54px
@@ -904,7 +910,8 @@
 
 
   /* =======================================
-     FIXED CATEGORY TITLE
+     CATEGORY TITLE
+     FIXED BELOW EXISTING HEADER
   ======================================= */
 
   .products-category-bar {
@@ -961,6 +968,8 @@
 
   /* =======================================
      MOBILE LAYOUT
+     LEFT = CATEGORY
+     RIGHT = PRODUCTS
   ======================================= */
 
   .products-layout {
@@ -968,10 +977,6 @@
 
     display: grid;
 
-    /*
-      Left = category navigation
-      Right = products
-    */
     grid-template-columns:
       86px minmax(0, 1fr);
 
@@ -982,7 +987,7 @@
 
 
   /* =======================================
-     LEFT CATEGORY SIDEBAR
+     LEFT CATEGORY
   ======================================= */
 
   .products-sidebar {
@@ -1009,7 +1014,6 @@
     overflow: hidden;
 
     border: 0;
-
     border-radius: 0;
 
     background: transparent;
@@ -1102,7 +1106,7 @@
 
 
   /* =======================================
-     PRODUCTS MAIN
+     RIGHT PRODUCT AREA
   ======================================= */
 
   .products-main {
@@ -1115,12 +1119,13 @@
 
 
   /* =======================================
-     PRODUCT GRID
-     EXACTLY 2 COLUMNS
+     MOBILE PRODUCT GRID
+     STRICTLY 2 PRODUCTS PER ROW
   ======================================= */
 
   .product-grid {
     width: 100%;
+    min-width: 0;
 
     display: grid;
 
@@ -1140,7 +1145,6 @@
 
   .product-card {
     width: 100%;
-
     min-width: 0;
 
     border-radius: 14px;
@@ -1161,6 +1165,7 @@
 
   .product-info {
     width: 100%;
+    min-width: 0;
 
     padding: 11px 9px 9px;
 
@@ -1169,7 +1174,7 @@
 
 
   /* =======================================
-     CATEGORY LABEL HIDDEN
+     CATEGORY LABEL
   ======================================= */
 
   .product-category {
@@ -1185,8 +1190,6 @@
     min-height: 0;
 
     margin: 0 0 8px;
-
-    color: var(--navy);
 
     font-size: 13px;
 
@@ -1231,6 +1234,7 @@
 
   /* =======================================
      ADD BUTTON
+     EXISTING CART UI PRESERVED
   ======================================= */
 
   .product-card .add-btn {
@@ -1243,6 +1247,8 @@
     border-radius: 9px;
 
     font-size: 11px;
+
+    pointer-events: auto;
   }
 
   .product-card .add-btn.added {
@@ -1256,9 +1262,11 @@
     width: 28px;
     height: 28px;
 
-    flex-basis: 28px;
+    flex: 0 0 28px;
 
     font-size: 17px;
+
+    pointer-events: auto;
   }
 
   .product-card .qty-number {
@@ -1266,12 +1274,12 @@
 
     font-size: 12px;
   }
-
 }
 
 
 /* =========================================
    VERY SMALL MOBILE
+   STILL EXACTLY 2 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 380px) {
@@ -1313,7 +1321,12 @@
     font-size: 9px;
   }
 
+
+  /* RIGHT SIDE = ALWAYS 2 */
   .product-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
     gap: 8px;
   }
 
@@ -1343,4 +1356,19 @@
     font-size: 10px;
   }
 
+  .product-card .qty-minus,
+  .product-card .qty-plus {
+    width: 26px;
+    height: 26px;
+
+    flex-basis: 26px;
+
+    font-size: 16px;
+  }
+
+  .product-card .qty-number {
+    min-width: 21px;
+
+    font-size: 11px;
+  }
 }
