@@ -1,6 +1,6 @@
 /* =========================================
    ZYNEXCART — PRODUCTS PAGE
-   Professional Quick-Commerce Category Layout
+   Professional Quick-Commerce Layout
 ========================================= */
 
 
@@ -10,7 +10,7 @@
 
 .products-page {
   width: 100%;
-  padding: var(--zynexcart-header-height, 0px) 0 60px;
+  padding: 0 0 60px;
 }
 
 .products-container {
@@ -21,13 +21,15 @@
 
 /* =========================================
    STICKY CATEGORY TITLE
-   Header ke neeche selected category
 ========================================= */
 
 .products-category-bar {
   position: sticky;
-  top: var(--zynexcart-header-height, 0px);
+  top: var(--zynexcart-header-height, 72px);
   z-index: 800;
+
+  width: 100%;
+  min-height: 54px;
 
   display: flex;
   align-items: center;
@@ -50,11 +52,13 @@
 .products-category-bar h1,
 .products-category-title,
 #productsPageTitle {
+  width: 100%;
+
   margin: 0;
 
   color: var(--navy);
 
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 800;
 
   line-height: 1.3;
@@ -72,6 +76,7 @@
 .products-content {
   width: min(1400px, calc(100% - 40px));
   margin-inline: auto;
+
   padding-top: 22px;
 }
 
@@ -82,8 +87,12 @@
 
 .products-layout {
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
+
+  grid-template-columns:
+    180px minmax(0, 1fr);
+
   align-items: start;
+
   gap: 22px;
 }
 
@@ -98,13 +107,17 @@
 
 .products-sidebar-inner {
   position: sticky;
-  top: 84px;
 
-  max-height: calc(100vh - 105px);
+  top: calc(
+    var(--zynexcart-header-height, 72px) + 68px
+  );
+
+  max-height: calc(100vh - 100px);
 
   overflow: hidden;
 
   background: var(--white);
+
   border: 1px solid var(--border);
   border-radius: 14px;
 
@@ -130,10 +143,11 @@
 
 .subcategory-item {
   width: 100%;
-  min-height: 78px;
+  min-height: 76px;
 
   display: flex;
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
 
@@ -149,6 +163,7 @@
 
   font-size: 12px;
   font-weight: 700;
+
   line-height: 1.25;
 
   text-align: center;
@@ -188,6 +203,7 @@
   border-radius: 12px;
 
   background: #f7f8fa;
+
   border: 1px solid #edf0f3;
 }
 
@@ -234,18 +250,9 @@
    PRODUCT TOOLBAR
 ========================================= */
 
-.products-toolbar {
-  display: none;
-}
-
-.products-toolbar-left {
-  display: none;
-}
-
-.products-toolbar h2 {
-  display: none;
-}
-
+.products-toolbar,
+.products-toolbar-left,
+.products-toolbar h2,
 .products-toolbar-left span {
   display: none;
 }
@@ -267,6 +274,7 @@
 
 /* =========================================
    PRODUCT GRID
+   DESKTOP / TABLET = 5 PRODUCTS
 ========================================= */
 
 .product-grid {
@@ -275,9 +283,9 @@
   display: grid;
 
   grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+    repeat(5, minmax(0, 1fr));
 
-  gap: 16px;
+  gap: 14px;
 }
 
 
@@ -319,12 +327,15 @@
 
 /* =========================================
    PRODUCT IMAGE
+   RESPONSIVE / PROPORTIONAL
 ========================================= */
 
 .product-image {
   position: relative;
 
-  height: 215px;
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
 
   display: flex;
   align-items: center;
@@ -348,15 +359,14 @@
 
   display: block;
 
-  padding: 18px;
+  padding: 12px;
 
   object-fit: contain;
 
   transition: transform 0.3s ease;
 }
 
-.product-card:hover
-.product-image img {
+.product-card:hover .product-image img {
   transform: scale(1.045);
 }
 
@@ -371,43 +381,43 @@
   display: flex;
   flex-direction: column;
 
-  padding: 13px 13px 12px;
+  padding: 11px 11px 10px;
 }
 
 .product-category {
   display: inline-block;
 
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 
   color: #7b8492;
 
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 900;
 
-  letter-spacing: 0.65px;
+  letter-spacing: 0.6px;
 
   text-transform: uppercase;
 }
 
 .product-info h3 {
-  min-height: 21px;
+  min-height: 39px;
 
-  margin: 0 0 4px;
+  margin: 0 0 3px;
 
   color: var(--navy);
 
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
 
   line-height: 1.3;
 }
 
 .product-unit {
-  margin: 0 0 9px;
+  margin: 0 0 7px;
 
   color: var(--muted);
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
 
@@ -416,28 +426,29 @@
 ========================================= */
 
 .product-price-row {
-  min-height: 27px;
+  min-height: 25px;
 
   display: flex;
   align-items: center;
+
   flex-wrap: wrap;
 
-  gap: 6px;
+  gap: 5px;
 
-  margin-bottom: 10px;
+  margin-bottom: 9px;
 }
 
 .product-price {
   color: var(--navy);
 
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 900;
 }
 
 .product-mrp {
   color: #9aa0a9;
 
-  font-size: 11px;
+  font-size: 10px;
 
   text-decoration: line-through;
 }
@@ -450,7 +461,7 @@
   background: var(--success-light);
   color: var(--success);
 
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 900;
 }
 
@@ -461,7 +472,7 @@
 
 .product-card .add-btn {
   width: 100%;
-  min-height: 40px;
+  min-height: 38px;
 
   display: flex;
   align-items: center;
@@ -469,7 +480,7 @@
 
   margin-top: auto;
 
-  padding: 0 10px;
+  padding: 0 9px;
 
   border: 1.5px solid #ffb27d;
   border-radius: 9px;
@@ -477,7 +488,7 @@
   background: var(--white);
   color: var(--primary);
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
 
   cursor: pointer;
@@ -507,7 +518,7 @@
 .product-card .add-btn.added {
   justify-content: space-between;
 
-  min-height: 40px;
+  min-height: 38px;
 
   padding: 3px 5px;
 
@@ -528,10 +539,10 @@
 
 .product-card .qty-minus,
 .product-card .qty-plus {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
 
-  flex: 0 0 32px;
+  flex: 0 0 30px;
 
   display: flex;
   align-items: center;
@@ -545,7 +556,7 @@
   background: transparent;
   color: var(--white);
 
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
 
   line-height: 1;
@@ -559,13 +570,13 @@
 }
 
 .product-card .qty-number {
-  min-width: 28px;
+  min-width: 26px;
 
   text-align: center;
 
   color: var(--white);
 
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 900;
 }
 
@@ -640,65 +651,98 @@
 
 
 /* =========================================
-   TABLET
+   LARGE DESKTOP
 ========================================= */
 
-@media screen and (max-width: 1100px) {
-
-  .products-layout {
-    grid-template-columns:
-      165px minmax(0, 1fr);
-
-    gap: 18px;
-  }
+@media screen and (min-width: 1400px) {
 
   .product-grid {
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-
-    gap: 14px;
+    gap: 16px;
   }
 
-  .product-image {
-    height: 200px;
+  .product-info {
+    padding: 12px;
+  }
+
+  .product-info h3 {
+    font-size: 15px;
   }
 
 }
 
 
 /* =========================================
-   SMALL TABLET
+   TABLET / LAPTOP
+   STILL 5 PRODUCTS
 ========================================= */
 
-@media screen and (max-width: 850px) {
+@media screen and (min-width: 651px) and (max-width: 1100px) {
+
+  .products-container,
+  .products-content,
+  .products-category-bar-inner {
+    width: calc(100% - 28px);
+  }
 
   .products-layout {
     grid-template-columns:
       150px minmax(0, 1fr);
 
-    gap: 15px;
+    gap: 14px;
   }
 
   .product-grid {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      repeat(5, minmax(0, 1fr));
 
-    gap: 12px;
-  }
-
-  .product-image {
-    height: 200px;
+    gap: 8px;
   }
 
   .subcategory-item {
-    min-height: 74px;
+    min-height: 70px;
   }
 
   .subcategory-image {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
 
-    flex-basis: 48px;
+    flex-basis: 46px;
+  }
+
+  .product-info {
+    padding: 8px 7px;
+  }
+
+  .product-category {
+    font-size: 7px;
+  }
+
+  .product-info h3 {
+    min-height: 34px;
+
+    font-size: 11px;
+  }
+
+  .product-unit {
+    font-size: 9px;
+  }
+
+  .product-price {
+    font-size: 13px;
+  }
+
+  .product-mrp {
+    font-size: 8px;
+  }
+
+  .product-discount {
+    font-size: 7px;
+  }
+
+  .product-card .add-btn {
+    min-height: 34px;
+
+    font-size: 10px;
   }
 
 }
@@ -706,12 +750,12 @@
 
 /* =========================================
    MOBILE
+   ALWAYS 2 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 650px) {
 
   .products-page {
-    padding-top: var(--zynexcart-header-height, 0px);
     padding-bottom: 40px;
   }
 
@@ -721,13 +765,14 @@
 
 
   /* -----------------------------------------
-     STICKY CATEGORY TITLE
+     CATEGORY TITLE
   ----------------------------------------- */
 
   .products-category-bar {
     min-height: 54px;
 
     position: sticky;
+
     top: var(--zynexcart-header-height, 0px);
 
     z-index: 800;
@@ -740,7 +785,7 @@
   .products-category-bar h1,
   .products-category-title,
   #productsPageTitle {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 800;
 
     line-height: 1.25;
@@ -775,7 +820,7 @@
 
 
   /* -----------------------------------------
-     LEFT CATEGORY SIDEBAR
+     MOBILE SIDEBAR
   ----------------------------------------- */
 
   .products-sidebar {
@@ -785,7 +830,9 @@
   .products-sidebar-inner {
     position: sticky;
 
-    top: 62px;
+    top: calc(
+      var(--zynexcart-header-height, 0px) + 62px
+    );
 
     max-height: calc(100vh - 76px);
 
@@ -820,6 +867,7 @@
 
   .subcategory-item {
     width: 100%;
+
     min-height: 78px;
 
     flex: 0 0 auto;
@@ -842,8 +890,7 @@
     color: var(--primary);
   }
 
-  .subcategory-item.active
-  .subcategory-image {
+  .subcategory-item.active .subcategory-image {
     border-color: var(--primary);
 
     box-shadow:
@@ -870,22 +917,34 @@
 
 
   /* -----------------------------------------
-     PRODUCTS AREA
+     MOBILE PRODUCT GRID
+     ALWAYS 2 COLUMNS
   ----------------------------------------- */
 
   .product-grid {
+    width: 100%;
+
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
 
     gap: 10px;
   }
 
+
+  /* -----------------------------------------
+     MOBILE PRODUCT CARD
+  ----------------------------------------- */
+
   .product-image {
-    height: 155px;
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    height: auto;
   }
 
   .product-image img {
-    padding: 12px;
+    padding: 10px;
   }
 
   .product-info {
@@ -894,9 +953,13 @@
 
   .product-category {
     font-size: 7px;
+
+    margin-bottom: 4px;
   }
 
   .product-info h3 {
+    min-height: 34px;
+
     font-size: 12px;
 
     line-height: 1.3;
@@ -955,6 +1018,7 @@
 
 /* =========================================
    VERY SMALL MOBILE
+   STILL 2 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 380px) {
@@ -986,11 +1050,10 @@
   }
 
   .product-grid {
-    gap: 8px;
-  }
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
 
-  .product-image {
-    height: 140px;
+    gap: 8px;
   }
 
   .product-info {
@@ -998,6 +1061,8 @@
   }
 
   .product-info h3 {
+    min-height: 32px;
+
     font-size: 11px;
   }
 
