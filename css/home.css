@@ -313,3 +313,18 @@ section {
 
   border-color: var(--primary);
 }
+/* =====================================================
+   MOBILE + CHROME DESKTOP SITE ON
+   Popular Products → 3 products per row
+   ===================================================== */
+
+@media screen
+  and (pointer: coarse)
+  and (hover: none)
+  and (max-device-width: 650px) {
+
+  #featuredProducts.product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+}
