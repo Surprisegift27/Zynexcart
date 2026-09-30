@@ -2153,14 +2153,159 @@ function setupSingleProductControl(control) {
     return;
   }
 
-  control.dataset.bound = "true";
-
-}
-
-
   control.dataset.bound =
     "true";
 
+
+  /* -----------------------------------------
+     ADD BUTTON
+  ----------------------------------------- */
+
+  if (
+    control.tagName === "BUTTON" &&
+    !control.classList.contains("added")
+  ) {
+
+    control.addEventListener(
+      "click",
+      function () {
+
+        const productId =
+          Number(
+            control.dataset.productId
+          );
+
+
+        const product =
+          getProductById(
+            productId
+          );
+
+
+        if (!product) {
+          return;
+        }
+
+
+        addToCart(
+          product
+        );
+
+
+        refreshProductButton(
+          productId
+        );
+
+
+        updateCartCount();
+
+      }
+    );
+
+
+    return;
+
+  }
+
+
+  /* -----------------------------------------
+     QUANTITY CONTROL
+  ----------------------------------------- */
+
+  if (
+    !control.classList.contains(
+      "added"
+    )
+  ) {
+    return;
+  }
+
+
+  control.addEventListener(
+    "click",
+    function (event) {
+
+      const actionButton =
+        event.target.closest(
+          "button.qty-minus, button.qty-plus"
+        );
+
+
+      if (!actionButton) {
+        return;
+      }
+
+
+      const productId =
+        Number(
+          control.dataset.productId
+        );
+
+
+      const product =
+        getProductById(
+          productId
+        );
+
+
+      if (!product) {
+        return;
+      }
+
+
+      /* PLUS */
+
+      if (
+        actionButton.classList.contains(
+          "qty-plus"
+        )
+      ) {
+
+        addToCart(
+          product
+        );
+
+
+        refreshProductButton(
+          productId
+        );
+
+
+        updateCartCount();
+
+
+        return;
+
+      }
+
+
+      /* MINUS */
+
+      if (
+        actionButton.classList.contains(
+          "qty-minus"
+        )
+      ) {
+
+        changeCartQuantity(
+          productId,
+          -1
+        );
+
+
+        refreshProductButton(
+          productId
+        );
+
+
+        updateCartCount();
+
+      }
+
+    }
+  );
+
+}
 
   /* -----------------------------------------
      ADD BUTTON
