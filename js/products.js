@@ -2145,22 +2145,17 @@ function refreshProductButton(
 
 /* =========================================
    SETUP SINGLE PRODUCT CONTROL
-   Delegated listener handles the click
 ========================================= */
 
-function setupSingleProductControl(
-  control
-) {
+function setupSingleProductControl(control) {
 
   if (!control) {
     return;
   }
 
-
   control.dataset.bound = "true";
 
 }
-
 
   control.dataset.bound =
     "true";
@@ -2319,129 +2314,117 @@ function setupSingleProductControl(
 
 /* =========================================
    SETUP ALL PRODUCT CONTROLS
-   Professional delegated click handling
 ========================================= */
 
 function setupProductControls() {
 
   if (
-    document.body.dataset.productControlsReady ===
-    "true"
+    document.body.dataset.zynexcartProductControlsReady === "true"
   ) {
     return;
   }
 
-
-  document.body.dataset.productControlsReady =
-    "true";
-
+  document.body.dataset.zynexcartProductControlsReady = "true";
 
   document.body.addEventListener(
     "click",
     function (event) {
 
-      const control =
+      const actionButton =
+        event.target.closest(
+          ".qty-minus, .qty-plus"
+        );
+
+      const addButton =
         event.target.closest(
           ".add-btn[data-product-id]"
         );
 
-
-      if (!control) {
+      if (!addButton) {
         return;
       }
-
-
-      /*
-       * Ignore clicks on product controls
-       * that are not part of the Products UI.
-       */
-      if (
-        !control.closest(
-          ".product-card"
-        )
-      ) {
-        return;
-      }
-
 
       const productId =
         Number(
-          control.dataset.productId
+          addButton.dataset.productId
         );
 
-
-      if (!Number.isFinite(productId)) {
+      if (!productId) {
         return;
       }
 
-
       const product =
-        getProductById(
-          productId
-        );
-
+        getProductById(productId);
 
       if (!product) {
         return;
       }
 
 
-      /*
-       * ADD
-       */
+      /* ==============================
+         PLUS
+      ============================== */
+
       if (
-        control.tagName === "BUTTON" &&
-        !control.classList.contains("added")
+        actionButton &&
+        actionButton.classList.contains("qty-plus")
       ) {
 
-        addToCart(
-          product
-        );
+        event.preventDefault();
+        event.stopPropagation();
 
-        return;
+        addToCart(product);
 
-      }
+        refreshProductButton(productId);
 
+        updateCartCount();
 
-      /*
-       * PLUS / MINUS
-       */
-      const actionButton =
-        event.target.closest(
-          "button.qty-minus, button.qty-plus"
-        );
-
-
-      if (!actionButton) {
         return;
       }
 
 
-      if (
-        actionButton.classList.contains(
-          "qty-plus"
-        )
-      ) {
-
-        addToCart(
-          product
-        );
-
-        return;
-
-      }
-
+      /* ==============================
+         MINUS
+      ============================== */
 
       if (
-        actionButton.classList.contains(
-          "qty-minus"
-        )
+        actionButton &&
+        actionButton.classList.contains("qty-minus")
       ) {
+
+        event.preventDefault();
+        event.stopPropagation();
 
         changeCartQuantity(
           productId,
           -1
         );
+
+        refreshProductButton(productId);
+
+        updateCartCount();
+
+        return;
+      }
+
+
+      /* ==============================
+         ADD
+      ============================== */
+
+      if (
+        addButton.tagName === "BUTTON" &&
+        !addButton.classList.contains("added")
+      ) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        addToCart(product);
+
+        refreshProductButton(productId);
+
+        updateCartCount();
 
       }
 
@@ -2588,10 +2571,6 @@ window.ZynexCartProducts = {
   displayProductsPage,
 
   refreshProductsPage,
-
-  setupProductControls,
-
-  setupSingleProductControl,
 
   refreshProductButton,
 
