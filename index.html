@@ -100,11 +100,15 @@
       if (
         window.__ZYNEXCART_INDEX_INITIALIZED__
       ) {
+
         return;
+
       }
+
 
       window.__ZYNEXCART_INDEX_INITIALIZED__ =
         true;
+
 
 
       /* =====================================================
@@ -117,7 +121,9 @@
       ) {
 
         const element =
-          document.getElementById(elementId);
+          document.getElementById(
+            elementId
+          );
 
 
         if (!element) {
@@ -177,6 +183,7 @@
       }
 
 
+
       /* =====================================================
          LOCATION MODAL INITIAL STATE
 
@@ -194,7 +201,9 @@
 
 
         if (!modal) {
+
           return;
+
         }
 
 
@@ -217,6 +226,7 @@
         );
 
       }
+
 
 
       /* =====================================================
@@ -297,6 +307,7 @@
       }
 
 
+
       /* =====================================================
          COMPONENT LIST
       ====================================================== */
@@ -341,9 +352,10 @@
       ];
 
 
+
       /* =====================================================
          JAVASCRIPT MODULES
-         
+
          Dependency order is preserved.
       ====================================================== */
 
@@ -407,6 +419,244 @@
         "js/products.js"
 
       ];
+
+
+
+      /* =====================================================
+         HOME POPULAR PRODUCTS
+         MOBILE + CHROME DESKTOP SITE
+
+         IMPORTANT:
+         This function ONLY affects:
+         #featuredProducts
+
+         Normal mobile:
+         2 products per row.
+
+         Real mobile phone with Chrome
+         Desktop Site ON:
+         3 products per row.
+
+         Desktop / laptop:
+         unchanged.
+      ====================================================== */
+
+      function setupMobileDesktopSitePopularProducts() {
+
+        const featuredProducts =
+          document.getElementById(
+            "featuredProducts"
+          );
+
+
+        if (!featuredProducts) {
+
+          return;
+
+        }
+
+
+        /*
+         * Prevent duplicate listeners / observers
+         * if this function is ever called again.
+         */
+
+        if (
+          featuredProducts.dataset
+            .mobileDesktopSiteSetup === "true"
+        ) {
+
+          return;
+
+        }
+
+
+        featuredProducts.dataset
+          .mobileDesktopSiteSetup =
+          "true";
+
+
+
+        function updatePopularProductsLayout() {
+
+          /*
+           * -------------------------------------------------
+           * 1. Touch capability
+           * -------------------------------------------------
+           *
+           * A normal desktop/laptop should not pass
+           * this condition.
+           */
+
+          const isTouchDevice =
+            (
+              navigator.maxTouchPoints > 0 ||
+              "ontouchstart" in window
+            );
+
+
+          /*
+           * -------------------------------------------------
+           * 2. Physical screen check
+           * -------------------------------------------------
+           *
+           * Desktop Site ON can make window.innerWidth
+           * behave like a desktop viewport.
+           *
+           * screen.width is used to identify the
+           * small physical phone display.
+           */
+
+          const screenWidth =
+            window.screen
+              ? Math.min(
+                  window.screen.width || Infinity,
+                  window.screen.height || Infinity
+                )
+              : Infinity;
+
+
+          const isPhoneScreen =
+            screenWidth <= 650;
+
+
+          /*
+           * -------------------------------------------------
+           * 3. Desktop Site detection
+           * -------------------------------------------------
+           *
+           * When Desktop Site is OFF:
+           * viewport remains phone-sized.
+           *
+           * When Desktop Site is ON:
+           * Chrome normally exposes a much wider
+           * CSS viewport.
+           */
+
+          const viewportWidth =
+            window.innerWidth;
+
+
+          const isDesktopSite =
+            viewportWidth > 650;
+
+
+
+          /*
+           * -------------------------------------------------
+           * FINAL CONDITION
+           * -------------------------------------------------
+           *
+           * Only:
+           *
+           * Real touch phone
+           * +
+           * Small physical screen
+           * +
+           * Wide desktop-style viewport
+           *
+           * gets 3 columns.
+           */
+
+          const shouldUseThreeColumns =
+            isTouchDevice &&
+            isPhoneScreen &&
+            isDesktopSite;
+
+
+
+          if (
+            shouldUseThreeColumns
+          ) {
+
+            featuredProducts.style.setProperty(
+              "grid-template-columns",
+              "repeat(3, minmax(0, 1fr))",
+              "important"
+            );
+
+
+            featuredProducts.dataset
+              .mobileDesktopSiteColumns =
+              "3";
+
+
+          } else {
+
+            /*
+             * Remove ONLY the inline rule created
+             * by this function.
+             *
+             * Existing responsive.css controls
+             * normal mobile layout.
+             */
+
+            featuredProducts.style
+              .removeProperty(
+                "grid-template-columns"
+              );
+
+
+            delete featuredProducts.dataset
+              .mobileDesktopSiteColumns;
+
+          }
+
+        }
+
+
+
+        /*
+         * Initial layout check.
+         */
+
+        updatePopularProductsLayout();
+
+
+
+        /*
+         * Chrome Desktop Site / rotation /
+         * viewport changes.
+         */
+
+        window.addEventListener(
+          "resize",
+          updatePopularProductsLayout,
+          {
+            passive: true
+          }
+        );
+
+
+
+        /*
+         * Products are generated dynamically by
+         * products.js.
+         *
+         * Observe ONLY the featured products grid.
+         *
+         * No product/cart functionality is changed.
+         */
+
+        const observer =
+          new MutationObserver(
+            function () {
+
+              updatePopularProductsLayout();
+
+            }
+          );
+
+
+        observer.observe(
+          featuredProducts,
+          {
+            childList: true
+          }
+        );
+
+      }
+
 
 
       /* =====================================================
@@ -507,6 +757,24 @@
           resetLocationModalState();
 
 
+
+          /*
+           * -------------------------------------------------
+           * STEP 5
+           * HOME POPULAR PRODUCTS SPECIAL LAYOUT
+           *
+           * Only real mobile phone + Chrome Desktop Site
+           * gets 3 products per row.
+           *
+           * Normal mobile remains controlled by
+           * responsive.css with 2 products per row.
+           * -------------------------------------------------
+           */
+
+          setupMobileDesktopSitePopularProducts();
+
+
+
           console.log(
             "ZynexCart: All components and modules loaded successfully."
           );
@@ -522,6 +790,7 @@
         }
 
       }
+
 
 
       /* =====================================================
