@@ -2145,18 +2145,21 @@ function refreshProductButton(
 
 /* =========================================
    SETUP SINGLE PRODUCT CONTROL
+   Delegated listener handles the click
 ========================================= */
 
 function setupSingleProductControl(
   control
 ) {
 
-  if (
-    !control ||
-    control.dataset.bound === "true"
-  ) {
+  if (!control) {
     return;
   }
+
+
+  control.dataset.bound = "true";
+
+}
 
 
   control.dataset.bound =
@@ -2316,22 +2319,131 @@ function setupSingleProductControl(
 
 /* =========================================
    SETUP ALL PRODUCT CONTROLS
+   Professional delegated click handling
 ========================================= */
 
 function setupProductControls() {
 
-  const controls =
-    document.querySelectorAll(
-      ".add-btn[data-product-id]"
-    );
+  if (
+    document.body.dataset.productControlsReady ===
+    "true"
+  ) {
+    return;
+  }
 
 
-  controls.forEach(
-    control => {
+  document.body.dataset.productControlsReady =
+    "true";
 
-      setupSingleProductControl(
-        control
-      );
+
+  document.body.addEventListener(
+    "click",
+    function (event) {
+
+      const control =
+        event.target.closest(
+          ".add-btn[data-product-id]"
+        );
+
+
+      if (!control) {
+        return;
+      }
+
+
+      /*
+       * Ignore clicks on product controls
+       * that are not part of the Products UI.
+       */
+      if (
+        !control.closest(
+          ".product-card"
+        )
+      ) {
+        return;
+      }
+
+
+      const productId =
+        Number(
+          control.dataset.productId
+        );
+
+
+      if (!Number.isFinite(productId)) {
+        return;
+      }
+
+
+      const product =
+        getProductById(
+          productId
+        );
+
+
+      if (!product) {
+        return;
+      }
+
+
+      /*
+       * ADD
+       */
+      if (
+        control.tagName === "BUTTON" &&
+        !control.classList.contains("added")
+      ) {
+
+        addToCart(
+          product
+        );
+
+        return;
+
+      }
+
+
+      /*
+       * PLUS / MINUS
+       */
+      const actionButton =
+        event.target.closest(
+          "button.qty-minus, button.qty-plus"
+        );
+
+
+      if (!actionButton) {
+        return;
+      }
+
+
+      if (
+        actionButton.classList.contains(
+          "qty-plus"
+        )
+      ) {
+
+        addToCart(
+          product
+        );
+
+        return;
+
+      }
+
+
+      if (
+        actionButton.classList.contains(
+          "qty-minus"
+        )
+      ) {
+
+        changeCartQuantity(
+          productId,
+          -1
+        );
+
+      }
 
     }
   );
