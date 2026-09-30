@@ -934,3 +934,20 @@
   }
 
 }
+/* =====================================================
+   MOBILE PHONE + CHROME DESKTOP SITE ON
+   HOME POPULAR PRODUCTS ONLY
+   ===================================================== */
+
+@media screen
+  and (pointer: coarse)
+  and (hover: none)
+  and (min-width: 651px)
+  and (max-width: 800px) {
+
+  #featuredProducts.product-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr)) !important;
+  }
+
+}
