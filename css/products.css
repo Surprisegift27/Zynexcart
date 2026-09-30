@@ -8,8 +8,7 @@
    - Product data is untouched
    - Existing cart controls are untouched
    - Desktop / Laptop / Tablet = 5 products
-   - Mobile phone = 2 products
-   - Desktop Site ON phone = 2 products
+   - Mobile = 2 products
 ========================================= */
 
 
@@ -20,6 +19,11 @@
 .products-page {
   width: 100%;
 
+  /*
+    Fixed main header
+    +
+    Fixed category title bar
+  */
   padding:
     calc(
       var(--zynexcart-header-height, 0px) + 54px
@@ -36,6 +40,7 @@
 
 /* =========================================
    FIXED CATEGORY TITLE
+   DO NOT CHANGE CATEGORY SYSTEM
 ========================================= */
 
 .products-category-bar {
@@ -127,6 +132,7 @@
 
 /* =========================================
    LEFT CATEGORY NAVIGATION
+   EXISTING CATEGORY SYSTEM PRESERVED
 ========================================= */
 
 .products-sidebar {
@@ -173,6 +179,7 @@
 
 /* =========================================
    CATEGORY LIST
+   NO CATEGORY DESIGN CHANGE
 ========================================= */
 
 .subcategory-nav {
@@ -354,7 +361,7 @@
 
 /* =========================================
    PRODUCT GRID
-   DESKTOP / LAPTOP / TABLET = 5
+   DESKTOP / LAPTOP / TABLET = EXACTLY 5
 ========================================= */
 
 .product-grid {
@@ -458,7 +465,7 @@
 
 /* =========================================
    PRODUCT CATEGORY LABEL
-   HIDDEN
+   COMPLETELY HIDDEN
 ========================================= */
 
 .product-category {
@@ -613,6 +620,7 @@
 
 /* =========================================
    QUANTITY CONTROL
+   EXISTING + / − STRUCTURE PRESERVED
 ========================================= */
 
 .product-card .add-btn.added {
@@ -879,8 +887,8 @@
 
 
 /* =========================================
-   MOBILE PHONE
-   EXACTLY 2 PRODUCTS
+   MOBILE
+   LEFT CATEGORY + EXACTLY 2 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 650px) {
@@ -899,6 +907,12 @@
   .products-container {
     width: 100%;
   }
+
+
+  /* =======================================
+     CATEGORY TITLE
+     FIXED BELOW EXISTING HEADER
+  ======================================= */
 
   .products-category-bar {
     position: fixed;
@@ -938,6 +952,11 @@
     text-align: left;
   }
 
+
+  /* =======================================
+     CONTENT
+  ======================================= */
+
   .products-content {
     width: calc(100% - 24px);
 
@@ -945,6 +964,13 @@
 
     padding-top: 14px;
   }
+
+
+  /* =======================================
+     MOBILE LAYOUT
+     LEFT = CATEGORY
+     RIGHT = PRODUCTS
+  ======================================= */
 
   .products-layout {
     width: 100%;
@@ -958,6 +984,11 @@
 
     align-items: start;
   }
+
+
+  /* =======================================
+     LEFT CATEGORY
+  ======================================= */
 
   .products-sidebar {
     width: 100%;
@@ -1073,6 +1104,11 @@
     word-break: normal;
   }
 
+
+  /* =======================================
+     RIGHT PRODUCT AREA
+  ======================================= */
+
   .products-main {
     width: 100%;
     min-width: 0;
@@ -1080,6 +1116,12 @@
     margin: 0;
     padding: 0;
   }
+
+
+  /* =======================================
+     MOBILE PRODUCT GRID
+     STRICTLY 2 PRODUCTS PER ROW
+  ======================================= */
 
   .product-grid {
     width: 100%;
@@ -1096,6 +1138,11 @@
     padding: 0;
   }
 
+
+  /* =======================================
+     MOBILE PRODUCT CARD
+  ======================================= */
+
   .product-card {
     width: 100%;
     min-width: 0;
@@ -1103,29 +1150,17 @@
     border-radius: 14px;
   }
 
-  /*
-   * IMPORTANT:
-   * Square product image on real mobile.
-   */
   .product-image {
     width: 100%;
 
-    height: auto;
-
-    min-height: 0;
-
-    aspect-ratio: 1 / 1;
-
-    overflow: hidden;
+    height: 155px;
   }
 
   .product-image img {
     width: 100%;
     height: 100%;
 
-    padding: 10px;
-
-    object-fit: contain;
+    padding: 12px;
   }
 
   .product-info {
@@ -1137,9 +1172,19 @@
     box-sizing: border-box;
   }
 
+
+  /* =======================================
+     CATEGORY LABEL
+  ======================================= */
+
   .product-category {
     display: none !important;
   }
+
+
+  /* =======================================
+     PRODUCT NAME
+  ======================================= */
 
   .product-info h3 {
     min-height: 0;
@@ -1158,6 +1203,11 @@
 
     font-size: 10px;
   }
+
+
+  /* =======================================
+     PRICE
+  ======================================= */
 
   .product-price-row {
     min-height: 24px;
@@ -1180,6 +1230,12 @@
 
     font-size: 7px;
   }
+
+
+  /* =======================================
+     ADD BUTTON
+     EXISTING CART UI PRESERVED
+  ======================================= */
 
   .product-card .add-btn {
     width: 100%;
@@ -1223,6 +1279,7 @@
 
 /* =========================================
    VERY SMALL MOBILE
+   STILL EXACTLY 2 PRODUCTS
 ========================================= */
 
 @media screen and (max-width: 380px) {
@@ -1264,6 +1321,8 @@
     font-size: 9px;
   }
 
+
+  /* RIGHT SIDE = ALWAYS 2 */
   .product-grid {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
@@ -1272,13 +1331,7 @@
   }
 
   .product-image {
-    width: 100%;
-
-    height: auto;
-
-    min-height: 0;
-
-    aspect-ratio: 1 / 1;
+    height: 140px;
   }
 
   .product-info {
@@ -1317,385 +1370,5 @@
     min-width: 21px;
 
     font-size: 11px;
-  }
-}
-
-
-/* =========================================
-   PHONE DEVICE — DESKTOP SITE ON
-   IMPORTANT FIX
-
-   Chrome "Desktop site" can report a larger
-   CSS viewport even on a real phone.
-
-   These rules use touch-phone detection
-   and force the SAME 2-column product layout.
-========================================= */
-
-@media screen
-  and (pointer: coarse)
-  and (hover: none)
-  and (max-device-width: 650px) {
-
-  .products-page {
-    width: 100% !important;
-
-    padding:
-      calc(
-        var(--zynexcart-header-height, 0px) + 54px
-      )
-      0
-      40px !important;
-  }
-
-  .products-container {
-    width: 100% !important;
-  }
-
-  .products-content {
-    width: calc(100% - 24px) !important;
-
-    margin-inline: auto !important;
-
-    padding-top: 14px !important;
-  }
-
-  .products-layout {
-    width: 100% !important;
-
-    display: grid !important;
-
-    grid-template-columns:
-      86px minmax(0, 1fr) !important;
-
-    gap: 12px !important;
-
-    align-items: start !important;
-  }
-
-  .products-sidebar {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .products-sidebar-inner {
-    position: sticky !important;
-
-    top:
-      calc(
-        var(--zynexcart-header-height, 0px)
-        + 66px
-      ) !important;
-
-    max-height:
-      calc(
-        100vh
-        - var(--zynexcart-header-height, 0px)
-        - 80px
-      ) !important;
-
-    overflow: hidden !important;
-
-    border: 0 !important;
-    border-radius: 0 !important;
-
-    background: transparent !important;
-
-    box-shadow: none !important;
-  }
-
-  .subcategory-nav {
-    width: 100% !important;
-
-    display: flex !important;
-
-    flex-direction: column !important;
-
-    gap: 8px !important;
-
-    padding: 0 !important;
-
-    max-height:
-      calc(
-        100vh
-        - var(--zynexcart-header-height, 0px)
-        - 80px
-      ) !important;
-
-    overflow-y: auto !important;
-
-    scrollbar-width: none !important;
-  }
-
-  .subcategory-nav::-webkit-scrollbar {
-    display: none !important;
-  }
-
-  .products-main {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-
-  /* =======================================
-     DESKTOP SITE ON:
-     EXACTLY 2 PRODUCTS
-  ======================================= */
-
-  .product-grid {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    display: grid !important;
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr)) !important;
-
-    gap: 10px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-
-  /* =======================================
-     DESKTOP SITE ON:
-     PRODUCT CARD
-  ======================================= */
-
-  .product-card {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    border-radius: 14px !important;
-  }
-
-
-  /* =======================================
-     CRITICAL IMAGE FIX
-     Forces square image area even when
-     another responsive stylesheet loads later.
-  ======================================= */
-
-  .product-image {
-    width: 100% !important;
-
-    height: auto !important;
-
-    min-height: 0 !important;
-
-    aspect-ratio: 1 / 1 !important;
-
-    overflow: hidden !important;
-  }
-
-  .product-image img {
-    width: 100% !important;
-    height: 100% !important;
-
-    padding: 10px !important;
-
-    object-fit: contain !important;
-  }
-
-
-  /* =======================================
-     PRODUCT DETAILS
-  ======================================= */
-
-  .product-info {
-    width: 100% !important;
-
-    min-width: 0 !important;
-
-    padding: 11px 9px 9px !important;
-
-    box-sizing: border-box !important;
-  }
-
-  .product-category {
-    display: none !important;
-  }
-
-  .product-info h3 {
-    min-height: 0 !important;
-
-    margin: 0 0 8px !important;
-
-    font-size: 13px !important;
-
-    font-weight: 800 !important;
-
-    line-height: 1.3 !important;
-  }
-
-  .product-unit {
-    margin: 0 0 8px !important;
-
-    font-size: 10px !important;
-  }
-
-  .product-price-row {
-    min-height: 24px !important;
-
-    gap: 4px !important;
-
-    margin-bottom: 8px !important;
-  }
-
-  .product-price {
-    font-size: 14px !important;
-  }
-
-  .product-mrp {
-    font-size: 9px !important;
-  }
-
-  .product-discount {
-    padding: 2px 4px !important;
-
-    font-size: 7px !important;
-  }
-
-
-  /* =======================================
-     ADD BUTTON
-  ======================================= */
-
-  .product-card .add-btn {
-    width: 100% !important;
-
-    min-height: 36px !important;
-
-    padding: 0 8px !important;
-
-    border-radius: 9px !important;
-
-    font-size: 11px !important;
-
-    pointer-events: auto !important;
-  }
-
-  .product-card .add-btn.added {
-    min-height: 36px !important;
-
-    padding: 3px 4px !important;
-  }
-
-  .product-card .qty-minus,
-  .product-card .qty-plus {
-    width: 28px !important;
-    height: 28px !important;
-
-    flex: 0 0 28px !important;
-
-    font-size: 17px !important;
-
-    pointer-events: auto !important;
-  }
-
-  .product-card .qty-number {
-    min-width: 23px !important;
-
-    font-size: 12px !important;
-  }
-}
-
-
-/* =========================================
-   VERY SMALL PHONE
-   DESKTOP SITE ON
-========================================= */
-
-@media screen
-  and (pointer: coarse)
-  and (hover: none)
-  and (max-device-width: 380px) {
-
-  .products-content {
-    width: calc(100% - 18px) !important;
-  }
-
-  .products-layout {
-    grid-template-columns:
-      72px minmax(0, 1fr) !important;
-
-    gap: 9px !important;
-  }
-
-  .subcategory-item {
-    min-height: 72px !important;
-  }
-
-  .subcategory-image {
-    width: 49px !important;
-    height: 49px !important;
-
-    flex-basis: 49px !important;
-  }
-
-  .subcategory-name {
-    font-size: 9px !important;
-  }
-
-  .product-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr)) !important;
-
-    gap: 8px !important;
-  }
-
-  .product-image {
-    width: 100% !important;
-
-    height: auto !important;
-
-    min-height: 0 !important;
-
-    aspect-ratio: 1 / 1 !important;
-  }
-
-  .product-info {
-    padding: 9px 7px 8px !important;
-  }
-
-  .product-info h3 {
-    font-size: 11px !important;
-  }
-
-  .product-unit {
-    font-size: 9px !important;
-  }
-
-  .product-price {
-    font-size: 13px !important;
-  }
-
-  .product-card .add-btn {
-    min-height: 34px !important;
-
-    font-size: 10px !important;
-  }
-
-  .product-card .qty-minus,
-  .product-card .qty-plus {
-    width: 26px !important;
-    height: 26px !important;
-
-    flex-basis: 26px !important;
-
-    font-size: 16px !important;
-  }
-
-  .product-card .qty-number {
-    min-width: 21px !important;
-
-    font-size: 11px !important;
   }
 }
