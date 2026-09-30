@@ -2147,15 +2147,17 @@ function refreshProductButton(
    SETUP SINGLE PRODUCT CONTROL
 ========================================= */
 
-function setupSingleProductControl(control) {
+function setupSingleProductControl(
+  control
+) {
 
-  if (!control) {
+  if (
+    !control ||
+    control.dataset.bound === "true"
+  ) {
     return;
   }
 
-  control.dataset.bound = "true";
-
-}
 
   control.dataset.bound =
     "true";
@@ -2318,115 +2320,18 @@ function setupSingleProductControl(control) {
 
 function setupProductControls() {
 
-  if (
-    document.body.dataset.zynexcartProductControlsReady === "true"
-  ) {
-    return;
-  }
-
-  document.body.dataset.zynexcartProductControlsReady = "true";
-
-  document.body.addEventListener(
-    "click",
-    function (event) {
-
-      const actionButton =
-        event.target.closest(
-          ".qty-minus, .qty-plus"
-        );
-
-      const addButton =
-        event.target.closest(
-          ".add-btn[data-product-id]"
-        );
-
-      if (!addButton) {
-        return;
-      }
-
-      const productId =
-        Number(
-          addButton.dataset.productId
-        );
-
-      if (!productId) {
-        return;
-      }
-
-      const product =
-        getProductById(productId);
-
-      if (!product) {
-        return;
-      }
+  const controls =
+    document.querySelectorAll(
+      ".add-btn[data-product-id]"
+    );
 
 
-      /* ==============================
-         PLUS
-      ============================== */
+  controls.forEach(
+    control => {
 
-      if (
-        actionButton &&
-        actionButton.classList.contains("qty-plus")
-      ) {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        addToCart(product);
-
-        refreshProductButton(productId);
-
-        updateCartCount();
-
-        return;
-      }
-
-
-      /* ==============================
-         MINUS
-      ============================== */
-
-      if (
-        actionButton &&
-        actionButton.classList.contains("qty-minus")
-      ) {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        changeCartQuantity(
-          productId,
-          -1
-        );
-
-        refreshProductButton(productId);
-
-        updateCartCount();
-
-        return;
-      }
-
-
-      /* ==============================
-         ADD
-      ============================== */
-
-      if (
-        addButton.tagName === "BUTTON" &&
-        !addButton.classList.contains("added")
-      ) {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        addToCart(product);
-
-        refreshProductButton(productId);
-
-        updateCartCount();
-
-      }
+      setupSingleProductControl(
+        control
+      );
 
     }
   );
