@@ -2589,6 +2589,10 @@ window.ZynexCartProducts = {
 
   refreshProductsPage,
 
+  setupProductControls,
+
+  setupSingleProductControl,
+
   refreshProductButton,
 
   syncProductButtons
