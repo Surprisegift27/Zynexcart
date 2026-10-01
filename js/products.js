@@ -2459,6 +2459,151 @@ function setupSingleProductControl(control) {
 
 
 /* =========================================
+   SETUP SINGLE PRODUCT CONTROL
+========================================= */
+
+function setupSingleProductControl(control) {
+
+  if (!control) {
+    return;
+  }
+
+  /* -----------------------------------------
+     ADD BUTTON
+  ----------------------------------------- */
+
+  if (
+    control.tagName === "BUTTON" &&
+    !control.classList.contains("added")
+  ) {
+
+    control.addEventListener(
+      "click",
+      function () {
+
+        const productId =
+          Number(
+            control.dataset.productId
+          );
+
+        const product =
+          getProductById(
+            productId
+          );
+
+        if (!product) {
+          return;
+        }
+
+        addToCart(
+          product
+        );
+
+        refreshProductButton(
+          productId
+        );
+
+        updateCartCount();
+
+      }
+    );
+
+    return;
+  }
+
+
+  /* -----------------------------------------
+     QUANTITY CONTROL
+  ----------------------------------------- */
+
+  if (
+    !control.classList.contains(
+      "added"
+    )
+  ) {
+    return;
+  }
+
+
+  control.addEventListener(
+    "click",
+    function (event) {
+
+      const actionButton =
+        event.target.closest(
+          "button.qty-minus, button.qty-plus"
+        );
+
+      if (!actionButton) {
+        return;
+      }
+
+
+      const productId =
+        Number(
+          control.dataset.productId
+        );
+
+      const product =
+        getProductById(
+          productId
+        );
+
+      if (!product) {
+        return;
+      }
+
+
+      /* PLUS */
+
+      if (
+        actionButton.classList.contains(
+          "qty-plus"
+        )
+      ) {
+
+        addToCart(
+          product
+        );
+
+        refreshProductButton(
+          productId
+        );
+
+        updateCartCount();
+
+        return;
+      }
+
+
+      /* MINUS */
+
+      if (
+        actionButton.classList.contains(
+          "qty-minus"
+        )
+      ) {
+
+        changeCartQuantity(
+          productId,
+          -1
+        );
+
+        refreshProductButton(
+          productId
+        );
+
+        updateCartCount();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================
    SETUP ALL PRODUCT CONTROLS
 ========================================= */
 
@@ -2470,7 +2615,9 @@ function setupProductControls() {
     return;
   }
 
-  document.body.dataset.zynexcartProductControlsReady = "true";
+  document.body.dataset.zynexcartProductControlsReady =
+    "true";
+
 
   document.body.addEventListener(
     "click",
@@ -2486,21 +2633,28 @@ function setupProductControls() {
           ".add-btn[data-product-id]"
         );
 
+
       if (!addButton) {
         return;
       }
+
 
       const productId =
         Number(
           addButton.dataset.productId
         );
 
+
       if (!productId) {
         return;
       }
 
+
       const product =
-        getProductById(productId);
+        getProductById(
+          productId
+        );
+
 
       if (!product) {
         return;
@@ -2513,15 +2667,21 @@ function setupProductControls() {
 
       if (
         actionButton &&
-        actionButton.classList.contains("qty-plus")
+        actionButton.classList.contains(
+          "qty-plus"
+        )
       ) {
 
         event.preventDefault();
         event.stopPropagation();
 
-        addToCart(product);
+        addToCart(
+          product
+        );
 
-        refreshProductButton(productId);
+        refreshProductButton(
+          productId
+        );
 
         updateCartCount();
 
@@ -2535,7 +2695,9 @@ function setupProductControls() {
 
       if (
         actionButton &&
-        actionButton.classList.contains("qty-minus")
+        actionButton.classList.contains(
+          "qty-minus"
+        )
       ) {
 
         event.preventDefault();
@@ -2546,7 +2708,9 @@ function setupProductControls() {
           -1
         );
 
-        refreshProductButton(productId);
+        refreshProductButton(
+          productId
+        );
 
         updateCartCount();
 
@@ -2560,15 +2724,21 @@ function setupProductControls() {
 
       if (
         addButton.tagName === "BUTTON" &&
-        !addButton.classList.contains("added")
+        !addButton.classList.contains(
+          "added"
+        )
       ) {
 
         event.preventDefault();
         event.stopPropagation();
 
-        addToCart(product);
+        addToCart(
+          product
+        );
 
-        refreshProductButton(productId);
+        refreshProductButton(
+          productId
+        );
 
         updateCartCount();
 
