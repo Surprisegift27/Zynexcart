@@ -12,7 +12,6 @@
 .zynexcart-search-screen {
   position: fixed;
 
-  /* Strong full-screen coverage */
   top: 0;
   right: 0;
   bottom: 0;
@@ -27,8 +26,6 @@
   display: flex;
   flex-direction: column;
 
-  /* IMPORTANT:
-     Fully opaque so Home page cannot show underneath */
   background: #ffffff;
   background-color: #ffffff;
 
@@ -91,7 +88,6 @@ body.zynexcart-search-open {
 
   background: #ffffff;
 
-  /* ZynexCart border */
   border: 1.5px solid #e7e9ee;
   border-radius: 16px;
 
@@ -106,7 +102,10 @@ body.zynexcart-search-open {
 }
 
 
-/* ZynexCart orange active/focus state */
+/* =========================================================
+   ZYNEXCART ORANGE ACTIVE STATE
+========================================================= */
+
 .zynexcart-search-bar:focus-within {
   border-color: #ff6b00;
 
@@ -117,49 +116,90 @@ body.zynexcart-search-open {
 
 
 /* =========================================================
-   BACK BUTTON
+   SEARCH ACTION BUTTONS
+   Reliable mobile touch/click area
 ========================================================= */
 
 .zynexcart-search-back,
 .zynexcart-search-clear {
-  width: 48px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
 
-  flex: 0 0 48px;
+  min-width: 56px;
+  min-height: 56px;
+
+  flex: 0 0 56px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  position: relative;
+  z-index: 20;
+
+  margin: 0;
   padding: 0;
 
   border: 0;
+  outline: none;
 
   background: transparent;
 
   color: #071b3a;
 
   font-family: inherit;
-  font-size: 29px;
+  font-size: 30px;
   font-weight: 500;
+  line-height: 1;
 
   cursor: pointer;
 
+  /* Important for mobile */
+  pointer-events: auto;
+  touch-action: manipulation;
+
+  -webkit-tap-highlight-color: transparent;
+
   transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
+    color 0.15s ease,
+    background-color 0.15s ease;
 }
+
+
+/* =========================================================
+   BUTTON HOVER
+========================================================= */
 
 .zynexcart-search-back:hover,
 .zynexcart-search-clear:hover {
   color: #ff6b00;
 }
 
+
+/* =========================================================
+   BUTTON ACTIVE
+========================================================= */
+
+.zynexcart-search-back:active,
+.zynexcart-search-clear:active {
+  color: #ff6b00;
+
+  background: rgba(255, 107, 0, 0.08);
+
+  border-radius: 12px;
+}
+
+
+/* =========================================================
+   BUTTON FOCUS
+========================================================= */
+
 .zynexcart-search-back:focus-visible,
 .zynexcart-search-clear:focus-visible {
   outline: 2px solid #ff6b00;
   outline-offset: -4px;
-  border-radius: 10px;
+
+  border-radius: 12px;
 }
 
 
@@ -196,7 +236,7 @@ body.zynexcart-search-open {
 
 
 /* =========================================================
-   CLEAR
+   CLEAR BUTTON
 ========================================================= */
 
 .zynexcart-search-clear {
@@ -228,6 +268,7 @@ body.zynexcart-search-open {
   -webkit-overflow-scrolling: touch;
 
   background: #ffffff;
+  background-color: #ffffff;
 }
 
 
@@ -267,6 +308,9 @@ body.zynexcart-search-open {
   text-decoration: none;
 
   cursor: pointer;
+
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 
   transition:
     background-color 0.18s ease,
@@ -421,6 +465,7 @@ body.zynexcart-search-open {
     min-height: 100dvh;
 
     background: #ffffff;
+    background-color: #ffffff;
   }
 
 
@@ -446,12 +491,16 @@ body.zynexcart-search-open {
   }
 
 
+  /* Reliable mobile touch targets */
   .zynexcart-search-back,
   .zynexcart-search-clear {
-    width: 46px;
-    height: 52px;
+    width: 56px;
+    height: 56px;
 
-    flex-basis: 46px;
+    min-width: 56px;
+    min-height: 56px;
+
+    flex: 0 0 56px;
   }
 
 
@@ -523,11 +572,16 @@ body.zynexcart-search-open {
   }
 
 
+  /* Still large enough for reliable tapping */
   .zynexcart-search-back,
   .zynexcart-search-clear {
-    width: 42px;
+    width: 52px;
+    height: 52px;
 
-    flex-basis: 42px;
+    min-width: 52px;
+    min-height: 52px;
+
+    flex: 0 0 52px;
   }
 
 
@@ -563,6 +617,7 @@ body.zynexcart-search-open {
 
   .zynexcart-search-screen * {
     scroll-behavior: auto;
+
     transition: none !important;
   }
 
