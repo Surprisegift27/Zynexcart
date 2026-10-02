@@ -11,24 +11,46 @@
 
 .zynexcart-search-screen {
   position: fixed;
-  inset: 0;
 
-  z-index: 5000;
+  /* Strong full-screen coverage */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100vh;
+  min-height: 100dvh;
+
+  z-index: 2147483647;
 
   display: flex;
   flex-direction: column;
 
+  /* IMPORTANT:
+     Fully opaque so Home page cannot show underneath */
   background: #ffffff;
+  background-color: #ffffff;
 
   overflow: hidden;
+
+  isolation: isolate;
+
+  box-sizing: border-box;
+}
+
+.zynexcart-search-screen *,
+.zynexcart-search-screen *::before,
+.zynexcart-search-screen *::after {
+  box-sizing: border-box;
 }
 
 .zynexcart-search-screen[hidden] {
-  display: none;
+  display: none !important;
 }
 
 body.zynexcart-search-open {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 
@@ -40,10 +62,16 @@ body.zynexcart-search-open {
   width: 100%;
   height: 100%;
 
+  min-height: 100vh;
+  min-height: 100dvh;
+
   display: flex;
   flex-direction: column;
 
   background: #ffffff;
+  background-color: #ffffff;
+
+  overflow: hidden;
 }
 
 
@@ -52,10 +80,7 @@ body.zynexcart-search-open {
 ========================================================= */
 
 .zynexcart-search-bar {
-  width: min(
-    100% - 32px,
-    900px
-  );
+  width: min(900px, calc(100% - 32px));
 
   min-height: 56px;
 
@@ -66,13 +91,28 @@ body.zynexcart-search-open {
 
   background: #ffffff;
 
-  border: 1px solid #e7e9ee;
+  /* ZynexCart border */
+  border: 1.5px solid #e7e9ee;
   border-radius: 16px;
 
   box-shadow:
     0 4px 18px rgba(7, 27, 58, 0.08);
 
   flex-shrink: 0;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* ZynexCart orange active/focus state */
+.zynexcart-search-bar:focus-within {
+  border-color: #ff6b00;
+
+  box-shadow:
+    0 0 0 3px rgba(255, 107, 0, 0.10),
+    0 6px 20px rgba(7, 27, 58, 0.08);
 }
 
 
@@ -94,15 +134,32 @@ body.zynexcart-search-open {
   padding: 0;
 
   border: 0;
+
   background: transparent;
 
-  color: #172033;
+  color: #071b3a;
 
   font-family: inherit;
   font-size: 29px;
-  font-weight: 400;
+  font-weight: 500;
 
   cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.zynexcart-search-back:hover,
+.zynexcart-search-clear:hover {
+  color: #ff6b00;
+}
+
+.zynexcart-search-back:focus-visible,
+.zynexcart-search-clear:focus-visible {
+  outline: 2px solid #ff6b00;
+  outline-offset: -4px;
+  border-radius: 10px;
 }
 
 
@@ -123,11 +180,13 @@ body.zynexcart-search-open {
 
   background: transparent;
 
-  color: #172033;
+  color: #071b3a;
 
   font-family: inherit;
   font-size: 18px;
   font-weight: 600;
+
+  caret-color: #ff6b00;
 }
 
 .zynexcart-search-bar input::placeholder {
@@ -151,14 +210,13 @@ body.zynexcart-search-open {
 ========================================================= */
 
 .zynexcart-search-content {
-  width: min(
-    100% - 32px,
-    1200px
-  );
+  width: min(1200px, calc(100% - 32px));
 
   margin: 0 auto;
 
   flex: 1;
+
+  min-height: 0;
 
   overflow-x: hidden;
   overflow-y: auto;
@@ -168,6 +226,8 @@ body.zynexcart-search-open {
   scrollbar-width: thin;
 
   -webkit-overflow-scrolling: touch;
+
+  background: #ffffff;
 }
 
 
@@ -182,6 +242,8 @@ body.zynexcart-search-open {
   flex-direction: column;
 
   margin-bottom: 12px;
+
+  background: #ffffff;
 }
 
 .zynexcart-search-suggestion {
@@ -196,19 +258,27 @@ body.zynexcart-search-open {
   padding: 8px 4px;
 
   border: 0;
-  border-bottom: 1px solid #f0f1f3;
+  border-bottom: 1px solid #e7e9ee;
 
   background: #ffffff;
 
-  color: #172033;
+  color: #071b3a;
 
   text-decoration: none;
 
   cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .zynexcart-search-suggestion:hover {
   background: #fff7f1;
+}
+
+.zynexcart-search-suggestion:active {
+  background: #fff0e6;
 }
 
 
@@ -243,8 +313,9 @@ body.zynexcart-search-open {
   object-fit: contain;
 }
 
-.zynexcart-search-suggestion-image
-span {
+.zynexcart-search-suggestion-image span {
+  color: #071b3a;
+
   font-size: 20px;
 }
 
@@ -258,7 +329,7 @@ span {
 
   overflow: hidden;
 
-  color: #172033;
+  color: #071b3a;
 
   font-size: 16px;
   font-weight: 600;
@@ -279,7 +350,7 @@ span {
 
   margin: 18px 0 16px;
 
-  color: #172033;
+  color: #071b3a;
 
   font-size: 20px;
   font-weight: 800;
@@ -292,19 +363,16 @@ span {
    SEARCH PRODUCT GRID
 
    IMPORTANT:
-   Do NOT define grid-template-columns here.
+   DO NOT set grid-template-columns here.
 
    Existing products.css + responsive.css
-   control the row/column layout.
-
-   Therefore:
-   - mobile stays existing mobile layout
-   - Desktop Site behavior stays existing
-   - desktop stays existing
+   control the product row layout.
 ========================================================= */
 
 .zynexcart-search-product-grid {
   width: 100%;
+
+  background: #ffffff;
 }
 
 
@@ -323,10 +391,12 @@ span {
   gap: 6px;
 
   text-align: center;
+
+  background: #ffffff;
 }
 
 .zynexcart-search-no-results strong {
-  color: #172033;
+  color: #071b3a;
 
   font-size: 16px;
   font-weight: 800;
@@ -344,6 +414,26 @@ span {
 ========================================================= */
 
 @media screen and (max-width: 600px) {
+
+  .zynexcart-search-screen {
+    width: 100%;
+    height: 100vh;
+    min-height: 100dvh;
+
+    background: #ffffff;
+  }
+
+
+  .zynexcart-search-shell {
+    width: 100%;
+    height: 100%;
+
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    background: #ffffff;
+  }
+
 
   .zynexcart-search-bar {
     width: calc(100% - 24px);
@@ -375,7 +465,11 @@ span {
   .zynexcart-search-content {
     width: calc(100% - 24px);
 
+    min-height: 0;
+
     padding-bottom: 90px;
+
+    background: #ffffff;
   }
 
 
@@ -432,6 +526,7 @@ span {
   .zynexcart-search-back,
   .zynexcart-search-clear {
     width: 42px;
+
     flex-basis: 42px;
   }
 
@@ -468,6 +563,7 @@ span {
 
   .zynexcart-search-screen * {
     scroll-behavior: auto;
+    transition: none !important;
   }
 
 }
