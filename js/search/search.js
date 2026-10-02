@@ -1,6 +1,6 @@
 /* =========================================
    ZYNEXCART — PROFESSIONAL LIVE SEARCH
-   Complete Product + Category + Subcategory Search
+   Product + Category Search
 ========================================= */
 
 (function () {
@@ -8,38 +8,39 @@
 
   let searchInitialized = false;
   let suggestionBox = null;
-  let outsideClickHandler = null;
 
-  /*
-   * IMPORTANT:
-   * There is intentionally NO fixed product-result limit.
-   *
-   * Suggestions can scroll when many products match.
-   * Full search results are handled by products.html.
-   */
+  const MAX_PRODUCTS = 6;
+  const MAX_CATEGORIES = 3;
+
 
   /* =========================================
      GET PRODUCTS
   ========================================= */
 
   function getProducts() {
+
     try {
+
       if (
         typeof products !== "undefined" &&
         Array.isArray(products)
       ) {
         return products;
       }
+
     } catch (error) {
+
       console.error(
         "ZynexCart: Unable to access products.js data.",
         error
       );
+
     }
 
     return Array.isArray(window.products)
       ? window.products
       : [];
+
   }
 
 
@@ -48,6 +49,7 @@
   ========================================= */
 
   function getCategories() {
+
     if (
       Array.isArray(window.ZynexCartCategories)
     ) {
@@ -55,6 +57,7 @@
     }
 
     return [];
+
   }
 
 
@@ -63,36 +66,12 @@
   ========================================= */
 
   function normalize(value) {
+
     return String(value || "")
       .toLowerCase()
       .trim()
-      .replace(/[-_]+/g, " ")
       .replace(/\s+/g, " ");
-  }
 
-
-  /* =========================================
-     ESCAPE HTML
-     Prevents product/category text from
-     being inserted as unsafe HTML.
-  ========================================= */
-
-  function escapeHTML(value) {
-    return String(value || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-
-  /* =========================================
-     ESCAPE HTML ATTRIBUTE
-  ========================================= */
-
-  function escapeAttribute(value) {
-    return escapeHTML(value);
   }
 
 
@@ -101,88 +80,32 @@
   ========================================= */
 
   function formatCategory(category) {
+
     return String(category || "")
-      .replace(/[-_]+/g, " ")
-      .replace(/\b\w/g, function (letter) {
-        return letter.toUpperCase();
-      });
+      .replace(/[-_]/g, " ")
+      .replace(/\b\w/g, letter =>
+        letter.toUpperCase()
+      );
+
   }
 
 
   /* =========================================
-     GET PRODUCT CATEGORY NAME
-  ========================================= */
-
-  function getProductCategoryName(product) {
-    return normalize(
-      product && (
-        product.category ||
-        product.categoryName ||
-        product.categoryId
-      )
-    );
-  }
-
-
-  /* =========================================
-     GET PRODUCT SUBCATEGORY
-  ========================================= */
-
-  function getProductSubcategory(product) {
-    if (!product) {
-      return "";
-    }
-
-    return normalize(
-      product.subcategory ||
-      product.subcategoryName ||
-      product.subCategory ||
-      product.subCategoryName ||
-      product.subcategoryId ||
-      product.subCategoryId
-    );
-  }
-
-
-  /* =========================================
-     GET PRODUCT SEARCH TEXT
+     PRODUCT SEARCH TEXT
   ========================================= */
 
   function getProductSearchText(product) {
-    if (!product) {
-      return "";
-    }
 
     return [
       product.name,
       product.category,
-      product.categoryName,
       product.categoryId,
-      product.subcategory,
-      product.subcategoryName,
-      product.subCategory,
-      product.subCategoryName,
-      product.subcategoryId,
-      product.subCategoryId,
       product.unit
     ]
       .map(normalize)
       .filter(Boolean)
       .join(" ");
-  }
 
-
-  /* =========================================
-     GET QUERY WORDS
-  ========================================= */
-
-  function getQueryWords(query) {
-    return normalize(query)
-      .split(" ")
-      .map(function (word) {
-        return word.trim();
-      })
-      .filter(Boolean);
   }
 
 
@@ -191,289 +114,193 @@
   ========================================= */
 
   function scoreProduct(product, query) {
-    const searchQuery = normalize(query);
+
+    const searchQuery =
+      normalize(query);
 
     if (!searchQuery || !product) {
       return 0;
     }
 
-    const name = normalize(product.name);
+    const name =
+      normalize(product.name);
 
-    const category = normalize(
-      product.category ||
-      product.categoryName
-    );
+    const category =
+      normalize(product.category);
 
-    const categoryId = normalize(
-      product.categoryId
-    );
+    const categoryId =
+      normalize(product.categoryId);
 
-    const subcategory = getProductSubcategory(
-      product
-    );
-
-    const unit = normalize(product.unit);
+    const unit =
+      normalize(product.unit);
 
     const searchText =
       getProductSearchText(product);
 
-    if (!searchText) {
-      return 0;
-    }
-
     let score = 0;
 
-    /* -----------------------------------------
-       EXACT PRODUCT NAME
-    ----------------------------------------- */
+
+    /* Exact product name */
 
     if (name === searchQuery) {
-      score += 3000;
-    }
-
-
-    /* -----------------------------------------
-       PRODUCT NAME STARTS WITH QUERY
-    ----------------------------------------- */
-
-    if (name.startsWith(searchQuery)) {
-      score += 1600;
-    }
-
-
-    /* -----------------------------------------
-       PRODUCT NAME CONTAINS QUERY
-    ----------------------------------------- */
-
-    if (name.includes(searchQuery)) {
       score += 1000;
     }
 
 
-    /* -----------------------------------------
-       PRODUCT WORD MATCHING
-    ----------------------------------------- */
+    /* Product name starts with query */
 
-    const nameWords = name.split(" ");
+    if (name.startsWith(searchQuery)) {
+      score += 500;
+    }
 
-    nameWords.forEach(function (word) {
+
+    /* Product name contains query */
+
+    if (name.includes(searchQuery)) {
+      score += 300;
+    }
+
+
+    /* Individual product words */
+
+    const nameWords =
+      name.split(" ");
+
+    nameWords.forEach(word => {
+
       if (word === searchQuery) {
-        score += 900;
-      } else if (
-        word.startsWith(searchQuery)
-      ) {
-        score += 650;
-      } else if (
-        word.includes(searchQuery)
-      ) {
         score += 400;
       }
+
+      else if (
+        word.startsWith(searchQuery)
+      ) {
+        score += 250;
+      }
+
+      else if (
+        word.includes(searchQuery)
+      ) {
+        score += 150;
+      }
+
     });
 
 
-    /* -----------------------------------------
-       CATEGORY MATCHING
-    ----------------------------------------- */
+    /* Existing category */
 
     if (category === searchQuery) {
-      score += 850;
+      score += 200;
     }
 
-    if (category.startsWith(searchQuery)) {
-      score += 600;
+    if (
+      category.startsWith(searchQuery)
+    ) {
+      score += 120;
     }
 
-    if (category.includes(searchQuery)) {
-      score += 450;
-    }
-
-
-    /* -----------------------------------------
-       CATEGORY ID MATCHING
-    ----------------------------------------- */
-
-    if (categoryId === searchQuery) {
-      score += 750;
-    }
-
-    if (categoryId.startsWith(searchQuery)) {
-      score += 500;
-    }
-
-    if (categoryId.includes(searchQuery)) {
-      score += 350;
+    if (
+      category.includes(searchQuery)
+    ) {
+      score += 80;
     }
 
 
-    /* -----------------------------------------
-       SUBCATEGORY MATCHING
-    ----------------------------------------- */
+    /* Category ID */
 
-    if (subcategory === searchQuery) {
-      score += 950;
+    if (
+      categoryId === searchQuery
+    ) {
+      score += 180;
     }
 
-    if (subcategory.startsWith(searchQuery)) {
-      score += 700;
-    }
-
-    if (subcategory.includes(searchQuery)) {
-      score += 500;
-    }
-
-
-    /* -----------------------------------------
-       UNIT / SIZE MATCHING
-    ----------------------------------------- */
-
-    if (unit === searchQuery) {
-      score += 150;
-    }
-
-    if (unit.startsWith(searchQuery)) {
+    if (
+      categoryId.startsWith(searchQuery)
+    ) {
       score += 100;
     }
 
-    if (unit.includes(searchQuery)) {
+    if (
+      categoryId.includes(searchQuery)
+    ) {
       score += 70;
     }
 
 
-    /* -----------------------------------------
-       MULTI-WORD SEARCH
-       Every query word should contribute.
-    ----------------------------------------- */
+    /* Unit */
 
-    const queryWords =
-      getQueryWords(searchQuery);
+    if (unit === searchQuery) {
+      score += 40;
+    }
 
-    if (queryWords.length > 1) {
-      let matchedWords = 0;
-
-      queryWords.forEach(function (word) {
-        if (!word) {
-          return;
-        }
-
-        if (name.includes(word)) {
-          matchedWords += 1;
-          score += 350;
-          return;
-        }
-
-        if (subcategory.includes(word)) {
-          matchedWords += 1;
-          score += 300;
-          return;
-        }
-
-        if (category.includes(word)) {
-          matchedWords += 1;
-          score += 250;
-          return;
-        }
-
-        if (categoryId.includes(word)) {
-          matchedWords += 1;
-          score += 200;
-          return;
-        }
-
-        if (unit.includes(word)) {
-          matchedWords += 1;
-          score += 100;
-        }
-      });
-
-      /*
-       * If not every query word matches,
-       * reduce the result priority.
-       */
-
-      if (
-        matchedWords === queryWords.length
-      ) {
-        score += 1000;
-      } else if (
-        matchedWords > 0
-      ) {
-        score += matchedWords * 50;
-      }
+    if (unit.includes(searchQuery)) {
+      score += 20;
     }
 
 
-    /* -----------------------------------------
-       GENERAL SEARCH FALLBACK
-    ----------------------------------------- */
+    /* General fallback */
 
-    if (searchText.includes(searchQuery)) {
-      score += 25;
+    if (
+      searchText.includes(searchQuery)
+    ) {
+      score += 10;
     }
 
     return score;
+
   }
 
 
   /* =========================================
      SEARCH PRODUCTS
-     Returns ALL matching products.
   ========================================= */
 
   function searchProducts(query) {
-    const searchQuery = normalize(query);
+
+    const searchQuery =
+      normalize(query);
 
     if (!searchQuery) {
       return [];
     }
 
     return getProducts()
-      .map(function (product, index) {
-        return {
-          product: product,
-          score: scoreProduct(
+
+      .map(product => ({
+        product,
+        score:
+          scoreProduct(
             product,
             searchQuery
-          ),
-          index: index
-        };
-      })
+          )
+      }))
 
-      .filter(function (result) {
-        return result.score > 0;
-      })
+      .filter(result =>
+        result.score > 0
+      )
 
-      .sort(function (a, b) {
-        if (b.score !== a.score) {
+      .sort((a, b) => {
+
+        if (
+          b.score !== a.score
+        ) {
           return b.score - a.score;
         }
 
-        const nameA = String(
+        return String(
           a.product.name || ""
+        ).localeCompare(
+          String(
+            b.product.name || ""
+          )
         );
 
-        const nameB = String(
-          b.product.name || ""
-        );
-
-        const nameCompare =
-          nameA.localeCompare(
-            nameB,
-            undefined,
-            {
-              sensitivity: "base"
-            }
-          );
-
-        if (nameCompare !== 0) {
-          return nameCompare;
-        }
-
-        return a.index - b.index;
       })
 
-      .map(function (result) {
-        return result.product;
-      });
+      .map(result =>
+        result.product
+      );
+
   }
 
 
@@ -485,7 +312,9 @@
     category,
     query
   ) {
-    const searchQuery = normalize(query);
+
+    const searchQuery =
+      normalize(query);
 
     if (
       !searchQuery ||
@@ -494,52 +323,94 @@
       return 0;
     }
 
-    const name = normalize(
-      category.name
-    );
+    const name =
+      normalize(category.name);
 
-    const id = normalize(
-      category.id
-    );
+    const id =
+      normalize(category.id);
 
-    const description = normalize(
-      category.description
-    );
+    const description =
+      normalize(category.description);
 
     let score = 0;
 
+
+    /* Exact category */
 
     if (name === searchQuery) {
       score += 1000;
     }
 
-    if (name.startsWith(searchQuery)) {
-      score += 600;
-    }
 
-    if (name.includes(searchQuery)) {
-      score += 400;
-    }
+    /* Starts with */
 
-    if (id === searchQuery) {
-      score += 800;
-    }
-
-    if (id.startsWith(searchQuery)) {
+    if (
+      name.startsWith(searchQuery)
+    ) {
       score += 500;
     }
 
-    if (id.includes(searchQuery)) {
-      score += 350;
+
+    /* Contains */
+
+    if (
+      name.includes(searchQuery)
+    ) {
+      score += 300;
+    }
+
+
+    /* Individual words */
+
+    name.split(" ")
+      .forEach(word => {
+
+        if (
+          word === searchQuery
+        ) {
+          score += 400;
+        }
+
+        else if (
+          word.startsWith(searchQuery)
+        ) {
+          score += 250;
+        }
+
+        else if (
+          word.includes(searchQuery)
+        ) {
+          score += 150;
+        }
+
+      });
+
+
+    /* Category ID */
+
+    if (
+      id === searchQuery
+    ) {
+      score += 200;
     }
 
     if (
-      description.includes(searchQuery)
+      id.includes(searchQuery)
     ) {
       score += 100;
     }
 
+
+    /* Description */
+
+    if (
+      description.includes(searchQuery)
+    ) {
+      score += 50;
+    }
+
     return score;
+
   }
 
 
@@ -548,34 +419,37 @@
   ========================================= */
 
   function searchCategories(query) {
-    const searchQuery = normalize(query);
+
+    const searchQuery =
+      normalize(query);
 
     if (!searchQuery) {
       return [];
     }
 
     return getCategories()
-      .map(function (category) {
-        return {
-          category: category,
-          score: scoreCategory(
+
+      .map(category => ({
+        category,
+        score:
+          scoreCategory(
             category,
             searchQuery
           )
-        };
-      })
+      }))
 
-      .filter(function (result) {
-        return result.score > 0;
-      })
+      .filter(result =>
+        result.score > 0
+      )
 
-      .sort(function (a, b) {
-        return b.score - a.score;
-      })
+      .sort((a, b) =>
+        b.score - a.score
+      )
 
-      .map(function (result) {
-        return result.category;
-      });
+      .map(result =>
+        result.category
+      );
+
   }
 
 
@@ -586,6 +460,7 @@
   function createSuggestionBox(
     searchForm
   ) {
+
     if (suggestionBox) {
       return suggestionBox;
     }
@@ -604,11 +479,6 @@
       "listbox"
     );
 
-    suggestionBox.setAttribute(
-      "aria-label",
-      "Search suggestions"
-    );
-
     suggestionBox.hidden = true;
 
     searchForm.appendChild(
@@ -616,6 +486,7 @@
     );
 
     return suggestionBox;
+
   }
 
 
@@ -626,36 +497,28 @@
   function createProductSuggestion(
     product
   ) {
+
     const image =
       product.image || "";
 
     const name =
       product.name || "Product";
 
-    const safeName =
-      escapeHTML(name);
+    const category =
+      formatCategory(
+        product.category
+      );
 
-    const safeImage =
-      escapeAttribute(image);
-
-    const productId =
-      product.id != null
-        ? String(product.id)
-        : "";
-
-    const safeProductId =
-      escapeAttribute(productId);
+    const unit =
+      product.unit || "";
 
 
     return `
       <a
-        href="product.html?id=${encodeURIComponent(
-          productId
-        )}"
+        href="product.html?id=${encodeURIComponent(product.id)}"
         class="search-suggestion"
         role="option"
-        data-product-id="${safeProductId}"
-        aria-label="Open ${safeName}"
+        data-product-id="${product.id}"
       >
 
         <span class="search-suggestion-image">
@@ -664,8 +527,8 @@
             image
               ? `
                 <img
-                  src="${safeImage}"
-                  alt="${safeName}"
+                  src="${image}"
+                  alt="${name}"
                   loading="lazy"
                 >
               `
@@ -685,59 +548,126 @@
         <span class="search-suggestion-content">
 
           <strong class="search-suggestion-name">
-            ${safeName}
+            ${name}
           </strong>
 
+          <span class="search-suggestion-meta">
+
+            ${category}
+
+            ${
+              unit
+                ? `
+                  <span
+                    aria-hidden="true"
+                  >
+                    •
+                  </span>
+                  ${unit}
+                `
+                : ""
+            }
+
+          </span>
+
+        </span>
+
+
+        <span
+          class="search-suggestion-arrow"
+          aria-hidden="true"
+        >
+          →
         </span>
 
       </a>
     `;
+
   }
 
 
   /* =========================================
-     CREATE SEARCH RESULT TITLE
-     
-     Used on products.html when a search
-     query is active.
+     CREATE CATEGORY SUGGESTION
   ========================================= */
 
-  function updateSearchResultsTitle() {
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
+  function createCategorySuggestion(
+    category
+  ) {
 
-    const searchQuery =
-      (params.get("search") || "").trim();
+    const image =
+      category.image || "";
 
-    if (!searchQuery) {
-      return;
-    }
+    const name =
+      category.name || "Category";
 
-    const pageTitle =
-      document.getElementById(
-        "productsPageTitle"
-      );
+    const description =
+      category.description || "";
 
-    if (!pageTitle) {
-      return;
-    }
 
-    pageTitle.textContent =
-      `Showing results for "${searchQuery}"`;
+    return `
+      <a
+        href="products.html?category=${encodeURIComponent(category.id)}"
+        class="search-suggestion search-category-suggestion"
+        role="option"
+        data-category-id="${category.id}"
+      >
+
+        <span class="search-suggestion-image">
+
+          ${
+            image
+              ? `
+                <img
+                  src="${image}"
+                  alt="${name}"
+                  loading="lazy"
+                >
+              `
+              : `
+                <span
+                  class="search-suggestion-image-placeholder"
+                  aria-hidden="true"
+                >
+                  🛍️
+                </span>
+              `
+          }
+
+        </span>
+
+
+        <span class="search-suggestion-content">
+
+          <strong class="search-suggestion-name">
+            ${name}
+          </strong>
+
+          <span class="search-suggestion-meta">
+            ${description}
+          </span>
+
+        </span>
+
+
+        <span
+          class="search-suggestion-arrow"
+          aria-hidden="true"
+        >
+          →
+        </span>
+
+      </a>
+    `;
+
   }
 
 
   /* =========================================
      SHOW SUGGESTIONS
-     
-     Product suggestions only.
-     No Categories / Products headings.
-     No artificial 6-product limit.
   ========================================= */
 
   function showSuggestions(query) {
+
     if (!suggestionBox) {
       return;
     }
@@ -750,8 +680,17 @@
       return;
     }
 
+
     const productsFound =
-      searchProducts(searchQuery);
+      searchProducts(
+        searchQuery
+      );
+
+
+    const categoriesFound =
+      searchCategories(
+        searchQuery
+      );
 
 
     /* =====================================
@@ -759,12 +698,12 @@
     ===================================== */
 
     if (
-      productsFound.length === 0
+      productsFound.length === 0 &&
+      categoriesFound.length === 0
     ) {
-      const safeQuery =
-        escapeHTML(searchQuery);
 
       suggestionBox.innerHTML = `
+
         <div
           class="search-no-results"
           role="status"
@@ -777,9 +716,8 @@
             🔍
           </div>
 
-          <div
-            class="search-no-results-content"
-          >
+
+          <div class="search-no-results-content">
 
             <strong>
               No products found
@@ -792,12 +730,8 @@
           </div>
 
         </div>
-      `;
 
-      suggestionBox.setAttribute(
-        "aria-label",
-        `No results for ${safeQuery}`
-      );
+      `;
 
       suggestionBox.hidden = false;
 
@@ -806,18 +740,115 @@
 
 
     /* =====================================
-       BUILD PRODUCT SUGGESTIONS
-       
-       ALL matching products are rendered.
-       The container itself is scrollable.
+       BUILD RESULTS
     ===================================== */
 
+    let html = "";
+
+
+    /* -------------------------------------
+       CATEGORY RESULTS
+    ------------------------------------- */
+
+    if (
+      categoriesFound.length > 0
+    ) {
+
+      html += `
+
+        <div
+          class="search-suggestions-header"
+        >
+          <span>Categories</span>
+        </div>
+
+      `;
+
+      html +=
+        categoriesFound
+          .slice(
+            0,
+            MAX_CATEGORIES
+          )
+          .map(
+            createCategorySuggestion
+          )
+          .join("");
+
+    }
+
+
+    /* -------------------------------------
+       PRODUCT RESULTS
+    ------------------------------------- */
+
+    if (
+      productsFound.length > 0
+    ) {
+
+      html += `
+
+        <div
+          class="search-suggestions-header"
+        >
+          <span>Products</span>
+        </div>
+
+      `;
+
+      html +=
+        productsFound
+          .slice(
+            0,
+            MAX_PRODUCTS
+          )
+          .map(
+            createProductSuggestion
+          )
+          .join("");
+
+
+      /* View all */
+
+      if (
+        productsFound.length >
+        MAX_PRODUCTS
+      ) {
+
+        html += `
+
+          <button
+            type="button"
+            class="search-view-all"
+            data-search-query="${encodeURIComponent(
+              searchQuery
+            )}"
+          >
+
+            <span>
+              View all results
+            </span>
+
+            <span
+              aria-hidden="true"
+            >
+              →
+            </span>
+
+          </button>
+
+        `;
+
+      }
+
+    }
+
+
     suggestionBox.innerHTML =
-      productsFound
-        .map(createProductSuggestion)
-        .join("");
+      html;
 
     suggestionBox.hidden = false;
+
   }
 
 
@@ -826,11 +857,13 @@
   ========================================= */
 
   function hideSuggestions() {
+
     if (!suggestionBox) {
       return;
     }
 
     suggestionBox.hidden = true;
+
   }
 
 
@@ -841,46 +874,24 @@
   function performSearch(
     searchInput
   ) {
+
     const searchTerm =
-      normalize(searchInput.value);
+      searchInput.value.trim();
 
     if (!searchTerm) {
+
       searchInput.focus();
+
       hideSuggestions();
+
       return;
     }
-
-    hideSuggestions();
 
     window.location.href =
       `products.html?search=${encodeURIComponent(
         searchTerm
       )}`;
-  }
 
-
-  /* =========================================
-     CLEAR SEARCH
-  ========================================= */
-
-  function clearSearch(
-    searchInput
-  ) {
-    if (!searchInput) {
-      return;
-    }
-
-    searchInput.value = "";
-
-    hideSuggestions();
-
-    searchInput.focus();
-
-    searchInput.dispatchEvent(
-      new Event("input", {
-        bubbles: true
-      })
-    );
   }
 
 
@@ -889,8 +900,8 @@
   ========================================= */
 
   function setupSearch() {
+
     if (searchInitialized) {
-      updateSearchResultsTitle();
       return;
     }
 
@@ -914,115 +925,102 @@
     searchInitialized = true;
 
 
-    /* -------------------------------------
-       CREATE DROPDOWN
-    ------------------------------------- */
+    /* Create dropdown */
 
     createSuggestionBox(
       searchForm
     );
 
 
-    /* -------------------------------------
-       SEARCH RESULT TITLE
-    ------------------------------------- */
-
-    updateSearchResultsTitle();
-
-
-    /* -------------------------------------
+    /* =====================================
        LIVE SEARCH
-    ------------------------------------- */
+    ===================================== */
 
     searchInput.addEventListener(
       "input",
       function () {
+
         showSuggestions(
           searchInput.value
         );
+
       }
     );
 
 
-    /* -------------------------------------
+    /* =====================================
        FOCUS
-    ------------------------------------- */
+    ===================================== */
 
     searchInput.addEventListener(
       "focus",
       function () {
+
         const value =
           searchInput.value.trim();
 
         if (value) {
           showSuggestions(value);
         }
+
       }
     );
 
 
-    /* -------------------------------------
+    /* =====================================
        FORM SUBMIT
-    ------------------------------------- */
+    ===================================== */
 
     searchForm.addEventListener(
       "submit",
       function (event) {
+
         event.preventDefault();
 
         performSearch(
           searchInput
         );
-      }
-    );
-
-
-    /* -------------------------------------
-       KEYBOARD CONTROL
-    ------------------------------------- */
-
-    searchInput.addEventListener(
-      "keydown",
-      function (event) {
-
-        /* Enter */
-
-        if (
-          event.key === "Enter"
-        ) {
-          event.preventDefault();
-
-          performSearch(
-            searchInput
-          );
-
-          return;
-        }
-
-
-        /* Escape */
-
-        if (
-          event.key === "Escape"
-        ) {
-          event.preventDefault();
-
-          hideSuggestions();
-
-          searchInput.blur();
-        }
 
       }
     );
 
 
-    /* -------------------------------------
+    /* =====================================
        SUGGESTION CLICK
-    ------------------------------------- */
+    ===================================== */
 
     suggestionBox.addEventListener(
       "click",
       function (event) {
+
+        const viewAllButton =
+          event.target.closest(
+            ".search-view-all"
+          );
+
+
+        if (viewAllButton) {
+
+          event.preventDefault();
+
+          const query =
+            decodeURIComponent(
+              viewAllButton.dataset
+                .searchQuery || ""
+            );
+
+          if (query) {
+
+            window.location.href =
+              `products.html?search=${encodeURIComponent(
+                query
+              )}`;
+
+          }
+
+          return;
+        }
+
 
         const suggestion =
           event.target.closest(
@@ -1037,11 +1035,12 @@
     );
 
 
-    /* -------------------------------------
+    /* =====================================
        OUTSIDE CLICK
-    ------------------------------------- */
+    ===================================== */
 
-    outsideClickHandler =
+    document.addEventListener(
+      "click",
       function (event) {
 
         if (
@@ -1049,69 +1048,36 @@
             event.target
           )
         ) {
+
           hideSuggestions();
+
         }
 
-      };
-
-    document.addEventListener(
-      "click",
-      outsideClickHandler
-    );
-
-
-    /* -------------------------------------
-       ESCAPE FROM SEARCH BOX
-    ------------------------------------- */
-
-    searchInput.addEventListener(
-      "blur",
-      function () {
-        /*
-         * Small delay allows a suggestion
-         * link to receive its click before
-         * the dropdown disappears.
-         */
-
-        window.setTimeout(
-          function () {
-
-            if (
-              !searchForm.contains(
-                document.activeElement
-              )
-            ) {
-              hideSuggestions();
-            }
-
-          },
-          120
-        );
       }
     );
-  }
 
 
-  /* =========================================
-     REFRESH SEARCH
-  ========================================= */
+    /* =====================================
+       ESCAPE
+    ===================================== */
 
-  function refreshSearch() {
-    const searchInput =
-      document.getElementById(
-        "searchInput"
-      );
+    searchInput.addEventListener(
+      "keydown",
+      function (event) {
 
-    if (!searchInput) {
-      return;
-    }
+        if (
+          event.key === "Escape"
+        ) {
 
-    const value =
-      searchInput.value.trim();
+          hideSuggestions();
 
-    if (value) {
-      showSuggestions(value);
-    }
+          searchInput.blur();
+
+        }
+
+      }
+    );
+
   }
 
 
@@ -1129,46 +1095,10 @@
 
     hideSuggestions,
 
-    refreshSearch,
-
-    clearSearch,
-
     getProducts,
 
-    getCategories,
-
-    normalize,
-
-    scoreProduct
+    getCategories
 
   };
-
-
-  /* =========================================
-     AUTO INITIALIZATION
-     
-     app.js can also call setupSearch().
-     The guard prevents duplicate setup.
-  ========================================= */
-
-  if (
-    document.readyState === "loading"
-  ) {
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      function () {
-        setupSearch();
-      },
-      {
-        once: true
-      }
-    );
-
-  } else {
-
-    setupSearch();
-
-  }
 
 })();
