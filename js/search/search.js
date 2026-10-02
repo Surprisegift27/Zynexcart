@@ -1,6 +1,7 @@
 /* =========================================
    ZYNEXCART — PROFESSIONAL SEARCH SYSTEM
    Full-screen live search experience
+   + Professional Voice Search
 ========================================= */
 
 (function () {
@@ -10,6 +11,12 @@
   let searchScreen = null;
   let searchInput = null;
   let originalSearchInput = null;
+
+  let voiceRecognition = null;
+  let isVoiceSupported = false;
+  let isListening = false;
+  let voiceBaseText = "";
+  let voiceMessageTimer = null;
 
   const SUGGESTION_LIMIT = 8;
 
@@ -329,6 +336,213 @@
 
 
   /* =========================================
+     VOICE ICON
+  ========================================= */
+
+  function getMicIcon() {
+    return `
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        class="zynexcart-mic-svg"
+      >
+        <path
+          d="M12 14.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 0 0-7 0v5a3.5 3.5 0 0 0 3.5 3.5Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M18.5 11a6.5 6.5 0 0 1-13 0"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+        <path
+          d="M12 17.5V21"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+        <path
+          d="M9 21h6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+      </svg>
+    `;
+  }
+
+
+  /* =========================================
+     STOP ICON
+  ========================================= */
+
+  function getStopIcon() {
+    return `
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        class="zynexcart-mic-svg"
+      >
+        <rect
+          x="7"
+          y="7"
+          width="10"
+          height="10"
+          rx="2"
+          fill="currentColor"
+        />
+      </svg>
+    `;
+  }
+
+
+  /* =========================================
+     ADD VOICE STYLES
+     Scoped only to voice-search UI
+  ========================================= */
+
+  function ensureVoiceStyles() {
+    if (
+      document.getElementById(
+        "zynexcartVoiceSearchStyles"
+      )
+    ) {
+      return;
+    }
+
+    const style =
+      document.createElement("style");
+
+    style.id =
+      "zynexcartVoiceSearchStyles";
+
+    style.textContent = `
+      .zynexcart-search-voice {
+        width: 56px;
+        height: 56px;
+        min-width: 56px;
+        min-height: 56px;
+        flex: 0 0 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 20;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: none;
+        background: transparent;
+        color: #071b3a;
+        font-family: inherit;
+        cursor: pointer;
+        pointer-events: auto;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          color 0.2s ease,
+          background-color 0.2s ease,
+          transform 0.15s ease;
+      }
+
+      .zynexcart-search-voice:hover {
+        color: #ff6b00;
+      }
+
+      .zynexcart-search-voice:focus-visible {
+        color: #ff6b00;
+        box-shadow:
+          inset 0 0 0 2px rgba(255, 107, 0, 0.2);
+        border-radius: 14px;
+      }
+
+      .zynexcart-search-voice:active {
+        transform: scale(0.94);
+      }
+
+      .zynexcart-search-voice.is-listening {
+        color: #ff6b00;
+        background: rgba(255, 107, 0, 0.08);
+        border-radius: 50%;
+      }
+
+      .zynexcart-mic-svg {
+        width: 24px;
+        height: 24px;
+        display: block;
+      }
+
+      .zynexcart-voice-status {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        z-index: 2147483648;
+        max-width: calc(100% - 32px);
+        padding: 11px 16px;
+        border-radius: 999px;
+        background: #071b3a;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.35;
+        text-align: center;
+        box-shadow: 0 8px 28px rgba(7, 27, 58, 0.22);
+        transform: translateX(-50%);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .zynexcart-voice-status.is-visible {
+        opacity: 1;
+      }
+
+      @media (max-width: 600px) {
+        .zynexcart-search-voice {
+          width: 56px;
+          height: 56px;
+          min-width: 56px;
+          min-height: 56px;
+          flex-basis: 56px;
+        }
+
+        .zynexcart-mic-svg {
+          width: 23px;
+          height: 23px;
+        }
+
+        .zynexcart-voice-status {
+          bottom: 18px;
+          font-size: 12px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .zynexcart-search-voice {
+          width: 52px;
+          height: 52px;
+          min-width: 52px;
+          min-height: 52px;
+          flex-basis: 52px;
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
+  }
+
+
+  /* =========================================
      CREATE SEARCH SCREEN
   ========================================= */
 
@@ -336,6 +550,8 @@
     if (searchScreen) {
       return searchScreen;
     }
+
+    ensureVoiceStyles();
 
     searchScreen =
       document.createElement("section");
@@ -376,9 +592,20 @@
 
           <button
             type="button"
+            class="zynexcart-search-voice"
+            id="zynexcartSearchVoice"
+            aria-label="Search by voice"
+            title="Search by voice"
+          >
+            ${getMicIcon()}
+          </button>
+
+          <button
+            type="button"
             class="zynexcart-search-clear"
             id="zynexcartSearchClear"
             aria-label="Clear search"
+            title="Clear search"
           >
             ×
           </button>
@@ -411,7 +638,455 @@
       searchScreen
     );
 
+    createVoiceStatus();
+
     return searchScreen;
+  }
+
+
+  /* =========================================
+     VOICE STATUS
+  ========================================= */
+
+  function createVoiceStatus() {
+    if (
+      document.getElementById(
+        "zynexcartVoiceStatus"
+      )
+    ) {
+      return;
+    }
+
+    const status =
+      document.createElement("div");
+
+    status.id =
+      "zynexcartVoiceStatus";
+
+    status.className =
+      "zynexcart-voice-status";
+
+    status.setAttribute(
+      "role",
+      "status"
+    );
+
+    status.setAttribute(
+      "aria-live",
+      "polite"
+    );
+
+    document.body.appendChild(status);
+  }
+
+
+  function showVoiceMessage(
+    message,
+    duration = 2600
+  ) {
+    const status =
+      document.getElementById(
+        "zynexcartVoiceStatus"
+      );
+
+    if (!status) {
+      return;
+    }
+
+    if (voiceMessageTimer) {
+      window.clearTimeout(
+        voiceMessageTimer
+      );
+    }
+
+    status.textContent =
+      message;
+
+    status.classList.add(
+      "is-visible"
+    );
+
+    voiceMessageTimer =
+      window.setTimeout(
+        function () {
+          status.classList.remove(
+            "is-visible"
+          );
+        },
+        duration
+      );
+  }
+
+
+  /* =========================================
+     VOICE SUPPORT
+  ========================================= */
+
+  function getSpeechRecognitionConstructor() {
+    return (
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition ||
+      null
+    );
+  }
+
+
+  function setupVoiceRecognition() {
+    const Recognition =
+      getSpeechRecognitionConstructor();
+
+    if (!Recognition) {
+      isVoiceSupported = false;
+      return false;
+    }
+
+    isVoiceSupported = true;
+
+    try {
+      voiceRecognition =
+        new Recognition();
+
+      voiceRecognition.continuous =
+        false;
+
+      voiceRecognition.interimResults =
+        true;
+
+      voiceRecognition.maxAlternatives =
+        1;
+
+      /*
+       * Indian English gives good support
+       * for both common English and
+       * Indian-accented speech.
+       */
+      voiceRecognition.lang =
+        "en-IN";
+
+
+      voiceRecognition.onstart =
+        function () {
+          isListening = true;
+
+          updateVoiceButton();
+
+          showVoiceMessage(
+            "Listening… Speak now"
+          );
+        };
+
+
+      voiceRecognition.onresult =
+        function (event) {
+          if (!searchInput) {
+            return;
+          }
+
+          let finalTranscript = "";
+          let interimTranscript = "";
+
+          for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i += 1
+          ) {
+            const result =
+              event.results[i];
+
+            const transcript =
+              result[0]
+                ? result[0].transcript
+                : "";
+
+            if (result.isFinal) {
+              finalTranscript +=
+                transcript;
+            } else {
+              interimTranscript +=
+                transcript;
+            }
+          }
+
+          const spokenText =
+            finalTranscript ||
+            interimTranscript;
+
+          const combinedText =
+            [
+              voiceBaseText,
+              spokenText
+            ]
+              .filter(Boolean)
+              .join(" ")
+              .trim();
+
+          searchInput.value =
+            combinedText;
+
+          if (originalSearchInput) {
+            originalSearchInput.value =
+              combinedText;
+          }
+
+          updateSearchActions();
+
+          renderSearch(
+            combinedText
+          );
+        };
+
+
+      voiceRecognition.onerror =
+        function (event) {
+          isListening = false;
+
+          updateVoiceButton();
+
+          handleVoiceError(
+            event &&
+              event.error
+              ? event.error
+              : "unknown"
+          );
+        };
+
+
+      voiceRecognition.onend =
+        function () {
+          isListening = false;
+
+          updateVoiceButton();
+
+          if (
+            searchInput &&
+            normalize(searchInput.value)
+          ) {
+            renderSearch(
+              searchInput.value
+            );
+          }
+        };
+
+      return true;
+
+    } catch (error) {
+      console.error(
+        "ZynexCart: Voice recognition initialization failed.",
+        error
+      );
+
+      voiceRecognition =
+        null;
+
+      isVoiceSupported =
+        false;
+
+      return false;
+    }
+  }
+
+
+  /* =========================================
+     VOICE ERROR HANDLING
+  ========================================= */
+
+  function handleVoiceError(errorCode) {
+    switch (errorCode) {
+      case "not-allowed":
+      case "service-not-allowed":
+        showVoiceMessage(
+          "Microphone permission was denied. Please allow microphone access."
+        );
+        break;
+
+      case "audio-capture":
+        showVoiceMessage(
+          "Microphone is unavailable. Please check your device microphone."
+        );
+        break;
+
+      case "no-speech":
+        showVoiceMessage(
+          "No speech detected. Please try again."
+        );
+        break;
+
+      case "network":
+        showVoiceMessage(
+          "Voice search needs a network connection. Please try again."
+        );
+        break;
+
+      case "aborted":
+        break;
+
+      case "language-not-supported":
+        showVoiceMessage(
+          "Voice language is not supported on this browser."
+        );
+        break;
+
+      default:
+        showVoiceMessage(
+          "Voice search could not start. Please try again."
+        );
+        break;
+    }
+  }
+
+
+  /* =========================================
+     UPDATE VOICE BUTTON
+  ========================================= */
+
+  function updateVoiceButton() {
+    const voiceButton =
+      document.getElementById(
+        "zynexcartSearchVoice"
+      );
+
+    if (!voiceButton) {
+      return;
+    }
+
+    if (isListening) {
+      voiceButton.classList.add(
+        "is-listening"
+      );
+
+      voiceButton.innerHTML =
+        getStopIcon();
+
+      voiceButton.setAttribute(
+        "aria-label",
+        "Stop voice search"
+      );
+
+      voiceButton.setAttribute(
+        "title",
+        "Stop voice search"
+      );
+
+      return;
+    }
+
+    voiceButton.classList.remove(
+      "is-listening"
+    );
+
+    voiceButton.innerHTML =
+      getMicIcon();
+
+    voiceButton.setAttribute(
+      "aria-label",
+      "Search by voice"
+    );
+
+    voiceButton.setAttribute(
+      "title",
+      "Search by voice"
+    );
+  }
+
+
+  /* =========================================
+     START VOICE SEARCH
+  ========================================= */
+
+  function startVoiceSearch() {
+    if (!searchInput) {
+      return;
+    }
+
+    if (!isVoiceSupported) {
+      showVoiceMessage(
+        "Voice search is not supported in this browser. You can type your search."
+      );
+
+      return;
+    }
+
+    if (!voiceRecognition) {
+      if (!setupVoiceRecognition()) {
+        showVoiceMessage(
+          "Voice search is unavailable in this browser."
+        );
+
+        return;
+      }
+    }
+
+    if (isListening) {
+      stopVoiceSearch();
+      return;
+    }
+
+    /*
+     * Save existing text so spoken words
+     * can be added after it naturally.
+     */
+    voiceBaseText =
+      normalize(searchInput.value);
+
+    try {
+      voiceRecognition.start();
+    } catch (error) {
+      /*
+       * Calling start() while recognition is
+       * already active can throw InvalidStateError.
+       * We handle it without breaking search.
+       */
+      if (
+        error &&
+        error.name ===
+          "InvalidStateError"
+      ) {
+        return;
+      }
+
+      console.error(
+        "ZynexCart: Unable to start voice search.",
+        error
+      );
+
+      isListening = false;
+
+      updateVoiceButton();
+
+      showVoiceMessage(
+        "Voice search could not start. Please try again."
+      );
+    }
+  }
+
+
+  /* =========================================
+     STOP VOICE SEARCH
+  ========================================= */
+
+  function stopVoiceSearch() {
+    if (!voiceRecognition) {
+      isListening = false;
+      updateVoiceButton();
+      return;
+    }
+
+    try {
+      voiceRecognition.stop();
+    } catch (error) {
+      /*
+       * Safe fallback if recognition has
+       * already ended.
+       */
+      console.debug(
+        "ZynexCart: Voice recognition stop completed.",
+        error
+      );
+    }
+
+    isListening = false;
+
+    updateVoiceButton();
   }
 
 
@@ -476,6 +1151,68 @@
 
 
   /* =========================================
+     UPDATE SEARCH ACTIONS
+  ========================================= */
+
+  function updateSearchActions() {
+    const clearButton =
+      document.getElementById(
+        "zynexcartSearchClear"
+      );
+
+    const voiceButton =
+      document.getElementById(
+        "zynexcartSearchVoice"
+      );
+
+    if (!searchInput) {
+      return;
+    }
+
+    const hasText =
+      Boolean(
+        normalize(
+          searchInput.value
+        )
+      );
+
+
+    /*
+     * Empty:
+     * Mic visible
+     * Clear hidden
+     *
+     * Typing:
+     * Mic hidden
+     * Clear visible
+     */
+
+    if (clearButton) {
+      clearButton.hidden =
+        !hasText;
+    }
+
+    if (voiceButton) {
+      voiceButton.hidden =
+        hasText && !isListening;
+    }
+
+
+    /*
+     * If user is currently listening,
+     * keep the stop button available.
+     */
+    if (
+      voiceButton &&
+      isListening
+    ) {
+      voiceButton.hidden =
+        false;
+    }
+  }
+
+
+  /* =========================================
      RENDER SEARCH
   ========================================= */
 
@@ -505,6 +1242,9 @@
     if (!searchQuery) {
       suggestions.innerHTML = "";
       results.innerHTML = "";
+
+      updateSearchActions();
+
       return;
     }
 
@@ -548,6 +1288,8 @@
         </div>
       `;
 
+      updateSearchActions();
+
       return;
     }
 
@@ -575,9 +1317,6 @@
      * If products.js has not finished exposing
      * createProductCard yet, do not create a
      * second product-card design.
-     *
-     * The search results will update again
-     * when the user types.
      */
 
     if (!productCards) {
@@ -588,6 +1327,8 @@
           </strong>
         </div>
       `;
+
+      updateSearchActions();
 
       return;
     }
@@ -607,6 +1348,8 @@
         ${productCards}
       </div>
     `;
+
+    updateSearchActions();
   }
 
 
@@ -635,6 +1378,8 @@
     if (searchInput) {
       searchInput.value =
         value || "";
+
+      updateSearchActions();
 
       window.setTimeout(
         function () {
@@ -667,6 +1412,8 @@
   ========================================= */
 
   function closeSearchScreen() {
+    stopVoiceSearch();
+
     if (!searchScreen) {
       return;
     }
@@ -693,17 +1440,23 @@
   ========================================= */
 
   function clearSearch() {
+    stopVoiceSearch();
+
     if (!searchInput) {
       return;
     }
 
     searchInput.value = "";
 
+    voiceBaseText = "";
+
     if (originalSearchInput) {
       originalSearchInput.value = "";
     }
 
     renderSearch("");
+
+    updateSearchActions();
 
     searchInput.focus();
   }
@@ -720,6 +1473,8 @@
     if (!query) {
       return;
     }
+
+    stopVoiceSearch();
 
     window.location.href =
       `products.html?search=${encodeURIComponent(
@@ -748,14 +1503,40 @@
         "zynexcartSearchClear"
       );
 
+    const voiceButton =
+      document.getElementById(
+        "zynexcartSearchVoice"
+      );
+
     if (!form || !searchInput) {
       return;
     }
 
 
+    /* -------------------------------------
+       VOICE SETUP
+    ------------------------------------- */
+
+    setupVoiceRecognition();
+
+    updateVoiceButton();
+
+
+    /* -------------------------------------
+       INPUT
+    ------------------------------------- */
+
     searchInput.addEventListener(
       "input",
       function () {
+        /*
+         * Manual typing while listening
+         * becomes the new base text.
+         */
+        if (!isListening) {
+          voiceBaseText = "";
+        }
+
         const value =
           searchInput.value;
 
@@ -764,10 +1545,16 @@
             value;
         }
 
+        updateSearchActions();
+
         renderSearch(value);
       }
     );
 
+
+    /* -------------------------------------
+       KEYBOARD
+    ------------------------------------- */
 
     searchInput.addEventListener(
       "keydown",
@@ -776,7 +1563,9 @@
           event.key === "Escape"
         ) {
           event.preventDefault();
+
           closeSearchScreen();
+
           return;
         }
 
@@ -784,6 +1573,7 @@
           event.key === "Enter"
         ) {
           event.preventDefault();
+
           performSearch(
             searchInput.value
           );
@@ -791,6 +1581,10 @@
       }
     );
 
+
+    /* -------------------------------------
+       FORM SUBMIT
+    ------------------------------------- */
 
     form.addEventListener(
       "submit",
@@ -804,21 +1598,54 @@
     );
 
 
-    backButton.addEventListener(
-      "click",
-      function () {
-        closeSearchScreen();
-      }
-    );
+    /* -------------------------------------
+       BACK
+    ------------------------------------- */
+
+    if (backButton) {
+      backButton.addEventListener(
+        "click",
+        function () {
+          closeSearchScreen();
+        }
+      );
+    }
 
 
-    clearButton.addEventListener(
-      "click",
-      function () {
-        clearSearch();
-      }
-    );
+    /* -------------------------------------
+       CLEAR
+    ------------------------------------- */
 
+    if (clearButton) {
+      clearButton.addEventListener(
+        "click",
+        function () {
+          clearSearch();
+        }
+      );
+    }
+
+
+    /* -------------------------------------
+       VOICE BUTTON
+    ------------------------------------- */
+
+    if (voiceButton) {
+      voiceButton.addEventListener(
+        "click",
+        function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          startVoiceSearch();
+        }
+      );
+    }
+
+
+    /* -------------------------------------
+       SUGGESTIONS
+    ------------------------------------- */
 
     const suggestions =
       document.getElementById(
@@ -829,6 +1656,8 @@
       suggestions.addEventListener(
         "click",
         function () {
+          stopVoiceSearch();
+
           window.setTimeout(
             function () {
               closeSearchScreen();
@@ -838,6 +1667,13 @@
         }
       );
     }
+
+
+    /* -------------------------------------
+       INITIAL ACTION STATE
+    ------------------------------------- */
+
+    updateSearchActions();
   }
 
 
@@ -918,6 +1754,25 @@
 
 
   /* =========================================
+     ANDROID / BROWSER BACK
+  ========================================= */
+
+  function setupBrowserBackHandling() {
+    window.addEventListener(
+      "popstate",
+      function () {
+        if (
+          searchScreen &&
+          !searchScreen.hidden
+        ) {
+          closeSearchScreen();
+        }
+      }
+    );
+  }
+
+
+  /* =========================================
      PUBLIC API
   ========================================= */
 
@@ -939,7 +1794,21 @@
 
     closeSearchScreen,
 
-    clearSearch
+    clearSearch,
+
+    startVoiceSearch,
+
+    stopVoiceSearch,
+
+    isVoiceSupported:
+      function () {
+        return isVoiceSupported;
+      },
+
+    isListening:
+      function () {
+        return isListening;
+      }
 
   };
 
@@ -990,12 +1859,17 @@
     );
 
 
-  observer.observe(
-    document.body,
-    {
-      childList: true,
-      subtree: true
-    }
-  );
+  if (document.body) {
+    observer.observe(
+      document.body,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
+  }
+
+
+  setupBrowserBackHandling();
 
 })();
