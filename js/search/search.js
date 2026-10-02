@@ -1144,74 +1144,31 @@
   };
 
 
- /* =========================================
-   AUTO INITIALIZATION
-   Header is loaded dynamically, so search
-   waits for the actual search form.
-========================================= */
-
-function initializeSearchWhenReady() {
-  const searchForm =
-    document.getElementById("searchForm");
-
-  const searchInput =
-    document.getElementById("searchInput");
+  /* =========================================
+     AUTO INITIALIZATION
+     
+     app.js can also call setupSearch().
+     The guard prevents duplicate setup.
+  ========================================= */
 
   if (
-    searchForm &&
-    searchInput
+    document.readyState === "loading"
   ) {
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        setupSearch();
+      },
+      {
+        once: true
+      }
+    );
+
+  } else {
+
     setupSearch();
-    return true;
+
   }
 
-  return false;
-}
-
-
-/* Try immediately */
-
-initializeSearchWhenReady();
-
-
-/* Try after DOM is ready */
-
-if (
-  document.readyState === "loading"
-) {
-  document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-      initializeSearchWhenReady();
-    },
-    {
-      once: true
-    }
-  );
-}
-
-
-/* =========================================
-   WATCH DYNAMIC HEADER
-   Header component is injected after page load.
-========================================= */
-
-const searchHeaderObserver =
-  new MutationObserver(function () {
-
-    if (
-      initializeSearchWhenReady()
-    ) {
-      searchHeaderObserver.disconnect();
-    }
-
-  });
-
-
-searchHeaderObserver.observe(
-  document.body,
-  {
-    childList: true,
-    subtree: true
-  }
-);
+})();
