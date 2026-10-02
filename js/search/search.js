@@ -1,22 +1,45 @@
 /* =========================================
-   ZYNEXCART — PROFESSIONAL LIVE SEARCH
-   Complete Product + Category + Subcategory Search
+   ZYNEXCART — PROFESSIONAL SEARCH SYSTEM
+   Full-screen live search experience
 ========================================= */
 
 (function () {
   "use strict";
 
   let searchInitialized = false;
-  let suggestionBox = null;
-  let outsideClickHandler = null;
+  let searchScreen = null;
+  let searchInput = null;
+  let originalSearchInput = null;
 
-  /*
-   * IMPORTANT:
-   * There is intentionally NO fixed product-result limit.
-   *
-   * Suggestions can scroll when many products match.
-   * Full search results are handled by products.html.
-   */
+  const SUGGESTION_LIMIT = 8;
+
+
+  /* =========================================
+     NORMALIZE
+  ========================================= */
+
+  function normalize(value) {
+    return String(value || "")
+      .toLowerCase()
+      .trim()
+      .replace(/[-_]+/g, " ")
+      .replace(/\s+/g, " ");
+  }
+
+
+  /* =========================================
+     ESCAPE HTML
+  ========================================= */
+
+  function escapeHTML(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
 
   /* =========================================
      GET PRODUCTS
@@ -32,7 +55,7 @@
       }
     } catch (error) {
       console.error(
-        "ZynexCart: Unable to access products.js data.",
+        "ZynexCart: Unable to access products.",
         error
       );
     }
@@ -48,104 +71,16 @@
   ========================================= */
 
   function getCategories() {
-    if (
-      Array.isArray(window.ZynexCartCategories)
-    ) {
-      return window.ZynexCartCategories;
-    }
-
-    return [];
+    return Array.isArray(
+      window.ZynexCartCategories
+    )
+      ? window.ZynexCartCategories
+      : [];
   }
 
 
   /* =========================================
-     NORMALIZE TEXT
-  ========================================= */
-
-  function normalize(value) {
-    return String(value || "")
-      .toLowerCase()
-      .trim()
-      .replace(/[-_]+/g, " ")
-      .replace(/\s+/g, " ");
-  }
-
-
-  /* =========================================
-     ESCAPE HTML
-     Prevents product/category text from
-     being inserted as unsafe HTML.
-  ========================================= */
-
-  function escapeHTML(value) {
-    return String(value || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-
-  /* =========================================
-     ESCAPE HTML ATTRIBUTE
-  ========================================= */
-
-  function escapeAttribute(value) {
-    return escapeHTML(value);
-  }
-
-
-  /* =========================================
-     FORMAT CATEGORY
-  ========================================= */
-
-  function formatCategory(category) {
-    return String(category || "")
-      .replace(/[-_]+/g, " ")
-      .replace(/\b\w/g, function (letter) {
-        return letter.toUpperCase();
-      });
-  }
-
-
-  /* =========================================
-     GET PRODUCT CATEGORY NAME
-  ========================================= */
-
-  function getProductCategoryName(product) {
-    return normalize(
-      product && (
-        product.category ||
-        product.categoryName ||
-        product.categoryId
-      )
-    );
-  }
-
-
-  /* =========================================
-     GET PRODUCT SUBCATEGORY
-  ========================================= */
-
-  function getProductSubcategory(product) {
-    if (!product) {
-      return "";
-    }
-
-    return normalize(
-      product.subcategory ||
-      product.subcategoryName ||
-      product.subCategory ||
-      product.subCategoryName ||
-      product.subcategoryId ||
-      product.subCategoryId
-    );
-  }
-
-
-  /* =========================================
-     GET PRODUCT SEARCH TEXT
+     PRODUCT SEARCH TEXT
   ========================================= */
 
   function getProductSearchText(product) {
@@ -156,33 +91,16 @@
     return [
       product.name,
       product.category,
-      product.categoryName,
       product.categoryId,
       product.subcategory,
-      product.subcategoryName,
-      product.subCategory,
-      product.subCategoryName,
       product.subcategoryId,
+      product.subCategory,
       product.subCategoryId,
       product.unit
     ]
       .map(normalize)
       .filter(Boolean)
       .join(" ");
-  }
-
-
-  /* =========================================
-     GET QUERY WORDS
-  ========================================= */
-
-  function getQueryWords(query) {
-    return normalize(query)
-      .split(" ")
-      .map(function (word) {
-        return word.trim();
-      })
-      .filter(Boolean);
   }
 
 
@@ -197,66 +115,46 @@
       return 0;
     }
 
-    const name = normalize(product.name);
+    const name =
+      normalize(product.name);
 
-    const category = normalize(
-      product.category ||
-      product.categoryName
-    );
+    const category =
+      normalize(product.category);
 
-    const categoryId = normalize(
-      product.categoryId
-    );
+    const categoryId =
+      normalize(product.categoryId);
 
-    const subcategory = getProductSubcategory(
-      product
-    );
+    const subcategory =
+      normalize(
+        product.subcategory ||
+        product.subcategoryId ||
+        product.subCategory ||
+        product.subCategoryId
+      );
 
-    const unit = normalize(product.unit);
+    const unit =
+      normalize(product.unit);
 
     const searchText =
       getProductSearchText(product);
 
-    if (!searchText) {
-      return 0;
-    }
-
     let score = 0;
 
-    /* -----------------------------------------
-       EXACT PRODUCT NAME
-    ----------------------------------------- */
 
     if (name === searchQuery) {
       score += 3000;
     }
 
-
-    /* -----------------------------------------
-       PRODUCT NAME STARTS WITH QUERY
-    ----------------------------------------- */
-
     if (name.startsWith(searchQuery)) {
       score += 1600;
     }
-
-
-    /* -----------------------------------------
-       PRODUCT NAME CONTAINS QUERY
-    ----------------------------------------- */
 
     if (name.includes(searchQuery)) {
       score += 1000;
     }
 
 
-    /* -----------------------------------------
-       PRODUCT WORD MATCHING
-    ----------------------------------------- */
-
-    const nameWords = name.split(" ");
-
-    nameWords.forEach(function (word) {
+    name.split(" ").forEach(function (word) {
       if (word === searchQuery) {
         score += 900;
       } else if (
@@ -271,10 +169,6 @@
     });
 
 
-    /* -----------------------------------------
-       CATEGORY MATCHING
-    ----------------------------------------- */
-
     if (category === searchQuery) {
       score += 850;
     }
@@ -288,26 +182,14 @@
     }
 
 
-    /* -----------------------------------------
-       CATEGORY ID MATCHING
-    ----------------------------------------- */
-
     if (categoryId === searchQuery) {
       score += 750;
-    }
-
-    if (categoryId.startsWith(searchQuery)) {
-      score += 500;
     }
 
     if (categoryId.includes(searchQuery)) {
       score += 350;
     }
 
-
-    /* -----------------------------------------
-       SUBCATEGORY MATCHING
-    ----------------------------------------- */
 
     if (subcategory === searchQuery) {
       score += 950;
@@ -322,92 +204,43 @@
     }
 
 
-    /* -----------------------------------------
-       UNIT / SIZE MATCHING
-    ----------------------------------------- */
-
-    if (unit === searchQuery) {
-      score += 150;
-    }
-
-    if (unit.startsWith(searchQuery)) {
+    if (unit.includes(searchQuery)) {
       score += 100;
     }
 
-    if (unit.includes(searchQuery)) {
-      score += 70;
-    }
-
-
-    /* -----------------------------------------
-       MULTI-WORD SEARCH
-       Every query word should contribute.
-    ----------------------------------------- */
 
     const queryWords =
-      getQueryWords(searchQuery);
+      searchQuery.split(" ").filter(Boolean);
 
     if (queryWords.length > 1) {
-      let matchedWords = 0;
+      let matched = 0;
 
       queryWords.forEach(function (word) {
-        if (!word) {
-          return;
-        }
-
-        if (name.includes(word)) {
-          matchedWords += 1;
-          score += 350;
-          return;
-        }
-
-        if (subcategory.includes(word)) {
-          matchedWords += 1;
-          score += 300;
-          return;
-        }
-
-        if (category.includes(word)) {
-          matchedWords += 1;
-          score += 250;
-          return;
-        }
-
-        if (categoryId.includes(word)) {
-          matchedWords += 1;
-          score += 200;
-          return;
-        }
-
-        if (unit.includes(word)) {
-          matchedWords += 1;
-          score += 100;
+        if (
+          name.includes(word) ||
+          category.includes(word) ||
+          categoryId.includes(word) ||
+          subcategory.includes(word) ||
+          unit.includes(word)
+        ) {
+          matched += 1;
         }
       });
 
-      /*
-       * If not every query word matches,
-       * reduce the result priority.
-       */
+      score += matched * 250;
 
       if (
-        matchedWords === queryWords.length
+        matched === queryWords.length
       ) {
-        score += 1000;
-      } else if (
-        matchedWords > 0
-      ) {
-        score += matchedWords * 50;
+        score += 800;
       }
     }
 
 
-    /* -----------------------------------------
-       GENERAL SEARCH FALLBACK
-    ----------------------------------------- */
-
-    if (searchText.includes(searchQuery)) {
-      score += 25;
+    if (
+      searchText.includes(searchQuery)
+    ) {
+      score += 20;
     }
 
     return score;
@@ -416,11 +249,12 @@
 
   /* =========================================
      SEARCH PRODUCTS
-     Returns ALL matching products.
+     ALL MATCHING PRODUCTS RETURNED
   ========================================= */
 
   function searchProducts(query) {
-    const searchQuery = normalize(query);
+    const searchQuery =
+      normalize(query);
 
     if (!searchQuery) {
       return [];
@@ -438,8 +272,8 @@
         };
       })
 
-      .filter(function (result) {
-        return result.score > 0;
+      .filter(function (item) {
+        return item.score > 0;
       })
 
       .sort(function (a, b) {
@@ -447,99 +281,18 @@
           return b.score - a.score;
         }
 
-        const nameA = String(
-          a.product.name || ""
+        return (
+          String(a.product.name || "")
+            .localeCompare(
+              String(b.product.name || "")
+            )
+          || a.index - b.index
         );
-
-        const nameB = String(
-          b.product.name || ""
-        );
-
-        const nameCompare =
-          nameA.localeCompare(
-            nameB,
-            undefined,
-            {
-              sensitivity: "base"
-            }
-          );
-
-        if (nameCompare !== 0) {
-          return nameCompare;
-        }
-
-        return a.index - b.index;
       })
 
-      .map(function (result) {
-        return result.product;
+      .map(function (item) {
+        return item.product;
       });
-  }
-
-
-  /* =========================================
-     SCORE CATEGORY
-  ========================================= */
-
-  function scoreCategory(
-    category,
-    query
-  ) {
-    const searchQuery = normalize(query);
-
-    if (
-      !searchQuery ||
-      !category
-    ) {
-      return 0;
-    }
-
-    const name = normalize(
-      category.name
-    );
-
-    const id = normalize(
-      category.id
-    );
-
-    const description = normalize(
-      category.description
-    );
-
-    let score = 0;
-
-
-    if (name === searchQuery) {
-      score += 1000;
-    }
-
-    if (name.startsWith(searchQuery)) {
-      score += 600;
-    }
-
-    if (name.includes(searchQuery)) {
-      score += 400;
-    }
-
-    if (id === searchQuery) {
-      score += 800;
-    }
-
-    if (id.startsWith(searchQuery)) {
-      score += 500;
-    }
-
-    if (id.includes(searchQuery)) {
-      score += 350;
-    }
-
-    if (
-      description.includes(searchQuery)
-    ) {
-      score += 100;
-    }
-
-    return score;
   }
 
 
@@ -548,132 +301,162 @@
   ========================================= */
 
   function searchCategories(query) {
-    const searchQuery = normalize(query);
+    const searchQuery =
+      normalize(query);
 
     if (!searchQuery) {
       return [];
     }
 
     return getCategories()
-      .map(function (category) {
-        return {
-          category: category,
-          score: scoreCategory(
-            category,
-            searchQuery
-          )
-        };
-      })
+      .filter(function (category) {
+        const name =
+          normalize(category.name);
 
-      .filter(function (result) {
-        return result.score > 0;
-      })
+        const id =
+          normalize(category.id);
 
-      .sort(function (a, b) {
-        return b.score - a.score;
-      })
+        const description =
+          normalize(category.description);
 
-      .map(function (result) {
-        return result.category;
+        return (
+          name.includes(searchQuery) ||
+          id.includes(searchQuery) ||
+          description.includes(searchQuery)
+        );
       });
   }
 
 
   /* =========================================
-     CREATE SUGGESTION BOX
+     CREATE SEARCH SCREEN
   ========================================= */
 
-  function createSuggestionBox(
-    searchForm
-  ) {
-    if (suggestionBox) {
-      return suggestionBox;
+  function createSearchScreen() {
+    if (searchScreen) {
+      return searchScreen;
     }
 
-    suggestionBox =
-      document.createElement("div");
+    searchScreen =
+      document.createElement("section");
 
-    suggestionBox.className =
-      "search-suggestions";
+    searchScreen.id =
+      "zynexcartSearchScreen";
 
-    suggestionBox.id =
-      "searchSuggestions";
+    searchScreen.className =
+      "zynexcart-search-screen";
 
-    suggestionBox.setAttribute(
-      "role",
-      "listbox"
+    searchScreen.hidden = true;
+
+    searchScreen.innerHTML = `
+      <div class="zynexcart-search-shell">
+
+        <form
+          class="zynexcart-search-bar"
+          id="zynexcartLiveSearchForm"
+          role="search"
+        >
+
+          <button
+            type="button"
+            class="zynexcart-search-back"
+            id="zynexcartSearchBack"
+            aria-label="Back"
+          >
+            ←
+          </button>
+
+          <input
+            type="search"
+            id="zynexcartLiveSearchInput"
+            autocomplete="off"
+            aria-label="Search products"
+            placeholder="Search for products..."
+          />
+
+          <button
+            type="button"
+            class="zynexcart-search-clear"
+            id="zynexcartSearchClear"
+            aria-label="Clear search"
+          >
+            ×
+          </button>
+
+        </form>
+
+
+        <div
+          class="zynexcart-search-content"
+          id="zynexcartSearchContent"
+        >
+
+          <div
+            class="zynexcart-search-suggestions"
+            id="zynexcartSearchSuggestions"
+          ></div>
+
+
+          <div
+            class="zynexcart-search-results"
+            id="zynexcartSearchResults"
+          ></div>
+
+        </div>
+
+      </div>
+    `;
+
+    document.body.appendChild(
+      searchScreen
     );
 
-    suggestionBox.setAttribute(
-      "aria-label",
-      "Search suggestions"
-    );
-
-    suggestionBox.hidden = true;
-
-    searchForm.appendChild(
-      suggestionBox
-    );
-
-    return suggestionBox;
+    return searchScreen;
   }
 
 
   /* =========================================
-     CREATE PRODUCT SUGGESTION
+     CREATE SUGGESTION
   ========================================= */
 
-  function createProductSuggestion(
-    product
-  ) {
-    const image =
-      product.image || "";
+  function createSuggestion(product) {
+    const id =
+      escapeHTML(product.id);
 
     const name =
-      product.name || "Product";
+      escapeHTML(
+        product.name || "Product"
+      );
 
-    const safeName =
-      escapeHTML(name);
-
-    const safeImage =
-      escapeAttribute(image);
-
-    const productId =
-      product.id != null
-        ? String(product.id)
-        : "";
-
-    const safeProductId =
-      escapeAttribute(productId);
-
+    const image =
+      escapeHTML(
+        product.image || ""
+      );
 
     return `
       <a
         href="product.html?id=${encodeURIComponent(
-          productId
+          product.id
         )}"
-        class="search-suggestion"
-        role="option"
-        data-product-id="${safeProductId}"
-        aria-label="Open ${safeName}"
+        class="zynexcart-search-suggestion"
+        data-product-id="${id}"
       >
 
-        <span class="search-suggestion-image">
+        <span
+          class="zynexcart-search-suggestion-image"
+        >
 
           ${
             image
               ? `
                 <img
-                  src="${safeImage}"
-                  alt="${safeName}"
+                  src="${image}"
+                  alt="${name}"
                   loading="lazy"
                 >
               `
               : `
-                <span
-                  class="search-suggestion-image-placeholder"
-                  aria-hidden="true"
-                >
+                <span aria-hidden="true">
                   🛒
                 </span>
               `
@@ -681,13 +464,10 @@
 
         </span>
 
-
-        <span class="search-suggestion-content">
-
-          <strong class="search-suggestion-name">
-            ${safeName}
-          </strong>
-
+        <span
+          class="zynexcart-search-suggestion-name"
+        >
+          ${name}
         </span>
 
       </a>
@@ -696,166 +476,215 @@
 
 
   /* =========================================
-     CREATE SEARCH RESULT TITLE
-     
-     Used on products.html when a search
-     query is active.
+     RENDER SEARCH
   ========================================= */
 
-  function updateSearchResultsTitle() {
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
-
-    const searchQuery =
-      (params.get("search") || "").trim();
-
-    if (!searchQuery) {
+  function renderSearch(query) {
+    if (!searchScreen) {
       return;
     }
 
-    const pageTitle =
+    const suggestions =
       document.getElementById(
-        "productsPageTitle"
+        "zynexcartSearchSuggestions"
       );
 
-    if (!pageTitle) {
-      return;
-    }
+    const results =
+      document.getElementById(
+        "zynexcartSearchResults"
+      );
 
-    pageTitle.textContent =
-      `Showing results for "${searchQuery}"`;
-  }
-
-
-  /* =========================================
-     SHOW SUGGESTIONS
-     
-     Product suggestions only.
-     No Categories / Products headings.
-     No artificial 6-product limit.
-  ========================================= */
-
-  function showSuggestions(query) {
-    if (!suggestionBox) {
+    if (!suggestions || !results) {
       return;
     }
 
     const searchQuery =
       normalize(query);
 
+
     if (!searchQuery) {
-      hideSuggestions();
+      suggestions.innerHTML = "";
+      results.innerHTML = "";
       return;
     }
 
-    const productsFound =
+
+    const matchingProducts =
       searchProducts(searchQuery);
 
 
     /* =====================================
-       NO RESULTS
+       LIVE SUGGESTIONS
     ===================================== */
 
-    if (
-      productsFound.length === 0
-    ) {
-      const safeQuery =
-        escapeHTML(searchQuery);
-
-      suggestionBox.innerHTML = `
-        <div
-          class="search-no-results"
-          role="status"
-        >
-
-          <div
-            class="search-no-results-icon"
-            aria-hidden="true"
-          >
-            🔍
-          </div>
-
-          <div
-            class="search-no-results-content"
-          >
-
-            <strong>
-              No products found
-            </strong>
-
-            <small>
-              Try another product or category
-            </small>
-
-          </div>
-
-        </div>
-      `;
-
-      suggestionBox.setAttribute(
-        "aria-label",
-        `No results for ${safeQuery}`
+    const suggestionProducts =
+      matchingProducts.slice(
+        0,
+        SUGGESTION_LIMIT
       );
 
-      suggestionBox.hidden = false;
-
-      return;
-    }
+    suggestions.innerHTML =
+      suggestionProducts
+        .map(createSuggestion)
+        .join("");
 
 
     /* =====================================
-       BUILD PRODUCT SUGGESTIONS
-       
-       ALL matching products are rendered.
-       The container itself is scrollable.
+       SEARCH RESULTS
     ===================================== */
 
-    suggestionBox.innerHTML =
-      productsFound
-        .map(createProductSuggestion)
-        .join("");
+    if (
+      matchingProducts.length === 0
+    ) {
+      results.innerHTML = `
+        <div class="zynexcart-search-no-results">
+          <strong>
+            No products found
+          </strong>
 
-    suggestionBox.hidden = false;
+          <span>
+            Try another product or category.
+          </span>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    let productCards = "";
+
+    const productAPI =
+      window.ZynexCartProducts;
+
+    if (
+      productAPI &&
+      typeof productAPI.createProductCard ===
+        "function"
+    ) {
+      productCards =
+        matchingProducts
+          .map(
+            productAPI.createProductCard
+          )
+          .join("");
+    }
+
+
+    /*
+     * If products.js has not finished exposing
+     * createProductCard yet, do not create a
+     * second product-card design.
+     *
+     * The search results will update again
+     * when the user types.
+     */
+
+    if (!productCards) {
+      results.innerHTML = `
+        <div class="zynexcart-search-no-results">
+          <strong>
+            Loading products...
+          </strong>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    results.innerHTML = `
+      <h2 class="zynexcart-search-results-title">
+        Showing results for "${escapeHTML(
+          searchQuery
+        )}"
+      </h2>
+
+      <div
+        class="product-grid zynexcart-search-product-grid"
+        id="zynexcartSearchProductGrid"
+      >
+        ${productCards}
+      </div>
+    `;
   }
 
 
   /* =========================================
-     HIDE SUGGESTIONS
+     OPEN SEARCH SCREEN
   ========================================= */
 
-  function hideSuggestions() {
-    if (!suggestionBox) {
+  function openSearchScreen(value) {
+    createSearchScreen();
+
+    if (!searchScreen) {
       return;
     }
 
-    suggestionBox.hidden = true;
+    searchScreen.hidden = false;
+
+    document.body.classList.add(
+      "zynexcart-search-open"
+    );
+
+    searchInput =
+      document.getElementById(
+        "zynexcartLiveSearchInput"
+      );
+
+    if (searchInput) {
+      searchInput.value =
+        value || "";
+
+      window.setTimeout(
+        function () {
+          searchInput.focus();
+
+          const length =
+            searchInput.value.length;
+
+          try {
+            searchInput.setSelectionRange(
+              length,
+              length
+            );
+          } catch (error) {
+            /* Ignore unsupported selection */
+          }
+        },
+        0
+      );
+    }
+
+    renderSearch(
+      value || ""
+    );
   }
 
 
   /* =========================================
-     PERFORM SEARCH
+     CLOSE SEARCH SCREEN
   ========================================= */
 
-  function performSearch(
-    searchInput
-  ) {
-    const searchTerm =
-      normalize(searchInput.value);
-
-    if (!searchTerm) {
-      searchInput.focus();
-      hideSuggestions();
+  function closeSearchScreen() {
+    if (!searchScreen) {
       return;
     }
 
-    hideSuggestions();
+    searchScreen.hidden = true;
 
-    window.location.href =
-      `products.html?search=${encodeURIComponent(
-        searchTerm
-      )}`;
+    document.body.classList.remove(
+      "zynexcart-search-open"
+    );
+
+    if (originalSearchInput) {
+      originalSearchInput.value =
+        searchInput
+          ? searchInput.value
+          : originalSearchInput.value;
+
+      originalSearchInput.blur();
+    }
   }
 
 
@@ -863,50 +692,177 @@
      CLEAR SEARCH
   ========================================= */
 
-  function clearSearch(
-    searchInput
-  ) {
+  function clearSearch() {
     if (!searchInput) {
       return;
     }
 
     searchInput.value = "";
 
-    hideSuggestions();
+    if (originalSearchInput) {
+      originalSearchInput.value = "";
+    }
+
+    renderSearch("");
 
     searchInput.focus();
-
-    searchInput.dispatchEvent(
-      new Event("input", {
-        bubbles: true
-      })
-    );
   }
 
 
   /* =========================================
-     SETUP SEARCH
+     PERFORM SEARCH
+  ========================================= */
+
+  function performSearch(value) {
+    const query =
+      normalize(value);
+
+    if (!query) {
+      return;
+    }
+
+    window.location.href =
+      `products.html?search=${encodeURIComponent(
+        query
+      )}`;
+  }
+
+
+  /* =========================================
+     SETUP SEARCH SCREEN EVENTS
+  ========================================= */
+
+  function setupSearchScreenEvents() {
+    const form =
+      document.getElementById(
+        "zynexcartLiveSearchForm"
+      );
+
+    const backButton =
+      document.getElementById(
+        "zynexcartSearchBack"
+      );
+
+    const clearButton =
+      document.getElementById(
+        "zynexcartSearchClear"
+      );
+
+    if (!form || !searchInput) {
+      return;
+    }
+
+
+    searchInput.addEventListener(
+      "input",
+      function () {
+        const value =
+          searchInput.value;
+
+        if (originalSearchInput) {
+          originalSearchInput.value =
+            value;
+        }
+
+        renderSearch(value);
+      }
+    );
+
+
+    searchInput.addEventListener(
+      "keydown",
+      function (event) {
+        if (
+          event.key === "Escape"
+        ) {
+          event.preventDefault();
+          closeSearchScreen();
+          return;
+        }
+
+        if (
+          event.key === "Enter"
+        ) {
+          event.preventDefault();
+          performSearch(
+            searchInput.value
+          );
+        }
+      }
+    );
+
+
+    form.addEventListener(
+      "submit",
+      function (event) {
+        event.preventDefault();
+
+        performSearch(
+          searchInput.value
+        );
+      }
+    );
+
+
+    backButton.addEventListener(
+      "click",
+      function () {
+        closeSearchScreen();
+      }
+    );
+
+
+    clearButton.addEventListener(
+      "click",
+      function () {
+        clearSearch();
+      }
+    );
+
+
+    const suggestions =
+      document.getElementById(
+        "zynexcartSearchSuggestions"
+      );
+
+    if (suggestions) {
+      suggestions.addEventListener(
+        "click",
+        function () {
+          window.setTimeout(
+            function () {
+              closeSearchScreen();
+            },
+            50
+          );
+        }
+      );
+    }
+  }
+
+
+  /* =========================================
+     SETUP ORIGINAL HEADER SEARCH
   ========================================= */
 
   function setupSearch() {
     if (searchInitialized) {
-      updateSearchResultsTitle();
       return;
     }
 
-    const searchForm =
+    const form =
       document.getElementById(
         "searchForm"
       );
 
-    const searchInput =
+    originalSearchInput =
       document.getElementById(
         "searchInput"
       );
 
     if (
-      !searchForm ||
-      !searchInput
+      !form ||
+      !originalSearchInput
     ) {
       return;
     }
@@ -914,204 +870,50 @@
     searchInitialized = true;
 
 
-    /* -------------------------------------
-       CREATE DROPDOWN
-    ------------------------------------- */
+    createSearchScreen();
 
-    createSuggestionBox(
-      searchForm
-    );
+    searchInput =
+      document.getElementById(
+        "zynexcartLiveSearchInput"
+      );
 
-
-    /* -------------------------------------
-       SEARCH RESULT TITLE
-    ------------------------------------- */
-
-    updateSearchResultsTitle();
+    setupSearchScreenEvents();
 
 
     /* -------------------------------------
-       LIVE SEARCH
+       ORIGINAL SEARCH INPUT
     ------------------------------------- */
 
-    searchInput.addEventListener(
-      "input",
+    originalSearchInput.addEventListener(
+      "focus",
       function () {
-        showSuggestions(
-          searchInput.value
+        openSearchScreen(
+          originalSearchInput.value
         );
       }
     );
 
 
-    /* -------------------------------------
-       FOCUS
-    ------------------------------------- */
-
-    searchInput.addEventListener(
-      "focus",
+    originalSearchInput.addEventListener(
+      "input",
       function () {
-        const value =
-          searchInput.value.trim();
-
-        if (value) {
-          showSuggestions(value);
-        }
+        openSearchScreen(
+          originalSearchInput.value
+        );
       }
     );
 
 
-    /* -------------------------------------
-       FORM SUBMIT
-    ------------------------------------- */
-
-    searchForm.addEventListener(
+    form.addEventListener(
       "submit",
       function (event) {
         event.preventDefault();
 
         performSearch(
-          searchInput
+          originalSearchInput.value
         );
       }
     );
-
-
-    /* -------------------------------------
-       KEYBOARD CONTROL
-    ------------------------------------- */
-
-    searchInput.addEventListener(
-      "keydown",
-      function (event) {
-
-        /* Enter */
-
-        if (
-          event.key === "Enter"
-        ) {
-          event.preventDefault();
-
-          performSearch(
-            searchInput
-          );
-
-          return;
-        }
-
-
-        /* Escape */
-
-        if (
-          event.key === "Escape"
-        ) {
-          event.preventDefault();
-
-          hideSuggestions();
-
-          searchInput.blur();
-        }
-
-      }
-    );
-
-
-    /* -------------------------------------
-       SUGGESTION CLICK
-    ------------------------------------- */
-
-    suggestionBox.addEventListener(
-      "click",
-      function (event) {
-
-        const suggestion =
-          event.target.closest(
-            ".search-suggestion"
-          );
-
-        if (suggestion) {
-          hideSuggestions();
-        }
-
-      }
-    );
-
-
-    /* -------------------------------------
-       OUTSIDE CLICK
-    ------------------------------------- */
-
-    outsideClickHandler =
-      function (event) {
-
-        if (
-          !searchForm.contains(
-            event.target
-          )
-        ) {
-          hideSuggestions();
-        }
-
-      };
-
-    document.addEventListener(
-      "click",
-      outsideClickHandler
-    );
-
-
-    /* -------------------------------------
-       ESCAPE FROM SEARCH BOX
-    ------------------------------------- */
-
-    searchInput.addEventListener(
-      "blur",
-      function () {
-        /*
-         * Small delay allows a suggestion
-         * link to receive its click before
-         * the dropdown disappears.
-         */
-
-        window.setTimeout(
-          function () {
-
-            if (
-              !searchForm.contains(
-                document.activeElement
-              )
-            ) {
-              hideSuggestions();
-            }
-
-          },
-          120
-        );
-      }
-    );
-  }
-
-
-  /* =========================================
-     REFRESH SEARCH
-  ========================================= */
-
-  function refreshSearch() {
-    const searchInput =
-      document.getElementById(
-        "searchInput"
-      );
-
-    if (!searchInput) {
-      return;
-    }
-
-    const value =
-      searchInput.value.trim();
-
-    if (value) {
-      showSuggestions(value);
-    }
   }
 
 
@@ -1127,91 +929,73 @@
 
     searchCategories,
 
-    hideSuggestions,
-
-    refreshSearch,
-
-    clearSearch,
-
     getProducts,
 
     getCategories,
 
     normalize,
 
-    scoreProduct
+    openSearchScreen,
+
+    closeSearchScreen,
+
+    clearSearch
 
   };
 
 
-/* =========================================
-   AUTO INITIALIZATION
-   Header is loaded dynamically, so search
-   waits for the actual search form.
-========================================= */
+  /* =========================================
+     AUTO INITIALIZATION
+     Header is dynamically loaded.
+  ========================================= */
 
-function initializeSearchWhenReady() {
-  const searchForm =
-    document.getElementById("searchForm");
+  function initializeWhenReady() {
+    if (
+      document.getElementById("searchForm") &&
+      document.getElementById("searchInput")
+    ) {
+      setupSearch();
+      return true;
+    }
 
-  const searchInput =
-    document.getElementById("searchInput");
+    return false;
+  }
+
+
+  initializeWhenReady();
+
 
   if (
-    searchForm &&
-    searchInput
+    document.readyState === "loading"
   ) {
-    setupSearch();
-    return true;
+    document.addEventListener(
+      "DOMContentLoaded",
+      initializeWhenReady,
+      {
+        once: true
+      }
+    );
   }
 
-  return false;
-}
+
+  const observer =
+    new MutationObserver(
+      function () {
+        if (
+          initializeWhenReady()
+        ) {
+          observer.disconnect();
+        }
+      }
+    );
 
 
-/* Try immediately */
-
-initializeSearchWhenReady();
-
-
-/* Try after DOM is ready */
-
-if (
-  document.readyState === "loading"
-) {
-  document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-      initializeSearchWhenReady();
-    },
+  observer.observe(
+    document.body,
     {
-      once: true
+      childList: true,
+      subtree: true
     }
   );
-}
 
-
-/* =========================================
-   WATCH DYNAMIC HEADER
-   Header component is injected after page load.
-========================================= */
-
-const searchHeaderObserver =
-  new MutationObserver(function () {
-
-    if (
-      initializeSearchWhenReady()
-    ) {
-      searchHeaderObserver.disconnect();
-    }
-
-  });
-
-
-searchHeaderObserver.observe(
-  document.body,
-  {
-    childList: true,
-    subtree: true
-  }
-);
+})();
