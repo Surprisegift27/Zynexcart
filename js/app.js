@@ -26,42 +26,46 @@
   const savedAddresses = window.ZynexCartSavedAddresses;
 
 
-  /* =========================================================
-     DEPENDENCY CHECK
-  ========================================================= */
+ /* =========================================================
+   DEPENDENCY CHECK
+========================================================= */
 
-  function checkDependencies() {
-    const missing = [];
+function checkDependencies() {
+  const missing = [];
 
-    if (!storage) missing.push("core/storage.js");
-    if (!utils) missing.push("core/utils.js");
-    if (!events) missing.push("core/events.js");
+  if (!storage) missing.push("core/storage.js");
+  if (!utils) missing.push("core/utils.js");
+  if (!events) missing.push("core/events.js");
 
-    if (!cart) missing.push("cart/cart.js");
-    if (!cartActions) missing.push("cart/cart-actions.js");
-    if (!cartUI) missing.push("cart/cart-ui.js");
+  if (!cart) missing.push("cart/cart.js");
+  if (!cartActions) missing.push("cart/cart-actions.js");
+  if (!cartUI) missing.push("cart/cart-ui.js");
 
-    if (!search) missing.push("search/search.js");
+  /*
+   * Search is initialized independently because
+   * the header/search form can load dynamically.
+   * Search must not stop the complete application
+   * from initializing.
+   */
 
-    if (!locationCore) missing.push("location/location.js");
-    if (!locationUI) missing.push("location/location-ui.js");
-    if (!locationSearch) missing.push("location/location-search.js");
-    if (!locationMap) missing.push("location/location-map.js");
-    if (!locationAddress) missing.push("location/location-address.js");
-    if (!savedAddresses) missing.push("location/saved-addresses.js");
+  if (!locationCore) missing.push("location/location.js");
+  if (!locationUI) missing.push("location/location-ui.js");
+  if (!locationSearch) missing.push("location/location-search.js");
+  if (!locationMap) missing.push("location/location-map.js");
+  if (!locationAddress) missing.push("location/location-address.js");
+  if (!savedAddresses) missing.push("location/saved-addresses.js");
 
-    if (missing.length) {
-      console.error(
-        "ZynexCart: Missing modules:",
-        missing
-      );
+  if (missing.length) {
+    console.error(
+      "ZynexCart: Missing modules:",
+      missing
+    );
 
-      return false;
-    }
-
-    return true;
+    return false;
   }
 
+  return true;
+}
 
   /* =========================================================
      CART API
