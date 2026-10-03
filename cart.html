@@ -25,7 +25,6 @@
 
   <!-- =====================================================
        ZYNEXCART GLOBAL CSS
-       Same system used by the main website
        ===================================================== -->
 
   <link
@@ -249,9 +248,7 @@
     .cart-layout {
       display: grid;
 
-      grid-template-columns:
-        minmax(0, 1fr)
-        360px;
+      grid-template-columns: 1fr;
 
       gap: 24px;
 
@@ -614,12 +611,9 @@
        ===================================================== */
 
     .cart-summary {
-      position: sticky;
+      position: static;
 
-      top:
-        calc(
-          var(--zynexcart-header-height, 0px) + 18px
-        );
+      width: 100%;
 
       align-self: start;
 
@@ -975,7 +969,7 @@
       .cart-summary {
         position: static;
 
-        order: -1;
+        order: 0;
 
         width: 100%;
       }
@@ -1219,7 +1213,9 @@
       }
 
 
-      /* MOBILE CHECKOUT */
+      /* =================================================
+         MOBILE CHECKOUT
+         ================================================= */
 
       .mobile-checkout-bar {
         position: fixed;
@@ -1364,8 +1360,7 @@
 
   <!-- =====================================================
        HEADER COMPONENT
-       IMPORTANT:
-       Same header.html as Home page
+       Same header as Home
        ===================================================== -->
 
   <div id="header-component"></div>
@@ -1378,7 +1373,9 @@
   <main class="cart-page">
 
 
-    <!-- TOP -->
+    <!-- ===================================================
+         TOP
+         =================================================== -->
 
     <div class="cart-topbar">
 
@@ -1568,6 +1565,132 @@
         </section>
 
 
+        <!-- =================================================
+             BILL DETAILS
+             MOVED BELOW TIP
+             ================================================= -->
+
+        <aside class="cart-summary">
+
+
+          <div class="cart-summary-header">
+
+            <h2>
+              Bill Details
+            </h2>
+
+          </div>
+
+
+          <div class="summary-content">
+
+
+            <div class="summary-row">
+
+              <span>
+                Items total
+              </span>
+
+              <strong id="summaryItemsTotal">
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Savings
+              </span>
+
+              <strong
+                class="saved"
+                id="summarySavings"
+              >
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Delivery charge
+              </span>
+
+              <strong class="delivery-free">
+                FREE
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Handling charge
+              </span>
+
+              <strong id="summaryHandling">
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Delivery tip
+              </span>
+
+              <strong id="summaryTip">
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <hr class="summary-divider">
+
+
+            <div class="grand-total-row">
+
+              <span>
+                Grand Total
+              </span>
+
+              <strong id="grandTotal">
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <button
+              class="checkout-btn"
+              id="checkoutBtn"
+              type="button"
+            >
+              Proceed to Checkout →
+            </button>
+
+
+            <!-- HOME PAGE -->
+            <a
+              href="index.html"
+              class="continue-shopping"
+            >
+              ← Continue Shopping
+            </a>
+
+          </div>
+
+        </aside>
+
+
         <!-- POLICY -->
 
         <section class="cart-extra-card">
@@ -1588,131 +1711,6 @@
 
 
       </div>
-
-
-      <!-- ===================================================
-           BILL DETAILS
-           =================================================== -->
-
-      <aside class="cart-summary">
-
-
-        <div class="cart-summary-header">
-
-          <h2>
-            Bill Details
-          </h2>
-
-        </div>
-
-
-        <div class="summary-content">
-
-
-          <div class="summary-row">
-
-            <span>
-              Items total
-            </span>
-
-            <strong id="summaryItemsTotal">
-              ₹0
-            </strong>
-
-          </div>
-
-
-          <div class="summary-row">
-
-            <span>
-              Savings
-            </span>
-
-            <strong
-              class="saved"
-              id="summarySavings"
-            >
-              ₹0
-            </strong>
-
-          </div>
-
-
-          <div class="summary-row">
-
-            <span>
-              Delivery charge
-            </span>
-
-            <strong class="delivery-free">
-              FREE
-            </strong>
-
-          </div>
-
-
-          <div class="summary-row">
-
-            <span>
-              Handling charge
-            </span>
-
-            <strong id="summaryHandling">
-              ₹0
-            </strong>
-
-          </div>
-
-
-          <div class="summary-row">
-
-            <span>
-              Delivery tip
-            </span>
-
-            <strong id="summaryTip">
-              ₹0
-            </strong>
-
-          </div>
-
-
-          <hr class="summary-divider">
-
-
-          <div class="grand-total-row">
-
-            <span>
-              Grand Total
-            </span>
-
-            <strong id="grandTotal">
-              ₹0
-            </strong>
-
-          </div>
-
-
-          <button
-            class="checkout-btn"
-            id="checkoutBtn"
-            type="button"
-          >
-            Proceed to Checkout →
-          </button>
-
-
-          <a
-            href="products.html"
-            class="continue-shopping"
-          >
-            ← Continue Shopping
-          </a>
-
-        </div>
-
-      </aside>
-
 
     </div>
 
@@ -1884,27 +1882,11 @@
 
       try {
 
-
-        /*
-         * IMPORTANT:
-         * Header must load FIRST.
-         *
-         * This prevents:
-         * - Select Your Location appearing
-         * - Search screen appearing
-         * - Header layout breaking
-         */
-
         await loadComponent(
           "header-component",
           "components/header.html"
         );
 
-
-        /*
-         * Load project dependencies
-         * in correct order.
-         */
 
         const scripts = [
 
@@ -1952,31 +1934,11 @@
         }
 
 
-        /*
-         * Start cart rendering
-         */
-
         initializeCartRendering();
-
-
-        /*
-         * Share
-         */
 
         initializeShare();
 
-
-        /*
-         * Tips
-         */
-
         initializeTips();
-
-
-        /*
-         * Keep header cart
-         * synchronized.
-         */
 
         updateHeaderCartDisplay();
 
@@ -2086,7 +2048,6 @@
        ===================================================== */
 
     function initializeCartRendering() {
-
 
       const cartCore =
         window.ZynexCartCart;
@@ -2472,7 +2433,6 @@
                     String(item.id)
                   )}"
                 >
-
 
                   <div class="cart-item-image">
 
