@@ -1352,12 +1352,21 @@
 
 
     /* =====================================================
+       DESKTOP — REAL HOME PAGE BACKDROP
+       ===================================================== */
+
+    .cart-home-backdrop {
+      display: none;
+    }
+
+
+    /* =====================================================
        LARGE SCREEN — PHOTO STYLE RIGHT CART DRAWER
-       
+
        IMPORTANT:
        This applies ONLY to real desktop-style pointer devices.
-       A phone using Chrome "Desktop Site" normally keeps its
-       touch/pointer characteristics, so its header remains.
+       A real phone using Chrome Desktop Site will NOT enter
+       this block because its pointer remains coarse.
        ===================================================== */
 
     @media screen
@@ -1365,36 +1374,116 @@
       and (pointer: fine)
       and (hover: hover) {
 
-      /* Hide normal site header on real PC/Laptop.
-         It is not part of the cart drawer. */
+
+      /* =================================================
+         REAL HOME PAGE BEHIND CART
+         ================================================= */
+
+      .cart-home-backdrop {
+
+        position: fixed;
+
+        inset: 0;
+
+        display: block;
+
+        overflow: hidden;
+
+        z-index: 998;
+
+        background: #07101f;
+      }
+
+
+      .cart-home-backdrop iframe {
+
+        position: absolute;
+
+        inset: 0;
+
+        width: 100%;
+        height: 100%;
+
+        display: block;
+
+        border: 0;
+
+        /*
+         * Home page is intentionally dimmed,
+         * matching the reference cart-drawer style.
+         */
+        filter: brightness(.52);
+
+        pointer-events: none;
+      }
+
+
+      .cart-home-backdrop-close {
+
+        position: absolute;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        /*
+         * Same drawer width as the cart.
+         * Everything on the left remains clickable.
+         */
+        width:
+          calc(
+            100% - min(520px, 44vw)
+          );
+
+        margin: 0;
+
+        padding: 0;
+
+        border: 0;
+
+        background: transparent;
+
+        cursor: pointer;
+
+        z-index: 2;
+      }
+
+
+      .cart-home-backdrop-close:focus {
+        outline: none;
+      }
+
+
+      /* =================================================
+         HEADER
+         ================================================= */
 
       #header-component {
         display: none !important;
       }
 
 
-      /* Dark page background behind drawer */
+      /* =================================================
+         BODY
+         ================================================= */
 
       body {
+
         overflow: hidden;
 
         background: #07101f;
       }
 
 
+      /*
+       * Disable the old dark overlay because the actual
+       * Home page iframe is already dimmed.
+       */
       body::before {
-        content: "";
 
-        position: fixed;
+        display: none !important;
 
-        inset: 0;
-
-        z-index: 999;
-
-        background:
-          rgba(7, 17, 31, .68);
-
-        pointer-events: none;
+        content: none !important;
       }
 
 
@@ -1412,10 +1501,11 @@
 
         z-index: 1000;
 
-        width: min(
-          520px,
-          44vw
-        );
+        width:
+          min(
+            520px,
+            44vw
+          );
 
         max-width: 520px;
 
@@ -1870,11 +1960,10 @@
 
 
     /* =====================================================
-       PHONE WITH DESKTOP SITE
-       
-       If browser reports a wide viewport but device is
-       touch/coarse, keep the header visible and allow the
-       desktop-style cart layout without hiding the header.
+       PHONE WITH CHROME DESKTOP SITE
+
+       IMPORTANT:
+       Real touch phone keeps its header visible.
        ===================================================== */
 
     @media screen
@@ -1888,12 +1977,27 @@
       }
 
 
+      .cart-home-backdrop {
+
+        display: none !important;
+
+      }
+
+
       .cart-page {
 
         padding-top:
           calc(
             var(--zynexcart-header-height, 0px) + 30px
           );
+
+      }
+
+
+      body {
+
+        overflow: auto;
+
       }
 
     }
@@ -1904,6 +2008,31 @@
 
 
 <body>
+
+
+  <!-- =====================================================
+       DESKTOP HOME PAGE BACKDROP
+       ===================================================== -->
+
+  <div
+    class="cart-home-backdrop"
+    aria-hidden="true"
+  >
+
+    <iframe
+      src="index.html"
+      title="ZynexCart Home"
+      tabindex="-1"
+    ></iframe>
+
+
+    <button
+      type="button"
+      class="cart-home-backdrop-close"
+      aria-label="Close cart and return to home"
+    ></button>
+
+  </div>
 
 
   <!-- =====================================================
@@ -1929,10 +2058,15 @@
 
       <div class="cart-page-title">
 
+        <!--
+          ONLY CHANGE:
+          My Cart back button now returns to Home.
+        -->
+
         <a
-          href="products.html"
+          href="index.html"
           class="cart-back-btn"
-          aria-label="Back to products"
+          aria-label="Back to home"
         >
           ←
         </a>
@@ -2324,6 +2458,42 @@
   <script>
 
     "use strict";
+
+
+    /* =====================================================
+       DESKTOP HOME BACKDROP CLICK
+       ===================================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function() {
+
+        const backdropClose =
+          document.querySelector(
+            ".cart-home-backdrop-close"
+          );
+
+
+        if (!backdropClose) {
+          return;
+        }
+
+
+        backdropClose.addEventListener(
+          "click",
+          function() {
+
+            window.location.href =
+              "index.html";
+
+          }
+        );
+
+      },
+      {
+        once: true
+      }
+    );
 
 
     /* =====================================================
