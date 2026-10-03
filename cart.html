@@ -23,7 +23,9 @@
   <title>My Cart — ZynexCart</title>
 
 
-  <!-- GLOBAL CSS -->
+  <!-- =====================================================
+       GLOBAL CSS
+       ===================================================== -->
 
   <link
     rel="stylesheet"
@@ -51,7 +53,9 @@
   >
 
 
-  <!-- CART PAGE CSS -->
+  <!-- =====================================================
+       CART PAGE CSS
+       ===================================================== -->
 
   <style>
 
@@ -61,7 +65,6 @@
 
     .cart-page {
       width: min(1200px, calc(100% - 40px));
-
       margin-inline: auto;
 
       padding-top:
@@ -74,12 +77,11 @@
 
 
     /* =====================================================
-       TOP
+       TOP BAR
        ===================================================== */
 
     .cart-topbar {
       display: flex;
-
       align-items: center;
       justify-content: space-between;
 
@@ -91,7 +93,6 @@
 
     .cart-page-title {
       display: flex;
-
       align-items: center;
 
       gap: 13px;
@@ -107,12 +108,10 @@
       flex: 0 0 42px;
 
       display: inline-flex;
-
       align-items: center;
       justify-content: center;
 
       border: 1px solid #e7e9ee;
-
       border-radius: 12px;
 
       background: #ffffff;
@@ -133,7 +132,6 @@
 
     .cart-back-btn:hover {
       border-color: #ff6b00;
-
       color: #ff6b00;
 
       transform: translateX(-2px);
@@ -146,7 +144,6 @@
       color: #071b3a;
 
       font-size: 28px;
-
       line-height: 1.15;
     }
 
@@ -166,7 +163,6 @@
       padding: 0 15px;
 
       border: 1px solid #dfe3ea;
-
       border-radius: 11px;
 
       background: #ffffff;
@@ -174,7 +170,6 @@
       color: #071b3a;
 
       font-size: 13px;
-
       font-weight: 800;
 
       cursor: pointer;
@@ -185,7 +180,6 @@
 
     .cart-share-btn:hover {
       border-color: #00aeef;
-
       color: #00aeef;
     }
 
@@ -207,7 +201,6 @@
       padding: 15px 18px;
 
       border: 1px solid #cfe9fa;
-
       border-radius: 15px;
 
       background:
@@ -223,7 +216,6 @@
       color: #1769aa;
 
       font-size: 14px;
-
       font-weight: 800;
     }
 
@@ -232,7 +224,6 @@
       color: #1769aa;
 
       font-size: 19px;
-
       font-weight: 900;
     }
 
@@ -275,7 +266,6 @@
       padding: 17px;
 
       border: 1px solid #e7e9ee;
-
       border-radius: 17px;
 
       background: #ffffff;
@@ -338,7 +328,6 @@
       overflow: hidden;
 
       border: 1px solid #e7e9ee;
-
       border-radius: 17px;
 
       background: #ffffff;
@@ -376,7 +365,6 @@
       color: #6b7280;
 
       font-size: 13px;
-
       font-weight: 700;
     }
 
@@ -475,7 +463,6 @@
       color: #071b3a;
 
       font-size: 17px;
-
       font-weight: 900;
     }
 
@@ -493,7 +480,6 @@
       color: #16834b;
 
       font-size: 12px;
-
       font-weight: 800;
     }
 
@@ -539,7 +525,6 @@
       color: #ffffff;
 
       font-size: 18px;
-
       font-weight: 800;
 
       cursor: pointer;
@@ -561,7 +546,6 @@
       color: #071b3a;
 
       font-size: 14px;
-
       font-weight: 900;
     }
 
@@ -578,7 +562,6 @@
       color: #e85f00;
 
       font-size: 13px;
-
       font-weight: 800;
 
       cursor: pointer;
@@ -710,7 +693,6 @@
       color: #071b3a;
 
       font-size: 18px;
-
       font-weight: 900;
     }
 
@@ -736,7 +718,6 @@
       color: #ffffff;
 
       font-size: 14px;
-
       font-weight: 900;
 
       cursor: pointer;
@@ -764,7 +745,6 @@
       text-align: center;
 
       font-size: 13px;
-
       font-weight: 800;
 
       text-decoration: none;
@@ -841,7 +821,6 @@
       color: #172033;
 
       font-size: 13px;
-
       font-weight: 800;
 
       cursor: pointer;
@@ -967,10 +946,16 @@
       }
 
 
+      /*
+       * IMPORTANT:
+       * Bill Details must NOT appear before
+       * Cart Items on mobile/tablet.
+       */
+
       .cart-summary {
         position: static;
 
-        order: -1;
+        order: initial;
 
         width: 100%;
       }
@@ -1009,14 +994,14 @@
 
 
       .cart-back-btn {
-        width: 38px;
-        height: 38px;
+        width: 40px;
+        height: 40px;
 
-        flex-basis: 38px;
+        flex-basis: 40px;
 
-        border-radius: 10px;
+        border-radius: 11px;
 
-        font-size: 17px;
+        font-size: 18px;
       }
 
 
@@ -1031,7 +1016,7 @@
 
 
       .cart-share-btn {
-        min-height: 38px;
+        min-height: 40px;
 
         padding: 0 11px;
 
@@ -1042,6 +1027,8 @@
 
 
       .cart-savings-banner {
+        margin-bottom: 14px;
+
         padding: 12px 14px;
 
         border-radius: 13px;
@@ -1058,7 +1045,11 @@
       }
 
 
+      /* DELIVERY */
+
       .cart-delivery-card {
+        margin-bottom: 14px;
+
         padding: 14px;
 
         border-radius: 14px;
@@ -1085,8 +1076,164 @@
       }
 
 
-      .cart-summary {
+      /* CART ITEMS */
+
+      .cart-items-card {
         border-radius: 14px;
+      }
+
+
+      .cart-section-heading {
+        padding: 14px;
+      }
+
+
+      .cart-section-heading h2 {
+        font-size: 16px;
+      }
+
+
+      .cart-section-heading span {
+        font-size: 12px;
+      }
+
+
+      .cart-item {
+        grid-template-columns:
+          78px
+          minmax(0, 1fr);
+
+        gap: 12px;
+
+        padding: 14px;
+      }
+
+
+      .cart-item-image {
+        width: 78px;
+        height: 78px;
+
+        border-radius: 12px;
+      }
+
+
+      .cart-item-details h3 {
+        font-size: 14px;
+      }
+
+
+      .cart-item-variant {
+        font-size: 12px;
+      }
+
+
+      .cart-price-row {
+        gap: 6px;
+      }
+
+
+      .cart-current-price {
+        font-size: 15px;
+      }
+
+
+      .cart-mrp {
+        font-size: 12px;
+      }
+
+
+      .cart-save-text {
+        font-size: 11px;
+      }
+
+
+      .cart-item-actions {
+        margin-top: 10px;
+      }
+
+
+      .cart-quantity-btn {
+        width: 32px;
+        height: 31px;
+
+        font-size: 17px;
+      }
+
+
+      .cart-item-quantity {
+        width: 34px;
+      }
+
+
+      .cart-remove-btn {
+        margin-left: 9px;
+
+        font-size: 12px;
+      }
+
+
+      .cart-item-total {
+        grid-column: 2;
+
+        margin-top: -5px;
+
+        text-align: left;
+      }
+
+
+      .cart-item-total strong {
+        font-size: 15px;
+      }
+
+
+      /* TIP */
+
+      .cart-extra-card {
+        margin-top: 14px;
+
+        padding: 15px;
+
+        border-radius: 14px;
+      }
+
+
+      .cart-extra-card h2 {
+        font-size: 17px;
+      }
+
+
+      .cart-extra-card p {
+        font-size: 13px;
+      }
+
+
+      .tip-options {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
+
+        margin-top: 14px;
+      }
+
+
+      .tip-option {
+        min-height: 48px;
+
+        font-size: 13px;
+      }
+
+
+      /* BILL DETAILS */
+
+      .cart-summary {
+        margin-top: 14px;
+
+        border-radius: 14px;
+
+        box-shadow:
+          0 3px 14px
+          rgba(7, 27, 58, .05);
       }
 
 
@@ -1112,6 +1259,11 @@
       }
 
 
+      .summary-divider {
+        margin: 14px 0;
+      }
+
+
       .grand-total-row {
         font-size: 16px;
       }
@@ -1123,94 +1275,25 @@
 
 
       .checkout-btn {
-        min-height: 46px;
+        min-height: 47px;
 
         margin-top: 15px;
+
+        font-size: 13px;
       }
 
 
-      .cart-items-card {
-        border-radius: 14px;
+      .continue-shopping {
+        margin-top: 13px;
+
+        font-size: 13px;
       }
 
 
-      .cart-section-heading {
-        padding: 14px;
-      }
+      /* POLICY */
 
-
-      .cart-section-heading h2 {
-        font-size: 16px;
-      }
-
-
-      .cart-item {
-        grid-template-columns:
-          78px
-          minmax(0, 1fr);
-
-        gap: 12px;
-
-        padding: 14px;
-      }
-
-
-      .cart-item-image {
-        width: 78px;
-        height: 78px;
-      }
-
-
-      .cart-item-details h3 {
-        font-size: 14px;
-      }
-
-
-      .cart-current-price {
-        font-size: 15px;
-      }
-
-
-      .cart-item-total {
-        grid-column: 2;
-
-        margin-top: -5px;
-
-        text-align: left;
-      }
-
-
-      .cart-item-total strong {
-        font-size: 15px;
-      }
-
-
-      .cart-quantity-btn {
-        width: 32px;
-        height: 31px;
-      }
-
-
-      .cart-item-quantity {
-        width: 34px;
-      }
-
-
-      .cart-remove-btn {
-        font-size: 12px;
-      }
-
-
-      .cart-extra-card {
-        padding: 15px;
-
-        border-radius: 14px;
-      }
-
-
-      .tip-options {
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+      .policy-text {
+        line-height: 1.55;
       }
 
 
@@ -1239,11 +1322,11 @@
         border-top: 1px solid #dfe3ea;
 
         background:
-          rgba(255,255,255,.97);
+          rgba(255, 255, 255, .97);
 
         box-shadow:
           0 -5px 20px
-          rgba(7,27,58,.09);
+          rgba(7, 27, 58, .09);
 
         backdrop-filter: blur(10px);
       }
@@ -1255,7 +1338,6 @@
         color: #6b7280;
 
         font-size: 10px;
-
         font-weight: 800;
 
         text-transform: uppercase;
@@ -1270,7 +1352,6 @@
         color: #071b3a;
 
         font-size: 18px;
-
         font-weight: 900;
       }
 
@@ -1292,7 +1373,6 @@
         color: #ffffff;
 
         font-size: 13px;
-
         font-weight: 900;
 
         cursor: pointer;
@@ -1349,45 +1429,6 @@
 
     }
 
-
-    /* =====================================================
-       REAL MOBILE PHONE + CHROME DESKTOP SITE
-       
-       IMPORTANT:
-       Normal mobile is NOT affected.
-       
-       When Chrome "Desktop site" is ON, the CSS viewport
-       becomes wide even though the physical device is a phone.
-       
-       In that situation:
-       - Do not show right-side Bill Details.
-       - Use the cart content as a single column.
-       - Keep mobile checkout bar working.
-       ===================================================== */
-
-    @media screen
-      and (min-width: 651px)
-      and (max-width: 1200px)
-      and (pointer: coarse)
-      and (hover: none)
-      and (max-device-width: 650px) {
-
-      .cart-layout {
-        display: block;
-      }
-
-
-      .cart-summary {
-        display: none !important;
-      }
-
-
-      .cart-left-column {
-        width: 100%;
-      }
-
-    }
-
   </style>
 
 </head>
@@ -1396,26 +1437,38 @@
 <body>
 
 
-  <!-- HEADER -->
+  <!-- =====================================================
+       HEADER
+       Same header component as Home
+       ===================================================== -->
 
   <div id="header-component"></div>
 
 
-  <!-- CART -->
+  <!-- =====================================================
+       CART MAIN
+       ===================================================== -->
 
   <main class="cart-page">
 
 
-    <!-- TOP -->
+    <!-- ===================================================
+         TOP
+         =================================================== -->
 
     <div class="cart-topbar">
 
       <div class="cart-page-title">
 
+        <!--
+          BACK BUTTON
+          Goes directly to HOME
+        -->
+
         <a
           href="index.html"
           class="cart-back-btn"
-          aria-label="Back to ZynexCart home"
+          aria-label="Back to Home"
         >
           ←
         </a>
@@ -1447,7 +1500,9 @@
     </div>
 
 
-    <!-- SAVINGS -->
+    <!-- ===================================================
+         SAVINGS
+         =================================================== -->
 
     <section class="cart-savings-banner">
 
@@ -1465,17 +1520,23 @@
     </section>
 
 
-    <!-- MAIN LAYOUT -->
+    <!-- ===================================================
+         MAIN LAYOUT
+         =================================================== -->
 
     <div class="cart-layout">
 
 
-      <!-- LEFT -->
+      <!-- =================================================
+           LEFT COLUMN
+           ================================================= -->
 
       <div class="cart-left-column">
 
 
-        <!-- DELIVERY -->
+        <!-- =================================================
+             DELIVERY
+             ================================================= -->
 
         <section class="cart-delivery-card">
 
@@ -1502,7 +1563,9 @@
         </section>
 
 
-        <!-- CART ITEMS -->
+        <!-- =================================================
+             CART ITEMS
+             ================================================= -->
 
         <section class="cart-items-section">
 
@@ -1530,7 +1593,9 @@
         </section>
 
 
-        <!-- TIP -->
+        <!-- =================================================
+             TIP
+             ================================================= -->
 
         <section class="cart-extra-card">
 
@@ -1588,7 +1653,135 @@
         </section>
 
 
-        <!-- POLICY -->
+        <!-- =================================================
+             MOBILE BILL DETAILS
+             The same summary appears here on mobile
+             through CSS order/layout.
+             ================================================= -->
+
+        <div class="cart-summary cart-summary-mobile-safe">
+
+
+          <div class="cart-summary-header">
+
+            <h2>
+              Bill Details
+            </h2>
+
+          </div>
+
+
+          <div class="summary-content">
+
+
+            <div class="summary-row">
+
+              <span>
+                Items total
+              </span>
+
+              <strong id="summaryItemsTotal">
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Savings
+              </span>
+
+              <strong
+                class="saved"
+                id="summarySavings"
+              >
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Delivery charge
+              </span>
+
+              <strong class="delivery-free">
+                FREE
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Handling charge
+              </span>
+
+              <strong id="summaryHandling">
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Delivery tip
+              </span>
+
+              <strong id="summaryTip">
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <hr class="summary-divider">
+
+
+            <div class="grand-total-row">
+
+              <span>
+                Grand Total
+              </span>
+
+              <strong id="grandTotal">
+                ₹0
+              </strong>
+
+            </div>
+
+
+            <button
+              class="checkout-btn"
+              id="checkoutBtn"
+              type="button"
+            >
+              Proceed to Checkout →
+            </button>
+
+
+            <a
+              href="products.html"
+              class="continue-shopping"
+            >
+              ← Continue Shopping
+            </a>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CANCELLATION POLICY
+             ================================================= -->
 
         <section class="cart-extra-card">
 
@@ -1610,13 +1803,12 @@
       </div>
 
 
-      <!-- BILL DETAILS
-           Desktop only.
-           Hidden specifically for real phones
-           when Chrome Desktop Site is ON.
-      -->
+      <!-- =================================================
+           DESKTOP BILL DETAILS
+           ================================================= -->
 
-      <aside class="cart-summary">
+      <aside class="cart-summary cart-summary-desktop">
+
 
         <div class="cart-summary-header">
 
@@ -1636,7 +1828,7 @@
               Items total
             </span>
 
-            <strong id="summaryItemsTotal">
+            <strong id="summaryItemsTotalDesktop">
               ₹0
             </strong>
 
@@ -1651,7 +1843,7 @@
 
             <strong
               class="saved"
-              id="summarySavings"
+              id="summarySavingsDesktop"
             >
               ₹0
             </strong>
@@ -1678,7 +1870,7 @@
               Handling charge
             </span>
 
-            <strong id="summaryHandling">
+            <strong id="summaryHandlingDesktop">
               ₹0
             </strong>
 
@@ -1691,7 +1883,7 @@
               Delivery tip
             </span>
 
-            <strong id="summaryTip">
+            <strong id="summaryTipDesktop">
               ₹0
             </strong>
 
@@ -1707,7 +1899,7 @@
               Grand Total
             </span>
 
-            <strong id="grandTotal">
+            <strong id="grandTotalDesktop">
               ₹0
             </strong>
 
@@ -1716,7 +1908,7 @@
 
           <button
             class="checkout-btn"
-            id="checkoutBtn"
+            id="checkoutBtnDesktop"
             type="button"
           >
             Proceed to Checkout →
@@ -1724,7 +1916,7 @@
 
 
           <a
-            href="index.html"
+            href="products.html"
             class="continue-shopping"
           >
             ← Continue Shopping
@@ -1740,7 +1932,9 @@
   </main>
 
 
-  <!-- MOBILE CHECKOUT BAR -->
+  <!-- =====================================================
+       MOBILE FIXED CHECKOUT BAR
+       ===================================================== -->
 
   <div class="mobile-checkout-bar">
 
@@ -1771,7 +1965,9 @@
   </div>
 
 
-  <!-- FOOTER -->
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
 
   <footer class="site-footer">
 
@@ -1790,7 +1986,9 @@
   </footer>
 
 
-  <!-- JAVASCRIPT -->
+  <!-- =====================================================
+       JAVASCRIPT
+       ===================================================== -->
 
   <script>
 
@@ -1818,9 +2016,12 @@
       try {
 
         const response =
-          await fetch(file, {
-            cache: "no-store"
-          });
+          await fetch(
+            file,
+            {
+              cache: "no-store"
+            }
+          );
 
 
         if (!response.ok) {
@@ -1899,12 +2100,19 @@
 
       try {
 
+        /*
+         * HEADER FIRST
+         */
 
         await loadComponent(
           "header-component",
           "components/header.html"
         );
 
+
+        /*
+         * PROJECT DEPENDENCIES
+         */
 
         const scripts = [
 
@@ -2034,7 +2242,7 @@
       if (textElement) {
 
         textElement.innerHTML =
-          `<span id="cartCount">${count}</span> ${
+          `${count} ${
             count === 1
               ? "item"
               : "items"
@@ -2066,7 +2274,6 @@
        ===================================================== */
 
     function initializeCartRendering() {
-
 
       const cartCore =
         window.ZynexCartCart;
@@ -2124,6 +2331,19 @@
             value;
 
         }
+
+      }
+
+
+      function updateSummaryFields(
+        id,
+        value
+      ) {
+
+        updateText(
+          id,
+          value
+        );
 
       }
 
@@ -2228,7 +2448,6 @@
 
         const handlingCharge = 0;
 
-
         const tip =
           Number(currentTip) || 0;
 
@@ -2240,40 +2459,68 @@
           tip;
 
 
+        const formattedTip =
+          utils.formatPrice(tip);
+
+
+        const formattedHandling =
+          utils.formatPrice(
+            handlingCharge
+          );
+
+
+        const formattedGrandTotal =
+          utils.formatPrice(
+            grandTotal
+          );
+
+
         updateText(
           "summaryTip",
-          utils.formatPrice(tip)
+          formattedTip
+        );
+
+
+        updateText(
+          "summaryTipDesktop",
+          formattedTip
         );
 
 
         updateText(
           "summaryHandling",
-          utils.formatPrice(
-            handlingCharge
-          )
+          formattedHandling
+        );
+
+
+        updateText(
+          "summaryHandlingDesktop",
+          formattedHandling
         );
 
 
         updateText(
           "grandTotal",
-          utils.formatPrice(
-            grandTotal
-          )
+          formattedGrandTotal
+        );
+
+
+        updateText(
+          "grandTotalDesktop",
+          formattedGrandTotal
         );
 
 
         updateText(
           "mobileGrandTotal",
-          utils.formatPrice(
-            grandTotal
-          )
+          formattedGrandTotal
         );
 
       }
 
 
       /* ===================================================
-         CART HEADER
+         HEADER
          =================================================== */
 
       function updateHeaderCart() {
@@ -2284,7 +2531,7 @@
 
 
       /* ===================================================
-         RENDER
+         RENDER CART
          =================================================== */
 
       function renderCart() {
@@ -2302,14 +2549,26 @@
 
 
         const savings =
-          calculateSavings(cart);
+          calculateSavings(
+            cart
+          );
+
+
+        const formattedSavings =
+          utils.formatPrice(
+            savings
+          );
+
+
+        const formattedItemsTotal =
+          utils.formatPrice(
+            itemsTotal
+          );
 
 
         updateText(
           "cartSavings",
-          utils.formatPrice(
-            savings
-          )
+          formattedSavings
         );
 
 
@@ -2340,22 +2599,30 @@
 
         updateText(
           "summaryItemsTotal",
-          utils.formatPrice(
-            itemsTotal
-          )
+          formattedItemsTotal
+        );
+
+
+        updateText(
+          "summaryItemsTotalDesktop",
+          formattedItemsTotal
         );
 
 
         updateText(
           "summarySavings",
-          utils.formatPrice(
-            savings
-          )
+          formattedSavings
+        );
+
+
+        updateText(
+          "summarySavingsDesktop",
+          formattedSavings
         );
 
 
         /* =================================================
-           EMPTY
+           EMPTY CART
            ================================================= */
 
         if (!cart.length) {
@@ -2428,12 +2695,10 @@
 
               const itemSaving =
                 mrp > price
-
                   ? (
                       (mrp - price) *
                       quantity
                     )
-
                   : 0;
 
 
@@ -2622,7 +2887,6 @@
 
                   </div>
 
-
                 </article>
 
               `;
@@ -2744,6 +3008,12 @@
         );
 
 
+      const checkoutBtnDesktop =
+        document.getElementById(
+          "checkoutBtnDesktop"
+        );
+
+
       const mobileCheckoutBtn =
         document.getElementById(
           "mobileCheckoutBtn"
@@ -2753,6 +3023,16 @@
       if (checkoutBtn) {
 
         checkoutBtn.addEventListener(
+          "click",
+          proceedToCheckout
+        );
+
+      }
+
+
+      if (checkoutBtnDesktop) {
+
+        checkoutBtnDesktop.addEventListener(
           "click",
           proceedToCheckout
         );
@@ -2818,7 +3098,7 @@
 
 
       /* ===================================================
-         PUBLIC CART REFRESH
+         PUBLIC API
          =================================================== */
 
       window.ZynexCartCartPage = {
@@ -2928,54 +3208,67 @@
             value;
 
 
-          const summaryTip =
-            document.getElementById(
-              "summaryTip"
+          const formattedTip =
+            utils.formatPrice(
+              value
             );
 
 
-          const grandTotalElement =
-            document.getElementById(
-              "grandTotal"
+          const formattedTotal =
+            utils.formatPrice(
+              grandTotal
             );
 
 
-          const mobileTotal =
-            document.getElementById(
-              "mobileGrandTotal"
-            );
+          updateTipText(
+            "summaryTip",
+            formattedTip
+          );
 
 
-          if (summaryTip) {
-
-            summaryTip.textContent =
-              utils.formatPrice(
-                value
-              );
-
-          }
+          updateTipText(
+            "summaryTipDesktop",
+            formattedTip
+          );
 
 
-          if (grandTotalElement) {
-
-            grandTotalElement.textContent =
-              utils.formatPrice(
-                grandTotal
-              );
-
-          }
+          updateTipText(
+            "grandTotal",
+            formattedTotal
+          );
 
 
-          if (mobileTotal) {
+          updateTipText(
+            "grandTotalDesktop",
+            formattedTotal
+          );
 
-            mobileTotal.textContent =
-              utils.formatPrice(
-                grandTotal
-              );
 
-          }
+          updateTipText(
+            "mobileGrandTotal",
+            formattedTotal
+          );
 
         };
+
+
+      function updateTipText(
+        id,
+        value
+      ) {
+
+        const element =
+          document.getElementById(id);
+
+
+        if (element) {
+
+          element.textContent =
+            value;
+
+        }
+
+      }
 
     }
 
