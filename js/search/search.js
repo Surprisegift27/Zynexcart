@@ -583,7 +583,7 @@
           </button>
 
           <input
-            type="search"
+            type="text"
             id="zynexcartLiveSearchInput"
             autocomplete="off"
             aria-label="Search products"
