@@ -60,7 +60,7 @@
   <style>
 
     /* =====================================================
-       PAGE
+       DESKTOP CART DRAWER BASE
        ===================================================== */
 
     .cart-page {
@@ -1350,6 +1350,554 @@
 
     }
 
+
+    /* =====================================================
+       LARGE SCREEN — PHOTO STYLE RIGHT CART DRAWER
+       
+       IMPORTANT:
+       This applies ONLY to real desktop-style pointer devices.
+       A phone using Chrome "Desktop Site" normally keeps its
+       touch/pointer characteristics, so its header remains.
+       ===================================================== */
+
+    @media screen
+      and (min-width: 901px)
+      and (pointer: fine)
+      and (hover: hover) {
+
+      /* Hide normal site header on real PC/Laptop.
+         It is not part of the cart drawer. */
+
+      #header-component {
+        display: none !important;
+      }
+
+
+      /* Dark page background behind drawer */
+
+      body {
+        overflow: hidden;
+
+        background: #07101f;
+      }
+
+
+      body::before {
+        content: "";
+
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 999;
+
+        background:
+          rgba(7, 17, 31, .68);
+
+        pointer-events: none;
+      }
+
+
+      /* =================================================
+         CART DRAWER
+         ================================================= */
+
+      .cart-page {
+
+        position: fixed;
+
+        top: 0;
+        right: 0;
+        bottom: 0;
+
+        z-index: 1000;
+
+        width: min(
+          520px,
+          44vw
+        );
+
+        max-width: 520px;
+
+        min-width: 430px;
+
+        margin: 0;
+
+        padding:
+          24px
+          24px
+          105px;
+
+        overflow-y: auto;
+
+        background: #ffffff;
+
+        box-shadow:
+          -12px 0 40px
+          rgba(0, 0, 0, .22);
+
+        scrollbar-width: thin;
+
+        scrollbar-color:
+          #cfd5dd
+          transparent;
+      }
+
+
+      .cart-page::-webkit-scrollbar {
+        width: 7px;
+      }
+
+
+      .cart-page::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+
+      .cart-page::-webkit-scrollbar-thumb {
+        background: #cfd5dd;
+
+        border-radius: 10px;
+      }
+
+
+      /* =================================================
+         DRAWER TOP
+         ================================================= */
+
+      .cart-topbar {
+
+        position: sticky;
+
+        top: -24px;
+
+        z-index: 30;
+
+        margin:
+          -24px
+          -24px
+          20px;
+
+        padding:
+          20px
+          24px
+          16px;
+
+        background:
+          rgba(255,255,255,.98);
+
+        border-bottom:
+          1px solid #eef0f3;
+
+        backdrop-filter:
+          blur(12px);
+      }
+
+
+      .cart-page-title {
+
+        gap: 11px;
+      }
+
+
+      .cart-back-btn {
+
+        width: 38px;
+        height: 38px;
+
+        flex-basis: 38px;
+
+        border-radius: 10px;
+
+        font-size: 17px;
+      }
+
+
+      .cart-page-title h1 {
+
+        font-size: 23px;
+
+        font-weight: 900;
+      }
+
+
+      .cart-page-title p {
+
+        display: none;
+      }
+
+
+      .cart-share-btn {
+
+        min-height: 38px;
+
+        padding: 0 12px;
+
+        border-radius: 10px;
+
+        font-size: 12px;
+      }
+
+
+      /* =================================================
+         DRAWER CONTENT
+         ================================================= */
+
+      .cart-savings-banner {
+
+        margin-bottom: 14px;
+
+        padding: 13px 15px;
+
+        border-radius: 13px;
+      }
+
+
+      .cart-savings-label {
+
+        font-size: 12px;
+      }
+
+
+      .cart-savings-value {
+
+        font-size: 17px;
+      }
+
+
+      .cart-delivery-card {
+
+        margin-bottom: 14px;
+
+        padding: 13px;
+
+        border-radius: 13px;
+      }
+
+
+      .delivery-icon {
+
+        width: 44px;
+        height: 44px;
+
+        flex-basis: 44px;
+
+        border-radius: 12px;
+
+        font-size: 20px;
+      }
+
+
+      .delivery-content strong {
+
+        font-size: 14px;
+      }
+
+
+      .delivery-content span {
+
+        font-size: 12px;
+      }
+
+
+      .cart-items-card {
+
+        border-radius: 13px;
+
+        box-shadow:
+          0 2px 10px
+          rgba(7,27,58,.04);
+      }
+
+
+      .cart-section-heading {
+
+        padding: 14px 15px;
+      }
+
+
+      .cart-section-heading h2 {
+
+        font-size: 16px;
+      }
+
+
+      .cart-section-heading span {
+
+        font-size: 12px;
+      }
+
+
+      .cart-item {
+
+        grid-template-columns:
+          72px
+          minmax(0,1fr);
+
+        gap: 12px;
+
+        padding: 14px;
+      }
+
+
+      .cart-item-image {
+
+        width: 72px;
+        height: 72px;
+
+        border-radius: 12px;
+      }
+
+
+      .cart-item-details h3 {
+
+        font-size: 14px;
+      }
+
+
+      .cart-item-variant {
+
+        margin-bottom: 5px;
+
+        font-size: 12px;
+      }
+
+
+      .cart-current-price {
+
+        font-size: 15px;
+      }
+
+
+      .cart-mrp {
+
+        font-size: 12px;
+      }
+
+
+      .cart-save-text {
+
+        font-size: 11px;
+      }
+
+
+      .cart-item-actions {
+
+        margin-top: 9px;
+      }
+
+
+      .cart-quantity-btn {
+
+        width: 32px;
+        height: 31px;
+      }
+
+
+      .cart-item-quantity {
+
+        width: 34px;
+      }
+
+
+      .cart-remove-btn {
+
+        font-size: 12px;
+      }
+
+
+      .cart-item-total {
+
+        grid-column: 2;
+
+        margin-top: -6px;
+
+        text-align: left;
+      }
+
+
+      .cart-item-total strong {
+
+        font-size: 15px;
+      }
+
+
+      /* =================================================
+         TIP
+         ================================================= */
+
+      .cart-extra-card {
+
+        margin-top: 14px;
+
+        padding: 15px;
+
+        border-radius: 13px;
+      }
+
+
+      .cart-extra-card h2 {
+
+        font-size: 15px;
+      }
+
+
+      .cart-extra-card p {
+
+        font-size: 12px;
+      }
+
+
+      .tip-options {
+
+        grid-template-columns:
+          repeat(4, minmax(0,1fr));
+
+        gap: 7px;
+
+        margin-top: 12px;
+      }
+
+
+      .tip-option {
+
+        min-height: 42px;
+
+        border-radius: 9px;
+
+        font-size: 12px;
+      }
+
+
+      /* =================================================
+         BILL DETAILS
+         ================================================= */
+
+      .cart-summary {
+
+        margin-top: 14px;
+
+        border-radius: 13px;
+
+        box-shadow:
+          0 3px 16px
+          rgba(7,27,58,.06);
+      }
+
+
+      .cart-summary-header {
+
+        padding: 15px;
+      }
+
+
+      .cart-summary-header h2 {
+
+        font-size: 17px;
+      }
+
+
+      .summary-content {
+
+        padding: 15px;
+      }
+
+
+      .summary-row {
+
+        margin-bottom: 10px;
+
+        font-size: 13px;
+      }
+
+
+      .summary-divider {
+
+        margin: 14px 0;
+      }
+
+
+      .grand-total-row {
+
+        font-size: 16px;
+      }
+
+
+      .grand-total-row strong {
+
+        font-size: 20px;
+      }
+
+
+      .checkout-btn {
+
+        min-height: 48px;
+
+        margin-top: 16px;
+
+        border-radius: 11px;
+      }
+
+
+      .continue-shopping {
+
+        margin-top: 12px;
+
+        font-size: 12px;
+      }
+
+
+      /* =================================================
+         POLICY
+         ================================================= */
+
+      .cart-left-column > .cart-extra-card:last-child {
+
+        margin-bottom: 20px;
+      }
+
+
+      /* =================================================
+         NO MOBILE FIXED CHECKOUT ON PC
+         ================================================= */
+
+      .mobile-checkout-bar {
+
+        display: none !important;
+      }
+
+    }
+
+
+    /* =====================================================
+       PHONE WITH DESKTOP SITE
+       
+       If browser reports a wide viewport but device is
+       touch/coarse, keep the header visible and allow the
+       desktop-style cart layout without hiding the header.
+       ===================================================== */
+
+    @media screen
+      and (min-width: 901px)
+      and (pointer: coarse) {
+
+      #header-component {
+
+        display: block !important;
+
+      }
+
+
+      .cart-page {
+
+        padding-top:
+          calc(
+            var(--zynexcart-header-height, 0px) + 30px
+          );
+      }
+
+    }
+
   </style>
 
 </head>
@@ -1567,7 +2115,6 @@
 
         <!-- =================================================
              BILL DETAILS
-             MOVED BELOW TIP
              ================================================= -->
 
         <aside class="cart-summary">
@@ -1678,7 +2225,6 @@
             </button>
 
 
-            <!-- HOME PAGE -->
             <a
               href="index.html"
               class="continue-shopping"
