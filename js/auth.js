@@ -1,10 +1,24 @@
 /* =========================================================
    ZYNEXCART AUTHENTICATION
    Mobile → OTP → Name
+
+   Supports:
+   1. Standalone login.html
+   2. Desktop Home-page login modal
 ========================================================= */
 
 (function () {
   "use strict";
+
+  /* =======================================================
+     PREVENT DUPLICATE INITIALIZATION
+  ======================================================== */
+
+  if (window.__ZYNEXCART_AUTH_INITIALIZED__) {
+    return;
+  }
+
+  window.__ZYNEXCART_AUTH_INITIALIZED__ = true;
 
 
   /* =======================================================
@@ -79,21 +93,16 @@
   let otpTimerInterval = null;
   let resendAvailable = false;
 
-  /*
-    Demo OTP.
 
-    IMPORTANT:
-    This is only a temporary front-end OTP flow.
-
-    For real customer authentication, this value must be
-    replaced by Supabase/Twilio OTP verification.
-  */
+  /* =======================================================
+     DEMO OTP
+  ======================================================== */
 
   const DEMO_OTP = "123456";
 
 
   /* =======================================================
-     STORAGE KEYS
+     STORAGE
   ======================================================== */
 
   const STORAGE_KEYS = {
@@ -244,20 +253,26 @@
 
         const mobile =
           normalizeMobile(
-            mobileNumberInput.value
+            mobileNumberInput
+              ? mobileNumberInput.value
+              : ""
           );
 
-        mobileNumberInput.value = mobile;
+        if (mobileNumberInput) {
+          mobileNumberInput.value = mobile;
+        }
 
-
-        /* Validation */
 
         if (!mobile) {
 
-          mobileError.textContent =
-            "Please enter your mobile number.";
+          if (mobileError) {
+            mobileError.textContent =
+              "Please enter your mobile number.";
+          }
 
-          mobileNumberInput.focus();
+          if (mobileNumberInput) {
+            mobileNumberInput.focus();
+          }
 
           return;
         }
@@ -265,10 +280,14 @@
 
         if (!isValidMobile(mobile)) {
 
-          mobileError.textContent =
-            "Please enter a valid 10-digit mobile number.";
+          if (mobileError) {
+            mobileError.textContent =
+              "Please enter a valid 10-digit mobile number.";
+          }
 
-          mobileNumberInput.focus();
+          if (mobileNumberInput) {
+            mobileNumberInput.focus();
+          }
 
           return;
         }
@@ -281,13 +300,6 @@
           true
         );
 
-
-        /*
-          Temporary OTP simulation.
-
-          In production this section will call the
-          real Supabase/Twilio OTP service.
-        */
 
         setTimeout(function () {
 
@@ -310,9 +322,11 @@
           startOtpTimer();
 
           if (otpInputs[0]) {
+
             setTimeout(function () {
               otpInputs[0].focus();
             }, 150);
+
           }
 
         }, 650);
@@ -344,7 +358,10 @@
 
           input.classList.add("filled");
 
-          if (index < otpInputs.length - 1) {
+          if (
+            index <
+            otpInputs.length - 1
+          ) {
 
             otpInputs[index + 1].focus();
 
@@ -396,7 +413,8 @@
 
         if (
           event.key === "ArrowRight" &&
-          index < otpInputs.length - 1
+          index <
+          otpInputs.length - 1
         ) {
 
           otpInputs[index + 1].focus();
@@ -506,8 +524,10 @@
 
         if (otp.length !== 6) {
 
-          otpError.textContent =
-            "Please enter the 6-digit OTP.";
+          if (otpError) {
+            otpError.textContent =
+              "Please enter the 6-digit OTP.";
+          }
 
           const firstEmpty =
             otpInputs.find(function (input) {
@@ -528,13 +548,6 @@
         );
 
 
-        /*
-          Temporary OTP verification.
-
-          Demo OTP:
-          123456
-        */
-
         setTimeout(function () {
 
           setLoading(
@@ -545,8 +558,10 @@
 
           if (otp !== DEMO_OTP) {
 
-            otpError.textContent =
-              "Invalid OTP. Please try again.";
+            if (otpError) {
+              otpError.textContent =
+                "Invalid OTP. Please try again.";
+            }
 
             clearOtpInputs();
 
@@ -558,10 +573,6 @@
           }
 
 
-          /*
-            Save mobile temporarily.
-          */
-
           try {
 
             localStorage.setItem(
@@ -570,16 +581,14 @@
             );
 
           } catch (error) {
+
             console.warn(
               "Unable to save mobile locally.",
               error
             );
+
           }
 
-
-          /*
-            Check whether customer name already exists.
-          */
 
           let existingName = "";
 
@@ -591,7 +600,9 @@
               ) || "";
 
           } catch (error) {
+
             existingName = "";
+
           }
 
 
@@ -645,11 +656,6 @@
 
         startOtpTimer();
 
-        /*
-          Temporary resend simulation.
-          Real SMS resend will be connected here.
-        */
-
         if (otpInputs[0]) {
           otpInputs[0].focus();
         }
@@ -671,7 +677,9 @@
     }
 
     if (otpTimerInterval) {
-      clearInterval(otpTimerInterval);
+      clearInterval(
+        otpTimerInterval
+      );
     }
 
     let seconds = 30;
@@ -716,7 +724,7 @@
 
 
   /* =======================================================
-     CHANGE MOBILE NUMBER
+     CHANGE MOBILE
   ======================================================== */
 
   function changeMobileNumber() {
@@ -764,7 +772,13 @@
 
     changeMobileLink.addEventListener(
       "click",
-      changeMobileNumber
+      function (event) {
+
+        event.preventDefault();
+
+        changeMobileNumber();
+
+      }
     );
 
   }
@@ -786,7 +800,9 @@
 
         const name =
           String(
-            customerNameInput.value || ""
+            customerNameInput
+              ? customerNameInput.value
+              : ""
           )
             .trim()
             .replace(/\s+/g, " ");
@@ -794,10 +810,14 @@
 
         if (!name) {
 
-          nameError.textContent =
-            "Please enter your name.";
+          if (nameError) {
+            nameError.textContent =
+              "Please enter your name.";
+          }
 
-          customerNameInput.focus();
+          if (customerNameInput) {
+            customerNameInput.focus();
+          }
 
           return;
         }
@@ -805,10 +825,14 @@
 
         if (name.length < 2) {
 
-          nameError.textContent =
-            "Please enter a valid name.";
+          if (nameError) {
+            nameError.textContent =
+              "Please enter a valid name.";
+          }
 
-          customerNameInput.focus();
+          if (customerNameInput) {
+            customerNameInput.focus();
+          }
 
           return;
         }
@@ -816,10 +840,14 @@
 
         if (name.length > 60) {
 
-          nameError.textContent =
-            "Name is too long.";
+          if (nameError) {
+            nameError.textContent =
+              "Name is too long.";
+          }
 
-          customerNameInput.focus();
+          if (customerNameInput) {
+            customerNameInput.focus();
+          }
 
           return;
         }
@@ -907,26 +935,46 @@
     }
 
 
-    /*
-      Show success briefly.
-    */
+    if (mobileStep) {
+      mobileStep.hidden = true;
+    }
 
-    mobileStep.hidden = true;
-    otpStep.hidden = true;
-    nameStep.hidden = true;
+    if (otpStep) {
+      otpStep.hidden = true;
+    }
 
-    if (authSuccess) {
-
-      authSuccess.hidden = false;
-
+    if (nameStep) {
+      nameStep.hidden = true;
     }
 
 
-    /*
-      Redirect to home after successful login.
-    */
+    if (authSuccess) {
+      authSuccess.hidden = false;
+    }
+
 
     setTimeout(function () {
+
+      /*
+        Desktop modal:
+        close the modal and remain on Home.
+      */
+
+      if (
+        typeof window.ZynexCartDesktopLoginClose ===
+        "function"
+      ) {
+
+        window.ZynexCartDesktopLoginClose();
+
+        return;
+      }
+
+
+      /*
+        Standalone login.html:
+        return to Home.
+      */
 
       window.location.href =
         "index.html";
@@ -984,7 +1032,7 @@
 
 
   /* =======================================================
-     MOBILE BACK BUTTON
+     MOBILE BACK
   ======================================================== */
 
   if (mobileAuthBack) {
@@ -1008,9 +1056,20 @@
 
   showStep(mobileStep);
 
+  /*
+    On desktop Home modal the input can receive focus.
+    On standalone mobile login it also works normally.
+  */
+
   if (mobileNumberInput) {
 
-    mobileNumberInput.focus();
+    setTimeout(function () {
+
+      try {
+        mobileNumberInput.focus();
+      } catch (error) {}
+
+    }, 100);
 
   }
 
@@ -1024,6 +1083,7 @@
     getCurrentMobile: function () {
       return currentMobile;
     },
+
 
     isLoggedIn: function () {
 
@@ -1043,6 +1103,7 @@
 
     },
 
+
     getCustomerName: function () {
 
       try {
@@ -1060,6 +1121,7 @@
       }
 
     },
+
 
     logout: function () {
 
@@ -1089,5 +1151,6 @@
     }
 
   };
+
 
 })();
