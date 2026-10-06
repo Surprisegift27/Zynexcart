@@ -1,337 +1,384 @@
-/* =====================================================
-   ZYNEXCART — AUTHENTICATION
-   Login / Signup / OTP / Account Access
-   ===================================================== */
+/* =========================================================
+   ZYNEXCART — AUTHENTICATION SYSTEM
+   Login / OTP / New Customer / Success
 
-.auth-page {
-  min-height: calc(100vh - 80px);
+   Designed specifically for the current login.html
+   Desktop  → Home background + centered modal
+   Mobile   → Clean full-width login experience
+   ========================================================= */
+
+
+/* =========================================================
+   1. AUTH PAGE / GLOBAL
+   ========================================================= */
+
+body.zynex-auth-page {
+  margin: 0;
+  padding: 0 !important;
+
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  background: #f7f8fa;
+  color: #172033;
+}
+
+
+/* =========================================================
+   2. BACKGROUND
+   ========================================================= */
+
+.auth-background {
+  position: fixed;
+  inset: 0;
+
+  z-index: 1;
+
+  overflow: hidden;
+
+  background: #f6f7f9;
+}
+
+
+/* DARK OVERLAY
+   Desktop: Home page becomes dark behind login modal
+*/
+
+.auth-bg-overlay {
+  position: absolute;
+  inset: 0;
+
+  z-index: 10;
+
+  background: rgba(0, 0, 0, 0.66);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   3. DESKTOP BACKGROUND
+   ========================================================= */
+
+.auth-desktop-bg {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f7f8fa 100%
+    );
+}
+
+
+/* HEADER */
+
+.auth-bg-header {
+  width: min(1400px, calc(100% - 48px));
+
+  min-height: 76px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(220px, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 24px;
+
+  border-bottom: 1px solid #e7e9ed;
+}
+
+
+.auth-bg-logo {
+  width: 125px;
+  height: auto;
+
+  object-fit: contain;
+}
+
+
+.auth-bg-search {
+  height: 42px;
 
   display: flex;
   align-items: center;
-  justify-content: center;
 
-  padding: 40px 16px 60px;
+  padding: 0 18px;
+
+  border: 1px solid #e2e5e9;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #9aa0aa;
+
+  font-size: 13px;
+}
+
+
+.auth-bg-cart {
+  min-width: 90px;
+
+  padding: 10px 14px;
+
+  border-radius: 8px;
+
+  background: #16834b;
+
+  color: #ffffff;
+
+  text-align: center;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   HERO BACKGROUND
+   ========================================================= */
+
+.auth-bg-hero {
+  width: min(1200px, calc(100% - 48px));
+
+  height: 190px;
+
+  margin: 28px auto 20px;
+
+  display: flex;
+  align-items: center;
+
+  border-radius: 14px;
+
+  overflow: hidden;
 
   background:
-    radial-gradient(
-      circle at top left,
-      rgba(255, 107, 0, 0.08),
-      transparent 35%
-    ),
-    var(--bg);
+    linear-gradient(
+      100deg,
+      #0b5d2a,
+      #16834b 50%,
+      #62a83e
+    );
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
-.auth-container {
-  width: min(100%, 440px);
+
+.auth-bg-hero-content {
+  padding: 30px 40px;
+
+  color: #ffffff;
 }
 
-/* AUTH CARD */
 
-.auth-card {
-  width: 100%;
-
-  padding: 32px;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-
-  box-shadow: var(--shadow-lg);
-}
-
-.auth-header {
-  margin-bottom: 26px;
-  text-align: center;
-}
-
-.auth-logo {
-  width: 130px;
-  max-height: 55px;
-
-  object-fit: contain;
-
-  margin: 0 auto 22px;
-}
-
-.auth-header h1 {
-  margin: 0;
-
-  color: var(--text);
-
-  font-size: 26px;
-  font-weight: 850;
-  line-height: 1.2;
-}
-
-.auth-header p {
-  margin: 8px 0 0;
-
-  color: var(--muted);
-
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-/* FORM */
-
-.auth-form {
-  width: 100%;
-}
-
-.auth-form-group {
-  margin-bottom: 17px;
-}
-
-.auth-form-group label {
+.auth-bg-hero-content span {
   display: block;
 
-  margin-bottom: 7px;
-
-  color: var(--text);
+  margin-bottom: 8px;
 
   font-size: 13px;
-  font-weight: 750;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
 }
 
-.auth-input-wrap {
-  position: relative;
+
+.auth-bg-hero-content h2 {
+  margin: 0;
+
+  font-size: 34px;
+
+  line-height: 1.1;
+
+  font-weight: 800;
 }
 
-.auth-input-wrap input {
-  width: 100%;
-  min-height: 48px;
 
-  padding: 0 14px;
-
-  border: 1px solid var(--border);
-  border-radius: 10px;
-
-  outline: none;
-
-  background: var(--white);
-  color: var(--text);
+.auth-bg-hero-content p {
+  margin: 12px 0 0;
 
   font-size: 14px;
 
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+  opacity: 0.9;
 }
 
-.auth-input-wrap input:focus {
-  border-color: var(--primary);
 
-  box-shadow:
-    0 0 0 3px rgba(255, 107, 0, 0.10);
-}
+/* =========================================================
+   BACKGROUND CATEGORY AREA
+   ========================================================= */
 
-.auth-input-wrap input::placeholder {
-  color: var(--muted-light);
-}
+.auth-bg-categories {
+  width: min(1200px, calc(100% - 48px));
 
-/* PHONE INPUT */
+  margin: 22px auto;
 
-.phone-input {
   display: grid;
-  grid-template-columns: 76px minmax(0, 1fr);
 
-  gap: 8px;
+  grid-template-columns:
+    repeat(6, 1fr);
+
+  gap: 16px;
 }
 
-.phone-code {
-  min-height: 48px;
+
+.auth-bg-category {
+  height: 150px;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #eef2f5
+    );
+
+  border: 1px solid #edf0f2;
+}
+
+
+/* =========================================================
+   4. MAIN AUTH AREA
+   ========================================================= */
+
+.auth-main {
+  position: relative;
+
+  z-index: 100;
+
+  min-height: 100vh;
+
+  width: 100%;
 
   display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 30px 20px;
+}
+
+
+/* =========================================================
+   5. AUTH CARD — DESKTOP
+   ========================================================= */
+
+.auth-card {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 460px;
+
+  min-height: 430px;
+
+  padding: 34px 42px 26px;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.28),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   6. LOGO
+   ========================================================= */
+
+.auth-brand {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 24px;
+}
+
+
+.auth-brand a {
+  display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
-  border: 1px solid var(--border);
-  border-radius: 10px;
-
-  background: #f8f9fb;
-
-  color: var(--text);
-
-  font-size: 13px;
-  font-weight: 750;
+  text-decoration: none;
 }
 
-/* PASSWORD */
 
-.password-toggle {
+.auth-logo {
+  display: block;
+
+  width: 125px;
+
+  max-width: 100%;
+
+  height: auto;
+
+  max-height: 58px;
+
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   7. MOBILE BACK BUTTON
+   ========================================================= */
+
+.mobile-auth-back {
   position: absolute;
 
-  top: 50%;
-  right: 13px;
+  top: 18px;
+  left: 18px;
 
-  transform: translateY(-50%);
-
-  padding: 4px;
-
-  border: 0;
-  background: transparent;
-
-  color: var(--muted);
-
-  font-size: 12px;
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-.password-toggle:hover {
-  color: var(--primary);
-}
-
-/* CHECKBOX */
-
-.auth-checkbox {
-  display: flex;
-  align-items: flex-start;
-
-  gap: 8px;
-
-  margin: 4px 0 18px;
-
-  color: var(--muted);
-
-  font-size: 12px;
-  line-height: 1.45;
-}
-
-.auth-checkbox input {
-  width: 15px;
-  height: 15px;
-
-  margin-top: 1px;
-
-  flex-shrink: 0;
-
-  accent-color: var(--primary);
-}
-
-/* FORGOT PASSWORD */
-
-.auth-options {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 10px;
-
-  margin: 4px 0 18px;
-}
-
-.auth-options a {
-  color: var(--primary);
-
-  font-size: 12px;
-  font-weight: 750;
-}
-
-.auth-options a:hover {
-  color: var(--primary-dark);
-  text-decoration: underline;
-}
-
-/* MAIN BUTTON */
-
-.auth-submit {
-  width: 100%;
-  min-height: 50px;
+  width: 36px;
+  height: 36px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
-  border: 0;
-  border-radius: var(--radius);
+  border: 1px solid #e2e5e9;
 
-  background: var(--primary);
-  color: var(--white);
+  border-radius: 8px;
 
-  font-size: 15px;
-  font-weight: 800;
+  background: #ffffff;
 
-  cursor: pointer;
+  color: #172033;
 
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
+  font-size: 20px;
 
-.auth-submit:hover {
-  background: var(--primary-dark);
-
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 8px 20px rgba(255, 107, 0, 0.22);
-}
-
-.auth-submit:active {
-  transform: translateY(0);
-}
-
-.auth-submit:disabled,
-.auth-submit.disabled {
-  background: #d9dde3;
-  color: #8a919c;
-
-  cursor: not-allowed;
-
-  transform: none;
-  box-shadow: none;
-}
-
-/* DIVIDER */
-
-.auth-divider {
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  margin: 24px 0;
-
-  color: var(--muted-light);
-
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.auth-divider::before,
-.auth-divider::after {
-  content: "";
-
-  flex: 1;
-
-  height: 1px;
-
-  background: var(--border);
-}
-
-/* SECONDARY BUTTON */
-
-.auth-secondary {
-  width: 100%;
-  min-height: 46px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--border);
-  border-radius: 10px;
-
-  background: var(--white);
-  color: var(--navy);
-
-  font-size: 13px;
-  font-weight: 750;
+  line-height: 1;
 
   cursor: pointer;
 
@@ -340,439 +387,725 @@
     border-color 0.18s ease;
 }
 
-.auth-secondary:hover {
+
+.mobile-auth-back:hover {
   background: #f7f8fa;
+
   border-color: #cfd4dc;
 }
 
-/* OTP */
 
-.otp-section {
-  text-align: center;
+/* =========================================================
+   8. AUTH STEPS
+   ========================================================= */
+
+.auth-step {
+  width: 100%;
+
+  animation:
+    authStepIn 0.22s ease;
 }
 
-.otp-message {
-  margin-bottom: 18px;
 
-  color: var(--muted);
+.auth-step[hidden],
+.auth-success[hidden] {
+  display: none !important;
+}
+
+
+@keyframes authStepIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   9. HEADING
+   ========================================================= */
+
+.auth-heading {
+  text-align: center;
+
+  margin-bottom: 24px;
+}
+
+
+.auth-heading h1 {
+  margin: 0;
+
+  color: #172033;
+
+  font-size: 25px;
+
+  line-height: 1.25;
+
+  font-weight: 800;
+
+  letter-spacing: -0.02em;
+}
+
+
+.auth-heading p {
+  margin: 8px 0 0;
+
+  color: #6b7280;
 
   font-size: 13px;
+
   line-height: 1.5;
 }
 
-.otp-inputs {
-  display: flex;
-  justify-content: center;
 
-  gap: 8px;
+.auth-heading strong {
+  color: #172033;
 
-  margin-bottom: 20px;
+  font-weight: 750;
 }
 
-.otp-inputs input {
-  width: 48px;
-  height: 52px;
 
-  padding: 0;
+/* =========================================================
+   10. FORM
+   ========================================================= */
 
-  border: 1px solid var(--border);
+.auth-form {
+  width: 100%;
+}
+
+
+/* =========================================================
+   11. MOBILE NUMBER INPUT
+   ========================================================= */
+
+.phone-input-container {
+  width: 100%;
+
+  min-height: 52px;
+
+  display: grid;
+
+  grid-template-columns:
+    52px
+    1px
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  column-gap: 12px;
+
+  padding: 0 14px;
+
+  border: 1.5px solid #bfc3c8;
+
   border-radius: 10px;
 
-  outline: none;
-
-  background: var(--white);
-  color: var(--text);
-
-  text-align: center;
-
-  font-size: 20px;
-  font-weight: 800;
+  background: #ffffff;
 
   transition:
     border-color 0.18s ease,
     box-shadow 0.18s ease;
 }
 
-.otp-inputs input:focus {
-  border-color: var(--primary);
+
+.phone-input-container:focus-within {
+  border-color: #ff6b00;
 
   box-shadow:
     0 0 0 3px rgba(255, 107, 0, 0.10);
 }
 
-.resend-otp {
-  margin-top: 14px;
+
+.country-code {
+  color: #172033;
+
+  font-size: 14px;
+
+  font-weight: 750;
+
+  text-align: center;
+}
+
+
+.phone-divider {
+  width: 1px;
+  height: 24px;
+
+  background: #e1e3e6;
+}
+
+
+.phone-input-container input {
+  width: 100%;
+
+  min-width: 0;
+
+  height: 50px;
+
+  padding: 0;
 
   border: 0;
+
+  outline: 0;
+
   background: transparent;
 
-  color: var(--primary);
+  color: #172033;
 
-  font-size: 12px;
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+
+.phone-input-container input::placeholder {
+  color: #a3a8af;
+}
+
+
+/* =========================================================
+   12. NAME INPUT
+   ========================================================= */
+
+#customerName {
+  width: 100%;
+
+  min-height: 52px;
+
+  padding: 0 15px;
+
+  border: 1.5px solid #bfc3c8;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #172033;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+
+#customerName:focus {
+  border-color: #ff6b00;
+
+  box-shadow:
+    0 0 0 3px rgba(255, 107, 0, 0.10);
+}
+
+
+#customerName::placeholder {
+  color: #a3a8af;
+}
+
+
+/* =========================================================
+   13. PRIMARY BUTTON
+   ========================================================= */
+
+.auth-primary-btn {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 50px;
+
+  margin-top: 14px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background: #ff6b00;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
   font-weight: 800;
 
   cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
 }
 
-.resend-otp:hover {
-  color: var(--primary-dark);
+
+.auth-primary-btn:hover {
+  background: #e85f00;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 20px rgba(255, 107, 0, 0.22);
 }
 
-/* SWITCH LOGIN / SIGNUP */
 
-.auth-switch {
-  margin-top: 22px;
-
-  text-align: center;
-
-  color: var(--muted);
-
-  font-size: 13px;
+.auth-primary-btn:active {
+  transform: translateY(0);
 }
 
-.auth-switch a {
-  color: var(--primary);
-  font-weight: 800;
+
+.auth-primary-btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.65;
+
+  transform: none;
+
+  box-shadow: none;
 }
 
-.auth-switch a:hover {
-  color: var(--primary-dark);
-  text-decoration: underline;
-}
 
-/* TERMS */
+/* =========================================================
+   14. BUTTON LOADER
+   ========================================================= */
 
-.auth-terms {
-  margin-top: 18px;
-
-  color: var(--muted-light);
-
-  font-size: 10px;
-  line-height: 1.55;
-
-  text-align: center;
-}
-
-.auth-terms a {
-  color: var(--muted);
-  text-decoration: underline;
-}
-
-/* ALERT / ERROR / SUCCESS */
-
-.auth-message {
-  margin-bottom: 16px;
-
-  padding: 11px 13px;
-
-  border-radius: 9px;
-
-  font-size: 12px;
-  line-height: 1.45;
-}
-
-.auth-message.error {
-  border: 1px solid rgba(211, 58, 44, 0.18);
-  background: #fff2f1;
-  color: var(--danger);
-}
-
-.auth-message.success {
-  border: 1px solid rgba(22, 131, 75, 0.18);
-  background: var(--success-light);
-  color: var(--success);
-}
-
-/* LOADING */
-
-.auth-submit.loading {
-  position: relative;
-
-  color: transparent;
-
-  pointer-events: none;
-}
-
-.auth-submit.loading::after {
-  content: "";
+.button-loader {
+  display: none;
 
   position: absolute;
 
   width: 18px;
   height: 18px;
 
-  border: 2px solid rgba(255, 255, 255, 0.45);
-  border-top-color: var(--white);
+  border: 2px solid rgba(255,255,255,0.40);
+
+  border-top-color: #ffffff;
 
   border-radius: 50%;
 
-  animation: authSpinner 0.7s linear infinite;
+  animation:
+    authSpinner 0.7s linear infinite;
 }
 
+
+.auth-primary-btn.loading .button-text {
+  visibility: hidden;
+}
+
+
+.auth-primary-btn.loading .button-loader {
+  display: block;
+}
+
+
 @keyframes authSpinner {
+
   to {
     transform: rotate(360deg);
   }
+
 }
 
 
-/* =====================================================
-   ZYNEXCART LOGIN — PROFESSIONAL ADDITION
-   ===================================================== */
+/* =========================================================
+   15. TERMS
+   ========================================================= */
 
-/* Login page */
+.auth-terms {
+  margin: 18px 0 0;
 
-.auth-page {
-  position: relative;
-  isolation: isolate;
+  color: #8b9199;
 
-  overflow: hidden;
+  font-size: 10px;
 
-  background:
-    radial-gradient(
-      circle at 15% 0%,
-      rgba(255, 107, 0, 0.10),
-      transparent 34%
-    ),
-    var(--bg);
-}
+  line-height: 1.5;
 
-/* Login card */
-
-.auth-card {
-  position: relative;
-
-  overflow: hidden;
-
-  background: rgba(255, 255, 255, 0.98);
-
-  box-shadow:
-    0 24px 70px rgba(7, 27, 58, 0.12),
-    0 8px 24px rgba(7, 27, 58, 0.06);
-}
-
-/* Logo */
-
-.auth-logo {
-  display: block;
-
-  width: 145px;
-  max-width: 100%;
-  height: auto;
-  max-height: 64px;
-
-  object-fit: contain;
-
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Header */
-
-.auth-header h1 {
-  letter-spacing: -0.35px;
-}
-
-.auth-header p {
-  max-width: 360px;
-
-  margin-left: auto;
-  margin-right: auto;
+  text-align: center;
 }
 
 
-/* =====================================================
-   LOGIN MOBILE NUMBER FIELD
-   ===================================================== */
+.auth-terms a {
+  color: #6b7280;
 
-.phone-input {
-  grid-template-columns: 68px minmax(0, 1fr);
+  text-decoration: underline;
 
-  gap: 0;
-
-  overflow: hidden;
-
-  border: 1px solid var(--border);
-
-  border-radius: 11px;
-
-  background: var(--white);
-
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.phone-input:focus-within {
-  border-color: var(--primary);
-
-  box-shadow:
-    0 0 0 3px rgba(255, 107, 0, 0.10);
-}
-
-.phone-code {
-  min-height: 50px;
-
-  border: 0;
-  border-right: 1px solid var(--border);
-
-  border-radius: 0;
-
-  background: #f8f9fb;
-
-  font-size: 14px;
-}
-
-.phone-input .auth-input-wrap input {
-  min-height: 50px;
-
-  border: 0;
-
-  border-radius: 0;
-
-  box-shadow: none;
-
-  padding-left: 14px;
-
-  font-size: 15px;
-}
-
-.phone-input .auth-input-wrap input:focus {
-  border: 0;
-
-  box-shadow: none;
+  text-underline-offset: 2px;
 }
 
 
-/* =====================================================
-   LOGIN BUTTON
-   ===================================================== */
-
-.auth-submit {
-  min-height: 52px;
-
-  border-radius: 11px;
+.auth-terms a:hover {
+  color: #ff6b00;
 }
 
 
-/* =====================================================
-   OTP PROFESSIONAL STYLE
-   ===================================================== */
+/* =========================================================
+   16. ERROR
+   ========================================================= */
 
-.otp-inputs {
-  gap: 9px;
+.auth-error {
+  min-height: 17px;
+
+  margin: 7px 0 0;
+
+  color: #d33a2c;
+
+  font-size: 12px;
+
+  line-height: 1.4;
+
+  text-align: left;
 }
 
-.otp-inputs input {
-  width: 48px;
-  height: 54px;
 
-  border-radius: 11px;
+.auth-error:empty {
+  min-height: 0;
+
+  margin: 0;
 }
 
 
-/* =====================================================
-   OTP LINKS
-   ===================================================== */
+/* =========================================================
+   17. OTP — CHANGE MOBILE
+   ========================================================= */
 
-.auth-otp-actions {
-  display: flex;
+.auth-change-number {
+  display: inline-flex;
 
   align-items: center;
-  justify-content: center;
 
-  gap: 16px;
+  gap: 4px;
 
-  margin-top: 15px;
-}
+  margin-bottom: 18px;
 
-.auth-otp-actions button,
-.change-mobile,
-.change-number {
   padding: 0;
 
   border: 0;
 
   background: transparent;
 
-  color: var(--primary);
+  color: #6b7280;
 
   font-size: 12px;
-  font-weight: 800;
+
+  font-weight: 700;
 
   cursor: pointer;
 }
 
-.auth-otp-actions button:hover,
-.change-mobile:hover,
-.change-number:hover {
-  color: var(--primary-dark);
+
+.auth-change-number:hover {
+  color: #ff6b00;
+}
+
+
+/* OTP heading */
+
+#otpStep .auth-heading {
+  margin-bottom: 22px;
+}
+
+
+#otpStep .auth-heading h1 {
+  font-size: 23px;
+}
+
+
+#otpStep .auth-heading p {
+  margin-top: 9px;
+}
+
+
+#otpMobileNumber {
+  color: #172033;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   18. OTP BOXES
+   ========================================================= */
+
+.otp-container {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 8px;
+
+  width: 100%;
+
+  margin: 4px 0 4px;
+}
+
+
+.otp-input {
+  width: 48px;
+  height: 54px;
+
+  padding: 0;
+
+  border: 1.5px solid #c9cdd2;
+
+  border-radius: 9px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #172033;
+
+  text-align: center;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  caret-color: #ff6b00;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+}
+
+
+.otp-input:focus {
+  border-color: #ff6b00;
+
+  box-shadow:
+    0 0 0 3px rgba(255, 107, 0, 0.10);
+
+  transform: translateY(-1px);
+}
+
+
+.otp-input:not(:placeholder-shown) {
+  border-color: #ff6b00;
+}
+
+
+/* =========================================================
+   19. OTP BOTTOM
+   ========================================================= */
+
+.otp-bottom {
+  min-height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-top: 15px;
+}
+
+
+.auth-link-btn {
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #ff6b00;
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+}
+
+
+.auth-link-btn:hover {
+  color: #e85f00;
 
   text-decoration: underline;
 }
 
 
-/* =====================================================
-   MOVING PRODUCTS
-   MOBILE LOGIN
-   RIGHT → LEFT
-   ===================================================== */
+.auth-link-btn:disabled {
+  color: #b9bdc3;
 
-.auth-product-strip {
-  position: relative;
+  cursor: not-allowed;
 
+  text-decoration: none;
+}
+
+
+.otp-timer {
+  color: #9aa0aa;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   20. SECONDARY CHANGE NUMBER
+   ========================================================= */
+
+.auth-secondary-link {
   width: 100%;
 
-  overflow: hidden;
+  margin-top: 8px;
 
-  margin: 0 0 22px;
+  padding: 8px 0;
 
-  padding: 10px 0;
+  border: 0;
 
   background: transparent;
 
-  pointer-events: none;
+  color: #6b7280;
 
-  user-select: none;
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
 }
 
-.auth-product-track {
+
+.auth-secondary-link:hover {
+  color: #ff6b00;
+
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   21. SUCCESS
+   ========================================================= */
+
+.auth-success {
+  min-height: 250px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  animation:
+    authStepIn 0.25s ease;
+}
+
+
+.success-icon {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 15px;
+
+  border-radius: 50%;
+
+  background: #eaf7ef;
+
+  color: #16834b;
+
+  font-size: 26px;
+
+  font-weight: 900;
+}
+
+
+.auth-success h2 {
+  margin: 0;
+
+  color: #16834b;
+
+  font-size: 20px;
+
+  font-weight: 800;
+}
+
+
+.auth-success p {
+  margin: 6px 0 0;
+
+  color: #6b7280;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   22. MOBILE PRODUCT MARQUEE
+   ========================================================= */
+
+.mobile-product-marquee {
+  display: none;
+}
+
+
+.product-track {
   display: flex;
 
   width: max-content;
 
   gap: 14px;
 
-  animation: zynexProductMove 24s linear infinite;
+  animation:
+    authProductMove 28s linear infinite;
 }
 
-.auth-product {
+
+.moving-product {
   flex: 0 0 auto;
 
-  width: 92px;
-  height: 92px;
+  width: 105px;
+  height: 105px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
-  overflow: hidden;
-
   border-radius: 20px;
 
-  background: #eafafa;
+  background: #eaf9f8;
+
+  overflow: hidden;
 }
 
-.auth-product img {
-  display: block;
 
-  width: 78%;
-  height: 78%;
+.moving-product-image {
+  width: 82px;
+  height: 82px;
 
-  object-fit: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
-@keyframes zynexProductMove {
+
+@keyframes authProductMove {
+
   from {
     transform: translateX(0);
   }
@@ -780,319 +1113,516 @@
   to {
     transform: translateX(-50%);
   }
+
 }
 
 
-/* =====================================================
-   DESKTOP / PC
-   ===================================================== */
+/* =========================================================
+   23. PRODUCT PLACEHOLDER BACKGROUNDS
+   =========================================================
 
-@media screen and (min-width: 769px) {
+   These are intentionally lightweight.
+   If actual product images are added later,
+   they can replace these backgrounds without
+   changing the login system.
+*/
 
-  .auth-page {
-    min-height: calc(100vh - 72px);
+.product-one {
+  background:
+    radial-gradient(
+      circle,
+      #ffffff 0%,
+      #dceeed 70%
+    );
+}
 
-    padding: 42px 20px 60px;
-  }
 
-  .auth-container {
-    width: min(100%, 460px);
-  }
+.product-two {
+  background:
+    radial-gradient(
+      circle,
+      #ffffff 0%,
+      #dceeed 70%
+    );
+}
+
+
+.product-three {
+  background:
+    radial-gradient(
+      circle,
+      #ffffff 0%,
+      #dceeed 70%
+    );
+}
+
+
+.product-four {
+  background:
+    radial-gradient(
+      circle,
+      #ffffff 0%,
+      #dceeed 70%
+    );
+}
+
+
+.product-five {
+  background:
+    radial-gradient(
+      circle,
+      #ffffff 0%,
+      #dceeed 70%
+    );
+}
+
+
+.product-six {
+  background:
+    radial-gradient(
+      circle,
+      #ffffff 0%,
+      #dceeed 70%
+    );
+}
+
+
+/* =========================================================
+   24. TABLET
+   ========================================================= */
+
+@media screen and (max-width: 900px) {
 
   .auth-card {
-    padding: 34px 34px 28px;
+    max-width: 440px;
 
-    border-radius: 20px;
+    padding-left: 34px;
+    padding-right: 34px;
+  }
+
+  .auth-bg-hero {
+    width: calc(100% - 32px);
+  }
+
+  .auth-bg-categories {
+    width: calc(100% - 32px);
+
+    grid-template-columns:
+      repeat(4, 1fr);
   }
 
 }
 
 
-/* =====================================================
-   MOBILE
-   ===================================================== */
+/* =========================================================
+   25. MOBILE
+   ========================================================= */
 
 @media screen and (max-width: 768px) {
 
-  .auth-page {
-    min-height: calc(100vh - 108px);
-
-    align-items: flex-start;
-
-    padding: 18px 10px 32px;
-
-    background:
-      linear-gradient(
-        180deg,
-        #f7f8fa 0%,
-        #ffffff 50%,
-        #f7f8fa 100%
-      );
+  body.zynex-auth-page {
+    background: #ffffff;
   }
 
-  .auth-container {
-    width: 100%;
 
-    max-width: 100%;
-  }
+  /* Background becomes a clean home/product area */
 
-  .auth-card {
-    padding: 28px 20px 24px;
+  .auth-background {
+    position: fixed;
 
-    border-radius: 18px;
-
-    box-shadow:
-      0 18px 45px rgba(7, 27, 58, 0.10),
-      0 4px 15px rgba(7, 27, 58, 0.05);
-  }
-
-  .auth-header {
-    margin-bottom: 23px;
-  }
-
-  .auth-logo {
-    width: 125px;
-
-    max-height: 58px;
-
-    margin-bottom: 18px;
-  }
-
-  .auth-header h1 {
-    font-size: 24px;
-  }
-
-  .auth-header p {
-    font-size: 13px;
-  }
-
-  .phone-input {
-    grid-template-columns: 64px minmax(0, 1fr);
-  }
-
-  .phone-code {
-    min-height: 50px;
-
-    font-size: 14px;
-  }
-
-  .phone-input .auth-input-wrap input {
-    min-height: 50px;
-
-    font-size: 15px;
-  }
-
-  .auth-submit {
-    min-height: 51px;
-  }
-
-  .otp-inputs {
-    gap: 6px;
-  }
-
-  .otp-inputs input {
-    width: 44px;
-    height: 50px;
-  }
-
-  /* Product strip */
-
-  .auth-product-strip {
-    display: block;
-
-    width: calc(100% + 20px);
-
-    margin:
-      -18px
-      -10px
-      22px;
-
-    padding: 10px 0;
+    inset: 0;
 
     background: #ffffff;
   }
 
-  .auth-product-track {
-    gap: 12px;
 
-    animation-duration: 20s;
+  .auth-bg-overlay {
+    display: none;
   }
 
-  .auth-product {
-    width: 82px;
-    height: 82px;
 
-    border-radius: 18px;
+  /* Hide desktop fake home */
+
+  .auth-desktop-bg {
+    display: none;
+  }
+
+
+  /* Product strip */
+
+  .mobile-product-marquee {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    display: block;
+
+    height: 180px;
+
+    padding: 22px 0;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #eef0f2;
+  }
+
+
+  .product-track {
+    gap: 12px;
+  }
+
+
+  .moving-product {
+    width: 112px;
+    height: 112px;
+
+    border-radius: 22px;
+  }
+
+
+  /* Main content */
+
+  .auth-main {
+    min-height: 100vh;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
+    padding:
+      145px
+      0
+      0;
+  }
+
+
+  .auth-card {
+    width: 100%;
+
+    max-width: none;
+
+    min-height: calc(100vh - 145px);
+
+    padding:
+      28px
+      20px
+      35px;
+
+    border: 0;
+
+    border-radius:
+      22px
+      22px
+      0
+      0;
+
+    box-shadow:
+      0 -4px 20px rgba(0, 0, 0, 0.06);
+
+    background: #ffffff;
+  }
+
+
+  .mobile-auth-back {
+    top: 16px;
+    left: 18px;
+
+    width: 36px;
+    height: 36px;
+
+    border-color: #e2e5e9;
+  }
+
+
+  .auth-brand {
+    margin-top: 8px;
+
+    margin-bottom: 22px;
+  }
+
+
+  .auth-logo {
+    width: 112px;
+
+    max-height: 52px;
+  }
+
+
+  .auth-heading {
+    margin-bottom: 22px;
+  }
+
+
+  .auth-heading h1 {
+    font-size: 23px;
+  }
+
+
+  .auth-heading p {
+    font-size: 13px;
+  }
+
+
+  .phone-input-container {
+    min-height: 56px;
+
+    border-radius: 11px;
+
+    grid-template-columns:
+      50px
+      1px
+      minmax(0, 1fr);
+  }
+
+
+  .phone-input-container input {
+    height: 54px;
+
+    font-size: 15px;
+  }
+
+
+  .auth-primary-btn {
+    min-height: 52px;
+
+    margin-top: 13px;
+
+    border-radius: 11px;
+
+    font-size: 15px;
+  }
+
+
+  .auth-terms {
+    margin-top: 18px;
+
+    font-size: 10px;
+  }
+
+
+  /* OTP mobile */
+
+  #otpStep .auth-heading h1 {
+    font-size: 23px;
+  }
+
+
+  .otp-container {
+    gap: 7px;
+
+    margin-top: 10px;
+  }
+
+
+  .otp-input {
+    width: 47px;
+    height: 54px;
+
+    border-radius: 9px;
+
+    font-size: 20px;
+  }
+
+
+  .otp-bottom {
+    margin-top: 17px;
+  }
+
+
+  .auth-change-number {
+    margin-bottom: 20px;
+  }
+
+
+  .auth-success {
+    min-height: 320px;
   }
 
 }
 
 
-/* =====================================================
-   SMALL PHONES
-   ===================================================== */
+/* =========================================================
+   26. SMALL PHONES
+   ========================================================= */
 
-@media screen and (max-width: 390px) {
+@media screen and (max-width: 430px) {
 
-  .auth-page {
-    padding: 15px 7px 28px;
+  .mobile-product-marquee {
+    height: 165px;
+
+    padding: 20px 0;
   }
+
+
+  .moving-product {
+    width: 100px;
+    height: 100px;
+
+    border-radius: 19px;
+  }
+
+
+  .auth-main {
+    padding-top: 132px;
+  }
+
 
   .auth-card {
-    padding: 24px 15px 21px;
+    min-height: calc(100vh - 132px);
 
-    border-radius: 16px;
+    padding:
+      25px
+      16px
+      30px;
   }
+
 
   .auth-logo {
-    width: 118px;
-
-    margin-bottom: 16px;
+    width: 105px;
   }
 
-  .auth-header h1 {
-    font-size: 22px;
+
+  .auth-heading h1 {
+    font-size: 21px;
   }
 
-  .auth-header p {
+
+  .auth-heading p {
     font-size: 12px;
   }
 
-  .auth-form-group {
-    margin-bottom: 14px;
+
+  .phone-input-container {
+    min-height: 52px;
+
+    grid-template-columns:
+      47px
+      1px
+      minmax(0, 1fr);
+
+    column-gap: 9px;
   }
 
-  .phone-input {
-    grid-template-columns: 62px minmax(0, 1fr);
-  }
 
-  .phone-code {
-    min-height: 48px;
-
-    font-size: 13px;
-  }
-
-  .phone-input .auth-input-wrap input {
-    min-height: 48px;
-
-    padding-left: 12px;
+  .phone-input-container input {
+    height: 50px;
 
     font-size: 14px;
   }
 
-  .auth-submit {
-    min-height: 49px;
+
+  .auth-primary-btn {
+    min-height: 50px;
   }
 
-  .otp-inputs {
+
+  .otp-container {
     gap: 5px;
   }
 
-  .otp-inputs input {
+
+  .otp-input {
+    width: 43px;
+    height: 50px;
+
+    font-size: 19px;
+  }
+
+}
+
+
+/* =========================================================
+   27. VERY SMALL PHONES
+   ========================================================= */
+
+@media screen and (max-width: 360px) {
+
+  .mobile-product-marquee {
+    height: 150px;
+  }
+
+
+  .moving-product {
+    width: 92px;
+    height: 92px;
+
+    border-radius: 17px;
+  }
+
+
+  .auth-main {
+    padding-top: 120px;
+  }
+
+
+  .auth-card {
+    min-height: calc(100vh - 120px);
+
+    padding:
+      23px
+      13px
+      28px;
+  }
+
+
+  .auth-logo {
+    width: 98px;
+  }
+
+
+  .auth-heading h1 {
+    font-size: 20px;
+  }
+
+
+  .otp-container {
+    gap: 4px;
+  }
+
+
+  .otp-input {
     width: 40px;
-    height: 46px;
+    height: 47px;
 
     font-size: 18px;
   }
 
-  .auth-product {
-    width: 74px;
-    height: 74px;
-
-    border-radius: 16px;
-  }
-
 }
 
 
-/* =====================================================
-   VERY SMALL PHONES
-   ===================================================== */
+/* =========================================================
+   28. ACCESSIBILITY
+   ========================================================= */
 
-@media screen and (max-width: 340px) {
+.auth-primary-btn:focus-visible,
+.auth-link-btn:focus-visible,
+.auth-secondary-link:focus-visible,
+.auth-change-number:focus-visible,
+.mobile-auth-back:focus-visible,
+.auth-terms a:focus-visible {
+  outline: 3px solid rgba(255, 107, 0, 0.25);
 
-  .auth-card {
-    padding-left: 13px;
-    padding-right: 13px;
-  }
-
-  .auth-header h1 {
-    font-size: 20px;
-  }
-
-  .otp-inputs {
-    gap: 4px;
-  }
-
-  .otp-inputs input {
-    width: 38px;
-    height: 44px;
-  }
-
-  .auth-product {
-    width: 68px;
-    height: 68px;
-  }
-
+  outline-offset: 2px;
 }
 
 
-/* =====================================================
-   ACCESSIBILITY
-   ===================================================== */
+/* =========================================================
+   29. REDUCED MOTION
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
-  .auth-product-track {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 
-  .auth-submit,
-  .auth-back,
-  .auth-back-btn,
-  .auth-close-btn {
-    transition: none;
-  }
-
-}
-
-
-/* =====================================================
-   FINAL HELPERS
-   ===================================================== */
-
-.auth-hidden {
-  display: none !important;
-}
-
-.auth-step {
-  width: 100%;
-}
-
-.auth-step[hidden] {
-  display: none !important;
-}
-
-.auth-error {
-  display: block;
-
-  margin-top: 7px;
-
-  color: var(--danger);
-
-  font-size: 11px;
-
-  line-height: 1.4;
-}
-
-.auth-success {
-  display: block;
-
-  margin-top: 7px;
-
-  color: var(--success);
-
-  font-size: 11px;
-
-  line-height: 1.4;
 }
