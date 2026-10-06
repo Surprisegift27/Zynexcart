@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -19,12 +20,13 @@
     content="#071b3a"
   >
 
-  <title>ZynexCart — Shop Smart, Live Better</title>
+  <title>
+    ZynexCart — Shop Smart, Live Better
+  </title>
 
 
   <!-- =====================================================
-       ZYNEXCART — CSS
-       EXISTING DESIGN PRESERVED
+       ZYNEXCART STYLES
   ====================================================== -->
 
   <link
@@ -38,10 +40,10 @@
   >
 
   <link
-  rel="stylesheet"
-  href="css/search.css"
+    rel="stylesheet"
+    href="css/search.css"
   >
-  
+
   <link
     rel="stylesheet"
     href="css/categories.css"
@@ -62,6 +64,221 @@
     href="css/responsive.css"
   >
 
+
+  <!-- =====================================================
+       DESKTOP LOGIN MODAL STYLE
+       Mobile is intentionally unaffected.
+  ====================================================== -->
+
+  <style>
+
+    /* =====================================================
+       DESKTOP LOGIN MODAL
+    ====================================================== */
+
+    #zynexcartDesktopLoginModal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 32px;
+
+      background: rgba(7, 27, 58, 0.58);
+
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+
+      overflow-y: auto;
+    }
+
+
+    #zynexcartDesktopLoginModal.is-open {
+      display: flex;
+    }
+
+
+    #zynexcartDesktopLoginModal
+    .zynexcart-desktop-login-shell {
+
+      position: relative;
+
+      width: min(
+        100%,
+        520px
+      );
+
+      max-height: calc(100vh - 64px);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      overflow-y: auto;
+
+      animation:
+        zynexcartLoginModalIn
+        0.22s
+        ease-out;
+    }
+
+
+    #zynexcartDesktopLoginModal
+    .zynexcart-desktop-login-content {
+
+      width: 100%;
+
+      display: flex;
+      justify-content: center;
+    }
+
+
+    /*
+      Close button
+    */
+
+    #zynexcartDesktopLoginClose {
+
+      position: absolute;
+
+      top: -14px;
+      right: -14px;
+
+      width: 40px;
+      height: 40px;
+
+      border: 0;
+
+      border-radius: 50%;
+
+      background: #ffffff;
+
+      color: #172033;
+
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.20);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 25px;
+      line-height: 1;
+
+      cursor: pointer;
+
+      z-index: 10;
+
+      transition:
+        transform 0.18s ease,
+        background 0.18s ease;
+    }
+
+
+    #zynexcartDesktopLoginClose:hover {
+
+      transform: scale(1.06);
+
+      background: #f7f8fa;
+    }
+
+
+    #zynexcartDesktopLoginClose:active {
+
+      transform: scale(0.96);
+    }
+
+
+    /*
+      When auth-main comes from login.html,
+      don't show its standalone page background
+      inside Home modal.
+    */
+
+    #zynexcartDesktopLoginModal .auth-main {
+
+      width: 100%;
+
+      min-height: auto;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 0 !important;
+
+      margin: 0 !important;
+
+      background: transparent !important;
+    }
+
+
+    #zynexcartDesktopLoginModal .auth-card {
+
+      width: 100%;
+
+      max-width: 460px;
+
+      margin: 0 auto;
+    }
+
+
+    @keyframes zynexcartLoginModalIn {
+
+      from {
+
+        opacity: 0;
+
+        transform:
+          translateY(12px)
+          scale(0.98);
+
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform:
+          translateY(0)
+          scale(1);
+
+      }
+
+    }
+
+
+    /*
+      Desktop only.
+      This is deliberately NOT applied to mobile.
+    */
+
+    @media (max-width: 768px) {
+
+      #zynexcartDesktopLoginModal {
+        display: none !important;
+      }
+
+    }
+
+
+    @media (max-width: 900px) and (min-width: 769px) {
+
+      #zynexcartDesktopLoginModal {
+
+        padding: 24px;
+
+      }
+
+    }
+
+  </style>
+
 </head>
 
 
@@ -69,7 +286,7 @@
 
 
   <!-- =====================================================
-       ZYNEXCART — PAGE COMPONENTS
+       ZYNEXCART HOME COMPONENTS
   ====================================================== -->
 
   <div id="header-component"></div>
@@ -88,7 +305,44 @@
 
 
   <!-- =====================================================
-       ZYNEXCART — COMPONENT + SCRIPT LOADER
+       DESKTOP LOGIN MODAL
+
+       This remains empty until Login is clicked.
+  ====================================================== -->
+
+  <div
+    id="zynexcartDesktopLoginModal"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="ZynexCart Login"
+  >
+
+    <div
+      class="zynexcart-desktop-login-shell"
+      id="zynexcartDesktopLoginShell"
+    >
+
+      <button
+        type="button"
+        id="zynexcartDesktopLoginClose"
+        aria-label="Close login"
+      >
+        ×
+      </button>
+
+      <div
+        class="zynexcart-desktop-login-content"
+        id="zynexcartDesktopLoginContent"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ZYNEXCART APPLICATION
   ====================================================== -->
 
   <script>
@@ -98,9 +352,9 @@
       "use strict";
 
 
-      /*
-       * Prevent accidental double initialization.
-       */
+      /* ===================================================
+         PREVENT DUPLICATE INITIALIZATION
+      ================================================= */
 
       if (
         window.__ZYNEXCART_INDEX_INITIALIZED__
@@ -110,15 +364,12 @@
 
       }
 
-
-      window.__ZYNEXCART_INDEX_INITIALIZED__ =
-        true;
+      window.__ZYNEXCART_INDEX_INITIALIZED__ = true;
 
 
-
-      /* =====================================================
-         LOAD HTML COMPONENT
-      ====================================================== */
+      /* ===================================================
+         COMPONENT LOADER
+      ================================================= */
 
       async function loadComponent(
         elementId,
@@ -130,72 +381,50 @@
             elementId
           );
 
-
         if (!element) {
 
-          console.warn(
-            `ZynexCart: Element #${elementId} not found.`
+          throw new Error(
+            "Component element not found: " +
+            elementId
           );
-
-          return false;
 
         }
 
 
-        try {
-
-          const response =
-            await fetch(
-              filePath,
-              {
-                cache: "no-cache"
-              }
-            );
-
-
-          if (!response.ok) {
-
-            throw new Error(
-              `Unable to load ${filePath}`
-            );
-
-          }
-
-
-          const html =
-            await response.text();
-
-
-          element.innerHTML =
-            html;
-
-
-          return true;
-
-
-        } catch (error) {
-
-          console.error(
-            "ZynexCart component error:",
-            error
+        const response =
+          await fetch(
+            filePath,
+            {
+              cache: "no-cache"
+            }
           );
 
 
-          return false;
+        if (!response.ok) {
+
+          throw new Error(
+            "Unable to load component: " +
+            filePath +
+            " (" +
+            response.status +
+            ")"
+          );
 
         }
+
+
+        const html =
+          await response.text();
+
+
+        element.innerHTML = html;
 
       }
 
 
-
-      /* =====================================================
-         LOCATION MODAL INITIAL STATE
-
-         IMPORTANT:
-         Location modal must NEVER open automatically
-         just because the page was refreshed.
-      ====================================================== */
+      /* ===================================================
+         LOCATION MODAL RESET
+      ================================================= */
 
       function resetLocationModalState() {
 
@@ -204,27 +433,15 @@
             "locationModal"
           );
 
+        if (!modal) return;
 
-        if (!modal) {
-
-          return;
-
-        }
-
-
-        /*
-         * Force modal to start closed.
-         */
-
-        modal.hidden =
-          true;
-
-
-        modal.setAttribute(
-          "aria-hidden",
-          "true"
+        modal.classList.remove(
+          "open",
+          "active",
+          "show"
         );
 
+        modal.hidden = true;
 
         document.body.classList.remove(
           "location-modal-open"
@@ -233,31 +450,51 @@
       }
 
 
+      /* ===================================================
+         SCRIPT LOADER
+      ================================================= */
 
-      /* =====================================================
-         LOAD JAVASCRIPT FILE
-      ====================================================== */
-
-      function loadScript(
-        src
-      ) {
+      function loadScript(src) {
 
         return new Promise(
           function (resolve, reject) {
 
-            /*
-             * Prevent same script from being loaded twice.
-             */
-
-            const existingScript =
+            const existing =
               document.querySelector(
-                `script[data-zynexcart-script="${src}"]`
+                'script[data-zynexcart-script="' +
+                src +
+                '"]'
               );
 
 
-            if (existingScript) {
+            if (existing) {
 
-              resolve();
+              if (
+                existing.dataset.loaded ===
+                "true"
+              ) {
+
+                resolve();
+
+              } else {
+
+                existing.addEventListener(
+                  "load",
+                  resolve,
+                  {
+                    once: true
+                  }
+                );
+
+                existing.addEventListener(
+                  "error",
+                  reject,
+                  {
+                    once: true
+                  }
+                );
+
+              }
 
               return;
 
@@ -270,13 +507,9 @@
               );
 
 
-            script.src =
-              src;
+            script.src = src;
 
-
-            script.async =
-              false;
-
+            script.defer = false;
 
             script.dataset.zynexcartScript =
               src;
@@ -284,6 +517,9 @@
 
             script.onload =
               function () {
+
+                script.dataset.loaded =
+                  "true";
 
                 resolve();
 
@@ -295,7 +531,8 @@
 
                 reject(
                   new Error(
-                    `Unable to load script: ${src}`
+                    "Failed to load script: " +
+                    src
                   )
                 );
 
@@ -312,10 +549,9 @@
       }
 
 
-
-      /* =====================================================
-         COMPONENT LIST
-      ====================================================== */
+      /* ===================================================
+         HOME COMPONENTS
+      ================================================= */
 
       const components = [
 
@@ -357,94 +593,50 @@
       ];
 
 
-
-      /* =====================================================
-         JAVASCRIPT MODULES
-
-         Dependency order is preserved.
-      ====================================================== */
+      /* ===================================================
+         HOME SCRIPTS
+      ================================================= */
 
       const scripts = [
 
-        /* =========================
-           CORE
-        ========================== */
-
         "js/core/storage.js",
+
         "js/core/utils.js",
+
         "js/core/events.js",
-
-
-        /* =========================
-           CATEGORY DATA + RENDERER
-        ========================== */
 
         "js/categories.js",
 
-
-        /* =========================
-           CART
-        ========================== */
-
         "js/cart/cart.js",
+
         "js/cart/cart-actions.js",
+
         "js/cart/cart-ui.js",
-
-
-        /* =========================
-           SEARCH
-        ========================== */
 
         "js/search/search.js",
 
-
-        /* =========================
-           LOCATION
-        ========================== */
-
         "js/location/location.js",
+
         "js/location/location-ui.js",
+
         "js/location/location-search.js",
+
         "js/location/location-map.js",
+
         "js/location/location-address.js",
+
         "js/location/saved-addresses.js",
 
-
-        /* =========================
-           MAIN APPLICATION
-        ========================== */
-
         "js/app.js",
-
-
-        /* =========================
-           PRODUCTS
-        ========================== */
 
         "js/products.js"
 
       ];
 
 
-
-      /* =====================================================
-         HOME POPULAR PRODUCTS
-         MOBILE + CHROME DESKTOP SITE
-
-         IMPORTANT:
-         This function ONLY affects:
-         #featuredProducts
-
-         Normal mobile:
-         2 products per row.
-
-         Real mobile phone with Chrome
-         Desktop Site ON:
-         3 products per row.
-
-         Desktop / laptop:
-         unchanged.
-      ====================================================== */
+      /* ===================================================
+         MOBILE DESKTOP-SITE PRODUCT GRID
+      ================================================= */
 
       function setupMobileDesktopSitePopularProducts() {
 
@@ -455,20 +647,14 @@
 
 
         if (!featuredProducts) {
-
           return;
-
         }
 
 
-        /*
-         * Prevent duplicate listeners / observers
-         * if this function is ever called again.
-         */
-
         if (
           featuredProducts.dataset
-            .mobileDesktopSiteSetup === "true"
+            .mobileDesktopSiteSetup ===
+          "true"
         ) {
 
           return;
@@ -481,36 +667,12 @@
           "true";
 
 
-
         function updatePopularProductsLayout() {
 
-          /*
-           * -------------------------------------------------
-           * 1. Touch capability
-           * -------------------------------------------------
-           *
-           * A normal desktop/laptop should not pass
-           * this condition.
-           */
-
           const isTouchDevice =
-            (
-              navigator.maxTouchPoints > 0 ||
-              "ontouchstart" in window
-            );
+            navigator.maxTouchPoints > 0 ||
+            "ontouchstart" in window;
 
-
-          /*
-           * -------------------------------------------------
-           * 2. Physical screen check
-           * -------------------------------------------------
-           *
-           * Desktop Site ON can make window.innerWidth
-           * behave like a desktop viewport.
-           *
-           * screen.width is used to identify the
-           * small physical phone display.
-           */
 
           const screenWidth =
             window.screen
@@ -525,19 +687,6 @@
             screenWidth <= 650;
 
 
-          /*
-           * -------------------------------------------------
-           * 3. Desktop Site detection
-           * -------------------------------------------------
-           *
-           * When Desktop Site is OFF:
-           * viewport remains phone-sized.
-           *
-           * When Desktop Site is ON:
-           * Chrome normally exposes a much wider
-           * CSS viewport.
-           */
-
           const viewportWidth =
             window.innerWidth;
 
@@ -546,33 +695,13 @@
             viewportWidth > 650;
 
 
-
-          /*
-           * -------------------------------------------------
-           * FINAL CONDITION
-           * -------------------------------------------------
-           *
-           * Only:
-           *
-           * Real touch phone
-           * +
-           * Small physical screen
-           * +
-           * Wide desktop-style viewport
-           *
-           * gets 3 columns.
-           */
-
           const shouldUseThreeColumns =
             isTouchDevice &&
             isPhoneScreen &&
             isDesktopSite;
 
 
-
-          if (
-            shouldUseThreeColumns
-          ) {
+          if (shouldUseThreeColumns) {
 
             featuredProducts.style.setProperty(
               "grid-template-columns",
@@ -585,16 +714,7 @@
               .mobileDesktopSiteColumns =
               "3";
 
-
           } else {
-
-            /*
-             * Remove ONLY the inline rule created
-             * by this function.
-             *
-             * Existing responsive.css controls
-             * normal mobile layout.
-             */
 
             featuredProducts.style
               .removeProperty(
@@ -610,19 +730,8 @@
         }
 
 
-
-        /*
-         * Initial layout check.
-         */
-
         updatePopularProductsLayout();
 
-
-
-        /*
-         * Chrome Desktop Site / rotation /
-         * viewport changes.
-         */
 
         window.addEventListener(
           "resize",
@@ -632,16 +741,6 @@
           }
         );
 
-
-
-        /*
-         * Products are generated dynamically by
-         * products.js.
-         *
-         * Observe ONLY the featured products grid.
-         *
-         * No product/cart functionality is changed.
-         */
 
         const observer =
           new MutationObserver(
@@ -663,28 +762,595 @@
       }
 
 
+      /* ===================================================
+         DESKTOP LOGIN MODAL SYSTEM
+      ================================================= */
 
-      /* =====================================================
-         MAIN INITIALIZATION
-      ====================================================== */
+      let desktopLoginLoaded = false;
+
+      let desktopLoginLoading = false;
+
+
+      const desktopLoginModal =
+        document.getElementById(
+          "zynexcartDesktopLoginModal"
+        );
+
+
+      const desktopLoginContent =
+        document.getElementById(
+          "zynexcartDesktopLoginContent"
+        );
+
+
+      const desktopLoginClose =
+        document.getElementById(
+          "zynexcartDesktopLoginClose"
+        );
+
+
+      function isDesktopScreen() {
+
+        return window.innerWidth >= 769;
+
+      }
+
+
+      function openDesktopLogin() {
+
+        if (!isDesktopScreen()) {
+
+          return;
+
+        }
+
+
+        if (
+          !desktopLoginModal ||
+          !desktopLoginContent
+        ) {
+
+          return;
+
+        }
+
+
+        desktopLoginModal.classList.add(
+          "is-open"
+        );
+
+
+        desktopLoginModal.setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+
+        document.body.classList.add(
+          "zynexcart-login-modal-open"
+        );
+
+
+        document.body.style.overflow =
+          "hidden";
+
+
+        if (desktopLoginLoaded) {
+
+          setTimeout(
+            focusDesktopLogin,
+            100
+          );
+
+          return;
+
+        }
+
+
+        loadDesktopLogin();
+
+      }
+
+
+      async function loadDesktopLogin() {
+
+        if (desktopLoginLoading) {
+          return;
+        }
+
+
+        desktopLoginLoading = true;
+
+
+        try {
+
+          /*
+            Load login.html only for desktop modal.
+
+            We extract .auth-main instead of loading
+            the complete login page inside Home.
+          */
+
+          const response =
+            await fetch(
+              "login.html",
+              {
+                cache: "no-cache"
+              }
+            );
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              "Unable to load login.html (" +
+              response.status +
+              ")"
+            );
+
+          }
+
+
+          const html =
+            await response.text();
+
+
+          const parser =
+            new DOMParser();
+
+
+          const loginDocument =
+            parser.parseFromString(
+              html,
+              "text/html"
+            );
+
+
+          const authMain =
+            loginDocument.querySelector(
+              ".auth-main"
+            );
+
+
+          if (!authMain) {
+
+            throw new Error(
+              "The .auth-main section was not found in login.html."
+            );
+
+          }
+
+
+          /*
+            Load auth.css once.
+          */
+
+          if (
+            !document.querySelector(
+              'link[data-zynexcart-auth-css="true"]'
+            )
+          ) {
+
+            const authCss =
+              document.createElement(
+                "link"
+              );
+
+
+            authCss.rel =
+              "stylesheet";
+
+
+            authCss.href =
+              "css/auth.css";
+
+
+            authCss.dataset
+              .zynexcartAuthCss =
+              "true";
+
+
+            document.head.appendChild(
+              authCss
+            );
+
+          }
+
+
+          /*
+            Only insert the actual authentication
+            interface. The standalone fake background
+            from login.html is NOT inserted.
+          */
+
+          desktopLoginContent.innerHTML =
+            authMain.outerHTML;
+
+
+          desktopLoginLoaded = true;
+
+
+          /*
+            auth.js is loaded AFTER the login
+            elements have been inserted.
+          */
+
+          await loadDesktopAuthScript();
+
+
+          focusDesktopLogin();
+
+        } catch (error) {
+
+          console.error(
+            "ZynexCart: Desktop login failed.",
+            error
+          );
+
+
+          desktopLoginContent.innerHTML =
+
+            '<div style="' +
+            'background:#fff;' +
+            'border-radius:18px;' +
+            'padding:32px;' +
+            'text-align:center;' +
+            'max-width:460px;' +
+            'width:100%;' +
+            'font-family:Inter,Arial,sans-serif;' +
+            '">' +
+
+            '<h3 style="' +
+            'margin:0 0 10px;' +
+            'color:#172033;' +
+            '">Unable to open Login</h3>' +
+
+            '<p style="' +
+            'margin:0;' +
+            'color:#6b7280;' +
+            '">Please refresh the page and try again.</p>' +
+
+            '</div>';
+
+        } finally {
+
+          desktopLoginLoading = false;
+
+        }
+
+      }
+
+
+      function loadDesktopAuthScript() {
+
+        return new Promise(
+          function (resolve, reject) {
+
+            /*
+              auth.js can be loaded once.
+            */
+
+            if (
+              window.__ZYNEXCART_AUTH_INITIALIZED__
+            ) {
+
+              resolve();
+
+              return;
+
+            }
+
+
+            const existing =
+              document.querySelector(
+                'script[data-zynexcart-auth="true"]'
+              );
+
+
+            if (existing) {
+
+              existing.addEventListener(
+                "load",
+                resolve,
+                {
+                  once: true
+                }
+              );
+
+
+              existing.addEventListener(
+                "error",
+                reject,
+                {
+                  once: true
+                }
+              );
+
+
+              return;
+
+            }
+
+
+            const script =
+              document.createElement(
+                "script"
+              );
+
+
+            script.src =
+              "js/auth.js";
+
+
+            script.dataset
+              .zynexcartAuth =
+              "true";
+
+
+            script.onload =
+              function () {
+
+                resolve();
+
+              };
+
+
+            script.onerror =
+              function () {
+
+                reject(
+                  new Error(
+                    "Unable to load js/auth.js"
+                  )
+                );
+
+              };
+
+
+            document.body.appendChild(
+              script
+            );
+
+          }
+        );
+
+      }
+
+
+      function focusDesktopLogin() {
+
+        const input =
+          document.getElementById(
+            "mobileNumber"
+          );
+
+
+        if (
+          input &&
+          desktopLoginModal &&
+          desktopLoginModal.classList.contains(
+            "is-open"
+          )
+        ) {
+
+          setTimeout(
+            function () {
+
+              try {
+                input.focus();
+              } catch (error) {}
+
+            },
+            120
+          );
+
+        }
+
+      }
+
+
+      function closeDesktopLogin() {
+
+        if (!desktopLoginModal) {
+          return;
+        }
+
+
+        desktopLoginModal.classList.remove(
+          "is-open"
+        );
+
+
+        desktopLoginModal.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+
+        document.body.classList.remove(
+          "zynexcart-login-modal-open"
+        );
+
+
+        document.body.style.overflow =
+          "";
+
+      }
+
+
+      /*
+        auth.js uses this after successful login.
+      */
+
+      window.ZynexCartDesktopLoginClose =
+        closeDesktopLogin;
+
+
+      /* ===================================================
+         ACCOUNT LOGIN CLICK
+         
+         Event delegation is used because the header
+         itself is loaded dynamically.
+      ================================================= */
+
+      document.addEventListener(
+        "click",
+        function (event) {
+
+          const accountLink =
+            event.target.closest(
+              ".account-link"
+            );
+
+
+          if (!accountLink) {
+            return;
+          }
+
+
+          /*
+            Mobile:
+            Do NOT intercept.
+
+            Existing login.html mobile
+            behavior remains unchanged.
+          */
+
+          if (!isDesktopScreen()) {
+            return;
+          }
+
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          openDesktopLogin();
+
+        },
+        false
+      );
+
+
+      /* ===================================================
+         CLOSE BUTTON
+      ================================================= */
+
+      if (desktopLoginClose) {
+
+        desktopLoginClose.addEventListener(
+          "click",
+          function (event) {
+
+            event.preventDefault();
+
+            closeDesktopLogin();
+
+          }
+        );
+
+      }
+
+
+      /* ===================================================
+         OUTSIDE CLICK
+      ================================================= */
+
+      if (desktopLoginModal) {
+
+        desktopLoginModal.addEventListener(
+          "click",
+          function (event) {
+
+            /*
+              Only the overlay itself closes.
+              Clicking the login card does not.
+            */
+
+            if (
+              event.target ===
+              desktopLoginModal
+            ) {
+
+              closeDesktopLogin();
+
+            }
+
+          }
+        );
+
+      }
+
+
+      /* ===================================================
+         ESC KEY
+      ================================================= */
+
+      document.addEventListener(
+        "keydown",
+        function (event) {
+
+          if (
+            event.key === "Escape" &&
+            desktopLoginModal &&
+            desktopLoginModal.classList.contains(
+              "is-open"
+            )
+          ) {
+
+            closeDesktopLogin();
+
+          }
+
+        }
+      );
+
+
+      /* ===================================================
+         RESPONSIVE SAFETY
+      ================================================= */
+
+      window.addEventListener(
+        "resize",
+        function () {
+
+          /*
+            If user changes from desktop to mobile
+            while modal is open, close it.
+          */
+
+          if (
+            !isDesktopScreen() &&
+            desktopLoginModal &&
+            desktopLoginModal.classList.contains(
+              "is-open"
+            )
+          ) {
+
+            closeDesktopLogin();
+
+          }
+
+        },
+        {
+          passive: true
+        }
+      );
+
+
+      /* ===================================================
+         INITIALIZE HOME
+      ================================================= */
 
       async function initializeZynexCart() {
 
         try {
 
-
           /*
-           * -------------------------------------------------
-           * STEP 1
-           * Load all HTML components.
-           *
-           * Components can load in parallel because they
-           * do not depend on JavaScript modules.
-           * -------------------------------------------------
-           */
+            1. Load all Home components.
+          */
 
           await Promise.all(
-
             components.map(
               function (component) {
 
@@ -695,32 +1361,15 @@
 
               }
             )
-
           );
 
-
-          /*
-           * -------------------------------------------------
-           * STEP 2
-           * IMPORTANT LOCATION FIX
-           *
-           * Header is now available.
-           * Force location modal closed before any JS
-           * location system starts.
-           * -------------------------------------------------
-           */
 
           resetLocationModalState();
 
 
           /*
-           * -------------------------------------------------
-           * STEP 3
-           * Load JavaScript modules sequentially.
-           *
-           * Dependency order must NOT change.
-           * -------------------------------------------------
-           */
+            2. Load Home JavaScript modules.
+          */
 
           for (
             const scriptPath of scripts
@@ -732,14 +1381,13 @@
                 scriptPath
               );
 
-
             } catch (error) {
 
               console.error(
-                `ZynexCart: Failed to load ${scriptPath}`,
+                "ZynexCart: Failed to load " +
+                scriptPath,
                 error
               );
-
 
               return;
 
@@ -748,36 +1396,10 @@
           }
 
 
-          /*
-           * -------------------------------------------------
-           * STEP 4
-           * Make absolutely sure the modal remains closed
-           * after application initialization.
-           *
-           * This prevents saved-location restoration from
-           * accidentally showing the modal.
-           * -------------------------------------------------
-           */
-
           resetLocationModalState();
 
 
-
-          /*
-           * -------------------------------------------------
-           * STEP 5
-           * HOME POPULAR PRODUCTS SPECIAL LAYOUT
-           *
-           * Only real mobile phone + Chrome Desktop Site
-           * gets 3 products per row.
-           *
-           * Normal mobile remains controlled by
-           * responsive.css with 2 products per row.
-           * -------------------------------------------------
-           */
-
           setupMobileDesktopSitePopularProducts();
-
 
 
           console.log(
@@ -797,10 +1419,9 @@
       }
 
 
-
-      /* =====================================================
-         START ZYNEXCART
-      ====================================================== */
+      /* ===================================================
+         DOM READY
+      ================================================= */
 
       if (
         document.readyState ===
@@ -824,7 +1445,6 @@
     })();
 
   </script>
-
 
 </body>
 
