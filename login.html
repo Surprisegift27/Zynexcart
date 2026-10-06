@@ -9,35 +9,163 @@
   >
 
   <meta
-    name="description"
-    content="Login to ZynexCart using your mobile number and OTP."
+    name="theme-color"
+    content="#ffffff"
   >
 
   <meta
-    name="theme-color"
-    content="#ff6b00"
+    name="description"
+    content="Login to ZynexCart using your mobile number."
   >
 
   <title>Login | ZynexCart</title>
 
-  <!-- ZynexCart Base Styles -->
+  <!-- Existing ZynexCart CSS -->
   <link rel="stylesheet" href="css/base.css">
-
-  <!-- ZynexCart Main Styles -->
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- ZynexCart Authentication Styles -->
+  <!-- Login CSS -->
   <link rel="stylesheet" href="css/auth.css">
 
-  <!-- ZynexCart Responsive Styles -->
+  <!-- Existing responsive system -->
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 
-<body class="auth-page">
+<body class="zynex-auth-page">
 
-  <!-- =========================================
-       LOGIN PAGE
-  ========================================== -->
+  <!-- =====================================================
+       LOGIN BACKGROUND
+       Desktop: clean ZynexCart background
+       Mobile: moving product strip
+  ====================================================== -->
+
+  <div class="auth-background" aria-hidden="true">
+
+    <div class="auth-bg-overlay"></div>
+
+    <!-- Desktop background -->
+    <div class="auth-desktop-bg">
+
+      <div class="auth-bg-header">
+
+        <img
+          src="assets/logo.png"
+          alt=""
+          class="auth-bg-logo"
+        >
+
+        <div class="auth-bg-search">
+          Search for products...
+        </div>
+
+        <div class="auth-bg-cart">
+          🛒 Cart
+        </div>
+
+      </div>
+
+      <div class="auth-bg-hero">
+        <div class="auth-bg-hero-content">
+          <span>WELCOME TO ZYNEXCART</span>
+
+          <h2>
+            Shop Smart,<br>
+            <strong>Live Better.</strong>
+          </h2>
+
+          <p>
+            Discover everyday essentials and great deals —
+            all in one place.
+          </p>
+        </div>
+      </div>
+
+
+      <div class="auth-bg-categories">
+
+        <div class="auth-bg-category"></div>
+        <div class="auth-bg-category"></div>
+        <div class="auth-bg-category"></div>
+        <div class="auth-bg-category"></div>
+        <div class="auth-bg-category"></div>
+        <div class="auth-bg-category"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         MOBILE MOVING PRODUCTS
+    ================================================== -->
+
+    <div class="mobile-product-marquee">
+
+      <div class="product-track">
+
+        <!-- Set 1 -->
+
+        <div class="moving-product">
+          <div class="moving-product-image product-one"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-two"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-three"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-four"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-five"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-six"></div>
+        </div>
+
+
+        <!-- Set 2 -->
+
+        <div class="moving-product">
+          <div class="moving-product-image product-one"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-two"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-three"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-four"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-five"></div>
+        </div>
+
+        <div class="moving-product">
+          <div class="moving-product-image product-six"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       LOGIN MAIN
+  ====================================================== -->
 
   <main class="auth-main">
 
@@ -46,40 +174,61 @@
       aria-label="ZynexCart Login"
     >
 
-      <!-- =====================================
-           BRAND
-      ====================================== -->
+      <!-- =================================================
+           MOBILE BACK BUTTON
+      ================================================== -->
+
+      <button
+        type="button"
+        class="mobile-auth-back"
+        id="mobileAuthBack"
+        aria-label="Go back"
+      >
+        <span>←</span>
+      </button>
+
+
+      <!-- =================================================
+           LOGO
+      ================================================== -->
 
       <div class="auth-brand">
+
         <a
           href="index.html"
-          class="auth-logo-link"
           aria-label="ZynexCart Home"
         >
+
           <img
             src="assets/logo.png"
             alt="ZynexCart"
             class="auth-logo"
           >
+
         </a>
+
       </div>
 
 
-      <!-- =====================================
+      <!-- =================================================
            STEP 1 — MOBILE NUMBER
-      ====================================== -->
+      ================================================== -->
 
       <div
-        id="mobileStep"
         class="auth-step active"
+        id="mobileStep"
       >
 
         <div class="auth-heading">
-          <h1>Welcome to ZynexCart</h1>
+
+          <h1>
+            Welcome to ZynexCart
+          </h1>
 
           <p>
             Login or continue with your mobile number
           </p>
+
         </div>
 
 
@@ -89,46 +238,34 @@
           novalidate
         >
 
-          <div class="phone-field">
+          <div class="phone-input-container">
 
-            <label
-              for="mobileNumber"
-              class="sr-only"
+            <span class="country-code">
+              +91
+            </span>
+
+            <span class="phone-divider"></span>
+
+            <input
+              type="tel"
+              id="mobileNumber"
+              name="mobile"
+              inputmode="numeric"
+              autocomplete="tel"
+              maxlength="10"
+              placeholder="Enter mobile number"
+              aria-label="Enter mobile number"
+              required
             >
-              Mobile number
-            </label>
-
-            <div class="phone-input-wrap">
-
-              <span
-                class="country-code"
-                aria-hidden="true"
-              >
-                +91
-              </span>
-
-              <input
-                type="tel"
-                id="mobileNumber"
-                name="mobile"
-                inputmode="numeric"
-                autocomplete="tel"
-                maxlength="10"
-                placeholder="Enter mobile number"
-                aria-label="Enter mobile number"
-                required
-              >
-
-            </div>
-
-            <p
-              id="mobileError"
-              class="auth-error"
-              role="alert"
-              aria-live="polite"
-            ></p>
 
           </div>
+
+
+          <p
+            id="mobileError"
+            class="auth-error"
+            role="alert"
+          ></p>
 
 
           <button
@@ -136,46 +273,69 @@
             id="continueMobileBtn"
             class="auth-primary-btn"
           >
-            Continue
+            <span class="button-text">
+              Continue
+            </span>
+
+            <span
+              class="button-loader"
+              aria-hidden="true"
+            ></span>
           </button>
 
         </form>
 
 
         <p class="auth-terms">
+
           By continuing, you agree to our
-          <a href="#" id="termsLink">Terms</a>
+
+          <a
+            href="#"
+            id="termsLink"
+          >
+            Terms
+          </a>
+
           &
-          <a href="#" id="privacyLink">Privacy Policy</a>
+
+          <a
+            href="#"
+            id="privacyLink"
+          >
+            Privacy Policy
+          </a>
+
         </p>
 
       </div>
 
 
-      <!-- =====================================
-           STEP 2 — OTP VERIFICATION
-      ====================================== -->
+      <!-- =================================================
+           STEP 2 — OTP
+      ================================================== -->
 
       <div
-        id="otpStep"
         class="auth-step"
+        id="otpStep"
         hidden
       >
 
         <button
           type="button"
+          class="auth-change-number"
           id="changeMobileBtn"
-          class="auth-back-btn"
-          aria-label="Change mobile number"
         >
-          <span aria-hidden="true">←</span>
-          Change number
+          <span>←</span>
+          Change mobile number
         </button>
 
 
         <div class="auth-heading">
 
-          <h1>Verify your mobile number</h1>
+          <h1>
+            Verify your mobile number
+          </h1>
 
           <p>
             OTP sent to
@@ -195,56 +355,54 @@
 
           <div
             class="otp-container"
-            role="group"
-            aria-label="Enter 6 digit OTP"
+            id="otpContainer"
           >
 
             <input
-              type="tel"
               class="otp-input"
-              maxlength="1"
+              type="tel"
               inputmode="numeric"
-              autocomplete="one-time-code"
+              maxlength="1"
               aria-label="OTP digit 1"
             >
 
             <input
-              type="tel"
               class="otp-input"
-              maxlength="1"
+              type="tel"
               inputmode="numeric"
+              maxlength="1"
               aria-label="OTP digit 2"
             >
 
             <input
-              type="tel"
               class="otp-input"
-              maxlength="1"
+              type="tel"
               inputmode="numeric"
+              maxlength="1"
               aria-label="OTP digit 3"
             >
 
             <input
-              type="tel"
               class="otp-input"
-              maxlength="1"
+              type="tel"
               inputmode="numeric"
+              maxlength="1"
               aria-label="OTP digit 4"
             >
 
             <input
-              type="tel"
               class="otp-input"
-              maxlength="1"
+              type="tel"
               inputmode="numeric"
+              maxlength="1"
               aria-label="OTP digit 5"
             >
 
             <input
-              type="tel"
               class="otp-input"
-              maxlength="1"
+              type="tel"
               inputmode="numeric"
+              maxlength="1"
               aria-label="OTP digit 6"
             >
 
@@ -253,9 +411,8 @@
 
           <p
             id="otpError"
-            class="auth-error otp-error"
+            class="auth-error"
             role="alert"
-            aria-live="polite"
           ></p>
 
 
@@ -264,13 +421,22 @@
             id="verifyOtpBtn"
             class="auth-primary-btn"
           >
-            Verify &amp; Continue
+
+            <span class="button-text">
+              Verify &amp; Continue
+            </span>
+
+            <span
+              class="button-loader"
+              aria-hidden="true"
+            ></span>
+
           </button>
 
         </form>
 
 
-        <div class="otp-actions">
+        <div class="otp-bottom">
 
           <button
             type="button"
@@ -283,7 +449,6 @@
           <span
             id="otpTimer"
             class="otp-timer"
-            aria-live="polite"
           ></span>
 
         </div>
@@ -300,19 +465,21 @@
       </div>
 
 
-      <!-- =====================================
-           STEP 3 — NEW CUSTOMER NAME
-      ====================================== -->
+      <!-- =================================================
+           STEP 3 — NAME
+      ================================================== -->
 
       <div
-        id="nameStep"
         class="auth-step"
+        id="nameStep"
         hidden
       >
 
         <div class="auth-heading">
 
-          <h1>Welcome to ZynexCart</h1>
+          <h1>
+            Welcome to ZynexCart
+          </h1>
 
           <p>
             What should we call you?
@@ -327,34 +494,23 @@
           novalidate
         >
 
-          <div class="name-field">
+          <input
+            type="text"
+            id="customerName"
+            name="name"
+            autocomplete="name"
+            maxlength="60"
+            placeholder="Enter your name"
+            aria-label="Enter your name"
+            required
+          >
 
-            <label
-              for="customerName"
-              class="sr-only"
-            >
-              Your name
-            </label>
 
-            <input
-              type="text"
-              id="customerName"
-              name="name"
-              autocomplete="name"
-              maxlength="60"
-              placeholder="Enter your name"
-              aria-label="Enter your name"
-              required
-            >
-
-            <p
-              id="nameError"
-              class="auth-error"
-              role="alert"
-              aria-live="polite"
-            ></p>
-
-          </div>
+          <p
+            id="nameError"
+            class="auth-error"
+            role="alert"
+          ></p>
 
 
           <button
@@ -362,7 +518,16 @@
             id="continueNameBtn"
             class="auth-primary-btn"
           >
-            Continue
+
+            <span class="button-text">
+              Continue
+            </span>
+
+            <span
+              class="button-loader"
+              aria-hidden="true"
+            ></span>
+
           </button>
 
         </form>
@@ -370,48 +535,38 @@
       </div>
 
 
-      <!-- =====================================
-           LOGIN LOADING
-      ====================================== -->
+      <!-- =================================================
+           SUCCESS
+      ================================================== -->
 
       <div
-        id="authLoading"
-        class="auth-loading"
+        class="auth-success"
+        id="authSuccess"
         hidden
-        aria-live="polite"
-        aria-label="Loading"
       >
 
-        <div
-          class="auth-spinner"
-          aria-hidden="true"
-        ></div>
+        <div class="success-icon">
+          ✓
+        </div>
 
-        <p>Please wait...</p>
+        <h2>
+          Login successful
+        </h2>
+
+        <p>
+          Welcome to ZynexCart
+        </p>
 
       </div>
-
-
-      <!-- =====================================
-           AUTH MESSAGE
-      ====================================== -->
-
-      <div
-        id="authMessage"
-        class="auth-message"
-        hidden
-        role="status"
-        aria-live="polite"
-      ></div>
 
     </section>
 
   </main>
 
 
-  <!-- =========================================
-       AUTHENTICATION SCRIPT
-  ========================================== -->
+  <!-- =====================================================
+       AUTH SCRIPT
+  ====================================================== -->
 
   <script src="js/auth.js"></script>
 
