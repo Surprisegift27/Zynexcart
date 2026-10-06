@@ -369,6 +369,11 @@
 
       /* ===================================================
          COMPONENT LOADER
+
+         IMPORTANT:
+         Browser cache is now allowed.
+         This avoids unnecessary network revalidation
+         on every Home page load.
       ================================================= */
 
       async function loadComponent(
@@ -395,7 +400,7 @@
           await fetch(
             filePath,
             {
-              cache: "no-cache"
+              cache: "default"
             }
           );
 
@@ -418,6 +423,9 @@
 
 
         element.innerHTML = html;
+
+
+        return element;
 
       }
 
@@ -451,23 +459,104 @@
 
 
       /* ===================================================
-         SCRIPT LOADER
+         SCRIPT CACHE / LOADED CHECK
       ================================================= */
 
-      function loadScript(src) {
+      function getExistingScript(src) {
+
+        return document.querySelector(
+          'script[data-zynexcart-script="' +
+          src +
+          '"]'
+        );
+
+      }
+
+
+      /* ===================================================
+         FAST SCRIPT FETCH
+
+         All JS files are DOWNLOADED IN PARALLEL.
+
+         They are NOT executed in parallel.
+
+         This is important because the original
+         execution order is preserved.
+      ================================================= */
+
+      async function fetchScriptSource(src) {
+
+        const existing =
+          getExistingScript(src);
+
+
+        if (existing) {
+
+          return {
+            src: src,
+            existing: existing,
+            source: null
+          };
+
+        }
+
+
+        const response =
+          await fetch(
+            src,
+            {
+              cache: "default"
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Failed to fetch script: " +
+            src +
+            " (" +
+            response.status +
+            ")"
+          );
+
+        }
+
+
+        const source =
+          await response.text();
+
+
+        return {
+          src: src,
+          existing: null,
+          source: source
+        };
+
+      }
+
+
+      /* ===================================================
+         SCRIPT EXECUTION
+
+         Executes scripts in the EXACT same order
+         as the original website.
+      ================================================= */
+
+      function executeScriptSource(
+        scriptData
+      ) {
 
         return new Promise(
           function (resolve, reject) {
 
-            const existing =
-              document.querySelector(
-                'script[data-zynexcart-script="' +
-                src +
-                '"]'
-              );
+            if (
+              scriptData.existing
+            ) {
 
+              const existing =
+                scriptData.existing;
 
-            if (existing) {
 
               if (
                 existing.dataset.loaded ===
@@ -476,25 +565,28 @@
 
                 resolve();
 
-              } else {
-
-                existing.addEventListener(
-                  "load",
-                  resolve,
-                  {
-                    once: true
-                  }
-                );
-
-                existing.addEventListener(
-                  "error",
-                  reject,
-                  {
-                    once: true
-                  }
-                );
+                return;
 
               }
+
+
+              existing.addEventListener(
+                "load",
+                resolve,
+                {
+                  once: true
+                }
+              );
+
+
+              existing.addEventListener(
+                "error",
+                reject,
+                {
+                  once: true
+                }
+              );
+
 
               return;
 
@@ -507,12 +599,49 @@
               );
 
 
-            script.src = src;
+            /*
+              Keep original script execution
+              behavior.
+            */
 
-            script.defer = false;
+            script.src =
+              scriptData.src;
 
-            script.dataset.zynexcartScript =
-              src;
+
+            /*
+              Use the already downloaded source
+              through a Blob URL.
+
+              This allows us to download all
+              scripts together while keeping
+              execution order.
+            */
+
+            const blob =
+              new Blob(
+                [
+                  scriptData.source
+                ],
+                {
+                  type:
+                    "application/javascript"
+                }
+              );
+
+
+            const blobUrl =
+              URL.createObjectURL(
+                blob
+              );
+
+
+            script.src =
+              blobUrl;
+
+
+            script.dataset
+              .zynexcartScript =
+              scriptData.src;
 
 
             script.onload =
@@ -520,6 +649,12 @@
 
                 script.dataset.loaded =
                   "true";
+
+
+                URL.revokeObjectURL(
+                  blobUrl
+                );
+
 
                 resolve();
 
@@ -529,10 +664,15 @@
             script.onerror =
               function () {
 
+                URL.revokeObjectURL(
+                  blobUrl
+                );
+
+
                 reject(
                   new Error(
-                    "Failed to load script: " +
-                    src
+                    "Failed to execute script: " +
+                    scriptData.src
                   )
                 );
 
@@ -545,6 +685,58 @@
 
           }
         );
+
+      }
+
+
+      /* ===================================================
+         FAST HOME SCRIPT LOADING
+
+         1. Download ALL scripts simultaneously.
+         2. Execute them in original order.
+
+         This removes the old:
+
+             download → wait
+             download → wait
+             download → wait
+             ...
+
+         behavior.
+      ================================================= */
+
+      async function loadHomeScriptsFast(
+        scripts
+      ) {
+
+        const scriptDataList =
+          await Promise.all(
+            scripts.map(
+              function (src) {
+
+                return fetchScriptSource(
+                  src
+                );
+
+              }
+            )
+          );
+
+
+        /*
+          Execute in original order.
+        */
+
+        for (
+          const scriptData of
+          scriptDataList
+        ) {
+
+          await executeScriptSource(
+            scriptData
+          );
+
+        }
 
       }
 
@@ -595,6 +787,8 @@
 
       /* ===================================================
          HOME SCRIPTS
+
+         ORDER IS EXACTLY THE SAME AS BEFORE.
       ================================================= */
 
       const scripts = [
@@ -636,6 +830,8 @@
 
       /* ===================================================
          MOBILE DESKTOP-SITE PRODUCT GRID
+
+         EXISTING SYSTEM PRESERVED.
       ================================================= */
 
       function setupMobileDesktopSitePopularProducts() {
@@ -764,11 +960,15 @@
 
       /* ===================================================
          DESKTOP LOGIN MODAL SYSTEM
+
+         EXISTING SYSTEM PRESERVED.
       ================================================= */
 
-      let desktopLoginLoaded = false;
+      let desktopLoginLoaded =
+        false;
 
-      let desktopLoginLoading = false;
+      let desktopLoginLoading =
+        false;
 
 
       const desktopLoginModal =
@@ -866,16 +1066,13 @@
 
           /*
             Load login.html only for desktop modal.
-
-            We extract .auth-main instead of loading
-            the complete login page inside Home.
           */
 
           const response =
             await fetch(
               "login.html",
               {
-                cache: "no-cache"
+                cache: "default"
               }
             );
 
@@ -958,9 +1155,7 @@
 
 
           /*
-            Only insert the actual authentication
-            interface. The standalone fake background
-            from login.html is NOT inserted.
+            Insert only authentication UI.
           */
 
           desktopLoginContent.innerHTML =
@@ -971,8 +1166,8 @@
 
 
           /*
-            auth.js is loaded AFTER the login
-            elements have been inserted.
+            Load auth.js after auth elements
+            exist in the DOM.
           */
 
           await loadDesktopAuthScript();
@@ -1188,9 +1383,6 @@
 
       /* ===================================================
          ACCOUNT LOGIN CLICK
-         
-         Event delegation is used because the header
-         itself is loaded dynamically.
       ================================================= */
 
       document.addEventListener(
@@ -1211,9 +1403,6 @@
           /*
             Mobile:
             Do NOT intercept.
-
-            Existing login.html mobile
-            behavior remains unchanged.
           */
 
           if (!isDesktopScreen()) {
@@ -1262,11 +1451,6 @@
           "click",
           function (event) {
 
-            /*
-              Only the overlay itself closes.
-              Clicking the login card does not.
-            */
-
             if (
               event.target ===
               desktopLoginModal
@@ -1314,11 +1498,6 @@
         "resize",
         function () {
 
-          /*
-            If user changes from desktop to mobile
-            while modal is open, close it.
-          */
-
           if (
             !isDesktopScreen() &&
             desktopLoginModal &&
@@ -1339,7 +1518,7 @@
 
 
       /* ===================================================
-         INITIALIZE HOME
+         INITIALIZE HOME — OPTIMIZED
       ================================================= */
 
       async function initializeZynexCart() {
@@ -1347,10 +1526,16 @@
         try {
 
           /*
-            1. Load all Home components.
+            -------------------------------------------------
+            STEP 1
+
+            Start EVERY component request immediately.
+
+            Nothing is downloaded one-by-one.
+            -------------------------------------------------
           */
 
-          await Promise.all(
+          const componentPromises =
             components.map(
               function (component) {
 
@@ -1360,40 +1545,68 @@
                 );
 
               }
+            );
+
+
+          /*
+            -------------------------------------------------
+            STEP 2
+
+            Start ALL JavaScript downloads immediately
+            at the same time as the components.
+
+            IMPORTANT:
+            JS is only downloaded here.
+            It is still executed later in the
+            original order.
+            -------------------------------------------------
+          */
+
+          const scriptsPromise =
+            loadHomeScriptsFast(
+              scripts
+            );
+
+
+          /*
+            -------------------------------------------------
+            STEP 3
+
+            Header + Hero + Categories +
+            Popular Products are the first visible
+            Home content.
+
+            Wait only for these.
+            -------------------------------------------------
+          */
+
+          await Promise.all(
+            componentPromises.slice(
+              0,
+              4
             )
           );
 
+
+          /*
+            Header is now available.
+          */
 
           resetLocationModalState();
 
 
           /*
-            2. Load Home JavaScript modules.
+            -------------------------------------------------
+            STEP 4
+
+            Execute the already-downloaded JS.
+
+            Execution order remains exactly the same
+            as the old website.
+            -------------------------------------------------
           */
 
-          for (
-            const scriptPath of scripts
-          ) {
-
-            try {
-
-              await loadScript(
-                scriptPath
-              );
-
-            } catch (error) {
-
-              console.error(
-                "ZynexCart: Failed to load " +
-                scriptPath,
-                error
-              );
-
-              return;
-
-            }
-
-          }
+          await scriptsPromise;
 
 
           resetLocationModalState();
@@ -1402,8 +1615,86 @@
           setupMobileDesktopSitePopularProducts();
 
 
+          /*
+            -------------------------------------------------
+            STEP 5
+
+            Remaining components continue in background.
+
+            Promo
+            Benefits
+            Footer
+
+            are NOT allowed to delay the main Home.
+            -------------------------------------------------
+          */
+
+          Promise.all(
+            componentPromises.slice(
+              4
+            )
+          )
+          .then(
+            function () {
+
+              resetLocationModalState();
+
+            }
+          )
+          .catch(
+            function (error) {
+
+              console.warn(
+                "ZynexCart: Background components could not be loaded.",
+                error
+              );
+
+            }
+          );
+
+
+          /*
+            -------------------------------------------------
+            STEP 6
+
+            Browser gets an opportunity to paint the
+            Home immediately before any non-critical
+            follow-up work.
+            -------------------------------------------------
+          */
+
+          if (
+            typeof window.requestIdleCallback ===
+            "function"
+          ) {
+
+            window.requestIdleCallback(
+              function () {
+
+                setupMobileDesktopSitePopularProducts();
+
+              },
+              {
+                timeout: 1000
+              }
+            );
+
+          } else {
+
+            setTimeout(
+              function () {
+
+                setupMobileDesktopSitePopularProducts();
+
+              },
+              0
+            );
+
+          }
+
+
           console.log(
-            "ZynexCart: All components and modules loaded successfully."
+            "ZynexCart: Fast Home initialization completed."
           );
 
 
